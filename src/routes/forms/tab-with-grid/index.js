@@ -52,6 +52,23 @@ import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+
+
+import MaskedInput from 'react-text-mask';
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
+// import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
+import FormControl from '@material-ui/core/FormControl';
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
+
+
 function TabContainer({ children }) {
     return (
        <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -66,6 +83,28 @@ function TabContainer({ children }) {
 		employeePayroll: null,
         activeIndex: 0
 	}
+
+    createNotification = (type) => {
+        return () => {
+           switch (type) {
+              case 'info':
+                 NotificationManager.info('Info message');
+                 break;
+              case 'success':
+                 NotificationManager.success('Success message');
+                 break;
+              case 'warning':
+                 NotificationManager.warning('Warning message');
+                 break;
+              case 'error':
+                 NotificationManager.error('Error message');
+                 break;
+              default:
+                 NotificationManager.success('Success message', 'Title here');
+                 break;
+           }
+        };
+     };
 
      handleChangeIndex(index) {
         this.setState({ activeIndex: index });
@@ -128,7 +167,7 @@ function TabContainer({ children }) {
             filterType: 'dropdown'
         };
         return (
-            <div className="formelements-wrapper">
+            <div className="formelements-wrapper main-layout-class">
                 <PageTitleBar title={<IntlMessages id="sidebar.simpleform" />} match={this.props.match} />
                 <Accordion>
 					<AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
@@ -139,43 +178,96 @@ function TabContainer({ children }) {
                     <div className="col-sm-12 col-md-12 col-xl-12">
                     
                     <RctCollapsibleCard heading="">
-                        <div className="row">
-							<div className="col-sm-6 col-md-6 col-xl-4">
-                                <div className="form-group">
-                                    <TextField id="Category Name" fullWidth label="Category Name" value=''  placeholder="Category Name"/>
-                                </div>
+
+
+                    <div className="col-sm-3 col-md-3 col-xl-4 float-right pr-0">
+								<Form> 
+                  
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning  mb-10 text-white btn-icon pull-right b-sm mr-0" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Warning <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
+                               
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Error <i className="zmdi zmdi-alert-circle"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                               
+                </Form>                               
 							</div>
-							<div className="col-sm-6 col-md-6 col-xl-4">
+
+
+                            <div className="clearfix"></div>
+						<div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
-								<TextField id="name" fullWidth label="Category Description" placeholder="Category Description"/>
+								<TextField id="skucode" fullWidth label="SKU Code" placeholder="SKU Code"/>
 								</div>
-							</div>	
-                            {/* <div className="col-sm-6 col-md-6 col-xl-4">
-								<Form>                                                            
-                                <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                                    <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
-                                </div>
-                                <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                                    <div className="form-group">
-                                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                    </div>                       
-                                </div>    
-                                </Form>                               
-							</div>											 */}
-                            <div className="col-sm-12 col-md-6 col-xl-4">
-                                <div className="row m-btop">                                                            
-                                <div className="col-sm-6 col-md-6 col-xl-6">      
-                                <div className="form-group">               
-                                    <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
-                                </div></div>
-                                <div className="col-sm-6 col-md-6 col-xl-6">                     
-                                    <div className="form-group">
-                                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                    </div>                       
-                                </div>    
-                                      </div>                       
-							</div>	
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="Category" fullWidth label="Category" placeholder="Category"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="age-simple">Sub Category</InputLabel>
+                    <Select value={this.state.age} onChange={this.handleChange}
+                      inputProps={{ name: 'age', id: 'age-simple', }}>
+                      <MenuItem value=""><em>None</em></MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Product Name</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>
 						</div>
+
+						<div className="row new-form mb-10">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+							  <div className="form-group">
+                    <TextField error id="error" fullWidth label="Error message will be displayed here" defaultValue="Hello World" />
+                </div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="HSN Code" placeholder="HSN Code"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Selling Method</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>		
+              <div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="Piece Quantity" placeholder="Piece Quantity"/>
+								</div>
+							</div>				
+						</div>
+         
+            
                         <AppBar position="static" color="default">
                             <Tabs
                                 value={this.state.activeIndex}
@@ -193,9 +285,304 @@ function TabContainer({ children }) {
                             axis={'x'}
                             index={this.state.activeIndex}
                             onChangeIndex={(index) => this.handleChangeIndex(index)}>
-                            <TabContainer>Item One</TabContainer>
-                            <TabContainer>Item Two</TabContainer>
-                            <TabContainer>Item Three</TabContainer>
+                            <TabContainer>
+
+                            
+              <div className="clearfix"></div>
+						<div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="skucode" fullWidth label="SKU Code" placeholder="SKU Code"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="Category" fullWidth label="Category" placeholder="Category"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="age-simple">Sub Category</InputLabel>
+                    <Select value={this.state.age} onChange={this.handleChange}
+                      inputProps={{ name: 'age', id: 'age-simple', }}>
+                      <MenuItem value=""><em>None</em></MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Product Name</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>
+						</div>
+
+						<div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+							  <div className="form-group">
+                    <TextField error id="error" fullWidth label="Error message will be displayed here" defaultValue="Hello World" />
+                </div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="HSN Code" placeholder="HSN Code"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Selling Method</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>		
+              <div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="Piece Quantity" placeholder="Piece Quantity"/>
+								</div>
+							</div>				
+						</div>
+            <div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="Sales Price" placeholder="Sales Price"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="HSN Code" placeholder="HSN Code"/>
+								</div>
+							</div>
+              <div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="Piece Quantity" placeholder="Piece Quantity"/>
+								</div>
+							</div>		
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Size</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>              		
+						</div>
+            <div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Colors</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Material Type</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>
+              <div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">UOM</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>		
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Item Type</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>              		
+						</div>
+            
+            <div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <TextField id="name" fullWidth label="Barcode" placeholder="Barcode"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Size</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>
+              <div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <TextField id="name" fullWidth label="Barcode" placeholder="Barcode"/>
+								</div>
+							</div>		
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Size</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>              		
+						</div>
+            <div className="row new-form">
+							<div className="col-sm-9 col-md-9 col-xl-8">
+                <FormGroup row>
+                  {/* <Label for="Email-5" sm={2}>Comments</Label> */}
+                  {/* <Col sm={10}>
+                    <textarea className="form-control" fullWidth label="Comments" placeholder="Comments" bsSize="lg"/>										
+                  </Col> */}
+                </FormGroup>
+              </div>
+             
+            </div>
+
+                            </TabContainer>
+                            <TabContainer>
+                                
+                            <div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="skucode" fullWidth label="SKU Code" placeholder="SKU Code"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="Category" fullWidth label="Category" placeholder="Category"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="age-simple">Sub Category</InputLabel>
+                    <Select value={this.state.age} onChange={this.handleChange}
+                      inputProps={{ name: 'age', id: 'age-simple', }}>
+                      <MenuItem value=""><em>None</em></MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                  <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Product Name</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>
+						</div>
+
+                            </TabContainer>
+                            <TabContainer>
+                                
+                            <div className="row new-form">
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="Sales Price" placeholder="Sales Price"/>
+								</div>
+							</div>
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="HSN Code" placeholder="HSN Code"/>
+								</div>
+							</div>
+              <div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+								<TextField id="name" fullWidth label="Piece Quantity" placeholder="Piece Quantity"/>
+								</div>
+							</div>		
+							<div className="col-sm-6 col-md-6 col-xl-3">
+								<div className="form-group">
+                <FormControl fullWidth>
+                      <InputLabel htmlFor="product-name">Size</InputLabel>
+                      <Select value={this.state.productname} onChange={this.handleChange}
+                        inputProps={{ name: 'product-name', id: 'product-name', }}>
+                        <MenuItem value=""><em>None</em></MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+								</div>
+							</div>              		
+						</div>
+
+                            </TabContainer>
                         </SwipeableViews>
                     </RctCollapsibleCard>
                 </div>

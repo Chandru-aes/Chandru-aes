@@ -703,7 +703,7 @@ ul.navbar-right-new{margin-right: 0px;}
 table tr th{background:#ececec!important; color: #000!important;padding: 6px 10px !important;
 	font-size: 15px !important;
 	line-height: 15px !important;}
-	table .MuiTableCell-root, .table-bordered td, .responsive td{padding: 6px 10px !important;}
+	table .MuiTableCell-root, .table-bordered td, .responsive td{padding: 4px 10px !important;}
 table tr:nth-child(2n) td{background: #fbfbfb;}
 table .MuiButton-root {font-size:1rem;}
 table .MuiIconButton-root {padding:0px 10px;}
@@ -771,34 +771,8 @@ table.table.table-bordered.table-striped.flip-content tr.bg-primary th{color: #0
     padding: 3px;
 }
 .MuiSelect-selectMenu{border-radius: .25rem!important;}
-table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: none !important;}
-.main-layout-class .rct-block .rct-block, .MuiCollapse-wrapperInner .rct-block{box-shadow: none;}
-.b-sm{width: 100px;}
-.b-md{width: 150px;}
-.MuiTypography-root.MuiTypography-body1 {
-    padding: 0 0!important;
-	overflow: hidden;
-}
-.MuiAccordionSummary-root.Mui-expanded {
-    min-height: 34px !important;
-}
-.MuiAccordionSummary-content.Mui-expanded {
-    margin: 0px 0 !important;
-}
-.MuiPaper-elevation4 {
-	box-shadow: none !important;
-}
+table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important;}
 
-.MuiAccordionDetails-root{display: block !important;}
-
-.MuiTablePagination-toolbar .MuiSelect-select.MuiSelect-select {
-    padding-right: 24px;
-    padding: 29px 20px 10px 0px !important;
-    border: none!important;
-} 
-.MuiCollapse-wrapper .rct-block-content{padding-top: 0!important;}
-.MuiAccordionDetails-root{padding-top: 0!important;}
-.MuiSvgIcon-root{font-size: 18px!important;} 
 /*Fixed column end*/
 
 /* #Media Queries
@@ -840,7 +814,6 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 	.m-btop{margin-top: 20px;}
 	.table td .media{display: block;}
 }
-
 
 /* Mobile Landscape Size (devices and browsers) */
 

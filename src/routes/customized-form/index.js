@@ -66,11 +66,11 @@ import FormattedInputs from '../customized-form/formated-input';
         const { employeePayroll } = this.state;
 		const { match } = this.props;
         return (
-            <div className="formelements-wrapper">
+            <div className="formelements-wrapper main-layout-class">
                 <PageTitleBar title={<IntlMessages id="simpleform" />} match={this.props.match} />
                  <div className="row">                
                     <div className="col-sm-12 col-md-12 col-xl-12">
-                    <RctCollapsibleCard heading="Formatted inputs">
+                    <RctCollapsibleCard heading="">
                         <FormattedInputs />
                     </RctCollapsibleCard>
                     </div>

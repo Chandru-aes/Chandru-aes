@@ -104,7 +104,22 @@ export default class FormattedInputs extends React.Component {
 
   render() {
     return (
-      <RctCollapsibleCard heading="Add Product">
+      <RctCollapsibleCard heading="">
+        <div className="col-sm-3 col-md-9 col-xl-4 float-left">
+          <h2>Add Product</h2>
+          </div>
+         <div className="col-sm-3 col-md-3 col-xl-4 float-right pr-0">
+								<Form> 
+                  
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('warning')}><span class="MuiButton-label">Warning <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
+                               
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span class="MuiButton-label">Error <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span class="MuiButton-label">save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                               
+                </Form>                               
+							</div>
+              <div className="clearfix"></div>
 						<div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
@@ -146,7 +161,7 @@ export default class FormattedInputs extends React.Component {
 							</div>
 						</div>
 
-						<div className="row">
+						<div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 							  <div className="form-group">
                     <TextField error id="error" fullWidth label="Error message will be displayed here" defaultValue="Hello World" />
@@ -177,7 +192,7 @@ export default class FormattedInputs extends React.Component {
 								</div>
 							</div>				
 						</div>
-            <div className="row">
+            <div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
 								<TextField id="name" fullWidth label="Sales Price" placeholder="Sales Price"/>
@@ -208,7 +223,7 @@ export default class FormattedInputs extends React.Component {
 								</div>
 							</div>              		
 						</div>
-            <div className="row">
+            <div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
                 <FormControl fullWidth>
@@ -267,7 +282,7 @@ export default class FormattedInputs extends React.Component {
 							</div>              		
 						</div>
             
-            <div className="row">
+            <div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
                 <TextField id="name" fullWidth label="Barcode" placeholder="Barcode"/>
@@ -307,46 +322,16 @@ export default class FormattedInputs extends React.Component {
 								</div>
 							</div>              		
 						</div>
-            <div className="row">
+            <div className="row new-form">
 							<div className="col-sm-9 col-md-9 col-xl-8">
                 <FormGroup row>
                   {/* <Label for="Email-5" sm={2}>Comments</Label> */}
-                  <Col sm={10}>
+                  {/* <Col sm={10}>
                     <textarea className="form-control" fullWidth label="Comments" placeholder="Comments" bsSize="lg"/>										
-                  </Col>
+                  </Col> */}
                 </FormGroup>
               </div>
-              <div className="col-sm-3 col-md-3 col-xl-4">
-								<Form> 
-                  <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                    
-                    <div className="form-group">
-                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button" onClick={this.createNotification('warning')}><span class="MuiButton-label">Warning <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
-                              </div> 
-
-                  </div>                                                          
-                  <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                      
-                    <div className="form-group">
-                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button" onClick={this.createNotification('error')}><span class="MuiButton-label">Error <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>
-                              </div>                 
-                  </div>
-                  <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                     
-                  <div className="form-group">
-                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button" onClick={this.createNotification('success')}><span class="MuiButton-label">save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                              </div>                
-                  </div>    
-                   {/* <div className="col-sm-12 col-md-12 col-xl-6 ft-lft">                     
-                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
-                    </div>
-                    <div className="col-sm-12 col-md-12 col-xl-6 ft-lft">                     
-                        <div className="form-group">
-                            <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                        </div>                       
-                    </div>   */}
-                </Form>                               
-							</div>
+             
             </div>
 						</RctCollapsibleCard>
     );
