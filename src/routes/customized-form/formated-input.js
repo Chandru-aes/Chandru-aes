@@ -105,7 +105,7 @@ export default class FormattedInputs extends React.Component {
   render() {
     return (
       <RctCollapsibleCard heading="Add Product">
-						<div className="row">
+						<div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
 								<TextField id="skucode" fullWidth label="SKU Code" placeholder="SKU Code"/>
@@ -149,7 +149,7 @@ export default class FormattedInputs extends React.Component {
 						<div className="row">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 							  <div className="form-group">
-                    <TextField error id="error" fullWidth label="Error" defaultValue="Hello World" />
+                    <TextField error id="error" fullWidth label="Error message will be displayed here" defaultValue="Hello World" />
                 </div>
 							</div>
 							<div className="col-sm-6 col-md-6 col-xl-3">
@@ -308,7 +308,7 @@ export default class FormattedInputs extends React.Component {
 							</div>              		
 						</div>
             <div className="row">
-							<div className="col-sm-6 col-md-6 col-xl-6">
+							<div className="col-sm-9 col-md-9 col-xl-8">
                 <FormGroup row>
                   {/* <Label for="Email-5" sm={2}>Comments</Label> */}
                   <Col sm={10}>
@@ -316,25 +316,35 @@ export default class FormattedInputs extends React.Component {
                   </Col>
                 </FormGroup>
               </div>
-              <div className="col-sm-6 col-md-6 col-xl-6">
+              <div className="col-sm-3 col-md-3 col-xl-4">
 								<Form> 
                   <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                    <Button variant="contained" className='text-white btn btn-warning mr-10 mb-10'
-                        onClick={this.createNotification('warning')}><i class="zmdi zmdi-delete">Warning</i>
-                    </Button>                 
+                    
+                    <div className="form-group">
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button" onClick={this.createNotification('warning')}><span class="MuiButton-label">Warning <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              </div> 
+
                   </div>                                                          
                   <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                    <Button variant="contained" className='text-white btn btn-danger mr-10 mb-10'
-                          onClick={this.createNotification('error')}><i class="zmdi zmdi-alert-circle">Error</i> 
-                    </Button>                     
+                      
+                    <div className="form-group">
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button" onClick={this.createNotification('error')}><span class="MuiButton-label">Error <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              </div>                 
                   </div>
                   <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                      <div className="form-group">
-                        <Button variant="contained" className='text-white btn btn-success mr-10 mb-10'
-                            onClick={this.createNotification('success')}><i class="zmdi zmdi-check-all">Success</i>
-                        </Button>
-                      </div>                       
+                     
+                  <div className="form-group">
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button" onClick={this.createNotification('success')}><span class="MuiButton-label">save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              </div>                
                   </div>    
+                   {/* <div className="col-sm-12 col-md-12 col-xl-6 ft-lft">                     
+                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
+                    </div>
+                    <div className="col-sm-12 col-md-12 col-xl-6 ft-lft">                     
+                        <div className="form-group">
+                            <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                        </div>                       
+                    </div>   */}
                 </Form>                               
 							</div>
             </div>

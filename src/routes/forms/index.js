@@ -10,7 +10,8 @@ import {
 	AsyncFormElementsComponent,
 	AsyncTextFieldComponent,
 	AsyncSelectListComponent,
-	AsyncTabFormsComponent
+	AsyncTabFormsComponent,
+	FormWithAccordionElement
 } from 'Components/AsyncComponent/AsyncComponent';
 
 const Forms = ({ match }) => (
@@ -25,6 +26,7 @@ const Forms = ({ match }) => (
 			<Route path={`${match.url}/text-field`} component={AsyncTextFieldComponent} />
 			<Route path={`${match.url}/select-list`} component={AsyncSelectListComponent} />
 			<Route path={`${match.url}/tabs`} component={AsyncTabFormsComponent} />
+			<Route path={`${match.url}/accordion-forms`} component={FormWithAccordionElement} />
 		</Switch>
 	</div>
 );

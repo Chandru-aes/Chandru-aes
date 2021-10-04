@@ -8,7 +8,9 @@ import { Helmet } from "react-helmet";
 import {
     AsyncBasicTableComponent,
     AsyncDataTableComponent,
-    AsyncResponsiveTableComponent
+    AsyncResponsiveTableComponent,
+    AsyncFixedColumnTableComponent,
+    AsyncInlineTableComponent
 } from 'Components/AsyncComponent/AsyncComponent';
 
 const Pages = ({ match }) => (
@@ -22,6 +24,8 @@ const Pages = ({ match }) => (
             <Route path={`${match.url}/basic`} component={AsyncBasicTableComponent} />
             <Route path={`${match.url}/data-table`} component={AsyncDataTableComponent} />
             <Route path={`${match.url}/responsive`} component={AsyncResponsiveTableComponent} />
+            <Route path={`${match.url}/fixed-columns`} component={AsyncFixedColumnTableComponent} />
+            <Route path={`${match.url}/inline-edit`} component={AsyncInlineTableComponent} />
         </Switch>
     </div>
 );

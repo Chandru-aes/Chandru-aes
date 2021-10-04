@@ -30,6 +30,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 // page title bar
 import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
  
+import FormattedInputs from '../../forms/material-text-field/components/formated-input';
  // intl messages
  import IntlMessages from 'Util/IntlMessages';
  
@@ -97,6 +98,7 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
                 >
                    <Tab label="Address List" />
                    <Tab label="Address Entry" />
+                   <Tab label="list3" />
                    {/* <Tab label="Education Details" /> */}
                 </Tabs>
              </AppBar>
@@ -200,7 +202,7 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
                            </div>								
                         </Form>
                      </div>
-                     <div className="col-sm-12 col-md-12 col-xl-4">
+                     <div className="col-sm-12 col-md-12 col-xl-3">
                         <Form>
                            <div className="col-sm-12 col-md-12 col-xl-12">                     
                               <div className="form-group">
@@ -215,21 +217,19 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
                         </Form>
                      </div>
                      
-                     <div className="col-sm-12 col-md-12 col-xl-4">
+                     <div className="col-sm-12 col-md-12 col-xl-5 pr-0">
                         <Form>
-                        <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                              <div className="form-group">
-                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-mail-send"></i></span><span class="MuiTouchRipple-root"></span></button>
-                              </div>                       
-                           </div> 
+                           <div className="col-sm-12 col-md-12 col-xl-4 ft-lft p-0">                     
+                              {/* <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Cancel <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>                       */}
+                           </div>
                            <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
-                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Cancel <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>                      
+                           {/* <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                      */}
                            </div>
-                           <div className="col-sm-12 col-md-12 col-xl-4 ">                     
-                           <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
-                           </div>
-                          
-                                                    						
+                           <div className="col-sm-12 col-md-12 col-xl-4 pr-0">                     
+                              <div className="form-group">
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Next <i class="zmdi zmdi-mail-send"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              </div>                       
+                           </div>                   						
                         </Form>
                      </div>
                      
@@ -295,12 +295,69 @@ import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
                            </div>								
                         </Form>
                      </div>  
+                     
                   </div>
+                  <div className="col-sm-12 col-md-12 col-xl-12 pr-0">
+                        <Form>
+                           <div className="col-sm-12 col-md-12 col-xl-4 ft-lft p-0">                     
+                              {/* <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Cancel <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>                       */}
+                           </div>
+                           <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
+                           {/* <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                      */}
+                           </div>
+                           <div className="col-sm-12 col-md-12 col-xl-4  pr-0">                     
+                              <div className="form-group">
+                                 <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-6" tabindex="0" type="button"><span class="MuiButton-label">Next <i class="zmdi zmdi-mail-send"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              </div>                       
+                           </div>                   						
+                        </Form>
+                     </div>
                 </RctCollapsibleCard>
                 </TabContainer>
-                <TabContainer>
                 
+                <TabContainer>
+                  <div className="row new-form">
+                     <div className="col-sm-6 col-md-6 col-xl-4">
+                        <div className="form-group">
+                        <TextField id="skucode" fullWidth label="SKU Code" placeholder="SKU Code"/>
+                        </div>
+                     </div>
+                     <div className="col-sm-6 col-md-6 col-xl-4">
+                        <div className="form-group">
+                        <TextField id="Category" fullWidth label="Category" placeholder="Category"/>
+                        </div>
+                     </div>
+                     <div className="col-sm-6 col-md-6 col-xl-4">
+                        <div className="form-group">
+                        <TextField id="Category" fullWidth label="Category" placeholder="Category"/>
+                        </div>
+                     </div>
+                     <div className="col-sm-6 col-md-6 col-xl-12">
+                        <div className="form-group">
+                        <FormattedInputs />
+                        </div>
+                     </div>
+                     
 
+
+                     <div className="col-sm-12 col-md-12 col-xl-6 pr-0">
+                        </div>
+                     <div className="col-sm-12 col-md-12 col-xl-6 pr-0">
+                        <Form>
+                           <div className="col-sm-12 col-md-12 col-xl-4 ft-lft p-0">                     
+                              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Cancel <i class="zmdi zmdi-alert-circle"></i></span><span class="MuiTouchRipple-root"></span></button>                      
+                           </div>
+                           <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
+                           <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
+                           </div>
+                           <div className="col-sm-12 col-md-12 col-xl-4  pr-0">                     
+                              <div className="form-group">
+                                 <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                              </div>                       
+                           </div>                   						
+                        </Form>
+                     </div>
+                  </div>
                 </TabContainer>
              </SwipeableViews>
           </RctCollapsibleCard>

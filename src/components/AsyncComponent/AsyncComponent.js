@@ -208,6 +208,15 @@ const AsyncResponsiveTableComponent = Loadable({
 	loading: () => <RctPageLoader />,
 });
 
+const AsyncFixedColumnTableComponent = Loadable({
+	loader: () => import("Routes/tables/fixed-column"),
+	loading: () => <RctPageLoader />,
+});
+
+const AsyncInlineTableComponent = Loadable({
+	loader: () => import("Routes/tables/inline-edit"),
+	loading: () => <RctPageLoader />,
+});
 // Users List
 const AsyncUsersListComponent = Loadable({
 	loader: () => import("Routes/users/user-list"),
@@ -349,6 +358,11 @@ const AsyncFormElementsComponent = Loadable({
 // forms TextField
 const AsyncTextFieldComponent = Loadable({
 	loader: () => import("Routes/forms/material-text-field"),
+	loading: () => <RctPageLoader />,
+});
+
+const FormWithAccordionElement = Loadable({
+	loader: () => import("Routes/forms/tab-with-grid"),
 	loading: () => <RctPageLoader />,
 });
 
@@ -672,5 +686,8 @@ export {
 	AsyncTImelineComponent,
 	AsyncStepperFormsComponent,
 	AsyncAdvancedFormComponent,
-	CustomizedFormElement
+	CustomizedFormElement,
+	AsyncFixedColumnTableComponent,
+	AsyncInlineTableComponent,
+	FormWithAccordionElement
 };

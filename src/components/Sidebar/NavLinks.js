@@ -287,7 +287,13 @@ export default {
                
                "path": "/app/customized-form",
                "menu_title": "Customized Form",
-            }
+            },
+            {
+               
+               "path": "/app/forms/accordion-forms",
+               "menu_title": "Accordion with tab",
+            },
+            
          ]
       },
       {
@@ -351,7 +357,18 @@ export default {
                "path": "/app/tables/responsive",
                "new_item": false,
                "menu_title": "sidebar.responsive"
-            }
+            },
+            {
+               "path": "/app/tables/fixed-columns",
+               "new_item": false,
+               "menu_title": "Fixed Column"
+            },
+            {
+               "path": "/app/tables/inline-edit",
+               "new_item": false,
+               "menu_title": "Inline Edit"
+            },
+            
          ]
       }
    ],

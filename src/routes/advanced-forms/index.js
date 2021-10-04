@@ -25,6 +25,8 @@ import TableRow from '@material-ui/core/TableRow';
 
  // page title bar
  import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
+
+ import MUIDataTable from "mui-datatables";
  
  // intl messages
  import IntlMessages from 'Util/IntlMessages';
@@ -40,6 +42,12 @@ import TableRow from '@material-ui/core/TableRow';
  import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import 'font-awesome/css/font-awesome.min.css';
+
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Typography from '@material-ui/core/Typography';
+
  
  class AdvanceFormElement extends Component {
     state = {
@@ -63,11 +71,53 @@ import 'font-awesome/css/font-awesome.min.css';
     render() {
         const { employeePayroll } = this.state;
 		const { match } = this.props;
+        const columns = ["Category Name", "Description", "Location", "Code", "Amount"];
+        const data = [
+            ["Gabby George", "Business Analyst", "Minneapolis", 30, "$100,000"],
+            ["Aiden Lloyd", "Business Consultant", "Dallas", 55, "$200,000"],
+            ["Jaden Collins", "Attorney", "Santa Ana", 27, "$500,000"],
+            ["Franky Rees", "Business Analyst", "St. Petersburg", 22, "$50,000"],
+            ["Aaren Rose", "Business Consultant", "Toledo", 28, "$75,000"],
+            ["Blake Duncan", "Business Management Analyst", "San Diego", 65, "$94,000"],
+            ["Frankie Parry", "Agency Legal Counsel", "Jacksonville", 71, "$210,000"],
+            ["Lane Wilson", "Commercial Specialist", "Omaha", 19, "$65,000"],
+            ["Robin Duncan", "Business Analyst", "Los Angeles", 20, "$77,000"],
+            ["Mel Brooks", "Business Consultant", "Oklahoma City", 37, "$135,000"],
+            ["Harper White", "Attorney", "Pittsburgh", 52, "$420,000"],
+            ["Kris Humphrey", "Agency Legal Counsel", "Laredo", 30, "$150,000"],
+            ["Frankie Long", "Industrial Analyst", "Austin", 31, "$170,000"],
+            ["Brynn Robbins", "Business Analyst", "Norfolk", 22, "$90,000"],
+            ["Justice Mann", "Business Consultant", "Chicago", 24, "$133,000"],
+            ["Addison Navarro", "Business Management Analyst", "New York", 50, "$295,000"],
+            ["Jesse Welch", "Agency Legal Counsel", "Seattle", 28, "$200,000"],
+            ["Eli Mejia", "Commercial Specialist", "Long Beach", 65, "$400,000"],
+            ["Gene Leblanc", "Industrial Analyst", "Hartford", 34, "$110,000"],
+            ["Danny Leon", "Computer Scientist", "Newark", 60, "$220,000"],
+            ["Lane Lee", "Corporate Counselor", "Cincinnati", 52, "$180,000"],
+            ["Jesse Hall", "Business Analyst", "Baltimore", 44, "$99,000"],
+            ["Danni Hudson", "Agency Legal Counsel", "Tampa", 37, "$90,000"],
+            ["Terry Macdonald", "Commercial Specialist", "Miami", 39, "$140,000"],
+            ["Justice Mccarthy", "Attorney", "Tucson", 26, "$330,000"],
+            ["Silver Carey", "Computer Scientist", "Memphis", 47, "$250,000"],
+            ["Franky Miles", "Industrial Analyst", "Buffalo", 49, "$190,000"],
+            ["Glen Nixon", "Corporate Counselor", "Arlington", 44, "$80,000"],
+            ["Gabby Strickland", "Business Process Consultant", "Scottsdale", 26, "$45,000"],
+            ["Mason Ray", "Computer Scientist", "San Francisco", 39, "$142,000"]
+        ];
+        const options = {
+            filterType: 'dropdown'
+        };
         return (
             <div className="formelements-wrapper">
                 <PageTitleBar title={<IntlMessages id="sidebar.simpleform" />} match={this.props.match} />
-                 <div className="row">                
+                <Accordion>
+					<AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
+						<Typography>Add Category</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+                                  
                     <div className="col-sm-12 col-md-12 col-xl-12">
+                    
                     <RctCollapsibleCard heading="Add Category">
                     <div className="row">
 							<div className="col-sm-6 col-md-6 col-xl-4">
@@ -80,67 +130,51 @@ import 'font-awesome/css/font-awesome.min.css';
 								<TextField id="name" fullWidth label="Category Description" placeholder="Category Description"/>
 								</div>
 							</div>	
-                            <div className="col-sm-6 col-md-6 col-xl-4">
-								<Form>
-                                                            
+                            {/* <div className="col-sm-6 col-md-6 col-xl-4">
+								<Form>                                                            
                                 <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
                                     <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
                                 </div>
                                 <div className="col-sm-12 col-md-12 col-xl-4 ft-lft">                     
                                     <div className="form-group">
-                                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-mail-send"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
                                     </div>                       
                                 </div>    
                                 </Form>                               
-							</div>											
+							</div>											 */}
+                            <div className="col-sm-12 col-md-6 col-xl-4">
+                                <div className="row m-btop">                                                            
+                                <div className="col-sm-6 col-md-6 col-xl-6">      
+                                <div className="form-group">               
+                                    <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 mb-10 text-white btn-icon col-12" tabindex="0" type="button"><span class="MuiButton-label">Reset <i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>                     
+                                </div></div>
+                                <div className="col-sm-6 col-md-6 col-xl-6">                     
+                                    <div className="form-group">
+                                        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon col-12" tabindex="0" type="button"><span class="MuiButton-label">Save <i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                    </div>                       
+                                </div>    
+                                      </div>                       
+							</div>	
 						</div>
                     </RctCollapsibleCard>
-                    </div>
                 </div>
+					</AccordionDetails>
+				</Accordion>
+               <br/>
+
+                <div className="row">   
                 <div className="col-sm-12 col-md-12 col-xl-12">
-                    <RctCollapsibleCard heading="Category List">
-                        <div className="row">
-                        <div className="table-responsive">
-						    <Table>
-                                <TableHead>
-                                    <TableRow hover>
-                                        <TableCell>Category Name</TableCell>
-                                        <TableCell>Description</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>Action</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <Fragment>
-                                    {employeePayroll && employeePayroll.map((employee, key) => (
-                                            <TableRow hover key={key}>
-                                                <TableCell>
-                                                    <Media>
-                                                        {/* <Media left>
-                                                            <Media object src={employee.employeeAvatar} alt="User Profile 1" className="rounded-circle mr-20" width="40" height="40" />
-                                                        </Media> */}
-                                                        <Media body><h5 className="m-0 pt-15">{employee.employeeName}</h5></Media>
-                                                    </Media>
-                                                </TableCell>
-                                                <TableCell>{employee.designation}</TableCell>
-                                                {/* <TableCell>${employee.salary}</TableCell> */}
-                                                {employee.status === 1 ?
-                                                    <TableCell><Badge color="success">Done</Badge></TableCell>
-                                                    : <TableCell><Badge color="warning">Done</Badge></TableCell>
-                                                }
-                                                <TableCell>
-                                                    <IconButton className="text-success" aria-label="Delete"><i className="zmdi zmdi-check-all"></i></IconButton>
-                                                    <IconButton className="text-danger" aria-label="Add an alarm"><i className="zmdi zmdi-close"></i></IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </Fragment>
-                                </TableBody>
-                            </Table>
-                            </div>
-                            </div>
-                    </RctCollapsibleCard>
+                    <RctCollapsibleCard heading="" fullBlock>
+					 <MUIDataTable
+						 title={"Category List"}
+						 data={data}
+						 columns={columns}
+						 options={options}
+					 />
+				    </RctCollapsibleCard>
+
 					</div>
+            </div>
             </div>
    );
  };
