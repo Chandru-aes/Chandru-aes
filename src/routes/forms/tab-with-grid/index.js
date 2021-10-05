@@ -81,7 +81,12 @@ function TabContainer({ children }) {
  class FormWithAccordionElement extends Component {
     state = {
 		employeePayroll: null,
-        activeIndex: 0
+        activeIndex: 0,
+        tableData: {
+          mobile_number:"995848585",
+          password:"123456"
+
+      },
 	}
 
     createNotification = (type) => {
@@ -119,7 +124,8 @@ function TabContainer({ children }) {
 
 	// get employee payrols
 	getEmployeePayrolls() {
-		api.get('employeePayrols.js')
+
+		api.post('subscriber_login',this.state.tableData)
 			.then((response) => {
 				this.setState({ employeePayroll: response.data });
 			})
@@ -169,19 +175,16 @@ function TabContainer({ children }) {
         return (
             <div className="formelements-wrapper main-layout-class">
                 <PageTitleBar title={<IntlMessages id="sidebar.simpleform" />} match={this.props.match} />
+                <div className="category-container rct-block">
                 <Accordion>
-					<AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-						<Typography>Add Category</Typography>
-					</AccordionSummary>
-					<AccordionDetails>
-                                  
-                    <div className="col-sm-12 col-md-12 col-xl-12">
-                    
-                    <RctCollapsibleCard heading="">
-
-
-                    <div className="col-sm-3 col-md-3 col-xl-4 float-right pr-0">
-								<Form> 
+                  <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
+                    <Typography>Add Category</Typography>
+                  </AccordionSummary>
+					        <AccordionDetails>                                  
+                    <div className="col-sm-12 col-md-12 col-xl-12 p-0">                    
+                      <RctCollapsibleCard heading="">
+                        <div className="col-sm-3 col-md-3 col-xl-4 float-right pr-0 but-tp">
+                          <Form> 
                   
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning  mb-10 text-white btn-icon pull-right b-sm mr-0" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Warning <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
                                
@@ -189,11 +192,9 @@ function TabContainer({ children }) {
                               
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                
-                </Form>                               
-							</div>
-
-
-                            <div className="clearfix"></div>
+                          </Form>                               
+                        </div>
+                        <div className="clearfix"></div>
 						<div className="row new-form">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 								<div className="form-group">
@@ -235,7 +236,7 @@ function TabContainer({ children }) {
 							</div>
 						</div>
 
-						<div className="row new-form mb-10">
+						<div className="row new-form mb-20">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 							  <div className="form-group">
                     <TextField error id="error" fullWidth label="Error message will be displayed here" defaultValue="Hello World" />
@@ -330,7 +331,7 @@ function TabContainer({ children }) {
 							</div>
 						</div>
 
-						<div className="row new-form">
+						<div className="row new-form mb-10">
 							<div className="col-sm-6 col-md-6 col-xl-3">
 							  <div className="form-group">
                     <TextField error id="error" fullWidth label="Error message will be displayed here" defaultValue="Hello World" />
@@ -588,9 +589,10 @@ function TabContainer({ children }) {
                 </div>
 					</AccordionDetails>
 				</Accordion>
+        </div>
                <br/>
 
-                <div className="row">   
+                <div className="row d-tbl-sp">   
                     <div className="col-sm-12 col-md-12 col-xl-12">
                     <RctCollapsibleCard heading="" fullBlock>
                         <Accordion>
