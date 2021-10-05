@@ -478,6 +478,13 @@ const AsyncCarouselComponent = Loadable({
 
 
 // components Grid List
+const AsyncUserbuyerrightsComponent = Loadable({
+	loader: () => import("Routes/userbuyerrights"),
+	loading: () => <RctPageLoader />,
+});
+
+
+// components Grid List
 const AsyncTImelineComponent = Loadable({
 	loader: () => import("Routes/timeline"),
 	loading: () => <RctPageLoader />,
@@ -689,5 +696,6 @@ export {
 	CustomizedFormElement,
 	AsyncFixedColumnTableComponent,
 	AsyncInlineTableComponent,
-	FormWithAccordionElement
+	FormWithAccordionElement,
+	AsyncUserbuyerrightsComponent
 };

@@ -21,6 +21,7 @@ import ImageCropper from 'Routes/image-cropper';
 import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
 import CarouselElement from 'Routes/carousel';
+import UserbuyerrightsElement from 'Routes/userbuyerrights';
 import TimelineElement from 'Routes/timeline';
 import AdvanceFormElement from 'Routes/advanced-forms';
 import CustomizedFormElement from 'Routes/customized-form';
@@ -132,6 +133,9 @@ export default [
    {
       path: 'carousel',
       component: CarouselElement
+   },{
+      path: 'user_buyer_rights',
+      component: UserbuyerrightsElement
    },
    {
       path: 'timeline',

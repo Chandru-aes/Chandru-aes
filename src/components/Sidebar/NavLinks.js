@@ -516,6 +516,21 @@ export default {
             
          ]
       },
+      {
+         "menu_title": "User Buyer Rights",
+         "menu_icon": "zmdi zmdi-wrench",
+         "type_multi": null,
+         "new_item": false,
+         "path": "/app/user_buyer_rights",
+         // "child_routes": [
+         //    {
+         //       "path": "/app/carousel",
+         //       "new_item": false,
+         //       "menu_title": "Carousel Slider"
+         //    },
+            
+         // ]
+      },
    ],
    // category11: [
    //    {
