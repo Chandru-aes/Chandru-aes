@@ -828,7 +828,10 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 		.MuiInputLabel-shrink{transform: none!important;}
 		.MUIDataTableFilter-resetLink-98{background: #e0e0e0!important;
 			color: #000!important;}
-
+			.MuiAccordionSummary-content p {
+				font-size: 19px!important;
+			}
+			.rct-block{margin-bottom: 5px!important;}
 
 /* #Media Queries
 ================================================== */
@@ -869,8 +872,40 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 	.m-btop{margin-top: 20px;}
 	.table td .media{display: block;}
 }
+.tb-pro label {
+    font-size: 14px;
+}
 
+.tb-pro .page-link {
+    font-size: 14px;
+	color: #000 !important;
+}
 
+.tb-pro .form-control {
+    font-size: 14px;
+}
+
+.rct-sidebar .rct-sidebar-nav .rct-mainMenu > li:not(.list-item) a{
+	padding: 5px;
+}
+.acc_title_font .MuiTypography-body1 {
+	font-family: "HelveticaNeue" !important;
+}
+.table .thead-light th{
+	background: #ececec !important;
+	font-size: 15px;
+	color: #000;
+	font-family: "HelveticaNeue" !important;padding: 5px 0;
+    font-weight: 500;
+}
+.table tr td{
+	font-family: "HelveticaNeue" !important;padding: 5px 0;
+    font-weight: 500; font-size: 13px;
+}
+.tbl-filter-btn {
+	margin-top: -42px;
+	margin-right: 25px;
+} 
 /* Mobile Landscape Size (devices and browsers) */
 
 
