@@ -74,6 +74,7 @@ module.exports = {
    "sidebar.fontAwesome": "Font Awesome",
    "sidebar.tables": "Tables",
    "sidebar.basic": "Basic",
+   "sidebar.forecasting":"Forecasting",
    "sidebar.dataTable": "Data Table",
    "sidebar.responsive": "Responsive",
    "sidebar.reactTable": "React Table",

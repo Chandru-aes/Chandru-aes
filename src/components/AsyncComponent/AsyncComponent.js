@@ -598,6 +598,22 @@ const CustomizedFormElement = Loadable({
 	loader: () => import("Routes/customized-form"),
 	loading: () => <RctPageLoader />,
 });
+
+const AsyncForecastComponent = Loadable({
+	loader: () => import("Routes/pre-production"),
+	loading: () => <RctPageLoader />,
+});
+
+const AsyncForecastlistComponent = Loadable({
+	loader: () => import("Routes/pre-production/forecast/list"),
+	loading: () => <RctPageLoader />,
+});
+
+const AsyncForecastAddComponent = Loadable({
+	loader: () => import("Routes/pre-production/forecast/add-forecasting"),
+	loading: () => <RctPageLoader />,
+});
+
 export {
 	AsyncUserWidgetComponent,
 	AsyncUserChartsComponent,
@@ -697,5 +713,8 @@ export {
 	AsyncFixedColumnTableComponent,
 	AsyncInlineTableComponent,
 	FormWithAccordionElement,
-	AsyncUserbuyerrightsComponent
+	AsyncUserbuyerrightsComponent,
+	AsyncForecastComponent,
+	AsyncForecastlistComponent,
+	AsyncForecastAddComponent
 };

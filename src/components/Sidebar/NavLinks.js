@@ -532,12 +532,24 @@ export default {
          // ]
       },
    ],
-   // category11: [
-   //    {
-   //       "menu_title": "Simple Forms",
-   //       "menu_icon": "zmdi zmdi-crop",
-   //       "path": "/app/advanced-form",
-   //       "child_routes": null
-   //    }
-   // ]
+   category11: [
+      {
+         "menu_title": "Forecasting",
+         "menu_icon": "zmdi zmdi-crop",
+         "path": "/app/pre-production/",
+         "child_routes": [
+            {
+               "path": "/app/pre-production/forecasting",
+               "new_item": false,
+               "menu_title": "List details"
+            },
+            {
+               "path": "/app/pre-production/add-forecasting",
+               "new_item": false,
+               "menu_title": "Add Forecasting"
+            },
+            
+         ]
+      }
+   ]
 }

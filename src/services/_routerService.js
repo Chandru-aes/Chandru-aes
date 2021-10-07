@@ -25,7 +25,7 @@ import UserbuyerrightsElement from 'Routes/userbuyerrights';
 import TimelineElement from 'Routes/timeline';
 import AdvanceFormElement from 'Routes/advanced-forms';
 import CustomizedFormElement from 'Routes/customized-form';
-
+import  AsyncForecastComponent from 'Routes/pre-production';
 
 
 // async component
@@ -156,5 +156,10 @@ export default [
    {
       path: 'customized-form',
       component: CustomizedFormElement
-   }
+   },
+   {
+      path: 'pre-production',
+      component: AsyncForecastComponent
+   },
+   
 ]
