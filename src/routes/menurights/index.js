@@ -8,12 +8,12 @@
 	Form,
 	FormGroup,
 	Label,
-	Input,
+	// Input,
 	FormText,
 	Col,
 	FormFeedback
 } from 'reactstrap';
-
+import Input from '@material-ui/core/Input';
 import { Media, Badge } from 'reactstrap';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -70,6 +70,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 function TabContainer({ children }) {
     return (
@@ -80,10 +81,11 @@ function TabContainer({ children }) {
  }
 
  
- class UserbuyerrightsElement extends Component {
+ class MenurightsElement extends Component {
     state = {
 		employeePayroll: null,
-        activeIndex: 0
+        activeIndex: 0,
+        name: ''
 	}
 
     createNotification = (type) => {
@@ -135,65 +137,64 @@ function TabContainer({ children }) {
 		const { match } = this.props;
         const columns = ["Buyer Code", "BuyDivCode", "DivName"];
         const data = [
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"], 
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],    
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],   
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],   
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"]
+            ["Pending MRC","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["Pending MRC","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["TNA Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Costing Sheet Reminder","Dashboard"],
+            ["Pending MRC","Dashboard"]
         ];
         const options = {
             filterType: 'dropdown'
         };
         return (
             <div className="formelements-wrapper main-layout-class">
-                {/* <PageTitleBar title={"User Buyer Rights<IntlMessages id="sidebar.simpleform" />} match={this.props.match} /> */}
-                 <PageTitleBar title="User Buyer Rights" match={this.props.match} />
+                {/* <PageTitleBar title={"Menu Rights<IntlMessages id="sidebar.simpleform" />} match={this.props.match} /> */}
+                 <PageTitleBar title="Menu Rights" match={this.props.match} />
                 <Accordion>
 					<AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                         <div className="acc_title_font">
-						    <Typography>User Buyer Rights</Typography>
+						    <Typography>Add Menu Rights</Typography>
                         </div>
 					</AccordionSummary>
 					<AccordionDetails> 
-                                  
+                                     
                     <div className="col-sm-12 col-md-12 col-xl-12 p-0">
                     
                     <RctCollapsibleCard heading="">
 
  
-                    <div className="col-sm-3 col-md-3 col-xl-4 float-right pr-0 but-tp">
+                    <div className="w-50 float-right pr-0 but-tp">
 								<Form> 
-                  
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning  mb-10 text-white btn-icon pull-right b-sm mr-0" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Warning <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
-                               
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Error <i className="zmdi zmdi-alert-circle"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger  text-white btn-icon pull-right b-sm mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Cancel <i className="zmdi zmdi-close"></i></span><span className="MuiTouchRipple-root"></span></button>
                               
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Report <i className="zmdi zmdi-file"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary  text-white btn-icon pull-right b-md mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Menu Rights <i className="zmdi zmdi-menu"></i></span><span className="MuiTouchRipple-root"></span></button>
                                
                 </Form>                               
 							</div>
@@ -201,21 +202,25 @@ function TabContainer({ children }) {
 
                             <div className="clearfix"></div>
 						<div className="row new-form">
-                            <div className="col-lg-5 col-md-3 col-sm-6 col-xs-12 p-0 mt-15">
+                            <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12 p-0 mt-15">
                                 <div className="row">
-                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                            <div className="w-50 ">
+                            <div className="w-20 float-left pl-10">
                             <InputLabel htmlFor="age-simple" className="pl-15 pt-10">User Level :</InputLabel>
                             </div>
-                                
-                                <div className="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+                            <div className="w-75 float-left">
                                 <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div className="w-25">
                                         <FormControlLabel color="primary" value="singleuser" control={<Radio />} label="Single User" />
                                     </div>
-                                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div className="w-25">
                                         <FormControlLabel color="primary" value="copyuser" control={<Radio />} label="Copy User" />
                                     </div>
+                                    <div className="w-25">
+                                        <FormControlLabel color="primary" value="roleuser" control={<Radio />} label="Role User" />
+                                    </div>
                                 </RadioGroup>
+                                </div>
 
                                 </div>
                                
@@ -223,23 +228,103 @@ function TabContainer({ children }) {
                             </div>
                             </div>
 							
-							<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 p-0">
-								<div className="form-group">
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="age-simple">UserId</InputLabel>
-                                        <Select value={this.state.age} onChange={this.handleChange}
-                                        inputProps={{ name: 'age', id: 'age-simple', }}>
-                                        <MenuItem value=""><em>None</em></MenuItem>
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </div>
-							</div>
+							
 							
 						</div>
 
+                        <div className="row new-form">
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="age-simple">User Name</InputLabel>
+                                            <Select value={this.state.age} onChange={this.handleChange}
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>Twenty</MenuItem>
+                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+   
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                
+                                    <FormControl disabled fullWidth>
+                                        <InputLabel htmlFor="name-disabled">User Role</InputLabel>
+                                        <Input id="name-disabled" value={this.state.name} onChange={this.handleChange} />
+                                        {/* <FormHelperText>Disabled</FormHelperText> */}
+                                    </FormControl>
+                                
+                                </div>   
+                                   
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="age-simple">Module</InputLabel>
+                                            <Select value={this.state.age} onChange={this.handleChange}
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>Twenty</MenuItem>
+                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="age-simple">Location</InputLabel>
+                                            <Select value={this.state.age} onChange={this.handleChange}
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>Twenty</MenuItem>
+                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                
+                        </div>
+
+
+                        <div className="row new-form">
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="age-simple">WHCategory</InputLabel>
+                                            <Select value={this.state.age} onChange={this.handleChange}
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>Twenty</MenuItem>
+                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="age-simple">ICategory</InputLabel>
+                                            <Select value={this.state.age} onChange={this.handleChange}
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>Twenty</MenuItem>
+                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                                
+                            </div>
 						
          
             
@@ -270,7 +355,7 @@ function TabContainer({ children }) {
                         <Accordion>
                             <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                             <div className="acc_title_font">
-                                <Typography>User Buyer Rights</Typography>
+                                <Typography>Menu Rights</Typography>
                             </div>
                             </AccordionSummary>
                             <AccordionDetails>
@@ -322,26 +407,49 @@ function TabContainer({ children }) {
                             </div>
                             <table className="table">
                                 <thead className="thead-light">
-                                    <th>
-                                    <Checkbox color="primary" value="true" />
-                                    {/* color="primary" checked={this.state.checkedA} onChange={this.handleChange('checkedA')} */}
-                                    </th>
-                                    <th>Buyer Code</th>
-                                    <th>BuyDivCode</th>
-
-                                    <th>DivName</th>
-
+                                    <th className="w-25">Menu Name</th>
+                                    <th className="w-25">Menu Type</th>
+                                    <th className="text-center w-10" >Full</th>
+                                    <th className="text-center w-10" >Read Only</th>
+                                    <th className="text-center w-10" >No Access</th>
+                                    <th className="w-20">Column rights</th>
                                 </thead>
                                 <tbody>
                                 {data.map(n => {
                                     
 										 return (
                                             <tr>
-                                                <td> <Checkbox color="primary" value="true" />
-                                                </td>
+                                               
                                                 <td>{n[0]}</td>
                                                 <td>{n[1]}</td>
-                                                <td>{n[2]}</td>
+                                                <td align="center">
+                                                        <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                                                            <div className="">
+                                                                <FormControlLabel color="primary" value="anchorEl" control={<Radio />} label="" />
+                                                            </div>
+                                                        </RadioGroup>
+                                                    </td>
+                                                    <td align="center">
+                                                        <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                                                            <div className="">
+                                                                <FormControlLabel color="primary" value="anchorEl" control={<Radio />} label="" />
+                                                            </div>
+                                                        </RadioGroup>
+                                                    </td>
+                                                    <td align="center">
+                                                        <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                                                            <div className="">
+                                                                <FormControlLabel color="primary" value="anchorEl" control={<Radio />} label="" />
+                                                            </div>
+                                                        </RadioGroup>
+                                                    </td>
+                                                    <td>
+                                                        <div className="form-group">
+                                            
+                                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder=""/>
+                                        
+                                        </div>
+                                                    </td>
                                             </tr>
 										 );
 									 })}
@@ -386,7 +494,8 @@ function TabContainer({ children }) {
                                     </div>
                                 </div>
                             </div>
-         
+                            
+                            
                                 {/* <RctCollapsibleCard heading="" fullBlock> */}
                                 {/* <MUIDataTable
                                     // title={"Category List"}
@@ -399,11 +508,13 @@ function TabContainer({ children }) {
                         </Accordion>
                         </RctCollapsibleCard>
 					</div>
+
+                    
                 </div>
             </div>
    );
  };
 }
- export default UserbuyerrightsElement;
+ export default MenurightsElement;
  
  

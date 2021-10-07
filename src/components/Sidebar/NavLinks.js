@@ -515,27 +515,13 @@ export default {
             },
             
          ]
-      },
-      {
-         "menu_title": "User Buyer Rights",
-         "menu_icon": "zmdi zmdi-wrench",
-         "type_multi": null,
-         "new_item": false,
-         "path": "/app/user_buyer_rights",
-         // "child_routes": [
-         //    {
-         //       "path": "/app/carousel",
-         //       "new_item": false,
-         //       "menu_title": "Carousel Slider"
-         //    },
-            
-         // ]
-      },
+      }
+     
    ],
    category11: [
       {
-         "menu_title": "Forecasting",
-         "menu_icon": "zmdi zmdi-crop",
+         "menu_title": "User Buyer Rights",
+         "menu_icon": "zmdi zmdi-account-circle",
          "path": "/app/pre-production/",
          "child_routes": [
             {
@@ -551,5 +537,52 @@ export default {
             
          ]
       }
-   ]
+   ],
+
+   category12: [
+      {
+         "menu_title": "User Buyer Rights",
+         "menu_icon": "zmdi zmdi-account-circle",
+         "type_multi": null,
+         "new_item": false,
+         "path": "/app/user_buyer_rights",
+         // "child_routes": [
+         //    {
+         //       "path": "/app/carousel",
+         //       "new_item": false,
+         //       "menu_title": "Carousel Slider"
+         //    },
+             
+         // ]
+      }], 
+      category13: [ {
+         "menu_title": "Menu",
+         "menu_icon": "zmdi zmdi-menu",
+         "type_multi": null,
+         "new_item": false,
+         "path": "/app/menu_lists",
+         // "child_routes": [
+         //    {
+         //       "path": "/app/carousel",
+         //       "new_item": false,
+         //       "menu_title": "Carousel Slider"
+         //    },
+            
+         // ]
+      }],
+      category14: [ {
+         "menu_title": "Menu Rights",
+         "menu_icon": "zmdi zmdi-menu",
+         "type_multi": null,
+         "new_item": false,
+         "path": "/app/menu_rights",
+         // "child_routes": [
+         //    {
+         //       "path": "/app/carousel",
+         //       "new_item": false,
+         //       "menu_title": "Carousel Slider"
+         //    },
+            
+         // ]
+      }]
 }

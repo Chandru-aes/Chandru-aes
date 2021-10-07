@@ -483,6 +483,18 @@ const AsyncUserbuyerrightsComponent = Loadable({
 	loading: () => <RctPageLoader />,
 });
 
+// components Grid List
+const AsyncMenurightsComponent = Loadable({
+	loader: () => import("Routes/menurights"),
+	loading: () => <RctPageLoader />,
+});
+
+// components Grid List
+const AsyncMenulistsComponent = Loadable({
+	loader: () => import("Routes/menulists"),
+	loading: () => <RctPageLoader />,
+});
+
 
 // components Grid List
 const AsyncTImelineComponent = Loadable({
@@ -699,7 +711,7 @@ export {
 	AsyncSaasDashboardComponent,
 	AsyncAgencyDashboardComponent,
 	AsyncNewsDashboardComponent,
-	AsyncCrmComponent,
+	AsyncCrmComponent,  
 	AsyncProjectsComponent,
 	AsyncProjectDetailComponent,
 	AsyncClientsComponent,
@@ -714,7 +726,9 @@ export {
 	AsyncInlineTableComponent,
 	FormWithAccordionElement,
 	AsyncUserbuyerrightsComponent,
+	AsyncMenurightsComponent,
+	AsyncMenulistsComponent,
 	AsyncForecastComponent,
 	AsyncForecastlistComponent,
 	AsyncForecastAddComponent
-};
+}; 

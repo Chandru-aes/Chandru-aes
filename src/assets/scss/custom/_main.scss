@@ -834,6 +834,58 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.rct-block{margin-bottom: 5px!important;}
 			.type-contianer{float: right;}
 			.type-contianer .bg-average{background-color: #b4b6be;color:black;}
+			.tb-pro label {
+				font-size: 14px;
+			}
+			
+			.tb-pro .page-link {
+				font-size: 14px;
+				color: #000 !important;
+			}
+			
+			.tb-pro .form-control {
+				font-size: 14px;
+			}
+			
+			.rct-sidebar .rct-sidebar-nav .rct-mainMenu > li:not(.list-item) a{
+				padding: 5px;
+			}
+			.acc_title_font .MuiTypography-body1 {
+				font-family: "HelveticaNeue" !important;
+			}
+			.table .thead-light th{
+				background: #ececec !important;
+				font-size: 15px;
+				color: #000;
+				font-family: "HelveticaNeue" !important;padding: 5px 10px;
+				font-weight: 500;
+			}
+			.table tr td{
+				font-family: "HelveticaNeue" !important;padding: 5px 10px;
+				font-weight: 500; font-size: 13px;
+			}
+			.tbl-filter-btn {
+				margin-top: -42px;
+				margin-right: 25px;
+			} 
+			.table tr td .form-control {
+				padding: 0 10px;
+				box-shadow: none;
+				border: none; 
+				background: none;
+			}
+			.table tr td .form-group {
+				margin: 0;
+			}
+			.table tr td .MuiFormGroup-row{display: block;}
+			.table tr td .MuiFormControlLabel-root{margin: 0;}
+			.w-10{width: 10%!important;}
+			.w-20{width: 20%!important;}
+			.w-30{width: 30%!important;}
+			.w-15{width: 15%!important;}
+
+			.b-ic{width: 20px; min-width: auto!important;}
+
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }
@@ -873,40 +925,7 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 	.m-btop{margin-top: 20px;}
 	.table td .media{display: block;}
 }
-.tb-pro label {
-    font-size: 14px;
-}
 
-.tb-pro .page-link {
-    font-size: 14px;
-	color: #000 !important;
-}
-
-.tb-pro .form-control {
-    font-size: 14px;
-}
-
-.rct-sidebar .rct-sidebar-nav .rct-mainMenu > li:not(.list-item) a{
-	padding: 5px;
-}
-.acc_title_font .MuiTypography-body1 {
-	font-family: "HelveticaNeue" !important;
-}
-.table .thead-light th{
-	background: #ececec !important;
-	font-size: 15px;
-	color: #000;
-	font-family: "HelveticaNeue" !important;padding: 5px 0;
-    font-weight: 500;
-}
-.table tr td{
-	font-family: "HelveticaNeue" !important;padding: 5px 0;
-    font-weight: 500; font-size: 13px;
-}
-.tbl-filter-btn {
-	margin-top: -42px;
-	margin-right: 25px;
-} 
 /* Mobile Landscape Size (devices and browsers) */
 
 

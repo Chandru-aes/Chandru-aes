@@ -22,7 +22,9 @@ import VideoPlayer from 'Routes/video-player';
 import Dropzone from 'Routes/dropzone';
 import CarouselElement from 'Routes/carousel';
 import UserbuyerrightsElement from 'Routes/userbuyerrights';
-import TimelineElement from 'Routes/timeline';
+import MenurightsElement from 'Routes/menurights';
+import MenulistsElement from 'Routes/menulists';
+import TimelineElement from 'Routes/timeline'; 
 import AdvanceFormElement from 'Routes/advanced-forms';
 import CustomizedFormElement from 'Routes/customized-form';
 import  AsyncForecastComponent from 'Routes/pre-production';
@@ -136,6 +138,13 @@ export default [
    },{
       path: 'user_buyer_rights',
       component: UserbuyerrightsElement
+   },
+   {
+      path: 'menu_rights',
+      component: MenurightsElement
+   },{
+      path: 'menu_lists',
+      component: MenulistsElement
    },
    {
       path: 'timeline',
