@@ -885,52 +885,13 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.w-15{width: 15%!important;}
 
 			.b-ic{width: 20px; min-width: auto!important;}
-
-
-            .content-wrapper .rct-block-title{padding-bottom: 0!important;}
-
-            .content-wrapper .rct-block .rct-block-content{padding-top: 0!important;}
-
-            table.table.data tr td .form-control {
-
-                border: 1px solid #bdbdbd;
-
-            }
-
-            .rct-picker .MuiFormControl-marginNormal{margin-top: 0!important;}
-
-			.select2-results ul.select2-results__options li:nth-child(1){
-				display: none !important;
+			.content-wrapper .rct-block-title{padding-bottom: 0!important;}
+			.content-wrapper .rct-block .rct-block-content{padding-top: 0!important;}
+			table.table.data tr td .form-control {
+				border: 1px solid #bdbdbd;
 			}
-			.select2-results ul.select2-results__options li {
-				font-family: "HelveticaNeue" !important;
-			}
-			.select2-container--default .select2-selection--single{
-				border: 1px solid #bdbdbd !important;
-			}
-			.select2-container .select2-selection--single{height: 36px!important;}
-			.select2-container--default .select2-selection--single .select2-selection__rendered {
-				color: #0000008a;
-				line-height: 32px;
-				font-size: 14px;
-				font-family: "HelveticaNeue" !important;
-			} 
+			.rct-picker .MuiFormControl-marginNormal{margin-top: 0!important;}
 
-			span.select2.select2-container.select2-container--default {
-				width: 100%!important;
-			} 
-
-			.MuiTab-textColorPrimary {
-				font-size: 16px!important;
-				font-weight: 600!important;
-			}
-			
-			table.table.multi-clr  tr:nth-child(2n) td {
-				background: #00d0bd7a;
-			}
-			table.table.multi-clr  tr td {
-				background: #bdf2c2;
-			}
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }

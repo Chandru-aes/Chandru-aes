@@ -192,56 +192,50 @@ function TabContainer({ children }) {
                         <div className="row new-form">
 
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="age-simple">Module</InputLabel>
-                                            <Select value={this.state.age} onChange={this.handleChange}
-                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                            <MenuItem value=""><em>None</em></MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
-                                            </Select>
-                                        </FormControl>
+                                    <div className="form-group select_label_name mt-15">                                        
+                                        <select className="form-control select2">
+                                            <option>Module</option> 
+                                            <option>Admin</option> 
+                                            <option>User</option> 
+                                            <option>Product</option> 
+                                            <option>Buyer</option> 
+                                            <option>Test</option> 
+                                        </select> 
                                     </div>
                                 </div>
+
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="age-simple">Menu Type</InputLabel>
-                                            <Select value={this.state.age} onChange={this.handleChange}
-                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                            <MenuItem value=""><em>None</em></MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
-                                            </Select>
-                                        </FormControl>
+                                    <div className="form-group select_label_name mt-15">                                        
+                                        <select className="form-control select2">
+                                            <option>Menu Type</option> 
+                                            <option>Type1</option> 
+                                            <option>Type2</option> 
+                                            <option>Type3</option> 
+                                            <option>Type4</option> 
+                                            <option>Type5</option> 
+                                        </select> 
                                     </div>
                                 </div>
  
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                
-                                <div className="form-group">
-                                    
-                                    <TextField id="menuname" fullWidth label="Menu Name" type="text" />
-                                </div>
+                                    <div className="form-group">
+                                        
+                                        <TextField id="menuname" fullWidth label="Menu Name" type="text" />
+                                    </div>
                                 
                                 </div>
 
-                               
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="age-simple">Parent Menu ID</InputLabel>
-                                            <Select value={this.state.age} onChange={this.handleChange}
-                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                            <MenuItem value=""><em>None</em></MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
-                                            </Select>
-                                        </FormControl>
+                                    <div className="form-group select_label_name mt-15">                                        
+                                        <select className="form-control select2">
+                                            <option>Parent Menu ID</option> 
+                                            <option>10</option> 
+                                            <option>20</option> 
+                                            <option>30</option> 
+                                            <option>40</option> 
+                                            <option>50</option> 
+                                        </select> 
                                     </div>
                                 </div>
                                 
@@ -330,12 +324,12 @@ function TabContainer({ children }) {
                             </AccordionSummary>
                             <AccordionDetails>
                             <div className="float-right tbl-filter-btn">
-                                                <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
+                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
                             
-                                    <span class="MuiIconButton-label">
+                                    <span className="MuiIconButton-label">
                             
                             
-                                    <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                    <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                             <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
                                         </svg>
                             
@@ -343,11 +337,11 @@ function TabContainer({ children }) {
                             
                                 </button>
                             
-                                <button class="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
+                                <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
                             
-                            <span class="MuiIconButton-label">
+                            <span className="MuiIconButton-label">
                             
-                            <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                            <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
                                 </svg></span>
                             
@@ -355,23 +349,23 @@ function TabContainer({ children }) {
                             
                             
                             </button>
-                            <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">
+                            <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">
                             
-                                            <span class="MuiIconButton-label">
+                                            <span className="MuiIconButton-label">
                             
-                                                <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                     <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
                                                 </svg></span></button>
                             
-                                                <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
+                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
                             
                             
                             
-                                                    <span class="MuiIconButton-label"><svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                 <path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path>
                                             </svg></span></button>
                             
-                                            <button class="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span class="MuiIconButton-label"><svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                            <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                 <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                             </svg></span></button>
                             </div>

@@ -127,25 +127,25 @@
        <div className="menu-div">
 		   
           <ul>
-            <li>
+            {/* <li>
 				
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Design & Development')}><img src={require('Assets/img/design-icon-cl.png')} alt="Design and Development" className="img-fluid" /> <span class="menu"><span>Design & Development</span></span></a>
-            </li>
+            </li> */}
             <li>
-              <a href="javascript:void(0);" onClick={() => this.checkMenu('Pre-Production')}><img src={require('Assets/img/pre-production-icon-cl.png')} alt="Pre-Production" className="img-fluid" /> <span class="menu"><span>Pre-Production</span></span></a>
+              <a href="javascript:void(0);" onClick={() => this.checkMenu('Pre-Production')}><img src={require('Assets/img/pre-production-icon-cl.png')} alt="Product Development" className="img-fluid" /> <span class="menu"><span>Product Development</span></span></a>
             </li>
-            <li>
+            {/* <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Planning')}><img src={require('Assets/img/planning-icon-cl.png')} alt="Planning" className="img-fluid" /> <span class="menu"><span>Planning</span></span></a>
             </li>
             <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Sourcing')}><img src={require('Assets/img/sourcing-icon-cl.png')} alt="Sourcing" className="img-fluid" /> <span class="menu"><span>Sourcing</span></span></a>
-            </li>
+            </li> */}
             <li>
-              <a href="javascript:void(0);" onClick={() => this.checkMenu('Admin')}><img src={require('Assets/img/admin-icon-cl.png')} alt="Admin" className="img-fluid" /> <span class="menu"><span>Admin</span></span></a>
+              <a href="javascript:void(0);" onClick={() => this.checkMenu('Admin')}><img src={require('Assets/img/admin-icon-cl.png')} alt="Admin" className="img-fluid" /> <span class="menu"><span>Administrator</span></span></a>
             </li>
-            <li>
+            {/* <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Bootstrap')}><img src={require('Assets/img/bootstrap-icon-cl.png')} alt="Bootstrap" className="img-fluid" /> <span class="menu"><span>Bootstrap</span></span></a>
-            </li>
+            </li> */} 
           </ul>
           {/* <a href="javascript:void(0);" className="app-link"><span>All Apps</span><i className="zmdi zmdi-long-arrow-right"></i> </a> */}
          </div>

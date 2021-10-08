@@ -199,7 +199,7 @@
 											}
 											
 
-									{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' && 
+									{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' && 
 								
 										<List className="rct-mainMenu p-0 m-0 list-unstyled"  
 										subheader={
@@ -218,7 +218,7 @@
 								}
 									
 
-								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' &&
+								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' &&
 								<List
 									className="rct-mainMenu p-0 m-0 list-unstyled"
 									subheader={<ListSubheader className="side-title" component="li">
@@ -234,7 +234,7 @@
 									))}
 								</List>
 								}
-								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' &&
+								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' &&
 								<List
 										className="rct-mainMenu p-0 m-0 list-unstyled"
 										subheader={<ListSubheader className="side-title" component="li">
@@ -250,11 +250,11 @@
 										))}
 									</List>
 								}
-								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Admin'  &&
+								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' &&
 									<List
 										className="rct-mainMenu p-0 m-0 list-unstyled"
 										subheader={<ListSubheader className="side-title" component="li">
-											
+											{/* <IntlMessages id="sidebar.features" /> */}
 											</ListSubheader>}
 									>
 										{sidebarMenus.category4.map((menu, key) => (
@@ -267,7 +267,7 @@
 									</List>
 									}
 							</div>
-					{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					{this.state.submenuName!='Bootstrap'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle2')}>
 						
 						<List
@@ -302,7 +302,7 @@
 					</div>
 					 }
 
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					 {this.state.submenuName!='Bootstrap'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle3')}>
 						
 						<List
@@ -433,7 +433,7 @@
 						</List>
 					</div>
 	 				}
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					 {this.state.submenuName!='Bootstrap'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle4')}>
 						
 						<List
@@ -467,7 +467,7 @@
 						</List>
 					</div>
 	 				}
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					 {this.state.submenuName!='Bootstrap'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle5')}>
 						<List
 							className="rct-mainMenu p-0 m-0 list-unstyled"
@@ -501,7 +501,7 @@
 						<List
 							className="rct-mainMenu p-0 m-0 list-unstyled"
 							subheader={<ListSubheader className="side-title" component="li">
-								
+								{/* <IntlMessages id="sidebar.component" /> */}
 								</ListSubheader>}
 						>
 							{sidebarMenus.category3.map((menu, key) => (
@@ -514,7 +514,7 @@
 						</List>
 					</div>
 				 }
-				  {this.state.submenuName=='Bootstrap' && 
+				  {this.state.submenuName=='Bootstrap' &&
 				
 				 	<List className="rct-mainMenu p-0 m-0 list-unstyled"  
 					 		subheader={
@@ -617,26 +617,25 @@
 										/>
 									))}
 								</List>
+								
 								}
-
-							{this.state.submenuName=='Pre-Production' &&
-															<List
-																className="rct-mainMenu p-0 m-0 list-unstyled"
-																subheader={<ListSubheader className="side-title" component="li">
-																	{/* <IntlMessages id="sidebar.modules" /> */}
-																	</ListSubheader>}
-															>
-																{sidebarMenus.category15.map((menu, key) => (
-																	<NavMenuItem
-																		menu={menu}
-																		key={key}
-																		onToggleMenu={() => this.toggleMenu(menu, 'category15')}
-																	/>
-																))}
-															</List>
-															
-															}
-				
+					{this.state.submenuName=='Pre-Production' &&
+								<List
+									className="rct-mainMenu p-0 m-0 list-unstyled"
+									subheader={<ListSubheader className="side-title" component="li">
+										{/* <IntlMessages id="sidebar.modules" /> */}
+										</ListSubheader>}
+								>
+									{sidebarMenus.category15.map((menu, key) => (
+										<NavMenuItem
+											menu={menu}
+											key={key}
+											onToggleMenu={() => this.toggleMenu(menu, 'category15')}
+										/>
+									))}
+								</List>
+								
+								}
 				 </nav>
 				
 			 </div>

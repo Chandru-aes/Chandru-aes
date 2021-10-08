@@ -83,7 +83,8 @@ function TabContainer({ children }) {
  class UserbuyerrightsElement extends Component {
     state = {
 		employeePayroll: null,
-        activeIndex: 0
+        activeIndex: 0,
+        userlevel:''
 	}
 
     createNotification = (type) => {
@@ -107,6 +108,11 @@ function TabContainer({ children }) {
            }
         };
      };
+
+     handleChangeradio = (event) => {
+        this.setState({ userlevel:  event.currentTarget.value });        
+       
+     }
 
      handleChangeIndex(index) {
         this.setState({ activeIndex: index });
@@ -187,6 +193,8 @@ function TabContainer({ children }) {
 
  
                     <div className="col-sm-3 col-md-3 col-xl-4 float-right pr-0 but-tp">
+                   
+                    
 								<Form> 
                   
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning  mb-10 text-white btn-icon pull-right b-sm mr-0" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Warning <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
@@ -210,33 +218,85 @@ function TabContainer({ children }) {
                                 <div className="col-lg-8 col-md-6 col-sm-6 col-xs-12">
                                 <RadioGroup row aria-label="anchorReference" name="anchorReference">
                                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <FormControlLabel color="primary" value="singleuser" control={<Radio />} label="Single User" />
+                                        <FormControlLabel color="primary" value="singleuser" control={<Radio onChange={this.handleChangeradio} />} label="Single User" />
                                     </div>
                                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <FormControlLabel color="primary" value="copyuser" control={<Radio />} label="Copy User" />
+                                        <FormControlLabel color="primary" value="copyuser" control={<Radio  onChange={this.handleChangeradio} />} label="Copy User" />
                                     </div>
                                 </RadioGroup>
 
                                 </div>
-                               
+                                {/* <select className="selectpicker" data-show-subtext="true" data-live-search="true">
+                        <option data-subtext="Rep California">Tom Foolery</option>
+                        <option data-subtext="Sen California">Bill Gordon</option>
+                        <option data-subtext="Sen Massacusetts">Elizabeth Warren</option>
+                        <option data-subtext="Rep Alabama">Mario Flores</option>
+                        <option data-subtext="Rep Alaska">Don Young</option>
+                        <option data-subtext="Rep California" disabled="disabled">Marvin Martinez</option>
+                    </select> */}
+
+
+
                                 
                             </div>
                             </div>
 							
-							<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 p-0">
-								<div className="form-group">
-                                    <FormControl fullWidth>
-                                        <InputLabel htmlFor="age-simple">UserId</InputLabel>
-                                        <Select value={this.state.age} onChange={this.handleChange}
-                                        inputProps={{ name: 'age', id: 'age-simple', }}>
-                                        <MenuItem value=""><em>None</em></MenuItem>
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                        </Select>
-                                    </FormControl>
+					
+
+                            {(() => {
+                           
+                             if (this.state.userlevel == 'copyuser') {
+                            return (
+                                <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                    <div className="row">
+                                        <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div className="form-group select_label_name mt-15">                                        
+                                                <select className="form-control select2">
+                                                    <option>From User</option> 
+                                                    <option>User 1</option> 
+                                                    <option>Test User</option> 
+                                                    <option>Admin</option> 
+                                                    <option>User 2</option> 
+                                                    <option>User 3</option> 
+                                                </select> 
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div className="form-group select_label_name mt-15">                                        
+                                                <select className="form-control select2">
+                                                    <option>To User</option> 
+                                                    <option>User 1</option> 
+                                                    <option>Test User</option> 
+                                                    <option>Admin</option> 
+                                                    <option>User 2</option> 
+                                                    <option>User 3</option> 
+                                                </select> 
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-							</div>
+                            )
+                            } 
+                             if (this.state.userlevel == 'singleuser') { 
+                            return (
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group select_label_name mt-15">                                        
+                                        <select className="form-control select2">
+                                            <option>User ID</option> 
+                                            <option>Test User</option> 
+                                            <option>Test User1</option> 
+                                            <option>Admin</option> 
+                                            <option>John</option> 
+                                            <option>Test</option> 
+                                        </select>
+                                    </div>
+                                </div>
+                            )
+                            }
+                        })()}
+
 							
 						</div>
 
@@ -275,12 +335,12 @@ function TabContainer({ children }) {
                             </AccordionSummary>
                             <AccordionDetails>
                             <div className="float-right tbl-filter-btn">
-                                                <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
+                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
                             
-                                    <span class="MuiIconButton-label">
+                                    <span className="MuiIconButton-label">
                             
                             
-                                    <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                    <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                             <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
                                         </svg>
                             
@@ -288,11 +348,11 @@ function TabContainer({ children }) {
                             
                                 </button>
                             
-                                <button class="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
+                                <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
                             
-                            <span class="MuiIconButton-label">
+                            <span className="MuiIconButton-label">
                             
-                            <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                            <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
                                 </svg></span>
                             
@@ -300,23 +360,23 @@ function TabContainer({ children }) {
                             
                             
                             </button>
-                            <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">
+                            <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">
                             
-                                            <span class="MuiIconButton-label">
+                                            <span className="MuiIconButton-label">
                             
-                                                <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                     <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
                                                 </svg></span></button>
                             
-                                                <button class="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
+                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
                             
                             
                             
-                                                    <span class="MuiIconButton-label"><svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                 <path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path>
                                             </svg></span></button>
                             
-                                            <button class="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span class="MuiIconButton-label"><svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                            <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                 <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                             </svg></span></button>
                             </div>
