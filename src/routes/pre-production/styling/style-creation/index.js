@@ -26,10 +26,7 @@ import Select from '@material-ui/core/Select';
  // intl messages
  import IntlMessages from 'Util/IntlMessages';
 
- import AddNewUserForm from './ActivityCloneForm';
-
- import QuantityFormClone from './QuantityCloneForm';
- 
+ //import AddNewUserForm from './AddNewUserForm';
  
  // rct card box
  import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
@@ -57,19 +54,14 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
         activeIndex: 0,
         selectedDate: moment(),
         addNewUserModal: false,
-        addQuantityModal:false
      }
      onAddUpdateUserModalClose() {
-        this.setState({ addNewUserModal: false,addQuantityModal:false, editUser: null })
+        this.setState({ addNewUserModal: false, editUser: null })
     }
 
      opnAddNewUserModal(e) {
         e.preventDefault();
         this.setState({ addNewUserModal: true });
-    }
-    opnQuantityModal(e){
-        e.preventDefault();
-        this.setState({ addQuantityModal: true });
     }
      componentDidMount() {
 		
@@ -120,7 +112,21 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
          return (
             <RctCollapsibleCard heading="Create Forecast">
                  <PageTitleBar title="Menu" match={this.props.match} />
-                <div className="row new-form mb-10">
+                <div className="row new-form">
+                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="w-100">
+                <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Stage" placeholder="Stage"/>
+                        </div>
+                        <img className="rounded " src="https://via.placeholder.com/150"  data-src="https://via.placeholder.com/150" alt="Square placeholder image 300px"></img>
+                    </div></div>
+
+                    <div className="col-lg-9 col-md-9 col-sm-6 col-xs-12">
+                        <div className="float-right">
+                            
+                        </div>
+                    </div>
+
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
@@ -141,8 +147,6 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
                         <TextField id="type" fullWidth label="Type" placeholder="Type"/>
                         </div>
                     </div>
-                   
-                        
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <FormControl fullWidth>
@@ -171,13 +175,13 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
                         </FormControl>
                         </div>
                     </div>
-                    <div className="col-lg-6 pr-0">
-                        <div className="form-group mt-15 text-right">
+                    <div className="col-sm-6 col-md-6 col-xl-3">
+                        <div className="form-group mt-15">
                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Add <i className="zmdi zmdi-file-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
                               
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon b-sm" tabindex="0" type="button"><span className="MuiButton-label">Guide<i className="zmdi zmdi-book"></i></span><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button"><span className="MuiButton-label">Guide<i className="zmdi zmdi-book"></i></span><span className="MuiTouchRipple-root"></span></button>
                         </div>
-                    </div> 
+                    </div>
                 </div>
 
                 <AppBar position="static" color="default">
@@ -213,8 +217,8 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
                      <div className="w-25 float-right pl-25">
                         <div className="form-group">
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                         </div>
                     </div>
 
@@ -311,7 +315,7 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group mt-15">
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"  onClick={(e) => this.opnAddNewUserModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                         </div>
                     </div>
@@ -336,9 +340,9 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
 
                                     <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
 
                                         {/* <button className="save">Save</button>
                                         <button className="edit">Edit</button>
@@ -372,29 +376,16 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
             </SwipeableViews>
                 <Modal isOpen={this.state.addNewUserModal} toggle={() => this.onAddUpdateUserModalClose()}>
                     <ModalHeader toggle={() => this.onAddUpdateUserModalClose()}>
-                      Activity Form
+                      Clone Activity
                     </ModalHeader>
                     <ModalBody>
-                        <AddNewUserForm addNewUserDetails={this.state.age} onChangeAddNewUserDetails={this.handleChange.bind(this)}/>
-                    </ModalBody>
-                    <ModalFooter>                      
-                        <Button variant="contained" className="text-white btn-danger">Cancel</Button>
-                        <Button variant="contained" className="text-white btn-success">Add</Button>
-                    </ModalFooter>
-                </Modal>
-                <Modal isOpen={this.state.addQuantityModal} toggle={() => this.onAddUpdateUserModalClose()}>
-                    <ModalHeader toggle={() => this.onAddUpdateUserModalClose()}>
-                      Quantity Breakup
-                    </ModalHeader>
-                    <ModalBody>
-                        <QuantityFormClone />
+                        {/* <AddNewUserForm /> */}
                     </ModalBody>
                     <ModalFooter>
                         <Button variant="contained" className="text-white btn-success">Add</Button>
                         <Button variant="contained" className="text-white btn-danger">Cancel</Button>
                     </ModalFooter>
                 </Modal>
-                
             </RctCollapsibleCard>
             
          );

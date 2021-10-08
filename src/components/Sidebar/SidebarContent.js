@@ -617,8 +617,25 @@
 										/>
 									))}
 								</List>
+								
 								}
-				
+					{this.state.submenuName=='Pre-Production' &&
+								<List
+									className="rct-mainMenu p-0 m-0 list-unstyled"
+									subheader={<ListSubheader className="side-title" component="li">
+										{/* <IntlMessages id="sidebar.modules" /> */}
+										</ListSubheader>}
+								>
+									{sidebarMenus.category15.map((menu, key) => (
+										<NavMenuItem
+											menu={menu}
+											key={key}
+											onToggleMenu={() => this.toggleMenu(menu, 'category15')}
+										/>
+									))}
+								</List>
+								
+								}
 				 </nav>
 				
 			 </div>

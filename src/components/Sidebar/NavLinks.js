@@ -520,7 +520,7 @@ export default {
    ],
    category11: [
       {
-         "menu_title": "User Buyer Rights",
+         "menu_title": "Forecasting",
          "menu_icon": "zmdi zmdi-account-circle",
          "path": "/app/pre-production/",
          "child_routes": [
@@ -584,5 +584,20 @@ export default {
          //    },
             
          // ]
-      }]
+      }],
+      category15: [
+         {
+            "menu_title": "Styling",
+            "menu_icon": "zmdi zmdi-account-circle",
+            "path": "/app/pre-production/",
+            "child_routes": [
+               {
+                  "path": "/app/pre-production/style-creation",
+                  "new_item": false,
+                  "menu_title": "Style Creation"
+               },
+              
+            ]
+         }
+      ],
 }

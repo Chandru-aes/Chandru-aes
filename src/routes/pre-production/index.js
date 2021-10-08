@@ -8,7 +8,8 @@
  import {
      AsyncForecastComponent,
      AsyncForecastlistComponent,
-     AsyncForecastAddComponent
+     AsyncForecastAddComponent,
+     AsyncStyleAddComponent
  } from 'Components/AsyncComponent/AsyncComponent';
  
  //console.log(match.url); 
@@ -23,6 +24,7 @@
              <Redirect exact from={`${match.url}/`} to={`${match.url}/basic`} />
              <Route path={`${match.url}/forecasting`} component={AsyncForecastlistComponent} />
              <Route path={`${match.url}/add-forecasting`} component={AsyncForecastAddComponent} />
+             <Route path={`${match.url}/style-creation`} component={AsyncStyleAddComponent} />
          </Switch>
      </div>
  );

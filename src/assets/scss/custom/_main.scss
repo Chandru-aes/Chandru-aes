@@ -885,6 +885,12 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.w-15{width: 15%!important;}
 
 			.b-ic{width: 20px; min-width: auto!important;}
+			.content-wrapper .rct-block-title{padding-bottom: 0!important;}
+			.content-wrapper .rct-block .rct-block-content{padding-top: 0!important;}
+			table.table.data tr td .form-control {
+				border: 1px solid #bdbdbd;
+			}
+			.rct-picker .MuiFormControl-marginNormal{margin-top: 0!important;}
 
 /* #Media Queries
 ================================================== */
