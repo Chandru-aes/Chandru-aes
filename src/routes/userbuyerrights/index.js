@@ -85,29 +85,29 @@ function TabContainer({ children }) {
  }
 
 
- const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+//  const ITEM_HEIGHT = 48;
+// const ITEM_PADDING_TOP = 8;
+// const MenuProps = {
+//   PaperProps: {
+//     style: {
+//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//       width: 250,
+//     },
+//   },
+// };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+// const names = [
+//   'Oliver Hansen',
+//   'Van Henry',
+//   'April Tucker',
+//   'Ralph Hubbard',
+//   'Omar Alexander',
+//   'Carlos Abbott',
+//   'Miriam Wagner',
+//   'Bradley Wilkerson',
+//   'Virginia Andrews',
+//   'Kelly Snyder',
+// ];
 
  
  class UserbuyerrightsElement extends Component {
@@ -168,17 +168,17 @@ const names = [
 	}
     render() {
 
-        const [personName, setPersonName] = React.useState([]);
+        // const [personName, setPersonName] = React.useState([]);
 
-        const handleChange = (event) => {
-            const {
-            target: { value },
-            } = event;
-            setPersonName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-            );
-        };
+        // const handleChange = (event) => {
+        //     const {
+        //     target: { value },
+        //     } = event;
+        //     setPersonName(
+        //     // On autofill we get a the stringified value.
+        //     typeof value === 'string' ? value.split(',') : value,
+        //     );
+        // };
         
         const { employeePayroll } = this.state;
 		const { match } = this.props;
