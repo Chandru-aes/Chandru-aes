@@ -143,9 +143,9 @@
             <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Admin')}><img src={require('Assets/img/admin-icon-cl.png')} alt="Admin" className="img-fluid" /> <span class="menu"><span>Administrator</span></span></a>
             </li>
-            {/* <li>
+         <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Bootstrap')}><img src={require('Assets/img/bootstrap-icon-cl.png')} alt="Bootstrap" className="img-fluid" /> <span class="menu"><span>Bootstrap</span></span></a>
-            </li> */} 
+            </li> 
           </ul>
           {/* <a href="javascript:void(0);" className="app-link"><span>All Apps</span><i className="zmdi zmdi-long-arrow-right"></i> </a> */}
          </div>
