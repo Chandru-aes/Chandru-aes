@@ -521,19 +521,19 @@ export default {
    category11: [
       {
          "menu_title": "Forecasting",
-         "menu_icon": "zmdi zmdi-account-circle",
+         "menu_icon": "zmdi zmdi-trending-up",
          "path": "/app/pre-production/",
          "child_routes": [
             {
                "path": "/app/pre-production/forecasting",
                "new_item": false,
-               "menu_title": "List details"
+               "menu_title": "Details"
             },
-            {
-               "path": "/app/pre-production/add-forecasting",
-               "new_item": false,
-               "menu_title": "Add Forecasting"
-            },
+            // {
+            //    "path": "/app/pre-production/add-forecasting",
+            //    "new_item": false,
+            //    "menu_title": "Add Forecasting"
+            // },
             
          ]
       }
@@ -588,7 +588,7 @@ export default {
       category15: [
          {
             "menu_title": "Styling",
-            "menu_icon": "zmdi zmdi-account-circle",
+            "menu_icon": "zmdi zmdi-brush",
             "path": "/app/pre-production/",
             "child_routes": [
                {

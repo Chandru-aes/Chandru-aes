@@ -3,13 +3,14 @@
  */
  import React, { Component, Fragment } from 'react';
  import Button from '@material-ui/core/Button';
+ import FormControlLabel from '@material-ui/core/FormControlLabel';
  import { Media, Badge,Modal,
     ModalHeader,
     ModalBody,
     ModalFooter, } from 'reactstrap';
  import IconButton from '@material-ui/core/IconButton';
  import Avatar from '@material-ui/core/Avatar';
- 
+ import Checkbox from '@material-ui/core/Checkbox';
  // api
  import api from 'Api';
  
@@ -39,6 +40,13 @@ import Select from '@material-ui/core/Select';
 
  import moment from 'moment';
 import DateFnsUtils from '@date-io/date-fns';
+
+// const styles = {
+// 	checked: {
+// 		color: pink[500],
+// 	},
+	
+// };
 import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers';
  const $ = require('jquery');
  function TabContainer({ children }) {
@@ -54,6 +62,7 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
         activeIndex: 0,
         selectedDate: moment(),
         addNewUserModal: false,
+        checkedA: true,
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -100,57 +109,55 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
 	}
      handleChange(event, value) {
         this.setState({ activeIndex: value });
+        this.setState({ [name]: checked });
      }
      handleDateChange = (date) => {
 		this.setState({ selectedDate: date });
 	};
- 
+    handleChangeCheckbox = name => (event, checked) => {
+		console.log("name:: ", name);
+		this.setState({ [name]: checked });
+	};
      render() {
          const { employeePayroll } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
+         const { classes } = this.props;
          return (
             <RctCollapsibleCard heading="Create Forecast">
                  <PageTitleBar title="Menu" match={this.props.match} />
+               
+                <div className="side-button">
+                      
+                 <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clone <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
+                 <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Upload <i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
+                 </div>
                 <div className="row new-form">
-                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="w-100">
-                <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Stage" placeholder="Stage"/>
-                        </div>
-                        <img className="rounded " src="https://via.placeholder.com/150"  data-src="https://via.placeholder.com/150" alt="Square placeholder image 300px"></img>
-                    </div></div>
-
-                    <div className="col-lg-9 col-md-9 col-sm-6 col-xs-12">
-                        <div className="float-right">
-                            
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="buyer-division" fullWidth label="Buyer Division" placeholder="Buyer Division"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Location" fullWidth label="Location" placeholder="Location"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="type" fullWidth label="Type" placeholder="Type"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
+                <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12">
+                <div className="w-100">
+                <div className="float-right n-bt-top">
+                        
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        
+                       
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                   </div>    </div> </div>
+                   <div className="col-lg-12 mt-10">
+                   <ul class="list-group list-group-horizontal-md">
+  <li class="list-group-item">ITH# 2136005</li>
+  <li class="list-group-item">Single window</li>
+  <li class="list-group-item">Costing</li>
+  <li class="list-group-item">Rm order</li>
+  <li class="list-group-item">Delivery SM</li>
+  <li class="list-group-item">History</li>
+</ul>
+</div>
+                   <div className="row new-form p-20">
+                <div className="w-25 border p-10 mr-5 no-f-mb">
+                <img className="rounded img-fluid" src="https://via.placeholder.com/300"  data-src="https://via.placeholder.com/250" alt="Square placeholder image 300px"></img>
+                    <div className="form-group">
                         <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Season</InputLabel>
+                            <InputLabel htmlFor="age-simple">Stage</InputLabel>
                             <Select value={this.state.age} onChange={this.handleChange}
                             inputProps={{ name: 'age', id: 'age-simple', }}>
                             <MenuItem value=""><em>None</em></MenuItem>
@@ -160,28 +167,179 @@ import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers
                             </Select>
                         </FormControl>
                         </div>
-                    </div>
-                    <div className="col-sm-6 col-md-6 col-xl-3">
                         <div className="form-group">
                         <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Year</InputLabel>
+                            <InputLabel htmlFor="age-simple">Location</InputLabel>
                             <Select value={this.state.age} onChange={this.handleChange}
                             inputProps={{ name: 'age', id: 'age-simple', }}>
                             <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>2020</MenuItem>
-                            <MenuItem value={20}>2019</MenuItem>
-                            <MenuItem value={30}>2018</MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
                             </Select>
                         </FormControl>
                         </div>
-                    </div>
-                    <div className="col-sm-6 col-md-6 col-xl-3">
-                        <div className="form-group mt-15">
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Add <i className="zmdi zmdi-file-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
-                              
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button"><span className="MuiButton-label">Guide<i className="zmdi zmdi-book"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Wash type</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControlLabel control={
+								<Checkbox color="primary" checked={this.state.checkedA} onChange={this.handleChangeCheckbox('checkedA')} value="checkedA" />
+							} label="Option A"
+							/>
+                        </div>
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Print type</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Gar_Due Type</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Embroidery Type</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                        
+                     </div>
+
+                    <div className="w-75 col border">
+                        
+                    <div className="row no-f-mb">
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
                         </div>
                     </div>
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Division" placeholder="Buyer Name"/>
+                        </div>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Season" placeholder="Buyer Name"/>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="year" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Base style" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="style no" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Descde" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Fabric" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Plaid" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Product type" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Sub Product type" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Contact person" placeholder="Buyer Name"/>
+                        </div>
+                    </div> 
+
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Projection details</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+
+                    </div>
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Order Specfication</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+
+                    </div>
+
+                    </div>
+
+
+                    </div>
+                    </div>
+ 
                 </div>
 
                 <AppBar position="static" color="default">

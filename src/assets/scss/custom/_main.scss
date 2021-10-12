@@ -925,11 +925,49 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 				font-weight: 600!important;
 			}
 			
-			table.table.multi-clr  tr:nth-child(2n) td {
-				background: #00d0bd7a;
+			 
+
+			.n-bt-top{margin-top: -25px;}
+			.MuiInputLabel-formControl{text-transform: capitalize;}
+			.no-f-mb .form-group{margin-bottom: 0!important;}
+			.list-group-horizontal-md {
+				flex-direction: row;
+				-webkit-box-orient: horizontal;
+				-webkit-box-direction: normal;
+				-webkit-flex-direction: row;
+				-ms-flex-direction: row;
 			}
-			table.table.multi-clr  tr td {
-				background: #bdf2c2;
+			.list-group-horizontal-md .list-group-item{padding: 3px 20px;}
+			.b-ic-sm i{font-size: 14px!important;}
+			.b-ic-sm {
+				padding: 3px!important;
+				min-width: 10px!important;
+			}
+			.w-33{width: 33.33%!important;}
+			.w-40{width:40%!important;}
+			.side-button {
+				position: fixed;
+				right: -91px;
+				transform: rotate(270deg);
+				z-index: 99;
+				top: 40%;
+			}
+			.s-panel { opacity: 0;
+				position: fixed;
+				right: 0;
+				width: 610px;
+				height: 100%;
+				background: #fff;
+				z-index: 9999;
+				padding: 20px;
+				top: 14%;
+				box-shadow: 5px 5px 5px 5px #ddd;
+			}
+			.nd-fom {
+				position: absolute;
+				left: -88px;
+				transform: rotate(270deg);
+				top: 50px;
 			}
 /* #Media Queries
 ================================================== */

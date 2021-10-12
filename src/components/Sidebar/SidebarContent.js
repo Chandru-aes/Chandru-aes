@@ -50,6 +50,7 @@
 	 }
 	 componentDidMount() {
 		this.interval = setInterval(() => this.setState({submenuName: localStorage.getItem('menuName')}), 1000);
+		
 	 }
 	 getClassName(id) {
         if(id === this.state.activeItem) return 'menuTitle active'
@@ -62,6 +63,7 @@
 	 clickMenu(id){
         // Add class 'active' on the clicked <li>, and remove from all other <li>
 		console.log(id)
+		console.log(this.state.submenuName)
         this.setState({
             activeItem: id,
         })
@@ -138,7 +140,7 @@
 						 	<div id="submenu" className={this.getClassName('MenuTitle1')}>
 
 							 
-{this.state.submenuName=='Admin' &&
+									{this.state.submenuName=='Admin' &&
 												
 												<List className="rct-mainMenu p-0 m-0 list-unstyled"  
 														subheader={
@@ -267,7 +269,7 @@
 									</List>
 									}
 							</div>
-					{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&  this.state.submenuName!='Pre-Production'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle2')}>
 						
 						<List
@@ -302,7 +304,7 @@
 					</div>
 					 }
 
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle3')}>
 						
 						<List
@@ -433,7 +435,7 @@
 						</List>
 					</div>
 	 				}
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' &&
 					<div id="submenu" className={this.getClassName('MenuTitle4')}>
 						
 						<List
@@ -467,7 +469,7 @@
 						</List>
 					</div>
 	 				}
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&
+					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production'  &&
 					<div id="submenu" className={this.getClassName('MenuTitle5')}>
 						<List
 							className="rct-mainMenu p-0 m-0 list-unstyled"
@@ -602,7 +604,7 @@
 					 </List>
 					 
 	 			}
-				{this.state.submenuName=='Pre-Production' &&
+				{this.state.submenuName=='Pre-Production' && this.state.submenuName!='Bootstrap' &&
 								<List
 									className="rct-mainMenu p-0 m-0 list-unstyled"
 									subheader={<ListSubheader className="side-title" component="li">
@@ -619,23 +621,23 @@
 								</List>
 								}
 
-							{this.state.submenuName=='Pre-Production' &&
-															<List
-																className="rct-mainMenu p-0 m-0 list-unstyled"
-																subheader={<ListSubheader className="side-title" component="li">
-																	{/* <IntlMessages id="sidebar.modules" /> */}
-																	</ListSubheader>}
-															>
-																{sidebarMenus.category15.map((menu, key) => (
-																	<NavMenuItem
-																		menu={menu}
-																		key={key}
-																		onToggleMenu={() => this.toggleMenu(menu, 'category15')}
-																	/>
-																))}
-															</List>
-															
-															}
+					{this.state.submenuName=='Pre-Production' && this.state.submenuName!='Bootstrap' &&
+						<List
+							className="rct-mainMenu p-0 m-0 list-unstyled"
+							subheader={<ListSubheader className="side-title" component="li">
+								{/* <IntlMessages id="sidebar.modules" /> */}
+								</ListSubheader>}
+						>
+							{sidebarMenus.category15.map((menu, key) => (
+								<NavMenuItem
+									menu={menu}
+									key={key}
+									onToggleMenu={() => this.toggleMenu(menu, 'category15')}
+								/>
+							))}
+						</List>
+						
+						}
 				
 				 </nav>
 				
