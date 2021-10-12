@@ -8,7 +8,7 @@
 	Form,
 	FormGroup,
 	Label,
-	Input,
+	// Input,
 	FormText,
 	Col,
 	FormFeedback
@@ -70,12 +70,19 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
- 
+import ListItemText from '@material-ui/core/ListItemText';
 // import OutlinedInput from '@mui/material/OutlinedInput';
 
 // import ListItemText from '@mui/material/ListItemText';
 
 
+// import { MDBSelect } from "mdbreact";
+
+import Input from '@material-ui/core/Input';
+
+import Chip from '@material-ui/core/Chip';
+
+ 
 function TabContainer({ children }) {
     return (
        <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -85,36 +92,39 @@ function TabContainer({ children }) {
  }
 
 
-//  const ITEM_HEIGHT = 48;
-// const ITEM_PADDING_TOP = 8;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250,
-//     },
-//   },
-// };
-
-// const names = [
-//   'Oliver Hansen',
-//   'Van Henry',
-//   'April Tucker',
-//   'Ralph Hubbard',
-//   'Omar Alexander',
-//   'Carlos Abbott',
-//   'Miriam Wagner',
-//   'Bradley Wilkerson',
-//   'Virginia Andrews',
-//   'Kelly Snyder',
-// ];
 
  
  class UserbuyerrightsElement extends Component {
     state = {
+        name: [],
 		employeePayroll: null,
         activeIndex: 0,
-        userlevel:''
+        userlevel:'',
+        options: [
+            {
+              text: "USA",
+              value: "1"
+            },
+            {
+              text: "Germany",
+              value: "2"
+            },
+            {
+              text: "France",
+              value: "3"
+            },
+            {
+              text: "Poland",
+              value: "4"
+            },
+            {
+              text: "Japan",
+              value: "5"
+            }
+          ],
+          fromuser:'',
+          touser:'',
+          username:''
 	}
 
     createNotification = (type) => {
@@ -144,6 +154,10 @@ function TabContainer({ children }) {
        
      }
 
+     handleChangesingledropdown = name => event => {
+		this.setState({ [name]: event.target.value });
+	};
+
      handleChangeIndex(index) {
         this.setState({ activeIndex: index });
      }
@@ -154,6 +168,10 @@ function TabContainer({ children }) {
     componentDidMount() {
 		this.getEmployeePayrolls();
 	}
+
+    handleChangedrop = event => {
+        this.setState({ name: event.target.value });
+      };
 
 	// get employee payrols
 	getEmployeePayrolls() {
@@ -219,7 +237,11 @@ function TabContainer({ children }) {
             filterType: 'dropdown'
         };
         return (
+
+            
             <div className="formelements-wrapper main-layout-class">
+
+                  
                 {/* <PageTitleBar title={"User Buyer Rights<IntlMessages id="sidebar.simpleform" />} match={this.props.match} /> */}
                  <PageTitleBar title="User Buyer Rights" match={this.props.match} />
                 <Accordion>
@@ -283,29 +305,6 @@ function TabContainer({ children }) {
                                 
                             </div>
                             </div>
-							
-					
-                            {/* <FormControl sx={{ m: 1, width: 300 }}>
-                                <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
-                                <Select
-                                labelId="demo-multiple-checkbox-label"
-                                id="demo-multiple-checkbox"
-                                multiple
-                                value={personName}
-                                onChange={handleChange}
-                                input={<OutlinedInput label="Tag" />}
-                                renderValue={(selected) => selected.join(', ')}
-                                MenuProps={MenuProps}
-                                >
-                                {names.map((name) => (
-                                    <MenuItem key={name} value={name}>
-                                    <Checkbox checked={personName.indexOf(name) > -1} />
-                                    <ListItemText primary={name} />
-                                    </MenuItem>
-                                ))} 
-                                </Select>
-                            </FormControl> */}
-
 
                             {(() => {
                            
@@ -314,29 +313,53 @@ function TabContainer({ children }) {
                                 <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <div className="row">
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <div className="form-group select_label_name mt-15">                                        
-                                                <select className="form-control select2">
+                                            <div className="form-group">
+                                            {/* select_label_name mt-15 */}
+                                            <FormControl fullWidth>
+                                                <InputLabel htmlFor="age-native-simple">From User</InputLabel>
+                                                <Select native value={this.state.fromuser} onChange={this.handleChangesingledropdown('fromuser')}
+                                                    inputProps={{ id: 'age-native-simple', }}>
+                                                    <option value="" />
+                                                    <option value={10}>Test User</option>
+                                                    <option value={20}>Admin</option>
+                                                    <option value={30}>John</option>
+                                                </Select>
+                                            </FormControl>   
+
+                                           
+                                                {/* <select className="form-control select2">
                                                     <option>From User</option> 
                                                     <option>User 1</option> 
                                                     <option>Test User</option> 
                                                     <option>Admin</option> 
                                                     <option>User 2</option> 
                                                     <option>User 3</option> 
-                                                </select> 
+                                                </select>  */}
                                             </div>
                                         </div>
 
 
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <div className="form-group select_label_name mt-15">                                        
-                                                <select className="form-control select2">
+                                            <div className="form-group">     
+                                            {/* select_label_name mt-15 */}
+                                            <FormControl fullWidth>
+                                                <InputLabel htmlFor="age-native-simple">To User</InputLabel>
+                                                <Select native value={this.state.touser} onChange={this.handleChangesingledropdown('touser')}
+                                                    inputProps={{ id: 'age-native-simple', }}>
+                                                    <option value="" />
+                                                    <option value={10}>Test User</option>
+                                                    <option value={20}>Admin</option>
+                                                    <option value={30}>John</option>
+                                                </Select>
+                                            </FormControl>                                 
+                                                {/* <select className="form-control select2">
                                                     <option>To User</option> 
                                                     <option>User 1</option> 
                                                     <option>Test User</option> 
                                                     <option>Admin</option> 
                                                     <option>User 2</option> 
                                                     <option>User 3</option> 
-                                                </select> 
+                                                </select>  */}
                                             </div>
                                         </div>
                                     </div>
@@ -346,15 +369,37 @@ function TabContainer({ children }) {
                              if (this.state.userlevel == 'singleuser') { 
                             return (
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group select_label_name mt-15">                                        
-                                        <select className="form-control select2">
+                                    <div className="form-group">   
+                                    {/* select_label_name mt-15 */}
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-native-simple">User ID</InputLabel>
+                                        <Select native value={this.state.username} onChange={this.handleChangesingledropdown('username')}
+                                            inputProps={{ id: 'age-native-simple', }}>
+                                            <option value="" />
+                                            <option value={10}>Test User</option>
+                                            <option value={20}>Admin</option>
+                                            <option value={30}>John</option>
+                                        </Select>
+                                    </FormControl>
+                                    
+                                    {/* <FormControl fullWidth>
+                                                <InputLabel htmlFor="select-multiple">User ID</InputLabel>
+                                                <Select multiple value={this.state.name} onChange={this.handleChange}
+                                                // input={<Input id="select-multiple" />}
+                                                MenuProps={MenuProps} >
+                                                {names.map(name => (
+                                                    <MenuItem key={name} value={name}>{name}</MenuItem>
+                                                ))}
+                                                </Select>
+                                            </FormControl>                                       */}
+                                        {/* <select className="form-control select2">
                                             <option>User ID</option> 
                                             <option>Test User</option> 
                                             <option>Test User1</option> 
                                             <option>Admin</option> 
                                             <option>John</option> 
                                             <option>Test</option> 
-                                        </select>
+                                        </select> */}
                                     </div>
                                 </div>
                             )
@@ -364,7 +409,7 @@ function TabContainer({ children }) {
 							
 						</div>
 
-						
+                        
          
             
                         {/* <AppBar position="static" color="default">
@@ -529,5 +574,4 @@ function TabContainer({ children }) {
  };
 }
  export default UserbuyerrightsElement;
- 
  

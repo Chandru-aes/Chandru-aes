@@ -85,7 +85,10 @@ function TabContainer({ children }) {
     state = {
 		employeePayroll: null,
         activeIndex: 0,
-        name: ''
+        name: '',
+        parent_menu_id:'',
+        module:'',
+        menu_type:''
 	}
 
     createNotification = (type) => {
@@ -110,6 +113,10 @@ function TabContainer({ children }) {
         };
      };
 
+     handleChangesingledropdown = name => event => {
+		this.setState({ [name]: event.target.value });
+	};
+    
      handleChangeIndex(index) {
         this.setState({ activeIndex: index });
      }
@@ -192,28 +199,54 @@ function TabContainer({ children }) {
                         <div className="row new-form">
 
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group select_label_name mt-15">                                        
-                                        <select className="form-control select2">
+                                    <div className="form-group">    
+                                    {/* select_label_name mt-15 */}
+                                    <FormControl fullWidth>
+                                                <InputLabel htmlFor="age-native-simple">Module</InputLabel>
+                                                <Select native value={this.state.module} onChange={this.handleChangesingledropdown('module')}
+                                                    inputProps={{ id: 'age-native-simple', }}>
+                                                    <option value="" />
+                                                    <option>Admin</option> 
+                                                    <option>User</option> 
+                                                    <option>Product</option> 
+                                                    <option>Buyer</option> 
+                                                    <option>Test</option> 
+                                                </Select>
+                                            </FormControl>                                      
+                                        {/* <select className="form-control select2">
                                             <option>Module</option> 
                                             <option>Admin</option> 
                                             <option>User</option> 
                                             <option>Product</option> 
                                             <option>Buyer</option> 
                                             <option>Test</option> 
-                                        </select> 
+                                        </select>  */}
                                     </div>
                                 </div>
 
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group select_label_name mt-15">                                        
-                                        <select className="form-control select2">
+                                    <div className="form-group"> 
+                                    <FormControl fullWidth>
+                                                <InputLabel htmlFor="age-native-simple">Menu Type</InputLabel>
+                                                <Select native value={this.state.menu_type} onChange={this.handleChangesingledropdown('menu_type')}
+                                                    inputProps={{ id: 'age-native-simple', }}>
+                                                    <option value="" />
+                                                    <option>Type1</option> 
+                                                    <option>Type2</option> 
+                                                    <option>Type3</option> 
+                                                    <option>Type4</option> 
+                                                    <option>Type5</option> 
+                                                </Select>
+                                            </FormControl>  
+
+                                        {/* <select className="form-control select2">
                                             <option>Menu Type</option> 
                                             <option>Type1</option> 
                                             <option>Type2</option> 
                                             <option>Type3</option> 
                                             <option>Type4</option> 
                                             <option>Type5</option> 
-                                        </select> 
+                                        </select>  */}
                                     </div>
                                 </div>
  
@@ -227,15 +260,27 @@ function TabContainer({ children }) {
                                 </div>
 
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group select_label_name mt-15">                                        
-                                        <select className="form-control select2">
+                                    <div className="form-group">   
+                                    <FormControl fullWidth>
+                                                <InputLabel htmlFor="age-native-simple">Parent Menu ID</InputLabel>
+                                                <Select native value={this.state.parent_menu_id} onChange={this.handleChangesingledropdown('parent_menu_id')}
+                                                    inputProps={{ id: 'age-native-simple', }}>
+                                                    <option value="" />
+                                                    <option>10</option> 
+                                                    <option>20</option> 
+                                                    <option>30</option> 
+                                                    <option>40</option> 
+                                                    <option>50</option> 
+                                                </Select>
+                                            </FormControl>                                       
+                                        {/* <select className="form-control select2">
                                             <option>Parent Menu ID</option> 
                                             <option>10</option> 
                                             <option>20</option> 
                                             <option>30</option> 
                                             <option>40</option> 
                                             <option>50</option> 
-                                        </select> 
+                                        </select>  */}
                                     </div>
                                 </div>
                                 
