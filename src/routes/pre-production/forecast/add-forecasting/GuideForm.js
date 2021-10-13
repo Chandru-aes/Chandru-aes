@@ -80,16 +80,15 @@
                                     </div>  
                                 </div>
                             </div>
-                            {/* <div className="col-lg-6 pr-0">
+                            <div className="col-lg-8 pr-0">
                                 <div className="form-group mt-15 text-right">
                                     
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide<i className="zmdi zmdi-book"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">View<i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button>
                                 </div>
-                            </div>  */}
+                            </div> 
                             <table className="table data activity-table">
                                         <thead>
-                                            <tr>
-                                                
+                                            <tr>                                                
                                             <th className="w-25 text-center">Qty</th>
                                             <th className="w-20 text-center">SU 20</th>
                                             <th className="w-20 text-center">HOL 20</th>

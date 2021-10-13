@@ -62,8 +62,7 @@
     }
 	 clickMenu(id){
         // Add class 'active' on the clicked <li>, and remove from all other <li>
-		console.log(id)
-		console.log(this.state.submenuName)
+		
         this.setState({
             activeItem: id,
         })
