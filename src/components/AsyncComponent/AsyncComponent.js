@@ -630,6 +630,12 @@ const AsyncStyleAddComponent = Loadable({
 	loader: () => import("Routes/pre-production/styling/style-creation"),
 	loading: () => <RctPageLoader />,
 });
+
+const AsyncStyleListComponent = Loadable({
+	loader: () => import("Routes/pre-production/styling/style-list"),
+	loading: () => <RctPageLoader />,
+});
+
 export {
 	AsyncUserWidgetComponent,
 	AsyncUserChartsComponent,
@@ -735,5 +741,6 @@ export {
 	AsyncForecastComponent,
 	AsyncForecastlistComponent,
 	AsyncForecastAddComponent,
-	AsyncStyleAddComponent
+	AsyncStyleAddComponent,
+	AsyncStyleListComponent
 }; 

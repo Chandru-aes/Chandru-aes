@@ -591,6 +591,11 @@ export default {
             "menu_icon": "zmdi zmdi-brush",
             "path": "/app/pre-production/",
             "child_routes": [
+                {
+                  "path": "/app/pre-production/style-list",
+                  "new_item": false,
+                  "menu_title": "Style List"
+               },
                {
                   "path": "/app/pre-production/style-creation",
                   "new_item": false,

@@ -9,7 +9,8 @@
      AsyncForecastComponent,
      AsyncForecastlistComponent,
      AsyncForecastAddComponent,
-     AsyncStyleAddComponent
+     AsyncStyleAddComponent,
+     AsyncStyleListComponent
  } from 'Components/AsyncComponent/AsyncComponent';
  
  //console.log(match.url); 
@@ -25,6 +26,8 @@
              <Route path={`${match.url}/forecasting`} component={AsyncForecastlistComponent} />
              <Route path={`${match.url}/add-forecasting`} component={AsyncForecastAddComponent} />
              <Route path={`${match.url}/style-creation`} component={AsyncStyleAddComponent} />
+             <Route path={`${match.url}/style-list`} component={AsyncStyleListComponent} />
+             
          </Switch>
      </div>
  );
