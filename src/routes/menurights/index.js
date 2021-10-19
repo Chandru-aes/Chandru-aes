@@ -375,7 +375,8 @@ function TabContainer({ children }) {
 
                                         <Select1
                                                 dropdownPosition="auto"
-                                                //   multi
+                                                  multi
+                                                  createNewLabel="From User"
                                                 options={options1}
                                                 onChange={values => this.setState({ fromuser:values })}
                                                 placeholder="From User"

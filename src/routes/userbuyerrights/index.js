@@ -82,6 +82,7 @@ import Input from '@material-ui/core/Input';
 
 import Chip from '@material-ui/core/Chip';
 
+import Select1 from "react-dropdown-select";
  
 function TabContainer({ children }) {
     return (
@@ -97,6 +98,8 @@ function TabContainer({ children }) {
  class UserbuyerrightsElement extends Component {
     state = {
         name: [],
+        buyerlists:[],
+        buyerrightlists:[],
 		employeePayroll: null,
         activeIndex: 0,
         userlevel:'',
@@ -122,9 +125,9 @@ function TabContainer({ children }) {
               value: "5"
             }
           ],
-          fromuser:'',
-          touser:'',
-          username:''
+          fromuser:[],
+          touser:[],
+          username:[]
 	}
 
     createNotification = (type) => {
@@ -166,19 +169,29 @@ function TabContainer({ children }) {
         this.setState({ activeIndex: value });
      }
     componentDidMount() {
-		this.getEmployeePayrolls();
+		this.getBuyeruserlists();
 	}
 
+    
     handleChangedrop = event => {
         this.setState({ name: event.target.value });
       };
 
 	// get employee payrols
-	getEmployeePayrolls() {
-		api.get('current_subscriptions')
+	getBuyeruserlists() {
+		api.get('Buyer/GetBuyerDropDown')
 			.then((response) => {
-        console.log(response,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-				this.setState({ employeePayroll: response.data });
+                
+				this.setState({ buyerlists: response.data.result.data });
+			})
+			.catch(error => {
+				// error handling
+			})
+
+            api.get('UserBuyerRights/GetUserBuyerRightsList')
+			.then((response) => {
+                console.log(response.data.result.data,'response.data.result.data') 
+				this.setState({ buyerrightlists: response.data.result.data });
 			})
 			.catch(error => {
 				// error handling
@@ -198,41 +211,72 @@ function TabContainer({ children }) {
         //     );
         // };
         
+        const options1 = [];
+        for (const item of this.state.buyerlists) {           
+            options1.push({value:item.buyerCode,label:item.buyerName});
+        }
+
+       
+        // const options1 = [
+        //     {
+        //       value: "1",
+        //       label: "Admin"
+        //     },
+        //     {
+        //       value: "2",
+        //       label: "John"
+        //     },
+        //     {
+        //       value: "3",
+        //       label: "Joe",
+        //     //   disabled: true
+        //     },
+        
+        //   ];
+
+
+
         const { employeePayroll } = this.state;
 		const { match } = this.props;
         const columns = ["Buyer Code", "BuyDivCode", "DivName"];
-        const data = [
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"], 
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],    
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],   
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],
-            ["BASIC","BASIC","BASICS"],   
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["BASSP","BASSP","BASS PRO"],
-            ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"]
-        ];
+
+        // const data = [];
+        // for (let item of this.state.buyerrightlists) {           
+        //     data.push([item.buyerCode,item.buyerDivCode,item.divName]);
+        // }
+
+        // const data = [
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"], 
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],    
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],   
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],
+        //     ["BASIC","BASIC","BASICS"],   
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["BASSP","BASSP","BASS PRO"],
+        //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"]
+        // ];
         const options = {
             filterType: 'dropdown'
         };
@@ -314,8 +358,18 @@ function TabContainer({ children }) {
                                     <div className="row">
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <div className="form-group">
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="From User"
+                                                options={options1}
+                                                onChange={values => this.setState({ fromuser:values })}
+                                                placeholder="From User"
+                                                values={this.state.fromuser}
+                                                />
+
                                             {/* select_label_name mt-15 */}
-                                            <FormControl fullWidth>
+                                            {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="age-native-simple">From User</InputLabel>
                                                 <Select native value={this.state.fromuser} onChange={this.handleChangesingledropdown('fromuser')}
                                                     inputProps={{ id: 'age-native-simple', }}>
@@ -324,7 +378,7 @@ function TabContainer({ children }) {
                                                     <option value={20}>Admin</option>
                                                     <option value={30}>John</option>
                                                 </Select>
-                                            </FormControl>   
+                                            </FormControl>    */}
 
                                            
                                                 {/* <select className="form-control select2">
@@ -340,9 +394,19 @@ function TabContainer({ children }) {
 
 
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <div className="form-group">     
+                                            <div className="form-group">  
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="To User"
+                                                options={options1}
+                                                onChange={values => this.setState({ touser:values })}
+                                                placeholder="To User"
+                                                values={this.state.touser}
+                                                />
+
                                             {/* select_label_name mt-15 */}
-                                            <FormControl fullWidth>
+                                            {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="age-native-simple">To User</InputLabel>
                                                 <Select native value={this.state.touser} onChange={this.handleChangesingledropdown('touser')}
                                                     inputProps={{ id: 'age-native-simple', }}>
@@ -351,7 +415,7 @@ function TabContainer({ children }) {
                                                     <option value={20}>Admin</option>
                                                     <option value={30}>John</option>
                                                 </Select>
-                                            </FormControl>                                 
+                                            </FormControl>                                  */}
                                                 {/* <select className="form-control select2">
                                                     <option>To User</option> 
                                                     <option>User 1</option> 
@@ -371,7 +435,18 @@ function TabContainer({ children }) {
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">   
                                     {/* select_label_name mt-15 */}
-                                    <FormControl fullWidth>
+
+                                    <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="User ID"
+                                                options={options1}
+                                                onChange={values => this.setState({ username:values })}
+                                                placeholder="User ID"
+                                                values={this.state.fromuser}
+                                                />
+
+                                    {/* <FormControl fullWidth>
                                         <InputLabel htmlFor="age-native-simple">User ID</InputLabel>
                                         <Select native value={this.state.username} onChange={this.handleChangesingledropdown('username')}
                                             inputProps={{ id: 'age-native-simple', }}>
@@ -380,7 +455,7 @@ function TabContainer({ children }) {
                                             <option value={20}>Admin</option>
                                             <option value={30}>John</option>
                                         </Select>
-                                    </FormControl>
+                                    </FormControl> */}
                                     
                                     {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="select-multiple">User ID</InputLabel>
@@ -502,15 +577,15 @@ function TabContainer({ children }) {
 
                                 </thead>
                                 <tbody>
-                                {data.map(n => {
+                                {this.state.buyerrightlists.map(n => {
                                     
 										 return (
                                             <tr>
                                                 <td> <Checkbox color="primary" value="true" />
                                                 </td>
-                                                <td>{n[0]}</td>
-                                                <td>{n[1]}</td>
-                                                <td>{n[2]}</td>
+                                                <td>{n.buyerCode}</td>
+                                                <td>{n.buyerDivCode}</td>
+                                                <td>{n.divName}</td>
                                             </tr>
 										 );
 									 })}
