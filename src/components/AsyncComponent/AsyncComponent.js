@@ -640,8 +640,17 @@ const AsyncSinglewindowComponent = Loadable({
 	loader: () => import("Routes/pre-production/singlewindow"),
 	loading: () => <RctPageLoader />,
 });
-
+const AsyncRequestGridOverallComponent = Loadable({	
+	loader: () => import("Routes/pre-production/request-grid/overall-list"),	
+	loading: () => <RctPageLoader />,	
+});	
+const AsyncRequestGridStyleComponent = Loadable({	
+	loader: () => import("Routes/pre-production/request-grid/style-list"),	
+	loading: () => <RctPageLoader />,	
+});
 export {
+	AsyncRequestGridOverallComponent,	
+	AsyncRequestGridStyleComponent,
 	AsyncUserWidgetComponent,
 	AsyncUserChartsComponent,
 	AsyncGeneralWidgetsComponent,

@@ -6,6 +6,7 @@
  import FormControlLabel from '@material-ui/core/FormControlLabel';
  import Button from '@material-ui/core/Button';
  import Checkbox from '@material-ui/core/Checkbox';
+ import { Link } from 'react-router-dom';
  import {
      Pagination,
      PaginationItem,
@@ -261,7 +262,7 @@
          return (
              <div className="user-management">
                  <Helmet>
-                     <title>Reactify | Users Management</title>
+                 <title>Ambattur Fashion India Private Limited ( AFIPL)</title>
                      <meta name="description" content="Reactify Widgets" />
                  </Helmet>
                  <PageTitleBar
@@ -272,7 +273,7 @@
                      <div className="table-responsive">
                          <div className="d-flex justify-content-between py-20 px-10 border-bottom">
                              <div>
-                                <h3 className="m-btop-10">Style List</h3>
+                                <h3 className="m-btop-10">Overall List</h3>
                              </div>
                                 <div>
                                     <div className="float-right">
@@ -328,326 +329,103 @@
                                              label="All"
                                          />
                                      </th> */}
-                                     <th>Style</th>
+                                     <th>Style Image</th>
+                                     <th>FIT</th>
+                                     <th>Req No</th>
+                                     <th>Type</th>
+                                     <th>Date</th>
                                      <th>Style No</th>
-                                     <th>Description</th>
-                                     <th>Location</th>
-                                     <th>Qty</th>
-                                     <th>PCD</th>
-                                     <th>Stage</th>
+                                    
+                                     <th>Purpose</th>
+                                     <th>No of Activity</th>
                                  </tr>
                              </thead>
                              <tbody>
                                  {/* {users && users.map((user, key) => ( */}
                                      <tr>                                       
                                          <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                             <div className="media">                                                
+                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-success badge-pill`}>Design</span></td>                                        
+                                         <td>859</td>
+                                         <td> Style product Top</td>
+                                         <td>2021-10-15 </td>
+                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
+                                         <td>-</td>  
+                                         <td>Design</td>                                    
+                                         <td>10</td>                                        
                                      </tr>
                                      <tr>                                       
                                          <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img2.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                             <div className="media">                                                
+                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-primary badge-pill`}>Sampling</span></td>                                        
+                                         <td>859</td>
+                                         <td> Style product Top</td>
+                                         <td>2021-10-15 </td>
+                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
+                                         <td>-</td> 
+                                         <td>Design</td>                                      
+                                         <td>10</td>                                        
                                      </tr>
                                      <tr>                                       
                                          <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img3.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                             <div className="media">                                                
+                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-danger badge-pill`}>Costing</span></td>                                        
+                                         <td>859</td>
+                                         <td> Style product Top</td>
+                                         <td>2021-10-15 </td>
+                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
+                                         <td>-</td> 
+                                         <td>Design</td>                                      
+                                         <td>10</td>                                        
                                      </tr>
                                      <tr>                                       
                                          <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img23png.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                             <div className="media">                                                
+                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-warning badge-pill`}>Projection</span></td>                                        
+                                         <td>859</td>
+                                         <td> Style product Top</td>
+                                         <td>2021-10-15 </td>
+                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
+                                         <td>-</td>     
+                                         <td>Design</td>                                  
+                                         <td>10</td>                                        
                                      </tr>
                                      <tr>                                       
                                          <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img2.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                             <div className="media">                                                
+                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-success badge-pill`}>Confirmed</span></td>                                        
+                                         <td>859</td>
+                                         <td> Style product Top</td>
+                                         <td>2021-10-15 </td>
+                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
+                                         <td>-</td> 
+                                         <td>Design</td>                                      
+                                         <td>10</td>                                        
                                      </tr>
                                      <tr>                                       
                                          <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                             <div className="media">                                                
+                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-success badge-pill`}>Closed</span></td>                                        
+                                         <td>859</td>
+                                         <td> Style product Top</td>
+                                         <td>2021-10-15 </td>
+                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
+                                         <td>-</td>  
+                                         <td>Design</td>                                     
+                                         <td>10</td>                                        
                                      </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img3.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td><span className={`badge badge-danger badge-pill`}>Cancelled/In active</span></td>                                        
-                                     </tr>
-                                     
                                  {/* )) */}
                              </tbody>
                              <tfoot className="border-top">

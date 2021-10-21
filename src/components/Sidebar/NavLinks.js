@@ -518,25 +518,20 @@ export default {
       }
      
    ],
-   category11: [
-      {
-         "menu_title": "Forecasting",
-         "menu_icon": "zmdi zmdi-trending-up",
-         "path": "/app/pre-production/",
-         "child_routes": [
-            {
-               "path": "/app/pre-production/forecasting",
-               "new_item": false,
-               "menu_title": "Details"
-            },
-            // {
-            //    "path": "/app/pre-production/add-forecasting",
-            //    "new_item": false,
-            //    "menu_title": "Add Forecasting"
-            // },
-            
-         ]
-      }
+   category11: [	
+      {	
+         "menu_title": "Forecasting",	
+         "menu_icon": "zmdi zmdi-trending-up",	
+         "path": "/app/pre-production/forecasting",	
+        	
+            // {	
+            //    "path": "/app/pre-production/add-forecasting",	
+            //    "new_item": false,	
+            //    "menu_title": "Add Forecasting"	
+            // },	
+            	
+        	
+      }	
    ],
 
    category12: [
@@ -600,6 +595,11 @@ export default {
                   "path": "/app/pre-production/style-creation",
                   "new_item": false,
                   "menu_title": "Style Creation"
+               },
+               {	
+                  "path": "/app/pre-production/request-grid",	
+                  "new_item": false,	
+                  "menu_title": "Request Grid"	
                },
               
             ]

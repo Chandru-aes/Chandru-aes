@@ -89,6 +89,10 @@ function TabContainer({ children }) {
  
  class MenurightsElement extends Component {
     state = {
+        buyerlists:[],
+        moduleLists:[],
+        LocationItem:[],
+        RoleTypeList:[],
 		employeePayroll: null,
         activeIndex: 0,
         name: '',
@@ -101,10 +105,14 @@ function TabContainer({ children }) {
             //   label: "Admin"
             // }
         ],
-        touser:'',
+        touser:[],
         username:'',
+        modulename:'',
+        modulenameValue:[],
+        lpcationItemValue:[],
         location:'',
         module:'',
+        roletype:[]
 	}
 
     createNotification = (type) => {
@@ -159,36 +167,61 @@ function TabContainer({ children }) {
 
 	// get employee payrols
 	getEmployeePayrolls() {
-		api.get('current_subscriptions')
-			.then((response) => {
-        console.log(response,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-				this.setState({ employeePayroll: response.data });
-			})
-			.catch(error => {
-				// error handling
-			})
+      
+        api.get('Buyer/GetBuyerDropDown')
+        .then((response) => {
+            
+            this.setState({ buyerlists: response.data.result.data });
+        })        
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('UserBuyerRights/GetUserBuyerRightsList')
+        .then((response) => { 
+            this.setState({ buyerrightlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+        api.get('Miscellaneous/GetMiscellaneousDropDown?MType=module')
+        .then((response) => {            
+            this.setState({ moduleLists: response.data.result.data });
+        })
+
+        api.get('Location/GetLocationDropDown')
+        .then((response) => {            
+            this.setState({ LocationItem: response.data.result.data });
+        })
+
+        api.get('RoleMaster/GetRoleMasterList')
+        .then((response) => {            
+            this.setState({ RoleTypeList: response.data.result.data });
+        })
 	}
     render() {
 
-        const options1 = [
-            {
-              value: "1",
-              label: "Admin"
-            },
-            {
-              value: "2",
-              label: "John"
-            },
-            {
-              value: "3",
-              label: "Joe",
-            //   disabled: true
-            },
-            {
-              value: "4",
-              label: "Test user"
-            }
-          ];
+        const options1 = [];         
+        for (const item of this.state.buyerlists) {           
+            options1.push({value:item.buyerCode,label:item.buyerName});
+        }
+
+        const moduleListOptions = [];         
+        for (const item of this.state.moduleLists) {           
+            moduleListOptions.push({value:item.code,label:item.code});
+        }
+
+        const locationItemOptions = [];         
+        for (const item of this.state.LocationItem) {           
+            locationItemOptions.push({value:item.locCode,label:item.locName});
+        }
+        
+        const RoleOptions =[];
+        for (const item of this.state.RoleTypeList) {           
+            RoleOptions.push({value:item.roleId,label:item.roleDesc});
+        }
 
         const { employeePayroll } = this.state;
 		const { match } = this.props;
@@ -330,22 +363,18 @@ function TabContainer({ children }) {
                             return (
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">    
-                                    {/* select_label_name mt-15 */}
-                                    <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">Role Type</InputLabel>
-                                                <Select native value={this.state.role_type} onChange={this.handleChangesingledropdown('role_type')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                    <option value="" />
-                                                    <option>MER</option> 
-                                                    <option>Test MER</option>  
-                                                </Select>
-                                            </FormControl>
-
-                                        {/* <select className="form-control select2">
-                                            <option>Role Type</option> 
-                                            <option>MER</option> 
-                                            <option>Test MER</option> 
-                                        </select>  */}
+                                    <div className="form-group select_label_name mt-15 "> 
+                                           <Select1
+                                                   dropdownPosition="auto"
+                                                     multi
+                                                     createNewLabel="Role Type"
+                                                   options={RoleOptions}
+                                                   onChange={values => this.setState({ roletype:values })}
+                                                   placeholder="Role Type"
+                                                   values={this.state.roletype}
+                                                   />
+                                              
+                                            </div>
                                     </div>
                                 </div>
                             )
@@ -356,23 +385,7 @@ function TabContainer({ children }) {
                                     <div className="row">
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <div className="form-group select_label_name mt-15 ">              
-                                             {/* <FormControl fullWidth>
-                                                <InputLabel>Label</InputLabel>
-                                                <Select>
-                                                    <TextField />
-                                                    <MenuItem>Remove Selection</MenuItem>
-                                                    <MenuItem>Option 1</MenuItem>
-                                                    <MenuItem>Option 2</MenuItem>
-                                                    <MenuItem>Option X</MenuItem>
-                                                </Select>
-                                                <FormHelperText />
-                                                </FormControl>                             */}
-
-{/* <TextField id="select" label="Age" value="20" select>
-  <MenuItem value="10">Ten</MenuItem>
-  <MenuItem value="20">Twenty</MenuItem>
-</TextField> */}
-
+                                           
                                         <Select1
                                                 dropdownPosition="auto"
                                                   multi
@@ -382,37 +395,23 @@ function TabContainer({ children }) {
                                                 placeholder="From User"
                                                 values={this.state.fromuser}
                                                 />
-                                            {/* <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">From User</InputLabel>
-                                                <Select native value={this.state.fromuser} onChange={this.handleChangesingledropdown('fromuser')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                       
-                                                    <option value="" />
-                                                    <option>User 1</option> 
-                                                    <option>Test User</option> 
-                                                    <option>Admin</option> 
-                                                    <option>User 2</option> 
-                                                    <option>User 3</option> 
-                                                </Select>
-                                            </FormControl>    */}
+                                           
                                          </div>
                                         </div>
 
 
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <div className="form-group">                                        
-                                            <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">To User</InputLabel>
-                                                <Select native value={this.state.touser} onChange={this.handleChangesingledropdown('touser')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                    <option value="" />
-                                                    <option>User 1</option> 
-                                                    <option>Test User</option> 
-                                                    <option>Admin</option> 
-                                                    <option>User 2</option> 
-                                                    <option>User 3</option> 
-                                                </Select>
-                                            </FormControl> 
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="To User"
+                                                options={options1}
+                                                onChange={values => this.setState({ touser:values })}
+                                                placeholder="To User"
+                                                values={this.state.touser}
+                                                />
+
                                             </div>
                                         </div>
                                     </div>
@@ -422,8 +421,19 @@ function TabContainer({ children }) {
                              if (this.state.userlevel == 'singleuser') { 
                             return (
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">                                        
-                                    <FormControl fullWidth>
+                                    <div className="form-group m-btop-10">   
+                                        <FormControl fullWidth>
+                                        <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="User ID"
+                                                options={options1}
+                                                onChange={values => this.setState({ username:values })}
+                                                placeholder="User ID"
+                                                values={this.state.fromuser}
+                                                />  
+                                                </FormControl>                                   
+                                    {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="age-native-simple">User Name</InputLabel>
                                                 <Select native value={this.state.username} onChange={this.handleChangesingledropdown('username')}
                                                     inputProps={{ id: 'age-native-simple', }}>
@@ -434,28 +444,13 @@ function TabContainer({ children }) {
                                                     <option>User 2</option> 
                                                     <option>User 3</option> 
                                                 </Select>
-                                            </FormControl> 
+                                            </FormControl>  */}
                                     </div>
                                 </div>
                             )
                             }
                         })()}
 
-                            {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="age-simple">User Name</InputLabel>
-                                            <Select value={this.state.age} onChange={this.handleChange}
-                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                            <MenuItem value=""><em>None</em></MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                </div> */}
-   
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 
                                     <FormControl disabled fullWidth>
@@ -468,108 +463,38 @@ function TabContainer({ children }) {
                                    
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">   
-                                                                      
-
-                                    <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">Module</InputLabel>
-                                                <Select native value={this.state.module} onChange={this.handleChangesingledropdown('module')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                    <option value="" />
-                                                    <option>Admin</option> 
-                                                    <option>User</option> 
-                                                    <option>Product</option> 
-                                                    <option>Buyer</option> 
-                                                    <option>Test</option> 
-                                                </Select>
+                                                   
+                                        <div className="form-group m-btop-10">   
+                                            <FormControl fullWidth>
+                                                <Select1  dropdownPosition="auto"
+                                                //   multi
+                                                    createNewLabel="Module"
+                                                    options={moduleListOptions}
+                                                    onChange={values => this.setState({ modulename:values })}
+                                                    placeholder="Module"
+                                                    values={this.state.modulenameValue}
+                                                />  
                                             </FormControl> 
+                                        </div>                                    
                                     </div>
                                 </div>
-{/* 
-                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="age-simple">Module</InputLabel>
-                                            <Select value={this.state.age} onChange={this.handleChange}
-                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                            <MenuItem value=""><em>None</em></MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                </div> */}
-
-                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">   
-                                    <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">Location</InputLabel>
-                                                <Select native value={this.state.location} onChange={this.handleChangesingledropdown('location')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                    <option value="" />
-                                                    <option>India</option> 
-                                            <option>USA</option> 
-                                                </Select>
-                                            </FormControl>                                      
-                                        
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">   
-                                    <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">WHCategory</InputLabel>
-                                                <Select native value={this.state.WHCategory} onChange={this.handleChangesingledropdown('WHCategory')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                    <option value="" />
-                                                    <option>Category 1</option> 
-                                                    <option>Category 2</option> 
-                                                </Select>
-                                            </FormControl>                                       
-                                        {/* <select className="form-control select2">
-                                            <option>WHCategory</option> 
-                                            <option>Category 1</option> 
-                                            <option>Category 2</option> 
-                                        </select>  */}
-                                    </div>
-                                </div>
-
-                            
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group"> 
-                                    <FormControl fullWidth>
-                                                <InputLabel htmlFor="age-native-simple">ICategory</InputLabel>
-                                                <Select native value={this.state.ICategory} onChange={this.handleChangesingledropdown('ICategory')}
-                                                    inputProps={{ id: 'age-native-simple', }}>
-                                                    <option value="" />
-                                                    <option>ICategory 1</option> 
-                                                    <option>ICategory 2</option>
-                                                </Select>
-                                            </FormControl>                                         
-                                       
+                                        <div className="form-group m-btop-10">   
+                                            <FormControl fullWidth>
+                                                <Select1  dropdownPosition="auto"
+                                                //   multi
+                                                    createNewLabel="Location"
+                                                    options={locationItemOptions}
+                                                    onChange={values => this.setState({ location:values })}
+                                                    placeholder="Location"
+                                                    values={this.state.lpcationItemValue}
+                                                />  
+                                            </FormControl> 
+                                        </div>  
                                     </div>
                                 </div>
-
-                                
-                                
                         </div>
-
-
-         
-            
-                        {/* <AppBar position="static" color="default">
-                            <Tabs
-                                value={this.state.activeIndex}
-                                onChange={(e, value) => this.handleChange(e, value)}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                variant="fullWidth"
-                            >
-                                <Tab label="Item One" />
-                                <Tab label="Item Two" />
-                                <Tab label="Item Three" />
-                            </Tabs>
-                        </AppBar> */}
                         
                     </RctCollapsibleCard>
                 </div>

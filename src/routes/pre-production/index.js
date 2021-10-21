@@ -11,7 +11,9 @@
      AsyncForecastAddComponent,
      AsyncStyleAddComponent,
      AsyncStyleListComponent,
-     AsyncSinglewindowComponent
+     AsyncSinglewindowComponent,
+     AsyncRequestGridOverallComponent,	
+	AsyncRequestGridStyleComponent,
  } from 'Components/AsyncComponent/AsyncComponent';
  
  //console.log(match.url); 
@@ -29,7 +31,8 @@
              <Route path={`${match.url}/style-creation`} component={AsyncStyleAddComponent} />
              <Route path={`${match.url}/style-list`} component={AsyncStyleListComponent} />
              <Route path={`${match.url}/single-window`} component={AsyncSinglewindowComponent} />
-             
+             <Route path={`${match.url}/request-grid`} component={AsyncRequestGridOverallComponent} />	
+             <Route path={`${match.url}/request-style-list`} component={AsyncRequestGridStyleComponent} />
          </Switch>
      </div>
  );

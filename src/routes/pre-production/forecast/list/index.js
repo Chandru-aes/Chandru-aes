@@ -94,7 +94,8 @@ import DataGrid, {
     Editing,
     Paging,
     Selection,
-    Lookup
+    Lookup,
+    Summary, TotalItem
   } from 'devextreme-react/data-grid';
   
   //import { Button } from 'devextreme-react/button';
@@ -102,8 +103,10 @@ import DataGrid, {
   
   import ArrayStore from 'devextreme/data/array_store';
   import DataSource from 'devextreme/data/data_source';
-  import service  from './data.js';
+  import { employees, states,product_types,sub_product_types } from './data.js';
   import 'devextreme/dist/css/dx.light.css';
+
+  const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 /****/
 function TabContainer({ children }) {
     return (
@@ -123,8 +126,12 @@ function TabContainer({ children }) {
 	}
     constructor(props) {
         super(props);
-        this.state = { employees: service.getEmployees() };
-        this.states = service.getStates();
+       // this.state = { employees: service.getEmployees() };
+       // this.states = service.getStates();
+        this.state = {
+            selectTextOnEditStart: true,
+            startEditAction: 'click'
+        };
         this.allowDeleting = this.allowDeleting.bind(this);
         this.onRowValidating = this.onRowValidating.bind(this);
         this.onEditorPreparing = this.onEditorPreparing.bind(this);
@@ -155,7 +162,7 @@ function TabContainer({ children }) {
       }
       cloneIconClick(e) {
         const employees = [...this.state.employees];
-        const clonedItem = { ...e.row.data, ID: service.getMaxID() };
+       // const clonedItem = { ...e.row.data, ID: service.getMaxID() };
     
         employees.splice(e.row.rowIndex, 0, clonedItem);
         this.setState({ employees: employees });
@@ -313,7 +320,8 @@ function TabContainer({ children }) {
 		const { match } = this.props;
         const { selectedDate } = this.state;
         //const columns = ["Buyer Code", "BuyDivCode", "DivName"];
-        const columns = ['Actions', 'Quantity', 'Location', 'Category', 'Sub Category','Avg SAM','PCD','Tent.ExFact','Confirm Due'];
+        const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+        //const columns = ['Actions', 'Quantity', 'Location', 'Category', 'Sub Category','Avg SAM','PCD','Tent.ExFact','Confirm Due'];
         // const dataSource = new DataSource({
         //     store: new ArrayStore({
         //       data: employees,
@@ -435,7 +443,7 @@ function TabContainer({ children }) {
                                 <div className="form-group mt-15 text-right">
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Add <i className="zmdi zmdi-file-plus"></i></span><span className="MuiTouchRipple-root"></span></button> */}
                                     
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide<i className="zmdi zmdi-book"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide</span><span className="MuiTouchRipple-root"></span></button>
                                 </div>
                             </div> 
                         </div> 
@@ -454,113 +462,42 @@ function TabContainer({ children }) {
                         </AppBar>
                         <SwipeableViews axis={'x'}  index={this.state.activeIndex} onChangeIndex={(index) => this.handleChangeIndex(index)}>
                             <TabContainer>
-                                <div className="">
-                                    {/* <div className="float-right">
-                                        <div className="">
-                                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
-                                        </div>
-                                    </div>
-                                    <table className="table data qty-breakup-table">
-                                        <thead>
-                                            <tr>
-                                            <th className="w-15 text-center">Actions </th>
-                                            <th className="w-10">Quantity</th>
-                                            <th className="w-10">Location</th>
-                                            <th className="w-10">Category</th>
-                                            <th className="w-10">Sub Category</th>
-                                            <th className="w-10">Avg SAM</th>
-                                            <th className="w-15">PCD</th>
-                                            <th className="w-10">Tent.ExFact</th>
-                                            <th className="w-10">Confirm Due</th>
-                                           
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <td className="text-center">
-                                            <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            <button class="MuiButtonBase-root MuiIconButton-root text-primary  save MuiIconButton-colorPrimary " tabindex="0" type="button" aria-label="Save"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            </td>
-                                            <td className="data">John Doe</td>
-                                            <td className="data">johndoe@john.com</td>
-                                            <td className="data">category 1</td>
-                                            <td className="data">Sub category 1</td>
-                                            <td className="data">45</td>
-                                            <td className="data">2021-10-05</td>
-                                            <td className="data">2021-11-05</td>
-                                            <td className="data">2021-12-05</td>
-                                           
-                                            </tr>
-                                            <tr>
-                                            <td className="text-center">
-                                                <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary " tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                                <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary " tabindex="0" type="button" aria-label="Save"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary " tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            </td>
-                                            <td className="data">John Doe</td>
-                                            <td className="data">johndoe@john.com</td>
-                                            <td className="data">category 2</td>
-                                            <td className="data">Sub category 2</td>
-                                            <td className="data">45</td>
-                                            <td className="data">2021-10-05</td>
-                                            <td className="data">2021-11-05</td>
-                                            <td className="data">2021-12-05</td>
-                                          
-                                            </tr>
-                                        </tbody>                                        
-                                    </table> */}
-                                    <div className="float-right tbl-filter-btn-1">
-                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
-                            
-                                    <span className="MuiIconButton-label">
-                            
-                            
-                                    <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-                                        </svg>
-                            
-                                    </span>
-                            
-                                </button>
-                            
-                                <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
-                            
-                            <span className="MuiIconButton-label">
-                            
-                            <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
-                                </svg></span>
-                            
-                            
-                            
-                            
-                            </button>
-                            <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">
-                            
-                                            <span className="MuiIconButton-label">
-                            
-                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                    <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
-                                                </svg></span></button>
-                            
-                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
-                            
-                            
-                            
-                                                    <span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                <path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path>
-                                            </svg></span></button>
-                            
-                                            <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
-                                            </svg></span></button>
-                            </div>
-                          
+                                <div className=""> 
                                     <div id="data-grid-demo">
-                                    <DataGrid
+                                    <DataGrid dataSource={employees} keyExpr="ID" showBorders={true} >
+                                        <Paging enabled={false} />
+                                        <Editing mode="batch" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
+                                                selectTextOnEditStart={this.state.selectTextOnEditStart}
+                                            startEditAction={this.state.startEditAction} useIcons={true}/>
+                                           <Column type="buttons" width={110} caption="Actions">
+                                                <Button name="edit" />
+                                                <Button name="delete" />
+                                                <Button hint="Clone" icon="repeat"  />
+                                            </Column>   
+                                        <Column dataField="Quantity" caption="Quantity"  />
+                                        <Column dataField="ProductTypeId" caption="Product type" >
+                                            <Lookup dataSource={product_types} valueExpr="ID" displayExpr="Name" />
+                                        </Column>
+                                        <Column dataField="SubProductTypeId" caption="Sub-Product type" >
+                                            <Lookup dataSource={sub_product_types} valueExpr="ID" displayExpr="Name" />
+                                        </Column>
+                                        <Column dataField="AvgSAM" caption="Average SAM"/>
+                                        <Column dataField="PCD" dataType="date" />
+                                        <Column dataField="tent-deli-date" caption="Tentative delivery date" dataType="date" />
+                                        <Column dataField="confirm-due-date" caption="Confirmation due date" dataType="date" />
+                                        <Column dataField="" caption="Available capacity" width={50}/>
+                                      
+                                        {/* <Column dataField="LastName" />
+                                        <Column dataField="Position" width={170} /> */}
+                                        {/* <Column dataField="StateID" caption="State" width={125}>
+                                            <Lookup dataSource={states} valueExpr="ID" displayExpr="Name" />
+                                        </Column> */}
+                                         <Summary>
+                                            <TotalItem column="Quantity" summaryType="sum"  valueFormat="#0.00" />
+                                        </Summary>
+                                        
+                                    </DataGrid>
+                                    {/* <DataGrid
                                         id="gridContainer"
                                         dataSource={this.state.employees}
                                         keyExpr="ID"
@@ -586,7 +523,7 @@ function TabContainer({ children }) {
                                         <Lookup dataSource={this.states} displayExpr="Name" valueExpr="ID" />
                                         </Column>
                                         <Column dataField="BirthDate" dataType="date" width={125} />
-                                    </DataGrid>
+                                    </DataGrid> */}
                                         <div className="row tb-pro mt-20">
                                 <div className="w-100">
                                     <div className="w-25 float-left">
