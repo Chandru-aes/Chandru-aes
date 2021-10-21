@@ -604,5 +604,24 @@ export default {
               
             ]
          }
+      ],category16: [
+         {
+            "menu_title": "Single Window",
+            "menu_icon": "zmdi zmdi-trending-up",
+            "path": "/app/pre-production/",
+            "child_routes": [
+               {
+                  "path": "/app/pre-production/single-window",
+                  "new_item": false,
+                  "menu_title": "Details"
+               },
+               // {
+               //    "path": "/app/pre-production/add-forecasting",
+               //    "new_item": false,
+               //    "menu_title": "Add Forecasting"
+               // },
+               
+            ]
+         }
       ],
 }

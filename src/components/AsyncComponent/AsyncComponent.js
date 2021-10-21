@@ -636,6 +636,11 @@ const AsyncStyleListComponent = Loadable({
 	loading: () => <RctPageLoader />,
 });
 
+const AsyncSinglewindowComponent = Loadable({
+	loader: () => import("Routes/pre-production/singlewindow"),
+	loading: () => <RctPageLoader />,
+});
+
 export {
 	AsyncUserWidgetComponent,
 	AsyncUserChartsComponent,
@@ -742,5 +747,6 @@ export {
 	AsyncForecastlistComponent,
 	AsyncForecastAddComponent,
 	AsyncStyleAddComponent,
-	AsyncStyleListComponent
+	AsyncStyleListComponent,
+	AsyncSinglewindowComponent
 }; 

@@ -72,6 +72,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
+
+import Select1 from "react-dropdown-select";
+
 function TabContainer({ children }) {
     return (
        <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -83,12 +86,21 @@ function TabContainer({ children }) {
  
  class MenurightsElement extends Component {
     state = {
+        menulists:[],
+        menutypelists:[],
+        modulelists:[],
 		employeePayroll: null,
         activeIndex: 0,
         name: '',
         parent_menu_id:'',
-        module:'',
-        menu_type:''
+        module:[],
+        menu_type:[],
+        menuname:'',
+        menuurl:'',
+        menudesc:'',
+        active_status:'',
+        isparent:'',
+        displayindex:''
 	}
 
     createNotification = (type) => {
@@ -125,23 +137,85 @@ function TabContainer({ children }) {
         this.setState({ activeIndex: value });
      }
     componentDidMount() {
-		this.getEmployeePayrolls();
+		this.getMenulists();
 	}
 
+    getMenusave () {
+       
+        // console.log(this.state,'ffffffffffffffffffffffffff');
+        let data = {
+            "menuId": 0,
+            "parantMenuId": this.state.parent_menu_id,
+            "menuType": this.state.menu_type,
+            "menuName": this.state.menuname,
+            "menuUrl": this.state.menuurl,
+            "appName": "",
+            "menuDescription": this.state.menudesc,
+            "displayIndex": this.state.displayindex,
+            "active":  this.state.active_status,
+            "createdBy": "1",
+            "modifyBy": "",
+            "modifyDt": "",
+            "hostName": ""
+          };;
+                api.post('Menu/SaveMenu',data) .then((response) => {
+                    
+                    NotificationManager.success('Added Sucessfully');
+                })
+                .catch(error => {
+                    // error handling
+                })
+
+      }
+
 	// get employee payrols
-	getEmployeePayrolls() {
-		api.get('current_subscriptions')
-			.then((response) => {
-        console.log(response,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-				this.setState({ employeePayroll: response.data });
-			})
-			.catch(error => {
-				// error handling
-			})
+	getMenulists() {
+
+        
+        api.get('Miscellaneous/GetMiscellaneousList?MType=Module')
+        .then((response) => {
+            
+            this.setState({ modulelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=Menutype')
+        .then((response) => {
+            
+            this.setState({ menutypelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Menu/GetMenuList')
+        .then((response) => {
+            
+            this.setState({ menulists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
 	}
     render() {
         const { employeePayroll } = this.state;
 		const { match } = this.props;
+
+        const moduledropdown = [];
+        for (const item of this.state.modulelists) {           
+            moduledropdown.push({value:item.code,label:item.codeDesc});
+        }
+
+        const menutypedropdown = [];
+        for (const item of this.state.menutypelists) {           
+            menutypedropdown.push({value:item.code,label:item.codeDesc});
+        }
+
+
         const columns = ["Buyer Code", "BuyDivCode", "DivName"];
         const data = [
             ["2","12","Master","Menu","Menu/master","Admin"],
@@ -183,7 +257,7 @@ function TabContainer({ children }) {
  
                     <div className="w-50 float-right pr-0 but-tp">
 								<Form> 
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.getMenusave()} ><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger  text-white btn-icon pull-right b-sm mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Cancel <i className="zmdi zmdi-close"></i></span><span className="MuiTouchRipple-root"></span></button>
 {/*                               
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Report <i className="zmdi zmdi-file"></i></span><span className="MuiTouchRipple-root"></span></button>
@@ -199,9 +273,19 @@ function TabContainer({ children }) {
                         <div className="row new-form">
 
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">    
+                                    <div className="form-group select_label_name mt-15 ">    
                                     {/* select_label_name mt-15 */}
-                                    <FormControl fullWidth>
+                                    <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="Module"
+                                                options={moduledropdown}
+                                                onChange={values => this.setState({ module:values })}
+                                                placeholder="Module"
+                                                values={this.state.module}
+                                                />
+
+                                    {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="age-native-simple">Module</InputLabel>
                                                 <Select native value={this.state.module} onChange={this.handleChangesingledropdown('module')}
                                                     inputProps={{ id: 'age-native-simple', }}>
@@ -212,7 +296,7 @@ function TabContainer({ children }) {
                                                     <option>Buyer</option> 
                                                     <option>Test</option> 
                                                 </Select>
-                                            </FormControl>                                      
+                                            </FormControl>                                       */}
                                         {/* <select className="form-control select2">
                                             <option>Module</option> 
                                             <option>Admin</option> 
@@ -225,8 +309,17 @@ function TabContainer({ children }) {
                                 </div>
 
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group"> 
-                                    <FormControl fullWidth>
+                                    <div className="form-group select_label_name mt-15 "> 
+                                    <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="Menu Type"
+                                                options={menutypedropdown}
+                                                onChange={values => this.setState({ menu_type:values })}
+                                                placeholder="Menu Type"
+                                                values={this.state.menu_type}
+                                                />
+                                    {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="age-native-simple">Menu Type</InputLabel>
                                                 <Select native value={this.state.menu_type} onChange={this.handleChangesingledropdown('menu_type')}
                                                     inputProps={{ id: 'age-native-simple', }}>
@@ -237,7 +330,7 @@ function TabContainer({ children }) {
                                                     <option>Type4</option> 
                                                     <option>Type5</option> 
                                                 </Select>
-                                            </FormControl>  
+                                            </FormControl>   */}
 
                                         {/* <select className="form-control select2">
                                             <option>Menu Type</option> 
@@ -300,12 +393,12 @@ function TabContainer({ children }) {
                             </div> */}
                             <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12">                              
                                <div className="form-group">                                   
-                                   <TextField id="menudesc" fullWidth label="Menu Desc" type="text" />
+                                   <TextField id="menudesc" value={this.state.menudesc}   onChange={this.handleChangesingledropdown('menudesc')} fullWidth label="Menu Desc" type="text" />
                                </div>                               
                             </div> 
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">                              
                                <div className="form-group">                                   
-                                   <TextField id="menuurl" fullWidth label="Menu URL" type="text" />
+                                   <TextField id="menuurl" value={this.state.menuurl} onChange={this.handleChangesingledropdown('menuurl')} fullWidth label="Menu URL" type="text" />
                                </div>                               
                             </div>
 
@@ -313,7 +406,7 @@ function TabContainer({ children }) {
 
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">                              
                                <div className="form-group">                                   
-                                   <TextField id="dispalyindex" fullWidth label="Display Index" type="text" />
+                                   <TextField id="displayindex" value={this.state.displayindex}  onChange={this.handleChangesingledropdown('displayindex')} fullWidth label="Display Index" type="text" />
                                </div>                               
                             </div> 
 
@@ -322,13 +415,13 @@ function TabContainer({ children }) {
                             <div className="row new-form">
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">
-                                    <FormControlLabel control={<Checkbox color="primary" value="active" />} label="Active" />
+                                    <FormControlLabel control={<Checkbox color="primary"  onChange={this.handleChangesingledropdown('active_status')} value="active" />} label="Active" />
                                     </div>
                                 </div>
 
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">
-                                    <FormControlLabel control={<Checkbox color="primary" value="isparent" />} label="IsParent" />
+                                    <FormControlLabel control={<Checkbox color="primary"  onChange={this.handleChangesingledropdown('isparent')} value="isparent" />} label="IsParent" />
                                     </div>
                                 </div>
 

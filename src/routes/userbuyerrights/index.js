@@ -83,6 +83,7 @@ import Input from '@material-ui/core/Input';
 import Chip from '@material-ui/core/Chip';
 
 import Select1 from "react-dropdown-select";
+import { event } from 'jquery';
  
 function TabContainer({ children }) {
     return (
@@ -96,7 +97,9 @@ function TabContainer({ children }) {
 
  
  class UserbuyerrightsElement extends Component {
+     
     state = {
+        mainarray:[],
         name: [],
         buyerlists:[],
         buyerrightlists:[],
@@ -172,11 +175,79 @@ function TabContainer({ children }) {
 		this.getBuyeruserlists();
 	}
 
-    
+    handleChangecheckbox(event,index) {
+       
+        // this.setState({mainarray: [event ]});
+      
+        if (this.state.mainarray.indexOf(event) !== -1) {
+            this.state.mainarray.splice(this.state.mainarray.indexOf(event), 1);
+        }   else{
+          this.state.mainarray.push(event);
+          
+          
+        }
+
+        if(event.notify=='Y'){
+            event.notify='N';
+            const { buyerrightlists } = this.state;
+            buyerrightlists[index] = event;
+            
+            this.setState({ buyerrightlists });
+        } else{
+            event.notify='Y';
+            const { buyerrightlists } = this.state;
+            buyerrightlists[index] = event;
+            
+            this.setState({ buyerrightlists });
+        }
+        
+      console.log(this.state.mainarray);
+        
+     }
+
+    //  handleChangecheckbox = function(event,n)  {
+
+    //     console.log(event.target.value,'dddddddddd');
+    //     console.log(n,'nnnnnnnnnnnnnnnnnnn');
+    //  }
+
     handleChangedrop = event => {
         this.setState({ name: event.target.value });
       };
+      getBuyerusersave () {
+        // const { buyerrightlists } = this.state;
 
+        //   console.log(buyerrightlists,'buyerrightlists')
+
+          const dataset = [];
+          for (const item of this.state.buyerrightlists) {     
+              if(item.notify=="Y"){
+                
+                dataset.push({
+                    "userId": "1",
+                    "buyerCode": item.buyerCode,
+                    "buyerDivCode": item.buyerDivCode,
+                    "notify": "Y",
+                    "createdBy": "",
+                    "hostname": ""
+                  });
+              }
+            
+          }
+          
+          console.log(dataset,'dataset');
+// alert(type)
+        let data = {
+            "UBInsertModel":dataset};
+                api.post('UserBuyerRights/SaveUserBuyerRights',data) .then((response) => {
+                    
+                    NotificationManager.success('Added Sucessfully');
+                })
+                .catch(error => {
+                    // error handling
+                })
+
+      }
 	// get employee payrols
 	getBuyeruserlists() {
 		api.get('Buyer/GetBuyerDropDown')
@@ -188,7 +259,7 @@ function TabContainer({ children }) {
 				// error handling
 			})
 
-            api.get('UserBuyerRights/GetUserBuyerRightsList')
+            api.get('UserBuyerRights/GetUserBuyerRightsList?UserID=1')
 			.then((response) => {
                 console.log(response.data.result.data,'response.data.result.data') 
 				this.setState({ buyerrightlists: response.data.result.data });
@@ -196,9 +267,12 @@ function TabContainer({ children }) {
 			.catch(error => {
 				// error handling
 			})
+
+           
+
 	}
     render() {
-
+        const mainarray =[];
         // const [personName, setPersonName] = React.useState([]);
 
         // const handleChange = (event) => {
@@ -240,10 +314,19 @@ function TabContainer({ children }) {
 		const { match } = this.props;
         const columns = ["Buyer Code", "BuyDivCode", "DivName"];
 
-        // const data = [];
-        // for (let item of this.state.buyerrightlists) {           
-        //     data.push([item.buyerCode,item.buyerDivCode,item.divName]);
-        // }
+      
+        for (let item of this.state.buyerrightlists) {  
+                     if(item.notify=='Y'){
+                        if (this.state.mainarray.indexOf(item) !== -1) {
+                            this.state.mainarray.splice(this.state.mainarray.indexOf(item), 1);
+                        }   else{
+                          this.state.mainarray.push(item);
+                          
+                          
+                        }
+                     }
+           
+        }
 
         // const data = [
         //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
@@ -310,7 +393,7 @@ function TabContainer({ children }) {
                                
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Error <i className="zmdi zmdi-alert-circle"></i></span><span className="MuiTouchRipple-root"></span></button>
                               
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.getBuyerusersave()} ><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                
                 </Form>                               
 							</div>
@@ -577,11 +660,24 @@ function TabContainer({ children }) {
 
                                 </thead>
                                 <tbody>
-                                {this.state.buyerrightlists.map(n => {
+                                {this.state.buyerrightlists.map((n,index) => {
                                     
 										 return (
                                             <tr>
-                                                <td> <Checkbox color="primary" value="true" />
+                                                {/* <Checkbox  onChange={this.handleChangecheckbox}  color="primary" value={`${n.buyerCode},${n.buyerDivCode}`} /> */}
+                                               
+                                                <td> {(() => {
+                           
+                                                    if (n.notify == 'Y') {
+                                                    return ( <Checkbox onClick={(e) =>this.handleChangecheckbox(n,index)}   color="primary" checked />
+                                                    )
+                                                    }
+                                                    if (n.notify != 'Y') {
+                                                        return ( <Checkbox onClick={(e) =>this.handleChangecheckbox(n,index)}   color="primary"  />
+                                                        )
+                                                        }
+                                                })()}
+                                              
                                                 </td>
                                                 <td>{n.buyerCode}</td>
                                                 <td>{n.buyerDivCode}</td>
@@ -593,7 +689,7 @@ function TabContainer({ children }) {
                                 
                                 </tbody>
                             </table>
-                            <div className="row tb-pro mt-10">
+                            {/* <div className="row tb-pro mt-10">
                                 <div className="w-100">
                                     <div className="w-25 float-left">
                                         <div className="form-group">
@@ -615,7 +711,7 @@ function TabContainer({ children }) {
                                         <nav aria-label="Page navigation example">
                                             <ul className="pagination justify-content-end">
                                                 <li className="page-item ">
-                                                {/* disabled */}
+                                               
                                                     <a className="page-link" href="#" tabindex="-1">Previous</a>
                                                 </li>
                                                 <li className="page-item"><a className="page-link" href="#">1</a></li>
@@ -629,7 +725,7 @@ function TabContainer({ children }) {
                                         </nav>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
          
                                 {/* <RctCollapsibleCard heading="" fullBlock> */}
                                 {/* <MUIDataTable
