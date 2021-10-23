@@ -21,6 +21,7 @@
  import { NotificationManager } from 'react-notifications';
  import Avatar from '@material-ui/core/Avatar';
  
+ import ActionMenu from './actionmenu';
  // api
  import api from 'Api';
  
@@ -334,7 +335,7 @@
                                      <th>Location</th>
                                      <th>Qty</th>
                                      <th>PCD</th>
-                                     <th>Stage</th>
+                                     <th>Pending</th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -381,7 +382,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-success badge-pill`}>Design</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                        
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -425,7 +429,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-primary badge-pill`}>Sampling</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                          
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -469,7 +476,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-danger badge-pill`}>Costing</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                          
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -513,7 +523,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-warning badge-pill`}>Projection</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                          
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -557,7 +570,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-success badge-pill`}>Confirmed</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                          
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -601,7 +617,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-success badge-pill`}>Closed</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                          
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -645,7 +664,10 @@
                                                 <Badge color="warning">SPRING</Badge>
                                             </div>
                                          </td>                                       
-                                         <td><span className={`badge badge-danger badge-pill`}>Cancelled/In active</span></td>                                        
+                                         <td>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <ActionMenu />
+                                        </td>                                          
                                      </tr>
                                      
                                  {/* )) */}

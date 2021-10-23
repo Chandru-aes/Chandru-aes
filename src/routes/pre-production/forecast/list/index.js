@@ -103,7 +103,7 @@ import DataGrid, {
   
   import ArrayStore from 'devextreme/data/array_store';
   import DataSource from 'devextreme/data/data_source';
-  import { employees, states,product_types,sub_product_types } from './data.js';
+  import { employees, states,product_types,sub_product_types,activityItems } from './data.js';
   import 'devextreme/dist/css/dx.light.css';
 
   const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
@@ -321,13 +321,7 @@ function TabContainer({ children }) {
         const { selectedDate } = this.state;
         //const columns = ["Buyer Code", "BuyDivCode", "DivName"];
         const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
-        //const columns = ['Actions', 'Quantity', 'Location', 'Category', 'Sub Category','Avg SAM','PCD','Tent.ExFact','Confirm Due'];
-        // const dataSource = new DataSource({
-        //     store: new ArrayStore({
-        //       data: employees,
-        //       key: 'ID'
-        //     })
-        //   });
+       
         const data = [
             ["Buyer 1","1st Division","Autumn","2021","Bangalore","10","10","6","Active"],
             ["Buyer 2","2nd Division","Summer","2021","Bangalore","10","10","6","Active"],
@@ -600,49 +594,26 @@ function TabContainer({ children }) {
                                         </div>
                                     </div>
                                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div className="form-group mt-15">
-                                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic addactivity" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                        <div className="form-group mt-15">                                       
                                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"  onClick={(e) => this.opnAddNewUserModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="table-responsive">
-                                    <table className="table data activity-table">
-                                        <thead>
-                                            <tr>
-                                                
-                                            <th className="w-33 text-center">Actions</th>
-                                            <th className="w-33 text-center">Activity</th>
-                                            <th className="w-33 text-center">Due By</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <td className="text-center">
-                                            <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Save"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                                {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button> */}
-                                            </td>
-                                            <td className="data text-center">Activity 1</td>
-                                            <td className="data text-center">2021-04-10</td>
-                                          
-                                            </tr>
-                                            <tr>
-                                            <td className="text-center">
-                                                <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                                <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Save"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                            </td>
-                                            <td className="data text-center">Activity 2</td>
-                                            <td className="data text-center">2021-11-10</td>
-                                          
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <DataGrid dataSource={activityItems} keyExpr="ID" showBorders={true} >
+                                        <Paging enabled={false} />
+                                        <Editing mode="batch" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
+                                                selectTextOnEditStart={this.state.selectTextOnEditStart}
+                                            startEditAction={this.state.startEditAction} useIcons={true}/>
+                                           <Column type="buttons" width={110} caption="Actions">
+                                                <Button name="edit" />
+                                                <Button name="delete" />
+                                                <Button hint="Clone" icon="repeat"  />
+                                            </Column>   
+                                        <Column dataField="Activity" caption="Activity"  />                                      
+                                        <Column dataField="Due Date" dataType="date" />
+                                        
+                                    </DataGrid>                       
                                 </div>
                             </TabContainer>
                         </SwipeableViews>    

@@ -279,3 +279,16 @@ export const states = [{
   'ID': 51,
   'Name': 'North Dakota'
 }];
+export const activityItems = [{
+  'ID': 1,  
+  'Activity': 'Design',  
+  'Due Date':'2021/10/20',
+}, {
+  'ID': 2,  
+  'Activity': 'Quality check',
+  'Due Date':'2021/10/20',
+}, {
+  'ID': 3,
+  'Activity': 'Ordered',
+  'Due Date':'2021/10/20',
+}];

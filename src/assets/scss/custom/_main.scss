@@ -738,7 +738,9 @@ table tr th.MuiTableCell-head, table tr th.MuiTableCell-head .MuiButton-root, .t
 table tr th .MuiButton-label, table thead tr[class*='bg-'] th{color: #000!important;}
 table.table.table-bordered.table-striped.table-hover tr.bg-primary.text-white th{color: #000!important;}
 table.table.table-bordered.table-striped.flip-content tr.bg-primary th{color: #000!important;}
-
+.pad-0{padding:0 !important;}
+.menu-radio-align{margin-top: 0 !important;position: relative !important;}
+.pd-lft-rem{padding-left: 2.25rem !important;}
 /*Fixed Colum Table*/
 .fixedcolumn {text-align: center;}  
 .table-container {width: 100%;height: 100%;overflow: scroll;}  
@@ -749,6 +751,33 @@ table.table.table-bordered.table-striped.flip-content tr.bg-primary th{color: #0
 .list-title{width: 80%;}
 .list-title h6{font-size: 20px;}
 
+.radio-effects {
+  
+  transition: .5s;
+}
+
+.radio-effects:checked {
+  background: #3c81de;
+}
+.radio-effects input:checked{
+	animation: manimate 7s;
+  }
+  
+  @keyframes manimate {
+	0% {
+	  box-shadow: 0 0 0 0 rgb(90, 168, 217)
+	}
+	12% {
+	  box-shadow: 0 0 0 10px rgba(255, 109, 74, 0)
+	}
+	80% {
+	  box-shadow: 0 0 0 0px rgba(255, 109, 74, 0)
+	}
+	100% {
+	  box-shadow: 0 0 0 0px rgba(255, 109, 74, 0)
+	}
+  }
+  
 .MuiInputBase-input{border: 1px solid #bdbdbd!important;
 	font-size: 16px !important;
 	border-radius: .25rem;
@@ -1036,6 +1065,7 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 				color: #00aa10 !important;	
 			}
 			.m-btop-10{margin-top: 10px;}
+			.cursor-pointer{cursor: pointer;}
 
 /* #Media Queries
 ================================================== */

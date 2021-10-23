@@ -559,7 +559,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                         <div className="form-group">
                             <div className="w-75 float-left m-btop-10">
                                 <FormControl>
-                                    <div class="item"  onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
+                                    <div class="item cursor-pointer"  onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
                                     <Dialog open={this.state.tpopen} onClose={this.CloseTechPack} aria-labelledby="form-dialog-title">
                                     <DialogTitle id="form-dialog-title">Tech Pack</DialogTitle>
                                     <DialogContent>                                   
@@ -853,11 +853,11 @@ import { DateTimePicker} from '@material-ui/pickers';
                     <div className="col-lg-12 mt-10 w-25 border p-10 mr-5 no-f-mb">
                         <ul class="list-group list-group-horizontal-md">
                             <li class="list-group-item">ITH# 2136005</li>
-                            <li class="list-group-item">Single window</li>
-                            <li class="list-group-item">Costing</li>
-                            <li class="list-group-item">Rm order</li>
-                            <li class="list-group-item">Delivery SM</li>
-                            <li class="list-group-item">History</li>
+                            <a href="javascript:void(0)"><li class="list-group-item">Single window</li></a>
+                            <a href="javascript:void(0)"><li class="list-group-item">Costing</li></a>
+                            <a href="javascript:void(0)"><li class="list-group-item">Rm order</li></a>
+                            <a href="javascript:void(0)"><li class="list-group-item">Delivery SM</li></a>
+                            <a href="javascript:void(0)"><li class="list-group-item">History</li></a>
                         </ul>
                     </div>
                     </div>
