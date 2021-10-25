@@ -205,6 +205,19 @@ function TabContainer({ children }) {
         
      }
 
+     handleChangecheckboxall() {
+        // const { buyerrightlists } = this.state;
+        // const allbuyerrights = [];
+        // for (const item of buyerrightlists) {   
+        //     item.notify='Y';        
+        //     allbuyerrights.push(item);
+        // }
+
+        // this.setState({ buyerrightlists: allbuyerrights });
+        // console.log(this.state.buyerrightlists,'nnnnnnnnnnnnnnnnnnn'); 
+        
+     }
+
     //  handleChangecheckbox = function(event,n)  {
 
     //     console.log(event.target.value,'dddddddddd');
@@ -228,7 +241,7 @@ function TabContainer({ children }) {
                     "buyerCode": item.buyerCode,
                     "buyerDivCode": item.buyerDivCode,
                     "notify": "Y",
-                    "createdBy": "",
+                    "createdBy": "1",
                     "hostname": ""
                   });
               }
@@ -649,8 +662,8 @@ function TabContainer({ children }) {
                             </div>
                             <table className="table">
                                 <thead className="thead-light">
-                                    <th>
-                                    <Checkbox color="primary" value="true" />
+                                    <th> 
+                                    <Checkbox color="primary" value="true" onClick={(e) =>this.handleChangecheckboxall()} />
                                     {/* color="primary" checked={this.state.checkedA} onChange={this.handleChange('checkedA')} */}
                                     </th>
                                     <th>Buyer Code</th>
@@ -677,7 +690,7 @@ function TabContainer({ children }) {
                                                         )
                                                         }
                                                 })()}
-                                              
+                                              {/* {n.notify} */}
                                                 </td>
                                                 <td>{n.buyerCode}</td>
                                                 <td>{n.buyerDivCode}</td>

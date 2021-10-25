@@ -86,6 +86,8 @@ function TabContainer({ children }) {
  
  class MenurightsElement extends Component {
     state = {
+        edit_add:false,
+        menuId:0,
         menulists:[],
         menutypelists:[],
         modulelists:[],
@@ -138,6 +140,7 @@ function TabContainer({ children }) {
      }
     componentDidMount() {
 		this.getMenulists();
+        this.getfilldropdownlists();
 	}
 
     getMenusave () {
@@ -146,21 +149,34 @@ function TabContainer({ children }) {
         let data = {
             "menuId": 0,
             "parantMenuId": this.state.parent_menu_id,
-            "menuType": this.state.menu_type,
+            "menuType": this.state.menu_type[0].value,
             "menuName": this.state.menuname,
             "menuUrl": this.state.menuurl,
-            "appName": "",
+            "appName": this.state.module[0].value,
             "menuDescription": this.state.menudesc,
             "displayIndex": this.state.displayindex,
             "active":  this.state.active_status,
             "createdBy": "1",
             "modifyBy": "",
-            "modifyDt": "",
-            "hostName": ""
-          };;
+            "modifyDt": "2021-10-22",
+            "hostName": "admin"
+          };
                 api.post('Menu/SaveMenu',data) .then((response) => {
-                    
+                    this.getMenulists();
                     NotificationManager.success('Added Sucessfully');
+                    this.setState( {
+                        edit_add:false,
+                        menuId:0,
+                        parent_menu_id:'',
+                        module:[],
+                        menu_type:[],
+                        menuname:'',
+                        menuurl:'',
+                        menudesc:'',
+                        active_status:'',
+                        isparent:'',
+                        displayindex:''
+                    });
                 })
                 .catch(error => {
                     // error handling
@@ -168,10 +184,49 @@ function TabContainer({ children }) {
 
       }
 
-	// get employee payrols
-	getMenulists() {
+      getMenuUpdate () {
+       
+        // console.log(this.state,'ffffffffffffffffffffffffff');
+        let data = {
+            "menuId": this.state.menuId,
+            "parantMenuId": this.state.parent_menu_id,
+            "menuType": this.state.menu_type[0].value,
+            "menuName": this.state.menuname,
+            "menuUrl": this.state.menuurl,
+            "appName": this.state.module[0].value,
+            "menuDescription": this.state.menudesc,
+            "displayIndex": this.state.displayindex,
+            "active":  this.state.active_status,
+            "createdBy": "1",
+            "modifyBy": "1",
+            "modifyDt": "2021-10-22",
+            "hostName": "admin"
+          };
+                api.post('Menu/SaveMenu',data) .then((response) => {
+                    this.getMenulists();
+                    NotificationManager.success('Updated Sucessfully');
+                 
+                    this.setState( {
+                        edit_add:false,
+                        menuId:0,
+                        parent_menu_id:'',
+                        module:[],
+                        menu_type:[],
+                        menuname:'',
+                        menuurl:'',
+                        menudesc:'',
+                        active_status:'',
+                        isparent:'',
+                        displayindex:''
+                    });
+                })
+                .catch(error => {
+                    // error handling
+                })
 
-        
+      }
+
+      getfilldropdownlists() {
         api.get('Miscellaneous/GetMiscellaneousList?MType=Module')
         .then((response) => {
             
@@ -189,10 +244,12 @@ function TabContainer({ children }) {
         .catch(error => {
             // error handling
         })
+      }
+	getMenulists() {
 
         api.get('Menu/GetMenuList')
         .then((response) => {
-            
+            this.setState({edit_add:false});
             this.setState({ menulists: response.data.result.data });
         })
         .catch(error => {
@@ -201,6 +258,42 @@ function TabContainer({ children }) {
 
         
 	}
+
+    deleteMenu(id,menuType,menuUrl){
+       
+
+        let data = {
+            "menuId": id,
+            "menuType": menuType,
+            "menuUrl": menuUrl
+          };
+                api.post('Menu/RemoveMenu',data) .then((response) => {
+                    
+                    this.getMenulists();
+                    this.setState({edit_add:false});
+                    NotificationManager.success('Deleted Sucessfully');
+                })
+                .catch(error => {
+                    // error handling
+                })
+    }
+
+    editMenu(id){
+       
+
+        this.setState({edit_add:true});
+          api.get('Menu/GetMenuList?MenuID='+id)
+          .then((response) => {
+              console.log(response.data.result.data,'response.data.result.data');
+              let dataval = response.data.result.data[0];
+              this.setState({ module: [{value:dataval.appName,label:dataval.appName}], menu_type: [{value:dataval.menuType,label:dataval.menuType}],menuname:dataval.menuName,menuurl:dataval.menuUrl,menudesc:dataval.menuDescription,displayindex:dataval.displayIndex,menuId:dataval.menuId});
+
+            //   this.setState({ menulists: response.data.result.data });
+          })
+          .catch(error => {
+              // error handling
+          })
+    }
     render() {
         const { employeePayroll } = this.state;
 		const { match } = this.props;
@@ -257,9 +350,22 @@ function TabContainer({ children }) {
  
                     <div className="w-50 float-right pr-0 but-tp">
 								<Form> 
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.getMenusave()} ><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger  text-white btn-icon pull-right b-sm mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Cancel <i className="zmdi zmdi-close"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                
+                                {(() => {
+                           
+                           if (this.state.edit_add == false) {
+                          return ( 
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.getMenusave()} ><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                          )
+                        }
+                        if (this.state.edit_add != false) {
+                            return ( <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.getMenuUpdate()} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                            )
+                          }
+                    })()}
+                    <button  className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger  text-white btn-icon pull-right b-sm mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Cancel <i className="zmdi zmdi-close"></i></span><span className="MuiTouchRipple-root"></span></button>
 {/*                               
+
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Report <i className="zmdi zmdi-file"></i></span><span className="MuiTouchRipple-root"></span></button>
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary  text-white btn-icon pull-right b-md mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Menu <i className="zmdi zmdi-menu"></i></span><span className="MuiTouchRipple-root"></span></button> */}
                                
@@ -347,7 +453,7 @@ function TabContainer({ children }) {
                                
                                     <div className="form-group">
                                         
-                                        <TextField id="menuname" fullWidth label="Menu Name" type="text" />
+                                        <TextField id="menuname" value={this.state.menuname}  onChange={this.handleChangesingledropdown('menuname')} fullWidth label="Menu Name" type="text" />
                                     </div>
                                 
                                 </div>
@@ -518,7 +624,25 @@ function TabContainer({ children }) {
                                     <th className="">Module</th>
                                 </thead>
                                 <tbody>
-                                {data.map(n => {
+
+                                {this.state.menulists.map((n,index) => {
+                                    
+                                    return (
+                                       <tr>
+                                       <td className="text-center"><button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) =>this.deleteMenu(n.menuId,n.menuType,n.menuUrl)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                </td>
+                                           <td>{n.menuId}</td>
+                                           <td>{n.parantMenuId}</td>
+                                           <td>{n.menuType}</td>
+                                           <td>{n.menuName}</td>
+                                           <td>{n.menuUrl}</td>
+                                           <td>{n.appName}</td>
+                                       </tr>
+                                    );
+                                })}
+
+                                {/* {data.map(n => {
                                     
 										 return (
                                             <tr>
@@ -535,7 +659,7 @@ function TabContainer({ children }) {
                                                
                                             </tr>
 										 );
-									 })}
+									 })} */}
 
                                 
                                 </tbody>
