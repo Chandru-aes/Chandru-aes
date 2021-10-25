@@ -94,7 +94,7 @@ function TabContainer({ children }) {
 		employeePayroll: null,
         activeIndex: 0,
         name: '',
-        parent_menu_id:'',
+        parent_menu_id:[],
         module:[],
         menu_type:[],
         menuname:'',
@@ -148,7 +148,7 @@ function TabContainer({ children }) {
         // console.log(this.state,'ffffffffffffffffffffffffff');
         let data = {
             "menuId": 0,
-            "parantMenuId": this.state.parent_menu_id,
+            "parantMenuId": this.state.parent_menu_id[0].value,
             "menuType": this.state.menu_type[0].value,
             "menuName": this.state.menuname,
             "menuUrl": this.state.menuurl,
@@ -189,7 +189,7 @@ function TabContainer({ children }) {
         // console.log(this.state,'ffffffffffffffffffffffffff');
         let data = {
             "menuId": this.state.menuId,
-            "parantMenuId": this.state.parent_menu_id,
+            "parantMenuId": this.state.parent_menu_id[0].value,
             "menuType": this.state.menu_type[0].value,
             "menuName": this.state.menuname,
             "menuUrl": this.state.menuurl,
@@ -209,7 +209,7 @@ function TabContainer({ children }) {
                     this.setState( {
                         edit_add:false,
                         menuId:0,
-                        parent_menu_id:'',
+                        parent_menu_id:[],
                         module:[],
                         menu_type:[],
                         menuname:'',
@@ -286,7 +286,7 @@ function TabContainer({ children }) {
           .then((response) => {
               console.log(response.data.result.data,'response.data.result.data');
               let dataval = response.data.result.data[0];
-              this.setState({ module: [{value:dataval.appName,label:dataval.appName}], menu_type: [{value:dataval.menuType,label:dataval.menuType}],menuname:dataval.menuName,menuurl:dataval.menuUrl,menudesc:dataval.menuDescription,displayindex:dataval.displayIndex,menuId:dataval.menuId});
+              this.setState({ module: [{value:dataval.appName,label:dataval.appName}],parent_menu_id: [{value:dataval.parantMenuId,label:dataval.parantMenuId}], menu_type: [{value:dataval.menuType,label:dataval.menuType}],menuname:dataval.menuName,menuurl:dataval.menuUrl,menudesc:dataval.menuDescription,displayindex:dataval.displayIndex,menuId:dataval.menuId});
 
             //   this.setState({ menulists: response.data.result.data });
           })
@@ -306,6 +306,11 @@ function TabContainer({ children }) {
         const menutypedropdown = [];
         for (const item of this.state.menutypelists) {           
             menutypedropdown.push({value:item.code,label:item.codeDesc});
+        }
+
+        const parentmenutypedropdown = [];
+        for (const item of this.state.menulists) {           
+            parentmenutypedropdown.push({value:item.menuId,label:item.menuName});
         }
 
 
@@ -459,8 +464,18 @@ function TabContainer({ children }) {
                                 </div>
 
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">   
-                                    <FormControl fullWidth>
+                                    <div className="form-group select_label_name mt-15 ">   
+                                    <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="Parent Menu ID"
+                                                options={parentmenutypedropdown}
+                                                onChange={values => this.setState({ parent_menu_id:values })}
+                                                placeholder="Parent Menu ID"
+                                                values={this.state.parent_menu_id}
+                                                />
+
+                                    {/* <FormControl fullWidth>
                                                 <InputLabel htmlFor="age-native-simple">Parent Menu ID</InputLabel>
                                                 <Select native value={this.state.parent_menu_id} onChange={this.handleChangesingledropdown('parent_menu_id')}
                                                     inputProps={{ id: 'age-native-simple', }}>
@@ -471,7 +486,7 @@ function TabContainer({ children }) {
                                                     <option>40</option> 
                                                     <option>50</option> 
                                                 </Select>
-                                            </FormControl>                                       
+                                            </FormControl>                                        */}
                                         {/* <select className="form-control select2">
                                             <option>Parent Menu ID</option> 
                                             <option>10</option> 
