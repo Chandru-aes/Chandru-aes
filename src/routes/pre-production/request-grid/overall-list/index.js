@@ -7,6 +7,7 @@
  import Button from '@material-ui/core/Button';
  import Checkbox from '@material-ui/core/Checkbox';
  import { Link } from 'react-router-dom';
+ import TextField from '@material-ui/core/TextField';
  import {
      Pagination,
      PaginationItem,
@@ -269,13 +270,69 @@
                      title={<IntlMessages id="sidebar.userManagement" />}
                      match={this.props.match}
                  />
-                 <RctCollapsibleCard fullBlock>
-                     <div className="table-responsive">
-                         <div className="d-flex justify-content-between py-20 px-10 border-bottom">
-                             <div>
-                                <h3 className="m-btop-10">Overall List</h3>
-                             </div>
-                                <div>
+                 <RctCollapsibleCard fullBlock heading="Overall List">
+                  
+                    <div className="row new-form overall-border no-padding-bottom">   
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                        <select className="form-control select2">
+                                            <option>Buyer Division</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <select className="form-control select2">
+                                            <option>Season</option> 
+                                            <option>Autumn</option> 
+                                            <option>Summer</option> 
+                                            <option>Winter</option> 
+                                        </select> 
+                                    </div>  
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-6 col-xl-3">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <select className="form-control select2">
+                                            <option>Year</option> 
+                                            <option>2021</option> 
+                                            <option>2020</option> 
+                                            <option>2019</option> 
+                                        </select> 
+                                    </div>  
+                                </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name"> 
+                                        <TextField id="StyleNumber" fullWidth label="Style Number" placeholder="Style Number"/>
+                                    </div>                                   
+                                </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <select className="form-control select2">
+                                            <option>Request Type</option> 
+                                            <option>Annual Buyer</option> 
+                                            <option>Monthly Buyer</option> 
+                                            <option>Weely</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div> 
+                     <div className="table-responsive no-padding-top overall-border">
+                         <div className="d-flex justify-content-between border-bottom">
+                             
+                                <div className="w-d-100">
                                     <div className="float-right">
                                         <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">                            
                                             <span className="MuiIconButton-label">
@@ -308,7 +365,7 @@
                                         <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                             <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                         </svg></span></button>
-                                        <Badge className="mb-10 mr-10" color="dark">Add New</Badge>
+                                        <Link to='/app/pre-production/style-creation'><Badge className="mb-10 mr-10" color="dark">Add New</Badge></Link>
                                     </div>
                                 </div>
                          </div>
@@ -334,10 +391,10 @@
                                      <th>Req No</th>
                                      <th>Type</th>
                                      <th>Date</th>
-                                     <th>Style No</th>
-                                    
+                                     <th>Style No</th>                                    
                                      <th>Purpose</th>
                                      <th>No of Activity</th>
+                                     <th>Color status</th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -348,13 +405,15 @@
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
+                                         <td>Slim</td> 
                                          <td>859</td>
                                          <td> Style product Top</td>
                                          <td>2021-10-15 </td>
                                          <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>-</td>  
+                                          
                                          <td>Design</td>                                    
-                                         <td>10</td>                                        
+                                         <td>10</td>     
+                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                     
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -362,13 +421,14 @@
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
+                                         <td>Medium</td> 
                                          <td>859</td>
                                          <td> Style product Top</td>
                                          <td>2021-10-15 </td>
                                          <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>-</td> 
                                          <td>Design</td>                                      
-                                         <td>10</td>                                        
+                                         <td>10</td>   
+                                         <td><span className={`badge badge-warning badge-pill ft-lft`}>In process</span></td>                                     
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -376,13 +436,14 @@
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
+                                         <td>Large</td>
                                          <td>859</td>
                                          <td> Style product Top</td>
                                          <td>2021-10-15 </td>
                                          <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>-</td> 
                                          <td>Design</td>                                      
-                                         <td>10</td>                                        
+                                         <td>10</td> 
+                                         <td><span className={`badge badge-danger badge-pill ft-lft`}>Yet to process</span></td>                                       
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -390,13 +451,15 @@
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
+                                         
+                                         <td>Slim</td>     
                                          <td>859</td>
                                          <td> Style product Top</td>
                                          <td>2021-10-15 </td>
                                          <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>-</td>     
                                          <td>Design</td>                                  
-                                         <td>10</td>                                        
+                                         <td>10</td>  
+                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                      
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -404,27 +467,30 @@
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
                                          </td>
+                                         
+                                         <td>medium</td>     
                                          <td>859</td>
                                          <td> Style product Top</td>
                                          <td>2021-10-15 </td>
                                          <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>-</td> 
                                          <td>Design</td>                                      
-                                         <td>10</td>                                        
+                                         <td>10</td> 
+                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                       
                                      </tr>
                                      <tr>                                       
                                          <td>
                                              <div className="media">                                                
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
                                              </div>
-                                         </td>
+                                         </td>                                         
+                                         <td>small</td>  
                                          <td>859</td>
                                          <td> Style product Top</td>
                                          <td>2021-10-15 </td>
                                          <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>-</td>  
                                          <td>Design</td>                                     
-                                         <td>10</td>                                        
+                                         <td>10</td>  
+                                         <td><span className={`badge badge-warning badge-pill ft-lft`}>completed</span></td>                                      
                                      </tr>
                                  {/* )) */}
                              </tbody>

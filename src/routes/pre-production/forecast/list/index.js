@@ -466,20 +466,20 @@ function TabContainer({ children }) {
                                            <Column type="buttons" width={110} caption="Actions">
                                                 <Button name="edit" />
                                                 <Button name="delete" />
-                                                <Button hint="Clone" icon="repeat"  />
+                                                <Button name="delete" hint="Clone" icon="repeat"  />
                                             </Column>   
-                                        <Column dataField="Quantity" caption="Quantity"  />
+                                        <Column dataField="Quantity" width={110} caption="Quantity"  />
                                         <Column dataField="ProductTypeId" caption="Product type" >
                                             <Lookup dataSource={product_types} valueExpr="ID" displayExpr="Name" />
                                         </Column>
                                         <Column dataField="SubProductTypeId" caption="Sub-Product type" >
                                             <Lookup dataSource={sub_product_types} valueExpr="ID" displayExpr="Name" />
                                         </Column>
-                                        <Column dataField="AvgSAM" caption="Average SAM"/>
+                                        <Column dataField="AvgSAM" width={110} caption="Average SAM"/>
                                         <Column dataField="PCD" dataType="date" />
-                                        <Column dataField="tent-deli-date" caption="Tentative delivery date" dataType="date" />
-                                        <Column dataField="confirm-due-date" caption="Confirmation due date" dataType="date" />
-                                        <Column dataField="" caption="Available capacity" width={50}/>
+                                        <Column dataField="tent-deli-date" caption="Tent.deli.date" dataType="date" />
+                                        <Column dataField="confirm-due-date" caption="Conf.due.date" dataType="date" />
+                                        <Column dataField="AvgSAM" caption="Available capacity"/>
                                       
                                         {/* <Column dataField="LastName" />
                                         <Column dataField="Position" width={170} /> */}

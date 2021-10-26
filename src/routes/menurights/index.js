@@ -88,6 +88,7 @@ function TabContainer({ children }) {
 
  
  class MenurightsElement extends Component {
+     
     state = {
         buyerlists:[],
         menuRightsList:[],
@@ -117,7 +118,8 @@ function TabContainer({ children }) {
         location:'',
         module:'',
         roletype:[],
-        MenurightsSaveList:[]
+        MenurightsSaveList:[],
+        textInputValues: [],
 	}
 
     createNotification = (type) => {
@@ -177,7 +179,35 @@ function TabContainer({ children }) {
         this.setState({ MenurightsSaveList });
         console.log(this.state.MenurightsSaveList)
     }
-
+    saveMenuRights(){
+        console.log(this.state)
+        const dataset = [];
+        for (const item of this.state.menuRightsList) { 
+            this.state.textInputValues[this.state.menuRightsList.indexOf(item)]
+            dataset.push({
+                "roleId": "50",
+                "appName": item.appName,
+                "menuId": item.menuId,
+                "menuRights": item.menuRights,
+                "columnRights": this.state.textInputValues[this.state.menuRightsList.indexOf(item)],
+                "unitCode": this.state.unitcodename[0].value,
+                "createdBy": "1",
+                "modifyBy": "1",
+                "modifyDt": "2021-10-10",
+                "locCode": item.locCode,
+                "hostName": "ADmin"
+            });
+        }
+        let data = {
+            "rmrInsertModel":dataset};
+                api.post('RoleMenuRights/SaveRoleMenuRights',data) .then((response) => {
+                    
+                    NotificationManager.success('Added Sucessfully');
+                })
+                .catch(error => {
+                    // error handling
+                })
+    }
 	// get employee payrols
 	getEmployeePayrolls() {
       
@@ -225,8 +255,25 @@ function TabContainer({ children }) {
         })
         
 	}
-    render() {
+    onNameEdited(i, event){
+        let textInputValues = [...this.state.textInputValues];
+        textInputValues[i] = event.target.value;
+        this.setState({ textInputValues });
+        console.log(this.state.textInputValues)
 
+    }
+    fetchMenuRights(){
+        const RoleID = 50;//this.state.roletype[0].value;
+        const AppName = this.state.modulename[0].value;
+        const LocCode = this.state.location[0].value;
+        const UnitCode = this.state.unitcodename[0].value;
+        api.get('RoleMenuRights/GeRoleMenuRightsList?RoleId='+RoleID+'&AppName='+AppName+'&LocCode='+LocCode+'&UnitCode='+UnitCode+'')
+        .then((response) => {            
+            this.setState({ menuRightsList: response.data.result.data });
+        })
+    }
+    render() {
+        
         const options1 = [];         
         for (const item of this.state.buyerlists) {           
             options1.push({value:item.buyerCode,label:item.buyerName});
@@ -271,13 +318,16 @@ function TabContainer({ children }) {
                                 <RctCollapsibleCard heading="">
                                     <div className="w-50 float-right pr-0 but-tp">
                                         <Form> 
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                            <Button disabled={this.state.menuRightsList.length==0}  onClick={(e) =>this.saveMenuRights()} color="primary" variant="contained" className="pull-right b-sm btn-success">
+                                                save <i className="zmdi zmdi-save"></i>
+                                            </Button>
+                                            {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('success')} disabled={!this.state.menuRightsList}><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> */}
 
                                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger  text-white btn-icon pull-right b-sm mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Cancel <i className="zmdi zmdi-close"></i></span><span className="MuiTouchRipple-root"></span></button>
                                             
                                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Report <i className="zmdi zmdi-file"></i></span><span className="MuiTouchRipple-root"></span></button>
 
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary  text-white btn-icon pull-right b-md mr-10" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Menu Rights <i className="zmdi zmdi-menu"></i></span><span className="MuiTouchRipple-root"></span></button>                               
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary  text-white btn-icon pull-right b-md mr-10" tabindex="0" type="button" onClick={(e) =>this.fetchMenuRights()}><span className="MuiButton-label">Menu Rights <i className="zmdi zmdi-menu"></i></span><span className="MuiTouchRipple-root"></span></button>                               
                                         </Form>                               
                                     </div>
                                     <div className="clearfix"></div>
@@ -303,7 +353,7 @@ function TabContainer({ children }) {
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">    
                                                 <div className="form-group select_label_name m-btop-10"> 
-                                                    <Select1  dropdownPosition="auto"  multi  createNewLabel="Role Type"
+                                                    <Select1  dropdownPosition="auto"    createNewLabel="Role Type"
                                                             options={RoleOptions}
                                                             onChange={values => this.setState({ roletype:values })}
                                                             placeholder="Role Type"
@@ -437,12 +487,17 @@ function TabContainer({ children }) {
                                                     </td>
                                                     <td>
                                                         <div className="form-group">                                            
-                                                            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder=""/>                                        
+                                                            <input type="email" className="form-control" value={n.columnRights} onChange={this.onNameEdited.bind(this, index)}/>                                        
                                                         </div>
                                                     </td>
                                                 </tr>
 										        );
 									            })}
+                                                {this.state.menuRightsList.length === 0 && (
+                                                    <td colSpan="6" className="no-records-data">
+                                                        <div>No Record Found</div>
+                                                    </td>
+                                                    )}
                                             </tbody>
                                         </table>
                                         <div className="row tb-pro mt-10">

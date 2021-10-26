@@ -1007,7 +1007,9 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.s-panel.active .nd-fom {
 				opacity: 0;
 			}
-
+			.s-panel-1.active .nd-fom {	
+				opacity: 0;	
+			}
 			.ch-new .MuiSvgIcon-root {
 				font-size: 24px !important;
 			}
@@ -1053,6 +1055,9 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 				opacity: 0;
 				transition:all .5s ease; -moz-transition:all .5s ease; -webkit-transition:all .5s ease; -o-transition:all .5s ease;
 			}
+			.s-panel-1.active .close-side {	
+				opacity: 1;	
+			}
 			.s-panel.active .close-side {
 				opacity: 1;
 			}
@@ -1094,6 +1099,10 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.react-dropdown-select-dropdown {
 				z-index: 999 !important;
 			}
+			.w-d-100{width: 100%;}	
+			.overall-border{padding: 18px;}	
+			.no-padding-top{padding-top: 0 !important;}	
+			.no-padding-bottom{padding-bottom: 0 !important;}
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }

@@ -335,6 +335,7 @@
                                      <th>Location</th>
                                      <th>Qty</th>
                                      <th>PCD</th>
+                                     <th>Status</th>
                                      <th>Pending</th>
                                  </tr>
                              </thead>
@@ -355,35 +356,49 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">70</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
                                         </td>                                        
                                      </tr>
@@ -402,35 +417,49 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 255101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-21</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">50</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 3</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
                                         </td>                                          
                                      </tr>
@@ -449,35 +478,49 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">70</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
                                         </td>                                          
                                      </tr>
@@ -496,37 +539,51 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">70</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
-                                        </td>                                          
+                                        </td>                                           
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -543,35 +600,49 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">70</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
                                         </td>                                          
                                      </tr>
@@ -590,37 +661,51 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">70</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
-                                        </td>                                          
+                                        </td>                                      
                                      </tr>
                                      <tr>                                       
                                          <td>
@@ -637,35 +722,49 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">859</h5>
-                                                     <Badge color="warning">USD 7.53</Badge>
+                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">Style product Top</h5>
                                                 <Badge color="warning">BRWB</Badge>
+                                                <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">10</h5>
-                                                <Badge color="warning">2023</Badge>
+                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                                <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD</h5>
+                                                <h5 className="mb-5 fw-bold">70</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Coimbatore</h5>
-                                                <Badge color="warning">SPRING</Badge>
+                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
                                          <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>
+                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
+                                        </td>      
+                                        <td>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
+                                                </div>
+                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
+                                                7
+                                                </div>
+                                                <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
+                                                </div>
+                                            </div>
                                              <ActionMenu />
                                         </td>                                          
                                      </tr>

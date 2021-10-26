@@ -31,7 +31,30 @@
                                     </div>
                                 </div>
                             </div>
-                         
+                            <div className="col-sm-6 col-md-6 col-xl-3">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <select className="form-control select2">
+                                            <option>Product type</option> 
+                                            <option>Category 1</option> 
+                                            <option>Category 2</option> 
+                                            <option>Category 3</option> 
+                                        </select> 
+                                    </div>  
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-6 col-xl-3">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <select className="form-control select2">
+                                            <option>Sub Product type</option> 
+                                            <option>Sub Category 1</option> 
+                                            <option>Sub Category 2</option> 
+                                            <option>Sub Category 3</option> 
+                                        </select> 
+                                    </div>  
+                                </div>
+                            </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
@@ -56,30 +79,7 @@
                                     </div>  
                                 </div>
                             </div>
-                            <div className="col-sm-6 col-md-6 col-xl-3">
-                                <div className="form-group">
-                                    <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Category</option> 
-                                            <option>Category 1</option> 
-                                            <option>Category 2</option> 
-                                            <option>Category 3</option> 
-                                        </select> 
-                                    </div>  
-                                </div>
-                            </div>
-                            <div className="col-sm-6 col-md-6 col-xl-3">
-                                <div className="form-group">
-                                    <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Sub categpry</option> 
-                                            <option>Sub Category 1</option> 
-                                            <option>Sub Category 2</option> 
-                                            <option>Sub Category 3</option> 
-                                        </select> 
-                                    </div>  
-                                </div>
-                            </div>
+                           
                             <div className="col-lg-8 pr-0">
                                 <div className="form-group mt-15 text-right">
                                     

@@ -195,23 +195,23 @@ import { DateTimePicker} from '@material-ui/pickers';
            };
            const handleToggle2 = () => {
                
-             this.setState({ isActiveOrder: false });
+             this.setState({ isActiveOrder: !this.state.isActiveOrder });
              console.log(this.state)
            };
  
            const handleToggle3 = () => {
-             this.setState({ isActive: false });
+             this.setState({ isActiveOrder: false });
            };
            const isActive = this.state.isActive;
            const isActiveOrder = this.state.isActiveOrder;
            const { selectedDate } = this.state;
           return (
               
-             <RctCollapsibleCard heading="Create Style">
+             <RctCollapsibleCard heading="Style Create">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div  className={isActive ? "s-panel active" : 's-panel'}>
                       { !isActive &&
-                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
+                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details{isActive}<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
                        { isActive &&
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle1} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
@@ -224,7 +224,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                                     <DateTimePicker
                                         value={selectedDate}
                                         clearable
-                                        label="Choose a date &amp; Time"
+                                        label="PCD"
                                         onChange={this.handleDateChange}
                                         leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
                                         rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
@@ -236,17 +236,48 @@ import { DateTimePicker} from '@material-ui/pickers';
                      </div>
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                          <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                            <div className="form-group">
+                                <div className="rct-picker">
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DateTimePicker
+                                            value={selectedDate}
+                                            clearable
+                                            label="Tentative Delivery Date"
+                                            onChange={this.handleDateChange}
+                                            leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                            rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                            fullWidth
+                                            />
+                                    </MuiPickersUtilsProvider>
+                                </div>
+                            </div>
                          </div>
                      </div>
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                          <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                         <TextField id="Buyer" fullWidth label="Expected Quantity" placeholder="Expected Quantity"/>
                          </div>
                      </div>
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                          <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                            <div className="rct-picker">
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DateTimePicker
+                                            value={selectedDate}
+                                            clearable
+                                            label="Confirmation Due Date"
+                                            onChange={this.handleDateChange}
+                                            leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                            rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                            fullWidth
+                                            />
+                                    </MuiPickersUtilsProvider>
+                                </div>
+                         </div>
+                     </div>
+                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                         <div className="form-group">
+                         <TextField id="Buyer" fullWidth label="Available Quantity" placeholder="Available Quantity"/>
                          </div>
                      </div>
                      <div className="table-responsive mt-15">
@@ -255,28 +286,29 @@ import { DateTimePicker} from '@material-ui/pickers';
                              <table className="table data w-100">
                                  <thead>
                                      <tr>
-                                     <th className="w-25">Activity</th>
-                                     <th className="w-25">Due By</th>
-                                     <th className="w-25">Number</th>
+                                     <th className="w-25">PCP</th>
+                                     <th className="w-25">Delivery Date</th>
+                                     <th className="w-25">Exp Qty</th>
+                                     <th className="w-25">Confirmation Date</th>
+                                     <th className="w-25">Shipper</th>
+                                     <th className="w-25">Available</th>
                                      <th className="w-25 text-center">Actions  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      <tr>
                                      <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
-                                     {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
+                                     <td className="data">2021-10-10</td>
+                                     <td className="data">50</td>
+                                     <td className="data">2021-10-10</td>
+                                     <td className="data">Royal</td>
+                                     <td className="data">10</td>
+                                     <td className="">
+                                   
  
                                     <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                    <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-
+                                   
                                          {/* <button className="save">Save</button>
                                          <button className="edit">Edit</button>
                                          <button className="delete">Delete</button> */}
@@ -284,9 +316,13 @@ import { DateTimePicker} from '@material-ui/pickers';
                                      </tr>
                                      <tr>
                                      <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
+                                     <td className="data">2021-10-10</td>
+                                     <td className="data">50</td>
+                                     <td className="data">2021-10-10</td>
+                                     <td className="data">Royal</td>
+                                     <td className="data">10</td>
+                                   
+                                     <td className="">
                                      {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
  
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
@@ -295,7 +331,7 @@ import { DateTimePicker} from '@material-ui/pickers';
  
                                             <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                             <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                            <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                          
  
                                          {/* <button className="save">Save</button>
                                          <button className="edit">Edit</button>
@@ -312,7 +348,7 @@ import { DateTimePicker} from '@material-ui/pickers';
  
                   <div  className={isActiveOrder ? "s-panel-1 active" : 's-panel-1'}>
                       { !isActiveOrder &&
-                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle2}><span className="MuiButton-label">Order Specification <i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
+                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle2}><span className="MuiButton-label">Order Specification{isActiveOrder} <i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
                        { isActiveOrder &&
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle3} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
@@ -320,11 +356,111 @@ import { DateTimePicker} from '@material-ui/pickers';
                           <div className="row new-form">
                           { isActiveOrder &&                           
                             <div>
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                                    <div className="form-group">
+                                        <select className="form-control select2">
+                                            <option>Color</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
+                                    <div className="form-group">
+                                        <select className="form-control select2">
+                                            <option>Fabric Type</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                                    <div className="form-group">
+                                        <select className="form-control select2">
+                                            <option>FIT</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
+                                    <div className="form-group">                                  
+                                        <select className="form-control select2">
+                                            <option>Size</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
+                                    <div className="form-group">                                  
+                                        <select className="form-control select2">
+                                            <option>Destination</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
+                                    <div className="form-group">                                  
+                                        <select className="form-control select2">
+                                            <option>Market</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div className="table-responsive mt-15"> 
+                             <table className="table data w-100">
+                                 <thead>
+                                     <tr>
+                                     <th className="w-25">Activity</th>
+                                     <th className="w-25">Due By</th>
+                                     <th className="w-25">Number</th>
+                                     <th className="w-25 text-center">Actions  </th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <tr>
+                                     <td className="data">John Doe</td>
+                                     <td className="data">johndoe@john.com</td>
+                                     <td className="data">666-666-666</td>
+                                     <td className="text-center">                                   
+                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                     </td>
+                                     </tr>
+                                     <tr>
+                                     <td className="data">John Doe</td>
+                                     <td className="data">johndoe@john.com</td>
+                                     <td className="data">666-666-666</td>
+                                     <td className="text-center">
+                                    
+                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                     </td>
+                                     </tr>
+                                 </tbody>
+                                 
+                                 </table>
+                                </div>                             
+                            </div>
+                         }
+                    { !isActiveOrder &&
+                        <div>
                             <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                                 <div className="form-group">
                                     <Input type="date" name="date" id="PCD" placeholder="PCD" />
                                 </div>
-                             </div>
+                            </div>
                             <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                                 <div className="form-group">
                                 <Input type="date" name="date" id="tentDalivery" placeholder="Tentaive Delivery Date" />
@@ -341,147 +477,42 @@ import { DateTimePicker} from '@material-ui/pickers';
                                 </div>
                             </div>
                             <div className="table-responsive mt-15"> 
-                             <table className="table data w-100">
-                                 <thead>
-                                     <tr>
-                                     <th className="w-25">Activity</th>
-                                     <th className="w-25">Due By</th>
-                                     <th className="w-25">Number</th>
-                                     <th className="w-25 text-center">Actions  </th>
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">                                   
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                                     </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
+                                <table className="table data w-100">
+                                    <thead>
+                                        <tr>
+                                        <th className="w-25">Activity</th>
+                                        <th className="w-25">Due By</th>
+                                        <th className="w-25">Number</th>
+                                        <th className="w-25 text-center">Actions  </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        <td className="data">John Doe</td>
+                                        <td className="data">johndoe@john.com</td>
+                                        <td className="data">666-666-666</td>
+                                        <td className="text-center">                                   
+                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                        <td className="data">John Doe</td>
+                                        <td className="data">johndoe@john.com</td>
+                                        <td className="data">666-666-666</td>
+                                        <td className="text-center">
+                                        
+                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                    <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                    <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                        </td>
+                                        </tr>
+                                    </tbody>
                                     
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                                     </td>
-                                     </tr>
-                                 </tbody>
-                                 
-                                 </table>
-                             </div>
-                             
-                     </div>
-                     
-                    }
-                    { isActiveOrder &&
-                            <div className="row new-form">
-                        
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
-                                <div className="form-group">
-                                    <select className="form-control select2 mt-15">
-                                        <option>Color</option> 
-                                        <option>Red</option> 
-                                        <option>Blue</option> 
-                                        <option>Solly</option> 
-                                    </select> 
-                                </div>
-                             </div>
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
-                                <div className="form-group">
-                                    <select className="form-control select2 mt-15">
-                                        <option>Fabric Type</option> 
-                                        <option>Red</option> 
-                                        <option>Blue</option> 
-                                        <option>Solly</option> 
-                                    </select> 
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
-                                <div className="form-group">
-                                    <select className="form-control select2 mt-15">
-                                        <option>Fit</option> 
-                                        <option>Red</option> 
-                                        <option>Blue</option> 
-                                        <option>Solly</option> 
-                                    </select> 
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
-                                <div className="form-group">
-                                    <select className="form-control select2 mt-15">
-                                        <option>Size</option> 
-                                        <option>Red</option> 
-                                        <option>Blue</option> 
-                                        <option>Solly</option> 
-                                    </select> 
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
-                                <div className="form-group">
-                                    <select className="form-control select2 mt-15">
-                                        <option>Destination</option> 
-                                        <option>Coimabtore</option> 
-                                        <option>Chennai</option> 
-                                        <option>Solly</option> 
-                                    </select> 
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
-                                <div className="form-group">
-                                    <select className="form-control select2 mt-15">
-                                        <option>Market</option> 
-                                        <option>premium</option> 
-                                        <option>Blue</option> 
-                                        <option>Solly</option> 
-                                    </select> 
-                                </div>
-                            </div>
-                            <div className="table-responsive mt-15"> 
-                             <table className="table data w-100">
-                                 <thead>
-                                     <tr>
-                                     <th className="w-25">Activity</th>
-                                     <th className="w-25">Due By</th>
-                                     <th className="w-25">Number</th>
-                                     <th className="w-25 text-center">Actions  </th>
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">                                   
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                                     </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
-                                    
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                                     </td>
-                                     </tr>
-                                 </tbody>
-                                 
-                                 </table>
-                             </div>
-                             
-                     </div>
-                     
+                                </table>
+                            </div>                             
+                        </div>
                     }
                      </div>
                   </div>
