@@ -538,8 +538,6 @@ export default {
       {
          "menu_title": "User Buyer Rights",
          "menu_icon": "zmdi zmdi-account-circle",
-         "type_multi": null,
-         "new_item": false,
          "path": "/app/user_buyer_rights",
          // "child_routes": [
          //    {
@@ -553,8 +551,6 @@ export default {
       category13: [ {
          "menu_title": "Menu",
          "menu_icon": "zmdi zmdi-menu",
-         "type_multi": null,
-         "new_item": false,
          "path": "/app/menu_lists",
          // "child_routes": [
          //    {
@@ -568,8 +564,6 @@ export default {
       category14: [ {
          "menu_title": "Menu Rights",
          "menu_icon": "zmdi zmdi-menu",
-         "type_multi": null,
-         "new_item": false,
          "path": "/app/menu_rights",
          // "child_routes": [
          //    {
@@ -600,27 +594,12 @@ export default {
                   "path": "/app/pre-production/request-grid",	
                   "new_item": false,	
                   "menu_title": "Request Grid"	
+               },{	
+                  "path": "/app/pre-production/single-window",	
+                  "new_item": false,	
+                  "menu_title": "Single Window"	
                },
               
-            ]
-         }
-      ],category16: [
-         {
-            "menu_title": "Single Window",
-            "menu_icon": "zmdi zmdi-trending-up",
-            "path": "/app/pre-production/",
-            "child_routes": [
-               {
-                  "path": "/app/pre-production/single-window",
-                  "new_item": false,
-                  "menu_title": "Details"
-               },
-               // {
-               //    "path": "/app/pre-production/add-forecasting",
-               //    "new_item": false,
-               //    "menu_title": "Add Forecasting"
-               // },
-               
             ]
          }
       ],
