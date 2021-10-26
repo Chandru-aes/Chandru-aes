@@ -356,7 +356,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                           <div className="row new-form">
                           { isActiveOrder &&                           
                             <div>
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 ft-lft">
                                     <div className="form-group">
                                         <select className="form-control select2">
                                             <option>Color</option> 
@@ -366,7 +366,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                                         </select> 
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 ft-lft">
                                     <div className="form-group">
                                         <select className="form-control select2">
                                             <option>Fabric Type</option> 
@@ -376,7 +376,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                                         </select> 
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 ft-lft mt-15">
                                     <div className="form-group">
                                         <select className="form-control select2">
                                             <option>FIT</option> 
@@ -386,7 +386,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                                         </select> 
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 ft-lft mt-15 ">
                                     <div className="form-group">                                  
                                         <select className="form-control select2">
                                             <option>Size</option> 
@@ -396,7 +396,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                                         </select> 
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 ft-lft mt-15 ">
                                     <div className="form-group">                                  
                                         <select className="form-control select2">
                                             <option>Destination</option> 
@@ -406,7 +406,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                                         </select> 
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15">
+                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15 ft-lft">
                                     <div className="form-group">                                  
                                         <select className="form-control select2">
                                             <option>Market</option> 
