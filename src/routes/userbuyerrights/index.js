@@ -231,7 +231,7 @@ function TabContainer({ children }) {
         // const { buyerrightlists } = this.state;
 
         //   console.log(buyerrightlists,'buyerrightlists')
-
+        let validation = 'false';
           const dataset = [];
           for (const item of this.state.buyerrightlists) {     
               if(item.notify=="Y"){
@@ -244,21 +244,28 @@ function TabContainer({ children }) {
                     "createdBy": "1",
                     "hostname": ""
                   });
+                   validation = 'true';
               }
             
           }
           
-          console.log(dataset,'dataset');
-// alert(type)
-        let data = {
-            "UBInsertModel":dataset};
-                api.post('UserBuyerRights/SaveUserBuyerRights',data) .then((response) => {
-                    
-                    NotificationManager.success('Added Sucessfully');
-                })
-                .catch(error => {
-                    // error handling
-                })
+
+            if(validation=='true'){
+                let data = {
+                    "UBInsertModel":dataset};
+                        api.post('UserBuyerRights/SaveUserBuyerRights',data) .then((response) => {
+                            
+                            NotificationManager.success('Added Sucessfully');
+                        })
+                        .catch(error => {
+                            // error handling
+                        })
+
+            } else{
+                NotificationManager.error('Atleast Choose 1 Buyer Rights');
+
+            }
+        
 
       }
 	// get employee payrols
@@ -402,9 +409,9 @@ function TabContainer({ children }) {
                     
 								<Form> 
                   
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning  mb-10 text-white btn-icon pull-right b-sm mr-0" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Warning <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-warning  mb-10 text-white btn-icon pull-right b-sm mr-0" tabindex="0" type="button" onClick={this.createNotification('warning')}><span className="MuiButton-label">Warning <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
                                
-                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Error <i className="zmdi zmdi-alert-circle"></i></span><span className="MuiTouchRipple-root"></span></button>
+                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={this.createNotification('error')}><span className="MuiButton-label">Error <i className="zmdi zmdi-alert-circle"></i></span><span className="MuiTouchRipple-root"></span></button> */}
                               
                               <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 mb-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.getBuyerusersave()} ><span className="MuiButton-label">save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                
@@ -453,7 +460,7 @@ function TabContainer({ children }) {
                                 <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                     <div className="row">
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <div className="form-group">
+                                            <div className="form-group select_label_name mt-15">
                                             <Select1
                                                 dropdownPosition="auto"
                                                 //   multi
@@ -490,7 +497,7 @@ function TabContainer({ children }) {
 
 
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <div className="form-group">  
+                                            <div className="form-group select_label_name mt-15">  
                                             <Select1
                                                 dropdownPosition="auto"
                                                 //   multi
@@ -529,7 +536,7 @@ function TabContainer({ children }) {
                              if (this.state.userlevel == 'singleuser') { 
                             return (
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <div className="form-group">   
+                                    <div className="form-group select_label_name mt-15">   
                                     {/* select_label_name mt-15 */}
 
                                     <Select1
@@ -663,7 +670,8 @@ function TabContainer({ children }) {
                             <table className="table">
                                 <thead className="thead-light">
                                     <th> 
-                                    <Checkbox color="primary" value="true" onClick={(e) =>this.handleChangecheckboxall()} />
+                                        Actions
+                                    {/* <Checkbox color="primary" value="true" onClick={(e) =>this.handleChangecheckboxall()} /> */}
                                     {/* color="primary" checked={this.state.checkedA} onChange={this.handleChange('checkedA')} */}
                                     </th>
                                     <th>Buyer Code</th>

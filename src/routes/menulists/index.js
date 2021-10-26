@@ -286,7 +286,7 @@ function TabContainer({ children }) {
           .then((response) => {
               console.log(response.data.result.data,'response.data.result.data');
               let dataval = response.data.result.data[0];
-              this.setState({ module: [{value:dataval.appName,label:dataval.appName}],parent_menu_id: [{value:dataval.parantMenuId,label:dataval.parantMenuId}], menu_type: [{value:dataval.menuType,label:dataval.menuType}],menuname:dataval.menuName,menuurl:dataval.menuUrl,menudesc:dataval.menuDescription,displayindex:dataval.displayIndex,menuId:dataval.menuId});
+              this.setState({ module: [{value:dataval.appName,label:dataval.appName}],parent_menu_id: [{value:dataval.parantMenuId,label:dataval.parentMenuName}], menu_type: [{value:dataval.menuType,label:dataval.menuType}],menuname:dataval.menuName,menuurl:dataval.menuUrl,menudesc:dataval.menuDescription,displayindex:dataval.displayIndex,menuId:dataval.menuId,active_status:dataval.active});
 
             //   this.setState({ menulists: response.data.result.data });
           })
@@ -536,15 +536,27 @@ function TabContainer({ children }) {
                             <div className="row new-form">
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">
-                                    <FormControlLabel control={<Checkbox color="primary"  onChange={this.handleChangesingledropdown('active_status')} value="active" />} label="Active" />
+                                    {(() => {
+                           
+                            if (this.state.active_status == 'Y') {
+                            return (
+                                        <FormControlLabel control={<Checkbox color="primary" checked onChange={this.handleChangesingledropdown('active_status')} value="Y" />} label="Active" />
+                                    )
+                                } 
+                                if (this.state.active_status != 'Y') {
+                                    return (
+                                    <FormControlLabel control={<Checkbox color="primary" onChange={this.handleChangesingledropdown('active_status')} value="Y" />} label="Active" />
+                                    )
+                                }
+                            })()}
                                     </div>
                                 </div>
 
-                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">
                                     <FormControlLabel control={<Checkbox color="primary"  onChange={this.handleChangesingledropdown('isparent')} value="isparent" />} label="IsParent" />
                                     </div>
-                                </div>
+                                </div> */}
 
                             </div>
                             

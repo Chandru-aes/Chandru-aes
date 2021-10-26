@@ -481,7 +481,7 @@ import Radio from '@material-ui/core/Radio';
                                 </Dialog>
 
                 <div className="row p-20">
-                <div className="w-25 border p-10 no-f-mb">
+                <div className="w-25 border p-10 mr-5 no-f-mb">
                 <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
                 <div className="form-group">
                         <FormControl fullWidth>
@@ -627,7 +627,6 @@ import Radio from '@material-ui/core/Radio';
    <input class="form-control w-70 float-left" type="file" id="formFile"/>
  </div>
                 </div>
-                
                 <div className="w-75 col border">
                 <div className="row no-f-mb">
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -749,7 +748,6 @@ import Radio from '@material-ui/core/Radio';
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      {/* <div className="row"> */}
                          {/* <div className="w-25">
                      <div className="">
@@ -1041,9 +1039,8 @@ import Radio from '@material-ui/core/Radio';
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">  
-                     <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="age-simple">Reference version</InputLabel>
@@ -1057,12 +1054,12 @@ import Radio from '@material-ui/core/Radio';
                             </FormControl>
                         </div>
                     </div>
-            <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
                 <TextField id="Buyer" fullWidth label="Expected delivery date" placeholder="Expected delivery date"/>
                 </div>
             </div>
-            <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
+            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
                 <FormControl fullWidth>
                     <InputLabel htmlFor="age-simple">Preparation sequence</InputLabel>
@@ -1168,13 +1165,13 @@ import Radio from '@material-ui/core/Radio';
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="w-20">Material Type</th>
-                                     <th className="w-20">Description</th>
-                                     <th className="w-20">Placement</th>
-                                     <th className="">Color  </th>
-                                     <th className="">Size  </th>
-                                     <th className="">Pieces  </th>
-                                     <th className="w-20">Sample Type  </th>
+                                     <th className="w-25">Material Type</th>
+                                     <th className="w-25">Description</th>
+                                     <th className="w-25">Placement</th>
+                                     <th className="w-25">Color  </th>
+                                     <th className="w-25">Size  </th>
+                                     <th className="w-25">Pieces  </th>
+                                     <th className="w-25">Sample Type  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
@@ -1217,26 +1214,6 @@ import Radio from '@material-ui/core/Radio';
                                  </tbody>
                                  
                                  </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-30 float-left pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="w-30 float-left">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
                              </div>   
                      </AccordionDetails>
                  </Accordion>
@@ -1252,7 +1229,6 @@ import Radio from '@material-ui/core/Radio';
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
@@ -1456,7 +1432,6 @@ import Radio from '@material-ui/core/Radio';
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group">
@@ -1508,19 +1483,15 @@ import Radio from '@material-ui/core/Radio';
                         </div>
                     </div>
                     
-                    <div className="w-10">
-                        <InputLabel htmlFor="age-simple" className="pl-15 pt-10">Ref Type :</InputLabel>
-                    </div>
-
-                    <div className="w-33 ml-15">
+                    <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12">
                         <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                            <div className="w-33">
+                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                 <FormControlLabel color="primary" value="sample" control={<Radio />} label="Sample" />
                             </div>
-                            <div className="w-33">
+                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                 <FormControlLabel color="primary" value="mock" control={<Radio  />} label="Mock" />
                             </div>
-                            <div className="w-33">
+                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                 <FormControlLabel color="primary" value="Reference" control={<Radio  />} label="Reference" />
                             </div>
                         </RadioGroup>
@@ -1588,7 +1559,6 @@ import Radio from '@material-ui/core/Radio';
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
                                 
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
