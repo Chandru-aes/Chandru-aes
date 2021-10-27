@@ -14,8 +14,9 @@
      AsyncSinglewindowComponent,
      AsyncRequestGridOverallComponent,	
 	AsyncRequestGridStyleComponent,
+    AsyncRequeststatusComponent,
  } from 'Components/AsyncComponent/AsyncComponent';
- 
+  
  //console.log(match.url); 
  const Productions = ({ match }) => (
      
@@ -33,6 +34,7 @@
              <Route path={`${match.url}/single-window`} component={AsyncSinglewindowComponent} />
              <Route path={`${match.url}/request-grid`} component={AsyncRequestGridOverallComponent} />	
              <Route path={`${match.url}/request-style-list`} component={AsyncRequestGridStyleComponent} />
+             <Route path={`${match.url}/request-status`} component={AsyncRequeststatusComponent} />
          </Switch>
      </div>
  );

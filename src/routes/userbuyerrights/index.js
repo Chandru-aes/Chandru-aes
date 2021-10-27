@@ -391,6 +391,7 @@ function TabContainer({ children }) {
                   
                 {/* <PageTitleBar title={"User Buyer Rights<IntlMessages id="sidebar.simpleform" />} match={this.props.match} /> */}
                  <PageTitleBar title="User Buyer Rights" match={this.props.match} />
+                 <div className="category-container rct-block">
                 <Accordion>
 					<AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                         <div className="acc_title_font">
@@ -608,6 +609,7 @@ function TabContainer({ children }) {
                 </div>
 					</AccordionDetails>
 				</Accordion>
+                </div>
                <br/>
 
                 <div className="row ">   

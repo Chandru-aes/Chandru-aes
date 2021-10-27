@@ -598,6 +598,10 @@ export default {
                   "path": "/app/pre-production/single-window",	
                   "new_item": false,	
                   "menu_title": "Single Window"	
+               },{	
+                  "path": "/app/pre-production/request-status",	
+                  "new_item": false,	
+                  "menu_title": "Request Status"	
                },
               
             ]
