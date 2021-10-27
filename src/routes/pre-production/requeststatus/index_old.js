@@ -39,8 +39,6 @@
  import Tabs from '@material-ui/core/Tabs';
  import Tab from '@material-ui/core/Tab';
  import SwipeableViews from 'react-swipeable-views';
- import RadioGroup from '@material-ui/core/RadioGroup';
- import Radio from '@material-ui/core/Radio';
  
  import moment from 'moment';
  import DateFnsUtils from '@date-io/date-fns';
@@ -372,13 +370,93 @@
                    </div> 
                    <div className="clearfix"></div>
                 <div className="row p-20">
-                
-                <div className="w-75 col border pb-10">
+                <div className="w-25 border p-10 mr-5 no-f-mb">
+                <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Div</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+ 
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Season</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+ 
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Year</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+ 
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Style No</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+ 
+                        <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Req no/ Date</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                        <div className="w-100 p-0 mt-5">
+   <label for="formFile" class="form-label float-left w-20 p-10">TP</label>
+   <input class="form-control w-80 float-left" type="file" id="formFile"/>
+ </div>
+ <div className="clearfix"></div>
+ <div className="w-100 p-0 mt-5">
+   <label for="formFile" class="form-label float-left w-20 p-10">FIS</label>
+   <input class="form-control w-80 float-left" type="file" id="formFile"/>
+ </div>
+ <div className="clearfix"></div>
+ <div className="w-100 p-0 mt-5">
+   <label for="formFile" class="form-label float-left w-30 p-10">BLOCK</label>
+   <input class="form-control w-70 float-left" type="file" id="formFile"/>
+ </div>
+                </div>
+                <div className="w-75 col border">
                 <div className="row no-f-mb">
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div className="form-group">
                         <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Request No</InputLabel>
+                            <InputLabel htmlFor="age-simple">Req Type</InputLabel>
                             <Select value={this.state.age} onChange={this.handleChange}
                             inputProps={{ name: 'age', id: 'age-simple', }}>
                             <MenuItem value=""><em>None</em></MenuItem>
@@ -391,59 +469,69 @@
  
                     </div> 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Style Number" placeholder="Style Number"/>
+                    <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Purpose</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
-                    </div>
+ 
+                    </div> 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Purpose" placeholder="Purpose"/>
+                    <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Pluid</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
-                    </div>
+ 
+                    </div> 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Base Style" placeholder="Base Style"/>
+                    <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Base Style</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                           
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Accept" />
-                           
-                           
-                        </RadioGroup>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                           
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Hold" />
-                           
-                           
-                        </RadioGroup>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                           
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Cancel" />
-                           
-                           
-                        </RadioGroup>
-                        </div>
-
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Reason" placeholder="Reason"/>
-                        </div>
-                    </div>
+ 
+                    </div> 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+                    <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Fabric</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
+ 
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div className="form-group">
                         <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Request View</InputLabel>
+                            <InputLabel htmlFor="age-simple">Wash Type</InputLabel>
                             <Select value={this.state.age} onChange={this.handleChange}
                             inputProps={{ name: 'age', id: 'age-simple', }}>
                             <MenuItem value=""><em>None</em></MenuItem>
@@ -455,9 +543,21 @@
                         </div>
  
                     </div> 
-                    
-                   
-               
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <TextField id="Buyer" fullWidth label="" placeholder=""/>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <TextField id="Buyer" fullWidth label="" placeholder=""/>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <TextField id="Buyer" fullWidth label="" placeholder=""/>
+                        </div>
+                    </div>
                     <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
                     <Accordion className="border mb-15 mt-15">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
@@ -469,7 +569,6 @@
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
                          <div className="w-25">
                      <div className="">
@@ -567,75 +666,43 @@
   </div>
                  
   <div className="table-responsive mt-0">
-                      <div className="float-right">
+                      <div className="w-20 float-right">
                          <div className="form-group">
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="">Actions</th>
-                                     <th className="">    Nature of Job </th>
-                                     <th className="">Version</th>
-                                     <th className="">Pattern Type  </th>
-                                     <th className="">    Storage Area    </th>
-                                     <th className="">Done By   </th>
-                                     <th className="">Checked By   </th>
-                                     <th className="">Revision    </th>
-                                     <th className="">    Date & Time     </th>
-                                     <th className="">    Remark     </th> 
-
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      <tr>
-                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
-                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -644,26 +711,6 @@
                                  </tbody>
                                  
                                  </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-33 float-left text-center pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="float-right">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
                              </div>      
                      
                     
@@ -682,15 +729,14 @@
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">  
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                      <div className="form-group">
  <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Pattern Version</InputLabel>
+     <InputLabel htmlFor="age-simple">Unit</InputLabel>
      <Select value={this.state.age} onChange={this.handleChange}
      inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em> none</em></MenuItem>
+     <MenuItem value=""><em> Pattern Version</em></MenuItem>
      <MenuItem value={10}>Autumn</MenuItem>
      <MenuItem value={20}>Summer</MenuItem>
      <MenuItem value={30}>Winter</MenuItem>
@@ -731,85 +777,50 @@
  </FormControl>
  </div>
  </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-     <div className="row">
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="In" />
-
-
-</RadioGroup>
-
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="Out" />
-
-
-</RadioGroup>
-</div>
-</div>
-<div className="col-lg-6 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-<div className="form-group">
- <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+ <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ 
  </div>
-</div>
-</div>
-
-
-
-                     <div className="table-responsive mt-10">
-                      <div className="float-right">
+ <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ 
+ </div></div>
+                     <div className="table-responsive mt-0">
+                      <div className="w-20 float-right">
                          <div className="form-group">
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="text-center">Actions</th>
-                                     <th className="">    Pattern Version </th>
-                                     <th className="">    No of Pieces </th>
-                                     <th className="">    Line </th>
-                                     <th className="">Department</th>
-                                     <th className="">In</th>
-                                     <th className="">Out</th>
-                                     <th className="">    Remarks </th>
-                                     
-
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -818,26 +829,6 @@
                                  </tbody>
                                  
                                  </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-33 float-left text-center pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="float-right">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
                              </div>   
                      </AccordionDetails>
                  </Accordion>
@@ -853,15 +844,14 @@
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                      <div className="form-group">
  <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">    Pattern Version </InputLabel>
+     <InputLabel htmlFor="age-simple">Unit</InputLabel>
      <Select value={this.state.age} onChange={this.handleChange}
      inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>none</em></MenuItem>
+     <MenuItem value=""><em>Pattern Version</em></MenuItem>
      <MenuItem value={10}>Autumn</MenuItem>
      <MenuItem value={20}>Summer</MenuItem>
      <MenuItem value={30}>Winter</MenuItem>
@@ -911,33 +901,23 @@
  <div className="form-group">
  <TextField id="Buyer" fullWidth label="Time" placeholder="Time"/>
  </div></div>
- <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="    Remarks " placeholder="    Remarks "/>
- </div></div>
  </div>
-                     <div className="table-responsive mt-10">
-                      <div className="float-right">
+                     <div className="table-responsive mt-0">
+                      <div className="w-20 float-right">
                          <div className="form-group">
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="">Pattern Version</th>
-                                     <th className="">Fabric Details</th>
-                                     <th className="">Width </th>
-                                     <th className="">Size </th>
-                                     <th className="">Repeat </th>
-                                     <th className="">GAR Quantity</th>
-                                     <th className="">Marker</th>
-                                     <th className="">Efficiency</th>
-                                     <th className="">Remarks</th>
-
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
@@ -946,7 +926,8 @@
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
-                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -957,29 +938,8 @@
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                      </tr>
                                      <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -988,26 +948,6 @@
                                  </tbody>
                                  
                                  </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-33 float-left text-center pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="float-right">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
                              </div>  
                      </AccordionDetails>
                  </Accordion>
@@ -1022,12 +962,11 @@
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                      <div className="form-group">
  <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Value Add</InputLabel>
+     <InputLabel htmlFor="age-simple">Unit</InputLabel>
      <Select value={this.state.age} onChange={this.handleChange}
      inputProps={{ name: 'age', id: 'age-simple', }}>
      <MenuItem value=""><em>None</em></MenuItem>
@@ -1039,36 +978,8 @@
  </div>
  </div>
  <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Value Add Type</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
+ <label>In/out</label>
  </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-     <div className="row">
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="In" />
-
-
-</RadioGroup>
-
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="Out" />
-
-
-</RadioGroup>
-</div>
-</div>
  <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
  <div className="form-group">
  <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
@@ -1084,60 +995,45 @@
  <TextField id="Buyer" fullWidth label="Description" placeholder="Description"/>
  </div>
  </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="    Remarks " placeholder="    Remarks "/>
- </div>
- </div>
                      </div>
-                     <div className="table-responsive mt-10">
-                      <div className=" float-right">
+                     <div className="table-responsive mt-0">
+                      <div className="w-20 float-right">
                          <div className="form-group">
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="text-center">Actions</th>
-                                     <th className="">    Department </th>
-                                     <th className="">    No of Pieces </th>
-                                     <th className="">    Description </th>
-                                     <th className="">     In </th>
-                                     <th className="">    Out </th>
-                                     <th className="">    Description </th>
-
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                          
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
                                          <td>Demo </td>
                                          <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1146,26 +1042,6 @@
                                  </tbody>
                                  
                                  </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-33 float-left text-center pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="float-right">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
                              </div>  
                      </AccordionDetails>
                  </Accordion>
@@ -1181,22 +1057,7 @@
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
                      <div className="row">
-                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">    Option Type </InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                      <div className="form-group">
  <FormControl fullWidth>
@@ -1228,17 +1089,12 @@
  </div>
  <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
  <div className="form-group">
- <TextField id="Buyer" fullWidth label="    Difficulty Level " placeholder="    Difficulty Level "/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
  <TextField id="Buyer" fullWidth label="OB Link" placeholder="OB Link"/>
  </div>
  </div>
                      </div>
-                     <div className="table-responsive mt-10">
-                      <div className="float-right">
+                     <div className="table-responsive mt-0">
+                      <div className="w-20 float-right">
                          <div className="form-group">
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
@@ -1249,57 +1105,32 @@
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="text-center">Actions</th>
-                                     <th className="">    Option Type </th>
-                                     <th className="">Option</th>
-                                     <th className="">SEW SAM</th>
-                                     <th className="">    KB SAM </th>
-                                     <th className="">    Manual SAM </th>
-                                     <th className="">OB Link</th>
-                                     <th className="">    Difficulty Level </th>
-
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo</th>
+                                     <th className="w-25">Demo  </th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                      <tr>
-                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                          
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                     
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1308,26 +1139,6 @@
                                  </tbody>
                                  
                                  </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-33 float-left text-center pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="float-right">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
                              </div>  
                      </AccordionDetails>
                  </Accordion>
