@@ -4,14 +4,7 @@
  import React, { Component, Fragment } from 'react';
  import api from 'Api';
  import {
-	Button,
-	Form,
-	FormGroup,
-	Label,
-	// Input,
-	FormText,
-	Col,
-	FormFeedback,Modal,
+	Button,Modal,
     ModalHeader,
     ModalBody,
     ModalFooter,
@@ -97,6 +90,7 @@ import DataGrid, {
     Lookup,
     Summary, TotalItem
   } from 'devextreme-react/data-grid';
+  import Select1 from "react-dropdown-select";
   
   //import { Button } from 'devextreme-react/button';
   import { Template } from 'devextreme-react/core/template';
@@ -107,6 +101,8 @@ import DataGrid, {
   import 'devextreme/dist/css/dx.light.css';
 
   const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+
+  const BuyerDivisionOptions=[];
 /****/
 function TabContainer({ children }) {
     return (
@@ -122,7 +118,9 @@ function TabContainer({ children }) {
 		employeePayroll: null,
         activeIndex: 0,
         name: '',
-        userlevel: '',
+        userlevel: '',        
+        BuyerValue:[],
+        BuyerdivisionValue:[],
 	}
     constructor(props) {
         super(props);
@@ -130,7 +128,11 @@ function TabContainer({ children }) {
        // this.states = service.getStates();
         this.state = {
             selectTextOnEditStart: true,
-            startEditAction: 'click'
+            startEditAction: 'click',
+            BuyerList:[],
+            BuyerDivisionList:[],
+            LocationItem:[],
+            forecastType:[],
         };
         this.allowDeleting = this.allowDeleting.bind(this);
         this.onRowValidating = this.onRowValidating.bind(this);
@@ -138,6 +140,42 @@ function TabContainer({ children }) {
         this.isCloneIconVisible = this.isCloneIconVisible.bind(this);
         this.cloneIconClick = this.cloneIconClick.bind(this);
       }
+
+      // get employee payrols
+        SaveForecast(){
+            if(employees.length==0 || activityItems.length==0){
+                NotificationManager.error('Please Select any Quantity or Activity Items');
+            }
+        }
+        getEmployeePayrolls() {   
+                    
+            api.get('Buyer/GetBuyerDropDown')
+            .then((response) => {                
+                this.setState({ BuyerList: response.data.result.data });
+            })        
+            .catch(error => {})
+
+            api.get('Location/GetLocationDropDown')
+            .then((response) => {            
+                this.setState({ LocationItem: response.data.result.data });
+            })
+
+            api.get('Miscellaneous/GetMiscellaneousList?MType=FCTYPE')
+            .then((response) => {            
+                this.setState({ forecastType: response.data.result.data });
+            })
+        }
+        getBuyerDivision1(val){
+            console.log(val);
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
+            .then((response) => {                
+                this.setState({ BuyerDivisionList: response.data.result.data });
+
+               
+            })        
+            .catch(error => {})
+            console.log(BuyerDivisionOptions)
+        }
       isChief(position) {
         return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
       }
@@ -186,49 +224,6 @@ function TabContainer({ children }) {
 
     componentDidMount() {
         this.getEmployeePayrolls();
-        //$(this).siblings('.save').hide();
-        $(document).on('click', '.edit', function() {
-            $(this).parent().siblings('td.data').each(function() {
-              var content = $(this).html();
-              $(this).html('<input value="' + content + '" class="float-none form-control m-auto w-50"/>');
-            });
-            
-            $(this).siblings('.save').show();
-            $(this).siblings('.delete').hide();
-            $(this).hide();
-          });
-          
-          $(document).on('click', '.save', function() {
-            
-            $('input').each(function() {
-              var content = $(this).val();
-              $(this).html(content);
-              $(this).contents().unwrap();
-            });
-            $(this).siblings('.edit').show();
-            $(this).siblings('.delete').show();
-            $(this).hide();
-            
-          });
-          
-          
-          $(document).on('click', '.delete', function() {
-            $(this).parents('tr').remove();
-          });
-
-          $(document).on('click', '.add', function() {
-             
-            $('.qty-breakup-table').append('<tr><td class="text-center"> <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button><button class="MuiButtonBase-root MuiIconButton-root text-primary  save MuiIconButton-colorPrimary " tabindex="0" type="button" aria-label="Save"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button><button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button></td><td class="data"><input value="" class="form-control" placeholder="Qty"></td><td class="data"><input value="" class="form-control" placeholder="location"></td><td class="data"><input value="" class="form-control" placeholder="Category"></td><td class="data"><input value="" class="form-control" placeholder="Sub Category"></td><td class="data"><input value="" class="form-control" placeholder="avg SAM"></td><td class="data"><input value="" class="form-control" placeholder="Tentative start date"></td><td class="data"><input value="" class="form-control" placeholder="Tentative delivery date"></td><td class="data"><input value="" class="form-control" placeholder="Confirm date"></td></tr>');
-          });
-
-          $(document).on('click', '.addactivity', function() {
-             
-            $('.activity-table').append('<tr><td class="text-center"> <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button><button class="MuiButtonBase-root MuiIconButton-root text-primary  save MuiIconButton-colorPrimary " tabindex="0" type="button" aria-label="Save"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button><button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button></td><td class="data"><input value="" class="float-none form-control m-auto w-50" placeholder="Activity Name"></td><td class="data"><input value="" class="float-none form-control m-auto w-50" placeholder="Due Date"></td></tr>');
-          });
-          
-        //   $('.add').click(function() {
-        //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
-        //   });
 	}
     createNotification = (type) => {
         return () => {
@@ -305,23 +300,34 @@ function TabContainer({ children }) {
           template: 'deleteButton'
         });
       }
-	// get employee payrols
-	getEmployeePayrolls() {
-		api.get('current_subscriptions')
-			.then((response) => {
-				this.setState({ employeePayroll: response.data });
-			})
-			.catch(error => {
-				// error handling
-			})
-	}
+	
     render() {
         const { employeePayroll } = this.state;
 		const { match } = this.props;
         const { selectedDate } = this.state;
         //const columns = ["Buyer Code", "BuyDivCode", "DivName"];
         const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
-       
+        const BuyerOptions =[];
+        for (const item of this.state.BuyerList) {           
+            BuyerOptions.push({value:item.buyerCode,label:item.buyerName});
+        }
+
+        const locationItemOptions = [];         
+        for (const item of this.state.LocationItem) {           
+            locationItemOptions.push({value:item.locCode,label:item.locName});
+        }
+
+        const ForecastTypeItemOptions = [];         
+        for (const item of this.state.forecastType) {           
+            ForecastTypeItemOptions.push({value:item.code,label:item.codeDesc});
+        }
+
+        
+        const BuyerDivisionOptions =[];
+        for (const item of this.state.BuyerDivisionList) {           
+            BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
+        }
+        
         const data = [
             ["Buyer 1","1st Division","Autumn","2021","Bangalore","10","10","6","Active"],
             ["Buyer 2","2nd Division","Summer","2021","Bangalore","10","10","6","Active"],
@@ -354,58 +360,53 @@ function TabContainer({ children }) {
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Buyer</option> 
-                                            <option>Levis</option> 
-                                            <option>Allen</option> 
-                                            <option>Solly</option> 
-                                        </select> 
-                                    </div>
-                                {/* <FormControl fullWidth>
-                                    <InputLabel htmlFor="age-simple">Buyer</InputLabel>
-                                    <Select value={this.state.age} onChange={this.handleChange}
-                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value={10}>Levis</MenuItem>
-                                    <MenuItem value={20}>Allen</MenuItem>
-                                    <MenuItem value={30}>Solly</MenuItem>
-                                    </Select>
-                                </FormControl> */}
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Buyer Division</option> 
-                                            <option>Levis</option> 
-                                            <option>Allen</option> 
-                                            <option>Solly</option> 
-                                        </select> 
+                                        <Select1  dropdownPosition="auto"  createNewLabel="Buyer"
+                                            options={BuyerOptions}
+                                            onChange={values => this.getBuyerDivision1({ BuyerValue:values })}
+                                            placeholder="Buyer"                                              
+                                            values={this.state.BuyerValue}
+                                        />                                   
                                     </div>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Location</option> 
-                                            <option>Coimbatore</option> 
-                                            <option>Chennai</option> 
-                                            <option>Tirupur</option> 
-                                        </select> 
+                                        <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
+                                            options={BuyerDivisionOptions}
+                                            placeholder="Buyer Division"
+                                            onChange={values => this.setState({ BuyerdivisionValue:values })}
+                                            values={this.state.BuyerdivisionValue}
+                                        />                                   
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <Select1  dropdownPosition="auto"
+                                        //   multi
+                                            createNewLabel="Location"
+                                            options={locationItemOptions}
+                                            onChange={values => this.setState({ location:values })}
+                                            placeholder="Location"
+                                            values={this.state.lpcationItemValue}
+                                        />  
                                     </div>                                   
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Forecast Type</option> 
-                                            <option>Annual Buyer</option> 
-                                            <option>Monthly Buyer</option> 
-                                            <option>Weely</option> 
-                                        </select> 
+                                    <Select1  dropdownPosition="auto"
+                                        //   multi
+                                            createNewLabel="Forecast Type"
+                                            options={ForecastTypeItemOptions}
+                                            onChange={values => this.setState({ forecastType:values })}
+                                            placeholder="Forecast Type"
+                                            values={this.state.Forecasttype}
+                                        />  
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -437,7 +438,7 @@ function TabContainer({ children }) {
                                 <div className="form-group mt-15 text-right">
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Add <i className="zmdi zmdi-file-plus"></i></span><span className="MuiTouchRipple-root"></span></button> */}
                                     
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide</span><span className="MuiTouchRipple-root"></span></button>
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide</span><span className="MuiTouchRipple-root"></span></button>
                                 </div>
                             </div> 
                         </div> 
@@ -518,45 +519,34 @@ function TabContainer({ children }) {
                                         </Column>
                                         <Column dataField="BirthDate" dataType="date" width={125} />
                                     </DataGrid> */}
-                                        <div className="row tb-pro mt-20">
-                                <div className="w-100">
-                                    <div className="w-25 float-left">
-                                        <div className="form-group">
-                                            <div className="w-50 float-left text-center">
-                                                <label for="exampleFormControlSelect1">Rows per page</label>
-                                            </div>
+                                        <div className="w-50 float-right mt-20">
                                             <div className="w-25 float-left">
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>50</option>
-                                                    <option>100</option>
-                                                    <option>150</option>
-                                                    <option>200</option>
-                                                    <option>250</option>
+                                                <label className="mt-5">Rows per page: </label>
+                                            </div>
+                                            <div className="w-15 float-left">
+                                                <select class="form-control">
+                                                    <option>10</option> 
+                                                    <option>20</option> 
+                                                    <option>30</option> 
+                                                    <option>40</option> 
                                                 </select>
+                                            </div>
+                                            <div className="w-30 float-left pl-30">
+                                                <label className="mt-5">1-10 of 50</label>
+                                            </div>
+                                            <div className="w-30 float-left">
+                                                <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
+                                                <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-25 float-right">
-                                        <nav aria-label="Page navigation example">
-                                            <ul className="pagination justify-content-end">
-                                                <li className="page-item ">
-                                                {/* disabled */}
-                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
-                                                </li>
-                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                    <div className="row tb-pro mt-10">
+                                        <div className="w-100">
+                                            <div className="float-right">
+                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                                    </div>
-                                    
                                 </div>
                             </TabContainer>
                             <TabContainer>
@@ -614,6 +604,13 @@ function TabContainer({ children }) {
                                         <Column dataField="Due Date" dataType="date" />
                                         
                                     </DataGrid>                       
+                                </div>
+                                <div className="tb-pro mt-10">
+                                    <div className="w-100">
+                                        <div className="float-right">
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </TabContainer>
                         </SwipeableViews>    
@@ -760,45 +757,28 @@ function TabContainer({ children }) {
 										 );
 									 })}
                         </tbody>
-                            </table>
-                            <div className="row tb-pro mt-10">
-                                <div className="w-100">
+                            </table>                           
+                                 <div className="w-50 float-right">
                                     <div className="w-25 float-left">
-                                        <div className="form-group">
-                                            <div className="w-50 float-left text-center">
-                                                <label for="exampleFormControlSelect1">Rows per page</label>
-                                            </div>
-                                            <div className="w-25 float-left">
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>50</option>
-                                                    <option>100</option>
-                                                    <option>150</option>
-                                                    <option>200</option>
-                                                    <option>250</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                        <label className="mt-5">Rows per page: </label>
                                     </div>
-                                    <div className="w-25 float-right">
-                                        <nav aria-label="Page navigation example">
-                                            <ul className="pagination justify-content-end">
-                                                <li className="page-item ">
-                                                {/* disabled */}
-                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
-                                                </li>
-                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                    <div className="w-15 float-left">
+                                        <select class="form-control">
+                                            <option>10</option> 
+                                            <option>20</option> 
+                                            <option>30</option> 
+                                            <option>40</option> 
+                                        </select>
+                                    </div>
+                                    <div className="w-30 float-left pl-30">
+                                        <label className="mt-5">1-10 of 50</label>
+                                    </div>
+                                    <div className="w-30 float-left">
+                                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
+                                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
                                     </div>
                                 </div>
-                            </div>
-                            
+                          
                             
                                 {/* <RctCollapsibleCard heading="" fullBlock> */}
                                 {/* <MUIDataTable
