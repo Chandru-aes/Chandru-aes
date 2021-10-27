@@ -779,7 +779,7 @@ table.table.table-bordered.table-striped.flip-content tr.bg-primary th{color: #0
   }
   
 .MuiInputBase-input{border: 1px solid #bdbdbd!important;
-	font-size: 14px !important;
+	font-size: 16px !important;
 	border-radius: .25rem;
 	height:35px!important; padding: 6px 15px!important;
 }
@@ -1087,8 +1087,7 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 				font-size: 14px!important;
 			}
 			.dropzone .dz-message{font-size: 14px;}
-			.MuiInputLabel-shrink{font-size: 12px !important; top: 5px !important;}
-			.MuiFormLabel-filled{top: 8.5px !important;}
+			.MuiInputLabel-shrink{font-size: 12px !important; top: 10px !important;}
 			.MuiSelect-selectMenu{font-size: 14px!important; background: #fff!important;}
 			label{	font-family: "HelveticaNeue" !important; font-size: 13px;}
 			.no-f-mb .MuiAccordionSummary-content{margin: 0!important;}
@@ -1096,7 +1095,7 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.no-f-mb .MuiIconButton-edgeEnd{padding: 5px 10px!important;}
 			.no-f-mb .MuiAccordionSummary-root{min-height: auto!important;}
 			.no-f-mb .but-tp{margin-top: -20px;}
-			.no-f-mb .MuiAccordion-root.Mui-expanded{margin:10px 0 5px 0!important;}
+			.no-f-mb .MuiAccordion-root.Mui-expanded{margin:5px 0!important;}
 			.react-dropdown-select-dropdown {
 				z-index: 999 !important;
 			}
@@ -1104,13 +1103,6 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			.overall-border{padding: 18px;}	
 			.no-padding-top{padding-top: 0 !important;}	
 			.no-padding-bottom{padding-bottom: 0 !important;}
-
-			.rb-mb .MuiFormControlLabel-root{margin-bottom: 0!important;}
-			table tr td button:hover{background: #ececec;
-				border-radius: 50px;width: 25px;
-				 }
-				table tr td button{width: 25px;
-					height: 25px;transition:all .5s ease; -moz-transition:all .5s ease; -webkit-transition:all .5s ease; -o-transition:all .5s ease; }
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }
