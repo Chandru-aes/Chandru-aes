@@ -88,7 +88,9 @@ import DataGrid, {
     Paging,
     Selection,
     Lookup,
-    Summary, TotalItem
+    Summary, TotalItem,
+    RequiredRule,
+    PatternRule,
   } from 'devextreme-react/data-grid';
   import Select1 from "react-dropdown-select";
   
@@ -121,6 +123,7 @@ function TabContainer({ children }) {
         userlevel: '',        
         BuyerValue:[],
         BuyerdivisionValue:[],
+       // QtyBreakUpList:[]
 	}
     constructor(props) {
         super(props);
@@ -133,6 +136,9 @@ function TabContainer({ children }) {
             BuyerDivisionList:[],
             LocationItem:[],
             forecastType:[],
+            QtyBreakUpList:[],
+            productTypes:[],
+            activityList:[]
         };
         this.allowDeleting = this.allowDeleting.bind(this);
         this.onRowValidating = this.onRowValidating.bind(this);
@@ -143,7 +149,7 @@ function TabContainer({ children }) {
 
       // get employee payrols
         SaveForecast(){
-            if(employees.length==0 || activityItems.length==0){
+            if(this.state.QtyBreakUpList.length==0 || this.state.activityList.length==0){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
             }
         }
@@ -164,6 +170,21 @@ function TabContainer({ children }) {
             .then((response) => {            
                 this.setState({ forecastType: response.data.result.data });
             })
+
+            api.get('ForecastQtyDetailEntity')
+            .then((response) => {            
+                this.setState({ QtyBreakUpList: response.data });
+            })
+            api.get('ForecastActivityEntity/GetForecastActivityList')
+            .then((response) => {            
+                this.setState({ activityList: response.data });
+            })
+            
+            api.get('ProductType/GetProductTypeDropDown')
+            .then((response) => {            
+                this.setState({ productTypes: response.data.result.data });
+            })
+            
         }
         getBuyerDivision1(val){
             console.log(val);
@@ -174,7 +195,7 @@ function TabContainer({ children }) {
                
             })        
             .catch(error => {})
-            console.log(BuyerDivisionOptions)
+           
         }
       isChief(position) {
         return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
@@ -302,6 +323,7 @@ function TabContainer({ children }) {
       }
 	
     render() {
+         
         const { employeePayroll } = this.state;
 		const { match } = this.props;
         const { selectedDate } = this.state;
@@ -316,6 +338,9 @@ function TabContainer({ children }) {
         for (const item of this.state.LocationItem) {           
             locationItemOptions.push({value:item.locCode,label:item.locName});
         }
+        
+        //const QtyBreakUpListItems =this.state.QtyBreakUpList.data;
+
 
         const ForecastTypeItemOptions = [];         
         for (const item of this.state.forecastType) {           
@@ -459,9 +484,9 @@ function TabContainer({ children }) {
                             <TabContainer>
                                 <div className=""> 
                                     <div id="data-grid-demo">
-                                    <DataGrid dataSource={employees} keyExpr="ID" showBorders={true} >
+                                    <DataGrid dataSource={this.state.QtyBreakUpList.data} keyExpr="" showBorders={true} >
                                         <Paging enabled={false} />
-                                        <Editing mode="batch" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
+                                        <Editing mode="cell" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
                                                 selectTextOnEditStart={this.state.selectTextOnEditStart}
                                             startEditAction={this.state.startEditAction} useIcons={true}/>
                                            <Column type="buttons" width={110} caption="Actions">
@@ -469,56 +494,28 @@ function TabContainer({ children }) {
                                                 <Button name="delete" />
                                                 <Button name="delete" hint="Clone" icon="repeat"  />
                                             </Column>   
-                                        <Column dataField="Quantity" width={110} caption="Quantity"  />
-                                        <Column dataField="ProductTypeId" caption="Product type" >
-                                            <Lookup dataSource={product_types} valueExpr="ID" displayExpr="Name" />
+                                        <Column dataField="qty" width={110} caption="Quantity">
+                                            <RequiredRule />
+                                        </Column>
+                                        <Column dataField="productType" caption="Product type" >
+                                        <RequiredRule />
+                                            <Lookup dataSource={this.state.productTypes} valueExpr="productType" displayExpr="productType" />
                                         </Column>
                                         <Column dataField="SubProductTypeId" caption="Sub-Product type" >
+                                            <RequiredRule />
                                             <Lookup dataSource={sub_product_types} valueExpr="ID" displayExpr="Name" />
                                         </Column>
-                                        <Column dataField="AvgSAM" width={110} caption="Average SAM"/>
-                                        <Column dataField="PCD" dataType="date" />
-                                        <Column dataField="tent-deli-date" caption="Tent.deli.date" dataType="date" />
-                                        <Column dataField="confirm-due-date" caption="Conf.due.date" dataType="date" />
-                                        <Column dataField="AvgSAM" caption="Available capacity"/>
+                                        <Column dataField="avgSAM" width={110} caption="Average SAM"><RequiredRule /></Column>
+                                        <Column dataField="pcd" dataType="date" ><RequiredRule /></Column>
+                                        <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" ><RequiredRule /></Column>
+                                        <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" ><RequiredRule /></Column>
+                                        <Column dataField="AvgSAM" caption="Available capacity"><RequiredRule /></Column>
                                       
-                                        {/* <Column dataField="LastName" />
-                                        <Column dataField="Position" width={170} /> */}
-                                        {/* <Column dataField="StateID" caption="State" width={125}>
-                                            <Lookup dataSource={states} valueExpr="ID" displayExpr="Name" />
-                                        </Column> */}
                                          <Summary>
                                             <TotalItem column="Quantity" summaryType="sum"  valueFormat="#0.00" />
                                         </Summary>
                                         
-                                    </DataGrid>
-                                    {/* <DataGrid
-                                        id="gridContainer"
-                                        dataSource={this.state.employees}
-                                        keyExpr="ID"
-                                        showBorders={true}
-                                        onRowValidating={this.onRowValidating}
-                                        onEditorPreparing={this.onEditorPreparing}
-                                        defaultColumns={columns}>
-                                        <Editing
-                                        mode="row"
-                                        useIcons={true}
-                                        allowUpdating={true}
-                                        allowDeleting={this.allowDeleting} />
-                                        <Column type="buttons" width={110}>
-                                        <Button name="edit" className="text-danger"/>
-                                        <Button name="delete" />
-                                        <Button hint="Clone" icon="repeat" visible={this.isCloneIconVisible} onClick={this.cloneIconClick} />
-                                        </Column>
-                                        <Column dataField="Prefix" caption="Title" />
-                                        <Column dataField="FirstName" />
-                                        <Column dataField="LastName" />
-                                        <Column dataField="Position" width={130} />
-                                        <Column dataField="StateID" caption="State" width={125}>
-                                        <Lookup dataSource={this.states} displayExpr="Name" valueExpr="ID" />
-                                        </Column>
-                                        <Column dataField="BirthDate" dataType="date" width={125} />
-                                    </DataGrid> */}
+                                    </DataGrid>                                 
                                         <div className="w-50 float-right mt-20">
                                             <div className="w-25 float-left">
                                                 <label className="mt-5">Rows per page: </label>
@@ -590,9 +587,9 @@ function TabContainer({ children }) {
                                     </div>
                                 </div>
                                 <div className="table-responsive">
-                                    <DataGrid dataSource={activityItems} keyExpr="ID" showBorders={true} >
+                                    <DataGrid dataSource={this.state.activityList.data} keyExpr="id" showBorders={true} >
                                         <Paging enabled={false} />
-                                        <Editing mode="batch" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
+                                        <Editing mode="cell" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
                                                 selectTextOnEditStart={this.state.selectTextOnEditStart}
                                             startEditAction={this.state.startEditAction} useIcons={true}/>
                                            <Column type="buttons" width={110} caption="Actions">
@@ -600,8 +597,8 @@ function TabContainer({ children }) {
                                                 <Button name="delete" />
                                                 <Button hint="Clone" icon="repeat"  />
                                             </Column>   
-                                        <Column dataField="Activity" caption="Activity"  />                                      
-                                        <Column dataField="Due Date" dataType="date" />
+                                        <Column dataField="activity" caption="Activity"  ><RequiredRule /></Column>                                      
+                                        <Column dataField="dueDt" dataType="date" ><RequiredRule /></Column>
                                         
                                     </DataGrid>                       
                                 </div>
