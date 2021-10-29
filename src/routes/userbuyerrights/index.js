@@ -83,8 +83,8 @@ import Input from '@material-ui/core/Input';
 import Chip from '@material-ui/core/Chip';
 
 import Select1 from "react-dropdown-select";
-import { event } from 'jquery';
- 
+
+const $ = require('jquery');
 function TabContainer({ children }) {
     return (
        <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -156,7 +156,7 @@ function TabContainer({ children }) {
      };
 
      handleChangeradio = (event) => {
-        this.setState({ userlevel:  event.currentTarget.value });        
+        this.setState({ userlevel:  event.currentTarget.value,username:[],touser:[],buyerrightlists:[]});        
        
      }
 
@@ -205,15 +205,22 @@ function TabContainer({ children }) {
         
      }
 
-     handleChangecheckboxall() {
-        // const { buyerrightlists } = this.state;
-        // const allbuyerrights = [];
-        // for (const item of buyerrightlists) {   
-        //     item.notify='Y';        
-        //     allbuyerrights.push(item);
-        // }
+     handleChangecheckboxall(event) {
+         console.log(event.target.checked,'---------------------------------')
+        const { buyerrightlists } = this.state;
+        let allbuyerrights = [];
+        this.setState({ buyerrightlists: [] });
+        for (const item of buyerrightlists) { 
+            if(event.target.checked==true){
+                item.notify='Y';   
+            }  else{
+                item.notify='N';   
+            }
+                 
+            allbuyerrights.push(item);
+        }
 
-        // this.setState({ buyerrightlists: allbuyerrights });
+        this.setState({ buyerrightlists: allbuyerrights });
         // console.log(this.state.buyerrightlists,'nnnnnnnnnnnnnnnnnnn'); 
         
      }
@@ -228,43 +235,60 @@ function TabContainer({ children }) {
         this.setState({ name: event.target.value });
       };
       getBuyerusersave () {
+          console.log(this.state,'-----------------------')
         // const { buyerrightlists } = this.state;
-
-        //   console.log(buyerrightlists,'buyerrightlists')
-        let validation = 'false';
-          const dataset = [];
-          for (const item of this.state.buyerrightlists) {     
-              if(item.notify=="Y"){
-                
-                dataset.push({
-                    "userId": "1",
-                    "buyerCode": item.buyerCode,
-                    "buyerDivCode": item.buyerDivCode,
-                    "notify": "Y",
-                    "createdBy": "1",
-                    "hostname": ""
-                  });
-                   validation = 'true';
-              }
-            
-          }
-          
-
-            if(validation=='true'){
-                let data = {
-                    "UBInsertModel":dataset};
-                        api.post('UserBuyerRights/SaveUserBuyerRights',data) .then((response) => {
-                            
-                            NotificationManager.success('Added Sucessfully');
-                        })
-                        .catch(error => {
-                            // error handling
-                        })
-
-            } else{
-                NotificationManager.error('Atleast Choose 1 Buyer Rights');
-
+     
+        if((this.state.userlevel=="singleuser" && this.state.username.length>0) || (this.state.userlevel=="copyuser" && this.state.touser.length>0)){
+            let user_id =0;
+            if(this.state.userlevel=="singleuser"){
+                user_id = this.state.username[0].value;
             }
+
+            if(this.state.userlevel=="copyuser"){
+                user_id = this.state.touser[0].value;
+            }
+
+            let validation = 'false';
+            const dataset = [];
+            for (const item of this.state.buyerrightlists) {     
+                if(item.notify=="Y"){
+                  
+                  dataset.push({
+                      "userId": user_id,
+                      "buyerCode": item.buyerCode,
+                      "buyerDivCode": item.buyerDivCode,
+                      "notify": "Y",
+                      "createdBy": "1",
+                      "hostname": ""
+                    });
+                     validation = 'true';
+                }
+              
+            }
+            
+  
+              if(validation=='true'){
+                  let data = {
+                      "UBInsertModel":dataset};
+                          api.post('UserBuyerRights/SaveUserBuyerRights',data) .then((response) => {
+                              
+                              NotificationManager.success('Added Sucessfully');
+                          })
+                          .catch(error => {
+                              // error handling
+                          })
+  
+              } else{
+                  NotificationManager.error('Atleast Choose One User Buyer Rights');
+  
+              }
+
+        } else{
+            NotificationManager.error('Please Select One User');
+
+        }
+        //   console.log(buyerrightlists,'buyerrightlists')
+       
         
 
       }
@@ -279,18 +303,26 @@ function TabContainer({ children }) {
 				// error handling
 			})
 
-            api.get('UserBuyerRights/GetUserBuyerRightsList?UserID=1')
-			.then((response) => {
-                console.log(response.data.result.data,'response.data.result.data') 
-				this.setState({ buyerrightlists: response.data.result.data });
-			})
-			.catch(error => {
-				// error handling
-			})
+           
 
            
 
 	}
+    getbuyerrightlists(val){
+
+        this.setState({ username: val.username, buyerrightlists:[]});
+
+        api.get('UserBuyerRights/GetUserBuyerRightsList?UserID='+val.username[0].value)
+        .then((response) => {
+            console.log(response.data.result.data,'response.data.result.data') 
+            this.setState({ buyerrightlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+    }
+
     render() {
         const mainarray =[];
         // const [personName, setPersonName] = React.useState([]);
@@ -310,6 +342,8 @@ function TabContainer({ children }) {
             options1.push({value:item.buyerCode,label:item.buyerName});
         }
 
+
+        
        
         // const options1 = [
         //     {
@@ -330,7 +364,7 @@ function TabContainer({ children }) {
 
 
 
-        const { employeePayroll } = this.state;
+        const { employeePayroll,buyerrightlists } = this.state;
 		const { match } = this.props;
         const columns = ["Buyer Code", "BuyDivCode", "DivName"];
 
@@ -347,6 +381,36 @@ function TabContainer({ children }) {
                      }
            
         }
+
+let buyerrightlistshtml = null;
+buyerrightlistshtml= buyerrightlists.map((n,index) => {
+                                    
+            return (
+               <tr>
+                   {/* <Checkbox  onChange={this.handleChangecheckbox}  color="primary" value={`${n.buyerCode},${n.buyerDivCode}`} /> */}
+                  
+                   <td> {(() => {
+
+                       if (n.notify == 'Y') {
+                       return (  <Checkbox color="primary" onClick={(e) =>this.handleChangecheckbox(n,index)} checked />
+                        // <input type="checkbox" onClick={(e) =>this.handleChangecheckbox(n,index)} checked />
+                       )
+                       }
+                       if (n.notify != 'Y') {
+                           return (
+                            <Checkbox color="primary" onClick={(e) =>this.handleChangecheckbox(n,index)} />
+                                // <input type="checkbox" onClick={(e) =>this.handleChangecheckbox(n,index)} />
+                           )
+                           }
+                   })()}
+                 {/* {n.notify} */}
+                   </td>
+                   <td>{n.buyerCode}</td>
+                   <td>{n.buyerDivCode}</td>
+                   <td>{n.divName}</td>
+               </tr>
+            );
+        })
 
         // const data = [
         //     ["AT","ATLOS","ANN TAYOLR LOFT OUTLET STORES"],
@@ -467,9 +531,9 @@ function TabContainer({ children }) {
                                                 //   multi
                                                   createNewLabel="From User"
                                                 options={options1}
-                                                onChange={values => this.setState({ fromuser:values })}
+                                                onChange={values => this.getbuyerrightlists({ username:values })}
                                                 placeholder="From User"
-                                                values={this.state.fromuser}
+                                                values={this.state.username}
                                                 />
 
                                             {/* select_label_name mt-15 */}
@@ -545,7 +609,7 @@ function TabContainer({ children }) {
                                                 //   multi
                                                   createNewLabel="User ID"
                                                 options={options1}
-                                                onChange={values => this.setState({ username:values })}
+                                                onChange={values => this.getbuyerrightlists({ username:values })}
                                                 placeholder="User ID"
                                                 values={this.state.fromuser}
                                                 />
@@ -588,42 +652,15 @@ function TabContainer({ children }) {
 							
 						</div>
 
-                        
-         
-            
-                        {/* <AppBar position="static" color="default">
-                            <Tabs
-                                value={this.state.activeIndex}
-                                onChange={(e, value) => this.handleChange(e, value)}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                variant="fullWidth"
-                            >
-                                <Tab label="Item One" />
-                                <Tab label="Item Two" />
-                                <Tab label="Item Three" />
-                            </Tabs>
-                        </AppBar> */}
-                        
-                    </RctCollapsibleCard>
-                </div>
-					</AccordionDetails>
-				</Accordion>
-                </div>
-               <br/>
+                        <br/>
+                        {/* {this.state.buyerrightlists.length}
+                                        {this.state.buyerrightlists.length > 0 &&
+                        <h2>
+                        You have {this.state.buyerrightlists.length} 
+                        </h2>
+                    } */}
 
-                <div className="row ">   
-                {/* d-tbl-sp  */}
-                    <div className="col-sm-12 col-md-12 col-xl-12">
-                    <RctCollapsibleCard heading="" fullBlock>
-                        <Accordion>
-                            <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                            <div className="acc_title_font">
-                                <Typography>User Buyer Rights</Typography>
-                            </div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                            <div className="float-right tbl-filter-btn">
+                        {/* <div className="float-right tbl-filter-btn">
                                                 <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
                             
                                     <span className="MuiIconButton-label">
@@ -668,12 +705,13 @@ function TabContainer({ children }) {
                                             <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                                 <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                             </svg></span></button>
-                            </div>
+                            </div> */}
                             <table className="table">
                                 <thead className="thead-light">
                                     <th> 
                                         Actions
-                                    {/* <Checkbox color="primary" value="true" onClick={(e) =>this.handleChangecheckboxall()} /> */}
+                                        {/* <input type="checkbox" onClick={(e) =>this.handleChangecheckboxall(e)}/> */}
+                                    {/* <Checkbox color="primary" onClick={(e) =>this.handleChangecheckboxall(e)} /> */}
                                     {/* color="primary" checked={this.state.checkedA} onChange={this.handleChange('checkedA')} */}
                                     </th>
                                     <th>Buyer Code</th>
@@ -682,87 +720,33 @@ function TabContainer({ children }) {
                                     <th>DivName</th>
 
                                 </thead>
-                                <tbody>
-                                {this.state.buyerrightlists.map((n,index) => {
-                                    
-										 return (
-                                            <tr>
-                                                {/* <Checkbox  onChange={this.handleChangecheckbox}  color="primary" value={`${n.buyerCode},${n.buyerDivCode}`} /> */}
-                                               
-                                                <td> {(() => {
-                           
-                                                    if (n.notify == 'Y') {
-                                                    return ( <Checkbox onClick={(e) =>this.handleChangecheckbox(n,index)}   color="primary" checked />
-                                                    )
-                                                    }
-                                                    if (n.notify != 'Y') {
-                                                        return ( <Checkbox onClick={(e) =>this.handleChangecheckbox(n,index)}   color="primary"  />
-                                                        )
-                                                        }
-                                                })()}
-                                              {/* {n.notify} */}
-                                                </td>
-                                                <td>{n.buyerCode}</td>
-                                                <td>{n.buyerDivCode}</td>
-                                                <td>{n.divName}</td>
-                                            </tr>
-										 );
-									 })}
-
-                                
-                                </tbody>
+                                <tbody>{buyerrightlistshtml}</tbody>
                             </table>
-                            {/* <div className="row tb-pro mt-10">
-                                <div className="w-100">
-                                    <div className="w-25 float-left">
-                                        <div className="form-group">
-                                            <div className="w-50 float-left text-center">
-                                                <label for="exampleFormControlSelect1">Rows per page</label>
-                                            </div>
-                                            <div className="w-25 float-left">
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>50</option>
-                                                    <option>100</option>
-                                                    <option>150</option>
-                                                    <option>200</option>
-                                                    <option>250</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="w-25 float-right">
-                                        <nav aria-label="Page navigation example">
-                                            <ul className="pagination justify-content-end">
-                                                <li className="page-item ">
-                                               
-                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
-                                                </li>
-                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div> */}
+
+                        
          
-                                {/* <RctCollapsibleCard heading="" fullBlock> */}
-                                {/* <MUIDataTable
-                                    // title={"Category List"}
-                                    data={data}
-                                    columns={columns}
-                                    options={options}
-                                /> */}
-                                {/* </RctCollapsibleCard> */}
-                            </AccordionDetails>
-                        </Accordion>
-                        </RctCollapsibleCard>
-					</div>
+            
+                        {/* <AppBar position="static" color="default">
+                            <Tabs
+                                value={this.state.activeIndex}
+                                onChange={(e, value) => this.handleChange(e, value)}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                variant="fullWidth"
+                            >
+                                <Tab label="Item One" />
+                                <Tab label="Item Two" />
+                                <Tab label="Item Three" />
+                            </Tabs>
+                        </AppBar> */}
+                        
+                    </RctCollapsibleCard>
                 </div>
+					</AccordionDetails>
+				</Accordion>
+                </div>
+               
+               
             </div>
    );
  };

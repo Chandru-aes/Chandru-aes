@@ -123,6 +123,7 @@ function TabContainer({ children }) {
         userlevel: '',        
         BuyerValue:[],
         BuyerdivisionValue:[],
+        forecastinglists:[]
        // QtyBreakUpList:[]
 	}
     constructor(props) {
@@ -138,7 +139,8 @@ function TabContainer({ children }) {
             forecastType:[],
             QtyBreakUpList:[],
             productTypes:[],
-            activityList:[]
+            activityList:[],
+            forecastinglists:[]
         };
         this.allowDeleting = this.allowDeleting.bind(this);
         this.onRowValidating = this.onRowValidating.bind(this);
@@ -183,6 +185,13 @@ function TabContainer({ children }) {
             api.get('ProductType/GetProductTypeDropDown')
             .then((response) => {            
                 this.setState({ productTypes: response.data.result.data });
+            })
+
+
+            api.get('ForecastEntity/GetForecastHeaderList')
+            .then((response) => {  
+                // console.log(response.data.data,'response.data.result.data')          
+                this.setState({ forecastinglists: response.data.data });
             })
             
         }
@@ -325,6 +334,7 @@ function TabContainer({ children }) {
     render() {
          
         const { employeePayroll } = this.state;
+        
 		const { match } = this.props;
         const { selectedDate } = this.state;
         //const columns = ["Buyer Code", "BuyDivCode", "DivName"];
@@ -728,7 +738,7 @@ function TabContainer({ children }) {
                             <th className="">Activity</th>
                         </thead>
                         <tbody>
-                            {data.map(n => {                                    
+                            {this.state.forecastinglists.map((n,index) => {                                    
                                 return (
                             <tr>                                               
                                 <td className="text-center">
@@ -741,15 +751,15 @@ function TabContainer({ children }) {
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
                                 </td>
-                                <td className="text-center"> {n[0]}</td>
-                                <td className="text-center">{n[1]}</td>
-                                <td>{n[2]}</td>
-                                <td>{n[3]}</td>
-                                <td>{n[4]}</td>
-                                <td>{n[5]}</td>
-                                <td>{n[6]}</td>
-                                <td>{n[7]}</td>
-                                <td>{n[8]}</td>
+                                <td className="text-center"> {n.buyCode}</td>
+                                <td className="text-center">{n.buyDivcode}</td>
+                                <td>{n.seasonCode}</td>
+                                <td>{n.seasonYear}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
                             </tr>
 										 );
 									 })}
