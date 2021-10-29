@@ -1109,8 +1109,17 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 			table tr td button:hover{background: #ececec;
 				border-radius: 50px;width: 25px;
 				 }
-				table tr td button{width: 25px;
-					height: 25px;transition:all .5s ease; -moz-transition:all .5s ease; -webkit-transition:all .5s ease; -o-transition:all .5s ease; }
+			table tr td button{width: 25px;
+				height: 25px;transition:all .5s ease; -moz-transition:all .5s ease; -webkit-transition:all .5s ease; -o-transition:all .5s ease; }
+			.productivity-grid .MuiPaper-root.MuiAccordion-root.mb-30.panel.MuiAccordion-rounded.MuiPaper-elevation1.MuiPaper-rounded{
+				border: 0.5px solid #dad4d4;
+				width: 97%;
+    			margin: 0 auto;
+			}
+			.pd-bottom-10{padding-bottom: 10px !important;}
+			.productivity-grid .MuiButtonBase-root.MuiAccordionSummary-root.m-0.panel-heading.Mui-expanded{
+				border-bottom: 0.5px solid #dad4d4;
+			}
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }

@@ -190,7 +190,7 @@ function TabContainer({ children }) {
                 "menuId": item.menuId,
                 "menuRights": item.menuRights,
                 "columnRights": this.state.textInputValues[this.state.menuRightsList.indexOf(item)],
-                "unitCode": this.state.unitcodename[0].value,
+                "unitCode": 'ALL',//this.state.unitcodename[0].value,
                 "createdBy": "1",
                 "modifyBy": "1",
                 "modifyDt": "2021-10-10",
@@ -266,7 +266,7 @@ function TabContainer({ children }) {
         const RoleID = 50;//this.state.roletype[0].value;
         const AppName = this.state.modulename[0].value;
         const LocCode = this.state.location[0].value;
-        const UnitCode = this.state.unitcodename[0].value;
+        const UnitCode = 'ALL';//this.state.unitcodename[0].value;
         api.get('RoleMenuRights/GeRoleMenuRightsList?RoleId='+RoleID+'&AppName='+AppName+'&LocCode='+LocCode+'&UnitCode='+UnitCode+'')
         .then((response) => {            
             this.setState({ menuRightsList: response.data.result.data });
@@ -489,7 +489,7 @@ function TabContainer({ children }) {
                                                     </td>
                                                     <td>
                                                         <div className="form-group">                                            
-                                                            <input type="email" className="form-control" value={n.columnRights} onChange={this.onNameEdited.bind(this, index)}/>                                        
+                                                            <input type="text" className="form-control" defaultValue={n.columnRights} onChange={this.onNameEdited.bind(this, index)}/>                                        
                                                         </div>
                                                     </td>
                                                 </tr>

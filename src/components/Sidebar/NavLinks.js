@@ -603,6 +603,11 @@ export default {
                   "new_item": false,	
                   "menu_title": "Request Status"	
                },
+               {	
+                  "path": "/app/pre-production/production-request",	
+                  "new_item": false,	
+                  "menu_title": "Production Request"	
+               },
               
             ]
          }
