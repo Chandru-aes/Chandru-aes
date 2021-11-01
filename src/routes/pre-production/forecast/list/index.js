@@ -187,7 +187,7 @@ function TabContainer({ children }) {
                 this.setState({ productTypes: response.data.result.data });
             })
 
-            api.get('ForecastEntity/GetForecastHeaderList')
+            api.get('ForecastQtyDetailEntity/GetForecastGrid')
             .then((response) => {  
                 // console.log(response.data.data,'response.data.result.data')          
                 this.setState({ forecastinglists: response.data.data });
@@ -749,15 +749,15 @@ function TabContainer({ children }) {
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
                                 </td>
-                                <td className="text-center"> {n.buyCode}</td>
-                                <td className="text-center">{n.buyDivcode}</td>
-                                <td>{n.seasonCode}</td>
+                                <td className="text-center"> {n.buyerName}</td>
+                                <td className="text-center">{n.buyerDivName}</td>
+                                <td>{n.seasonName}</td>
                                 <td>{n.seasonYear}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
+                                <td>{n.locName}</td>
+                                <td>{n.forecastQty}</td>
+                                <td>{n.projectionQty}</td>
+                                <td>{n.confirmedQty}</td>
+                                <td>{n.activity}</td>
                             </tr>
 										 );
 									 })}
