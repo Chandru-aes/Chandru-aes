@@ -1,3 +1,7 @@
+
+ 
+
+ 
 /**
  * Basic Table
  */
@@ -44,7 +48,11 @@
  
  import moment from 'moment';
  import DateFnsUtils from '@date-io/date-fns';
- 
+ import Dialog from '@material-ui/core/Dialog';
+ import DialogActions from '@material-ui/core/DialogActions';
+ import DialogContent from '@material-ui/core/DialogContent';
+ import DialogContentText from '@material-ui/core/DialogContentText';
+ import DialogTitle from '@material-ui/core/DialogTitle';
  // const styles = {
  // 	checked: {
  // 		color: pink[500],
@@ -92,6 +100,10 @@
          }
      state = {
         activeIndex: 0,
+        open: false,
+        cloneopen: false,
+        ropen: false,
+        tpopen: false,
         selectedDate: moment(),
         addNewUserModal: false,
         checkedA: true,
@@ -105,7 +117,7 @@
         this.setState({ addNewUserModal: true });
     }
      componentDidMount() {
-        
+        document.body.classList.add('med-pop-up');
         $(document).on('click', '.edit', function() {
             $(this).parent().siblings('td.data').each(function() {
               var content = $(this).html();
@@ -150,6 +162,13 @@
         console.log("name:: ", name);
         this.setState({ [name]: checked });
     };
+    rhandleClickOpen = () => {
+        this.setState({ ropen: true });
+     };
+
+     rhandleClose = () => {
+        this.setState({ ropen: false });
+     };
      render() {
          const { employeePayroll } = this.state;
          const { match } = this.props;
@@ -753,6 +772,163 @@
  <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
  </div>
 </div>
+<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+<div className="form-group mt-15">  
+<Button variant="contained" className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-0 text-white btn-icon b-md" onClick={this.rhandleClickOpen}>Additional tab</Button>
+</div>
+</div>
+
+
+<div classname="med-popup" >
+                                <Dialog open={this.state.ropen} onClose={this.rhandleClose} aria-labelledby="form-dialog-title">
+                                    <DialogTitle id="form-dialog-title">Additional tab</DialogTitle>
+                                    <DialogContent>                                   
+                                        <div className="col border pb-10">                       
+                                            <div className="row no-f-mb">
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ <div className="form-group">
+ <FormControl fullWidth>
+     <InputLabel htmlFor="age-simple">Department</InputLabel>
+     <Select value={this.state.age} onChange={this.handleChange}
+     inputProps={{ name: 'age', id: 'age-simple', }}>
+     <MenuItem value=""><em>None</em></MenuItem>
+     <MenuItem value={10}>Autumn</MenuItem>
+     <MenuItem value={20}>Summer</MenuItem>
+     <MenuItem value={30}>Winter</MenuItem>
+     </Select>
+ </FormControl>
+ </div>
+ </div>         
+ <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ <div className="form-group">
+ <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+ </div>
+ </div>
+ <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+ <div className="form-group">
+ <div className="w-100 p-0 mt-15">
+   <label for="formFile" class="form-label float-left w-20 p-10">Add File</label>
+   <input class="form-control w-80 float-left" type="file" id="formFile"/>
+ </div>
+ </div>
+ </div>
+ <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ <div className="form-group">
+ <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
+ </div>
+ </div>  
+ <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+     <div className="row">
+<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+
+<FormControlLabel color="primary" value="sample" control={<Radio />} label="Pass" />
+
+
+</RadioGroup>
+
+<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+
+<FormControlLabel color="primary" value="sample" control={<Radio />} label="Fail" />
+
+
+</RadioGroup>
+</div>
+</div>      
+<div className="clearfix"></div>   
+<div className="table-responsive mt-10">
+                      <div className="float-right mr-5">
+                         <div className="form-group">
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         </div>
+                     </div>
+ 
+                             <table className="table mt-10 data w-100 float-left">
+                                 <thead>
+                                     <tr>
+                                     <th className="">Department</th>
+                                     <th className="">    No of Pieces </th>
+                                     <th className="">    Pass</th>
+                                     <th className="">    Fail </th>
+                                     <th className="">Date</th>
+                                     <th className="">Time</th>
+                                      
+                                     <th className="">    Remarks </th>
+                                     
+
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <tr>
+                                   
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
+                                     
+                                         
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
+                                    
+                                         
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                 </tbody>
+                                 
+                                 </table>
+                                 <div className="clearfix"></div>
+                                 <div className="w-50 float-right">
+                                 <div className="w-25 float-left">
+                                 <label className="mt-5">Rows per page: </label>
+                    </div>
+                    <div className="w-15 float-left">
+                    <select class="form-control">
+                                                            <option>10</option> 
+                                                            <option>20</option> 
+                                                            <option>30</option> 
+                                                            <option>40</option> 
+                                                        </select>
+        </div>
+        <div className="w-33 float-left text-center pl-30">
+                        <label className="mt-5">1-10 of 50</label>
+                        </div>
+                        <div className="float-right">
+                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
+                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
+                        </div></div>
+                             </div>                         
+                                            </div>
+                                        </div>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button variant="contained" onClick={this.rhandleClose} color="primary" className="text-white">
+                                            Cancel
+                                        </Button>
+                                        <Button variant="contained" onClick={this.rhandleClose} className="btn-success text-white">
+                                            Ok
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                                </div>
 </div>
 
 

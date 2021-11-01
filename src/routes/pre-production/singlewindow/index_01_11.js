@@ -480,18 +480,9 @@ import Radio from '@material-ui/core/Radio';
                                     </DialogActions>
                                 </Dialog>
 
-               
-                <div className="w-100 border p-10 no-f-mb mt-5">
-                <div className="row">
-
-                <div className="w-25 float-left">
-                <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                <div className="row p-20">
+                <div className="w-25 border p-10 no-f-mb">
                 <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
-                </div>
-                </div>
-                <div className="w-75 float-left pr-15">
-                <div className="row">  
-                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Buyer</InputLabel>
@@ -504,8 +495,7 @@ import Radio from '@material-ui/core/Radio';
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
                         <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Div</InputLabel>
@@ -518,8 +508,7 @@ import Radio from '@material-ui/core/Radio';
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ 
                         <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Season</InputLabel>
@@ -532,8 +521,7 @@ import Radio from '@material-ui/core/Radio';
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ 
                         <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Year</InputLabel>
@@ -546,8 +534,7 @@ import Radio from '@material-ui/core/Radio';
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ 
                         <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Style No</InputLabel>
@@ -560,8 +547,7 @@ import Radio from '@material-ui/core/Radio';
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+ 
                         <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Req no/ Date</InputLabel>
@@ -574,16 +560,14 @@ import Radio from '@material-ui/core/Radio';
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <div className="w-100 float-left m-btop-10">
+                            <div className="w-75 float-left m-btop-10">
                                 <FormControl>
-                                    <div class="item cursor-pointer mt-5"  onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
+                                    <div class="item cursor-pointer"  onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
                                     <Dialog open={this.state.tpopen} onClose={this.CloseTechPack} aria-labelledby="form-dialog-title">
                                     <DialogTitle id="form-dialog-title">Tech Pack</DialogTitle>
                                     <DialogContent>                                   
-                                        <div className="col border pb-10">                       
+                                        <div className="col border">                       
                                             <div className="row no-f-mb">
                                                
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -611,7 +595,7 @@ import Radio from '@material-ui/core/Radio';
                                                         <TextField id="Buyer" fullWidth label="Version Number" placeholder="Version No"/>
                                                     </div>
                                                 </div> 
-                                                <div className="col-lg-12 col-md-6 col-sm-6 col-xs-12 mt-15">
+                                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 mt-15">
                                                     <div className="form-group">
                                                         <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
                                                     </div>
@@ -631,24 +615,20 @@ import Radio from '@material-ui/core/Radio';
                                 </Dialog>
                                 </FormControl>
                             </div>
-                        </div> </div>
- <div className="clearfix "></div>
- <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 mt-5">
+                        </div>
+ <div className="clearfix"></div>
  <div className="w-100 p-0 mt-5">
    <label for="formFile" class="form-label float-left w-20 p-10">FIS</label>
    <input class="form-control w-80 float-left" type="file" id="formFile"/>
- </div></div>
- 
+ </div>
  <div className="clearfix"></div>
- <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 mt-5">
- <div className="w-100 p-0 mt-5 ">
-   <label for="formFile" class="form-label float-left w-20 p-10">BLOCK</label>
-   <input class="form-control w-80 float-left" type="file" id="formFile"/>
+ <div className="w-100 p-0 mt-5">
+   <label for="formFile" class="form-label float-left w-30 p-10">BLOCK</label>
+   <input class="form-control w-70 float-left" type="file" id="formFile"/>
  </div>
- </div>
-                </div></div></div>
+                </div>
                 
-                <div className="w-100 col border mt-10 pb-10">
+                <div className="w-75 col border">
                 <div className="row no-f-mb">
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div className="form-group">
@@ -777,10 +757,9 @@ import Radio from '@material-ui/core/Radio';
                      </div>
                      </div> */}
                      <div className="row">
-                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="form-group mt-15">
-                                <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>Reference version <i class="zmdi zmdi-arrow-right-top"></i></button>
-                                {/* <Button variant="contained" className="btn-secondary text-white btn-block" >Reference version</Button> */}
+                                <Button variant="contained" className="btn-secondary text-white btn-block" onClick={this.rhandleClickOpen}>Reference version</Button>
                                 <Dialog open={this.state.ropen} onClose={this.rhandleClose} aria-labelledby="form-dialog-title">
                                     <DialogTitle id="form-dialog-title">Reference version</DialogTitle>
                                     <DialogContent>                                   
@@ -865,7 +844,7 @@ import Radio from '@material-ui/core/Radio';
                             </FormControl>
                         </div>
                     </div> */}
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group">
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="age-simple">Body grain</InputLabel>
@@ -879,7 +858,7 @@ import Radio from '@material-ui/core/Radio';
                             </FormControl>
                         </div>
                     </div>
-                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                      <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple"> Nature of Job</InputLabel>
@@ -893,7 +872,7 @@ import Radio from '@material-ui/core/Radio';
                         </FormControl>
                         </div>
                     </div>
-            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
             <div className="form-group">
                 <FormControl fullWidth>
                     <InputLabel htmlFor="age-simple">Add on info</InputLabel>
@@ -907,12 +886,9 @@ import Radio from '@material-ui/core/Radio';
                 </FormControl>
             </div>
             </div>
-            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="form-group mt-15">
-
-                            <button type="button" class="btn btn-outline-primary" onClick={this.handleClickOpen}>Pattern for <i class="zmdi zmdi-arrow-right-top"></i></button>
-
-                                {/* <Button variant="contained" className="btn-secondary text-white btn-block" >Pattern for</Button> */}
+                                <Button variant="contained" className="btn-secondary text-white btn-block" onClick={this.handleClickOpen}>Pattern for</Button>
                                 <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                                     <DialogTitle id="form-dialog-title">Pattern for</DialogTitle>
                                     <DialogContent>                                   

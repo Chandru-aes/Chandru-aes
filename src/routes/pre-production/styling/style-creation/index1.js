@@ -54,8 +54,6 @@ import { DateTimePicker} from '@material-ui/pickers';
     
  // };
  import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers';
- import Select1 from "react-dropdown-select";
-
  const $ = require('jquery');
  function TabContainer({ children }) {
     return (
@@ -102,30 +100,6 @@ import { DateTimePicker} from '@material-ui/pickers';
         open: false,
         tpopen: false,
         selectedDate: new Date(),
-        buyerlists:[],
-        buyerdivlists:[],
-        yearlists:[],
-        GarDyeTypelists:[],
-        OrderTypelists:[],
-        Washtypelists:[],
-        embtypelists:[],
-        printtypelists:[],
-        FashionGRPlists:[],
-        locationlists:[],
-        sizelists:[],
-        size:[],
-        location:[],
-        FashionGRP:[],
-        buyer:[],
-        buyerdiv:[],
-        year:[],
-        GarDyeType:[],
-        OrderType:[],
-        Washtype:[],
-        embtype:[],
-        printtype:[],
-
-
      }
      handleDateChange = (date) => {
 		this.setState({ selectedDate: date });
@@ -215,7 +189,7 @@ import { DateTimePicker} from '@material-ui/pickers';
         api.get('BuyerDivision/GetBuyerDivisionList')
         .then((response) => {
             
-            this.setState({ buyerdivlists: response.data.result.data });
+            this.setState({ buyerlists: response.data.result.data });
         })
         .catch(error => {
             // error handling
@@ -223,90 +197,23 @@ import { DateTimePicker} from '@material-ui/pickers';
 
 
 
-        api.get('Miscellaneous/GetMiscellaneousList?MType=OrderType')
+        api.get('Miscellaneous/GetMiscellaneousList?MType=Module')
         .then((response) => {
             
-            this.setState({ OrderTypelists: response.data.result.data });
+            this.setState({ modulelists: response.data.result.data });
         })
         .catch(error => {
             // error handling
         })
 
-        api.get('Miscellaneous/GetMiscellaneousList?MType=Washtype')
+        api.get('Miscellaneous/GetMiscellaneousList?MType=Menutype')
         .then((response) => {
             
-            this.setState({ Washtypelists: response.data.result.data });
+            this.setState({ menutypelists: response.data.result.data });
         })
         .catch(error => {
             // error handling
         })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=FashionGRP')
-        .then((response) => {
-            
-            this.setState({ FashionGRPlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Location/GetLocationList')
-        .then((response) => {
-            
-            this.setState({ locationlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Size/GetSizeList')
-        .then((response) => {
-            
-            this.setState({ sizelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=printtype')
-        .then((response) => {
-            
-            this.setState({ printtypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=embtype')
-        .then((response) => {
-            
-            this.setState({ embtypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=GarDyeType')
-        .then((response) => {
-            
-            this.setState({ GarDyeTypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=year')
-        .then((response) => {
-            
-            this.setState({ yearlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-
       }
      render() {
          const { employeePayroll } = this.state;
@@ -342,69 +249,6 @@ import { DateTimePicker} from '@material-ui/pickers';
            const isActive = this.state.isActive;
            const isActiveOrder = this.state.isActiveOrder;
            const { selectedDate } = this.state;
-
-
-           const buyeroptions = [];
-           for (const item of this.state.buyerlists) {           
-               buyeroptions.push({value:item.buyerCode,label:item.buyerName});
-           }
-
-           const buyerdivoptions = [];
-           for (const item of this.state.buyerdivlists) {           
-               buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
-           }
-
-           const yearoptions = [];
-           for (const item of this.state.yearlists) {           
-               yearoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const GarDyeTypeoptions = [];
-           for (const item of this.state.GarDyeTypelists) {           
-               GarDyeTypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-
-           const OrderTypeoptions = [];
-           for (const item of this.state.OrderTypelists) {           
-               OrderTypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const Washtypeoptions = [];
-           for (const item of this.state.Washtypelists) {           
-               Washtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const embtypeoptions = [];
-           for (const item of this.state.embtypelists) {           
-               embtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const printtypeoptions = [];
-           for (const item of this.state.printtypelists) {           
-               printtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const FashionGRPoptions = [];
-           for (const item of this.state.FashionGRPlists) {           
-               FashionGRPoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const locationoptions = [];
-           for (const item of this.state.locationlists) {           
-               locationoptions.push({value:item.locCode,label:item.locName});
-           }
-
-           const sizeoptions = [];
-           for (const item of this.state.sizelists) {           
-               sizeoptions.push({value:item.sizecode,label:item.sizeIndex});
-           }
-
-
-           
-           
-
-           
           return (
               
              <RctCollapsibleCard heading="Style Create">
@@ -587,35 +431,23 @@ import { DateTimePicker} from '@material-ui/pickers';
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 ft-lft mt-15 ">
-                                <div className="form-group">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                          multi
-                                                        createNewLabel="Size"
-                                                        options={sizeoptions}
-                                                        onChange={values => this.setState({ size:values })}
-                                                        placeholder="Size"
-                                                        values={this.state.size}
-                                                        />
+                                    <div className="form-group">                                  
+                                        <select className="form-control select2">
+                                            <option>Size</option> 
+                                            <option>Levis</option> 
+                                            <option>Allen</option> 
+                                            <option>Solly</option> 
+                                        </select> 
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 ft-lft mt-15 ">
-                                <div className="form-group">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Destination"
-                                                        options={locationoptions}
-                                                        onChange={values => this.setState({ location:values })}
-                                                        placeholder="Destination"
-                                                        values={this.state.location}
-                                                        />                          
-                                        {/* <select className="form-control select2">
+                                    <div className="form-group">                                  
+                                        <select className="form-control select2">
                                             <option>Destination</option> 
                                             <option>Levis</option> 
                                             <option>Allen</option> 
                                             <option>Solly</option> 
-                                        </select>  */}
+                                        </select> 
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0 mt-15 ft-lft">
@@ -764,22 +596,13 @@ import { DateTimePicker} from '@material-ui/pickers';
                             <option>Solly</option> 
                         </select> 
                     </div>
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Location"
-                                                        options={locationoptions}
-                                                        onChange={values => this.setState({ location:values })}
-                                                        placeholder="Location"
-                                                        values={this.state.location}
-                                                        />
-                        {/* <select className="form-control select2 mt-15">
+                    <div className="form-group">
+                        <select className="form-control select2 mt-15">
                             <option>Location</option> 
                             <option>India</option> 
                             <option>Australia</option> 
                             <option>Germany</option> 
-                        </select> */}
+                        </select>
                     </div>
                     <div className="form-group">
                         <TextField id="Buyer" fullWidth label="Unit" placeholder="Unit"/>
@@ -885,37 +708,23 @@ import { DateTimePicker} from '@material-ui/pickers';
                         
                     <div className="row no-f-mb">
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                            <Select1
-                                                dropdownPosition="auto"
-                                                //   multi
-                                                  createNewLabel="Buyer"
-                                                options={buyeroptions}
-                                                onChange={values => this.setState({ buyer:values })}
-                                                placeholder="Buyer"
-                                                values={this.state.buyer}
-                                                />
-                                
-                                {/* <select className="form-control select2 mt-15">
+                            <div className="form-group">
+                                <select className="form-control select2 mt-15">
                                     <option>Buyer</option> 
                                     <option>Levis</option> 
                                     <option>Allen</option> 
                                     <option>Solly</option> 
-                                </select>  */}
+                                </select> 
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                            <Select1
-                                                dropdownPosition="auto"
-                                                //   multi
-                                                  createNewLabel="Buyer Division"
-                                                options={buyerdivoptions}
-                                                onChange={values => this.setState({ buyerdiv:values })}
-                                                placeholder="Buyer Division"
-                                                values={this.state.buyerdiv}
-                                                />
-                               
+                            <div className="form-group">
+                                <select className="form-control select2 mt-15">
+                                    <option>Buyer Division</option> 
+                                    <option>Levis</option> 
+                                    <option>Allen</option> 
+                                    <option>Solly</option> 
+                                </select>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -930,17 +739,13 @@ import { DateTimePicker} from '@material-ui/pickers';
                         </div>
  
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                            <Select1
-                                                dropdownPosition="auto"
-                                                //   multi
-                                                  createNewLabel="Year"
-                                                options={yearoptions}
-                                                onChange={values => this.setState({ year:values })}
-                                                placeholder="Year"
-                                                values={this.state.year}
-                                                />
-                               
+                            <div className="form-group">
+                                <select className="form-control select2 mt-15">
+                                    <option>Year</option> 
+                                    <option>2021</option> 
+                                    <option>2020</option> 
+                                    <option>2019</option> 
+                                </select>
                             </div>
                         </div> 
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -952,29 +757,23 @@ import { DateTimePicker} from '@material-ui/pickers';
                                         <div className="col border">                       
                                             <div className="row no-f-mb">
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Buyer"
-                                                        options={buyeroptions}
-                                                        onChange={values => this.setState({ buyer:values })}
-                                                        placeholder="Buyer"
-                                                        values={this.state.buyer}
-                                                        />
+                                                    <div className="form-group">
+                                                        <select className="form-control select2 mt-15">
+                                                            <option>Buyer</option> 
+                                                            <option>Levis</option> 
+                                                            <option>Allen</option> 
+                                                            <option>Solly</option> 
+                                                        </select> 
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Buyer Division"
-                                                        options={buyerdivoptions}
-                                                        onChange={values => this.setState({ buyerdiv:values })}
-                                                        placeholder="Buyer Division"
-                                                        values={this.state.buyerdiv}
-                                                        />
+                                                    <div className="form-group">
+                                                        <select className="form-control select2 mt-15">
+                                                            <option>Buyer Division</option> 
+                                                            <option>Levis</option> 
+                                                            <option>Allen</option> 
+                                                            <option>Solly</option> 
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -988,16 +787,13 @@ import { DateTimePicker} from '@material-ui/pickers';
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Year"
-                                                        options={yearoptions}
-                                                        onChange={values => this.setState({ year:values })}
-                                                        placeholder="Year"
-                                                        values={this.state.year}
-                                                        />
+                                                    <div className="form-group">
+                                                        <select className="form-control select2 mt-15">
+                                                            <option>Year</option> 
+                                                            <option>2021</option> 
+                                                            <option>2020</option> 
+                                                            <option>2019</option> 
+                                                        </select>
                                                     </div>
                                                 </div> 
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1020,17 +816,13 @@ import { DateTimePicker} from '@material-ui/pickers';
                             </div>
                         </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Order Category"
-                                                        options={OrderTypeoptions}
-                                                        onChange={values => this.setState({ OrderType:values })}
-                                                        placeholder="Order Category"
-                                                        values={this.state.OrderType}
-                                                        />
-                          
+                        <div className="form-group">
+                            <select className="form-control select2 mt-15">
+                                <option>Order Category</option> 
+                                <option>Category 1</option> 
+                                <option>Category 2</option> 
+                                <option>Category 3</option> 
+                            </select>
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1057,17 +849,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                     </div> 
  
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                         {/* select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Product Type"
-                                                        options={OrderTypeoptions}
-                                                        onChange={values => this.setState({ OrderType:values })}
-                                                        placeholder="Product Type"
-                                                        values={this.state.OrderType}
-                                                        /> */}
+                        <div className="form-group">
                             <select className="form-control select2 mt-15">
                                 <option>Product Type</option> 
                                 <option>Product 1</option> 
@@ -1088,17 +870,13 @@ import { DateTimePicker} from '@material-ui/pickers';
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Fashion Group"
-                                                        options={FashionGRPoptions}
-                                                        onChange={values => this.setState({ FashionGRP:values })}
-                                                        placeholder="Fashion Group"
-                                                        values={this.state.FashionGRP}
-                                                        />
-                          
+                        <div className="form-group">
+                            <select className="form-control select2 mt-15">
+                                <option>Fashion Group</option> 
+                                <option>Group 1</option> 
+                                <option>Group 2</option> 
+                                <option>Group 3</option> 
+                            </select>
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1113,64 +891,33 @@ import { DateTimePicker} from '@material-ui/pickers';
                     </div>        
                   
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Print Type"
-                                                        options={printtypeoptions}
-                                                        onChange={values => this.setState({ printtype:values })}
-                                                        placeholder="Print Type"
-                                                        values={this.state.printtype}
-                                                        />
-                               
-                        </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Garment dye type"
-                                                        options={GarDyeTypeoptions}
-                                                        onChange={values => this.setState({ GarDyeType:values })}
-                                                        placeholder="Garment dye type"
-                                                        values={this.state.GarDyeType}
-                                                        />
-                               
-                        </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Wash Type"
-                                                        options={Washtypeoptions}
-                                                        onChange={values => this.setState({ Washtype:values })}
-                                                        placeholder="Wash Type"
-                                                        values={this.state.Washtype}
-                                                        />
-                               
-                             
+                        <div className="form-group">
+                                <select className="form-control select2 mt-15">
+                                    <option>print Type</option> 
+                                    <option>Levis</option> 
+                                    <option>Allen</option> 
+                                    <option>Solly</option> 
+                                </select>
                         </div>
                     </div>
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Embroidery Type"
-                                                        options={embtypeoptions}
-                                                        onChange={values => this.setState({ embtype:values })}
-                                                        placeholder="Embroidery Type"
-                                                        values={this.state.embtype}
-                                                        />
-                               
-                             
-                               
+                        <div className="form-group">
+                                <select className="form-control select2 mt-15">
+                                    <option>Wash Type</option> 
+                                    <option>Levis</option> 
+                                    <option>Allen</option> 
+                                    <option>Solly</option> 
+                                </select>
+                        </div>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                         <div className="form-group">
+                                <select className="form-control select2 mt-15">
+                                    <option>Embroidery Type</option> 
+                                    <option>Levis</option> 
+                                    <option>Allen</option> 
+                                    <option>Solly</option> 
+                                </select>
                         </div>
                     </div>
  
