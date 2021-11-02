@@ -99,12 +99,13 @@ import DataGrid, {
   
   import ArrayStore from 'devextreme/data/array_store';
   import DataSource from 'devextreme/data/data_source';
-  import { employees, states,product_types,sub_product_types,activityItems } from './data.js';
+  import { employees, states,product_types,sub_product_types,activityItems,saveData } from './data.js';
   import 'devextreme/dist/css/dx.light.css';
 
   const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 
   const BuyerDivisionOptions=[];
+
 /****/
 function TabContainer({ children }) {
     return (
@@ -123,7 +124,9 @@ function TabContainer({ children }) {
         userlevel: '',        
         BuyerValue:[],
         BuyerdivisionValue:[],
-        forecastinglists:[]
+        forecastinglists:[],
+        yearlists:[],
+        seasonlists:[]
        // QtyBreakUpList:[]
 	}
     constructor(props) {
@@ -137,24 +140,327 @@ function TabContainer({ children }) {
             BuyerDivisionList:[],
             LocationItem:[],
             forecastType:[],
+            forecastItem:[],
             QtyBreakUpList:[],
             productTypes:[],
+            subproductTypes:[],
             activityList:[],
-            forecastinglists:[]
+            forecastinglists:[],
+            yearlists:[],
+            seasonlists:[],
+            fcQtyDetailInsertEntityModel:[],
+            fcActivityInsertEntityModel:[],
+            saveQtyDetailItems:{},
+            saveActivityItems:{},
+            deleteQtyDetailItems:{},
+            activityName:''
         };
         this.allowDeleting = this.allowDeleting.bind(this);
         this.onRowValidating = this.onRowValidating.bind(this);
         this.onEditorPreparing = this.onEditorPreparing.bind(this);
         this.isCloneIconVisible = this.isCloneIconVisible.bind(this);
         this.cloneIconClick = this.cloneIconClick.bind(this);
+        this.onRowUpdated = this.onRowUpdated.bind(this);
+        this.onRowUpdatedActiv= this.onRowUpdatedActiv.bind(this);
       }
-
+      handleChangesingledropdown = name => event => {
+		this.setState({ [name]: event.target.value });
+	};
+    
       // get employee payrols
-        SaveForecast(){
+        SaveForecast(type){
             if(this.state.QtyBreakUpList.length==0 || this.state.activityList.length==0){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
+            }else{
+                if(type=='qty'){
+                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response) => {
+                    
+                        NotificationManager.success('Added Sucessfully');
+                    })
+                    .catch(error => {
+                        // error handling
+                    })
+                }else{
+                    if(this.state.activityName !='' && this.state.selectedDate!=''){
+                        this.state.saveActivityItems =  
+                        { 
+                            "hid":0,
+                            "entityID": "st",
+                            "buyCode": this.state.BuyerDivisionList[0].buyerCode,
+                            "buyDivcode": this.state.BuyerdivisionValue[0].value,
+                            "loccode": this.state.location[0].value,
+                            "seasonCode": this.state.season[0].value,
+                            "seasonYear": this.state.year[0].value,
+                            "fCtype": this.state.forecastItem[0].value,
+                            "createdBy": "1",
+                            "modifyBy": "1",
+                            "cancel": "N",
+                            "hostName": "admin",
+                            "fcQtyDetailInsertEntityModel": [
+                            {
+                              "id": 0,
+                              "fcHead_ID": 0,
+                              "productType": "string",
+                              "subProductType": "string",
+                              "qty": 0,
+                              "avgSAM": 0,
+                              "pcd": "2021-11-02T17:05:04.667Z",
+                              "exfacDt": "2021-11-02T17:05:04.667Z",
+                              "confirmDt": "2021-11-02T17:05:04.667Z",
+                              "cancel": "s",
+                              "createdBy": "string",
+                              "modifyBy": "string",
+                              "hostName": "string"
+                            }
+                          ],
+                        "forecastActivityEntityModel":[{
+                            "id": 0,
+                            "fcHead_ID": 0,
+                            "activity": this.state.activityName,
+                            "dueDt": this.state.selectedDate,
+                            "cancel": "s",
+                            "createdBy": "1",
+                            "modifyBy": "1",
+                            "hostName": "LOCALHOST"
+                        }]
+                    }
+                   
+                    }
+
+                    api.post('ForecastActivityEntity/SaveForecastActivity',this.state.saveActivityItems) .then((response) => {
+                    
+                        NotificationManager.success('Added Sucessfully');
+                    })
+                    .catch(error => {
+                        // error handling
+                    })
+                }
             }
         }
+        onRowRemovingActiv(e){
+              /*Stop removing the data in a row*/        
+                e.cancel=true;
+              /**/
+              console.log(e)
+              const tdeleteQtyDetailItems = {
+                "hid":e.data.fcHead_ID,
+                "entityID": "st",
+                "buyCode": e.data.buyCode,
+                "buyDivcode": e.data.buyDivcode,
+                "loccode": e.data.loccode,
+                "seasonCode": e.data.seasonCode,
+                "seasonYear": e.data.seasonYear,
+                "fCtype":e.data.fCtype,
+                "createdBy": e.data.hCreatedBy,
+                "modifyBy": e.data.hModifyBy,
+                "cancel": e.data.hCancel,
+                "hostName": e.data.hostName,
+                "fcQtyDetailInsertEntityModel":[{
+                    "id": 0,
+                    "fcHead_ID": 0,
+                    "productType": "string",
+                    "subProductType": "string",
+                    "qty": 0,
+                    "avgSAM": 0,
+                    "pcd": "2021-11-02T19:34:53.517Z",
+                    "exfacDt": "2021-11-02T19:34:53.517Z",
+                    "confirmDt": "2021-11-02T19:34:53.517Z",
+                    "cancel": "s",
+                    "createdBy": "string",
+                    "modifyBy": "string",
+                    "hostName": "string"
+                }],
+                "forecastActivityEntityModel": [
+                    {
+                      "id": e.data.id,
+                      "fcHead_ID": e.data.fcHead_ID,
+                      "activity": e.data.activity,
+                      "dueDt": e.data.dueDt,
+                      "cancel": "Y",
+                      "createdBy": "1",
+                      "modifyBy": "1",
+                      "hostName": "LocalHost"
+                    }
+                  ]
+            }
+            
+            api.post('ForecastActivityEntity/SaveForecastActivity',tdeleteQtyDetailItems) .then((response) => {
+                    
+                NotificationManager.success('Deleted Sucessfully');
+                e.cancel=false;
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+        onRowRemoving(e){    
+            /*Stop removing the data in a row*/        
+                e.cancel=true;
+            /**/
+            const tdeleteQtyDetailItems = {
+                "hid":e.data.fcHead_ID,
+                "entityID": "st",
+                "buyCode": e.data.buyCode,
+                "buyDivcode": e.data.buyDivcode,
+                "loccode": e.data.loccode,
+                "seasonCode": e.data.seasonCode,
+                "seasonYear": e.data.seasonYear,
+                "fCtype":e.data.fCtype,
+                "createdBy": e.data.hCreatedBy,
+                "modifyBy": e.data.hModifyBy,
+                "cancel": e.data.hCancel,
+                "hostName": e.data.hostName,
+                "fcQtyDetailInsertEntityModel":[{
+                    "id": e.data.id,
+                    "fcHead_ID": e.data.fcHead_ID,
+                    "productType":  e.data.productType,
+                    "subProductType":  e.data.subProductType,
+                    "qty":  e.data.qty,
+                    "avgSAM":  e.data.avgSAM,
+                    "pcd":  e.data.pcd,
+                    "exfacDt":  e.data.exfacDt,
+                    "confirmDt":  e.data.exfacDt,
+                    "cancel": "Y",
+                    "createdBy":  e.data.hCreatedBy,
+                    "modifyBy":  e.data.hModifyBy,
+                    "hostName": "LOCALHOST"
+                }],
+                "forecastActivityEntityModel": [
+                    {
+                      "id": 0,
+                      "fcHead_ID": 0,
+                      "activity": "string",
+                      "dueDt": "2021-11-02T06:23:14.481Z",
+                      "cancel": "N",
+                      "createdBy": "string",
+                      "modifyBy": "string",
+                      "hostName": "string"
+                    }
+                  ]
+            }
+
+            api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
+                    
+                NotificationManager.success('Deleted Sucessfully');
+                e.cancel=false;
+            })
+            .catch(error => {
+                // error handling
+            })
+           
+        }
+        onRowUpdatedActiv(e){
+            const UpdatedData = e.data;  
+
+            const {fcActivityInsertEntityModel} = this.state;
+
+            console.log(this.state.selectedDate);
+
+            if(fcActivityInsertEntityModel.length>0){
+                fcActivityInsertEntityModel.find(function(el,index1) {
+                 
+                if(el.id == e.data.id){
+                    const index = fcActivityInsertEntityModel.findIndex(item=>item.id === e.data.id);
+                    fcActivityInsertEntityModel.splice(index, 1);
+                    fcActivityInsertEntityModel.push(UpdatedData);
+                    
+                }else{
+                    fcActivityInsertEntityModel.push(UpdatedData);
+                }
+              }); 
+            }else{
+                fcActivityInsertEntityModel.push(UpdatedData);
+            }
+
+            const key = 'id';
+            const arrayUniqueByKey = [...new Map(fcActivityInsertEntityModel.map(item =>
+                [item[key], item])).values()];
+
+            this.state.saveActivityItems = {
+                "hid":e.data.fcHead_ID,
+                "entityID": "st",
+                "buyCode": this.state.BuyerDivisionList[0].buyerCode,
+                "buyDivcode": this.state.BuyerdivisionValue[0].value,
+                "loccode": this.state.location[0].value,
+                "seasonCode": this.state.season[0].value,
+                "seasonYear": this.state.year[0].value,
+                "fCtype": this.state.forecastItem[0].value,
+                "createdBy": "1",
+                "modifyBy": "1",
+                "cancel": "N",
+                "hostName": "admin",
+                "fcQtyDetailInsertEntityModel": [
+                    {
+                      "id": 0,
+                      "fcHead_ID": 0,
+                      "productType": "string",
+                      "subProductType": "string",
+                      "qty": 0,
+                      "avgSAM": 0,
+                      "pcd": "2021-11-02T17:05:04.667Z",
+                      "exfacDt": "2021-11-02T17:05:04.667Z",
+                      "confirmDt": "2021-11-02T17:05:04.667Z",
+                      "cancel": "s",
+                      "createdBy": "string",
+                      "modifyBy": "string",
+                      "hostName": "string"
+                    }
+                  ],
+                "forecastActivityEntityModel":arrayUniqueByKey
+            }
+        }
+        onRowUpdated(e) {
+           
+            const UpdatedData = e.data;           
+            const {fcQtyDetailInsertEntityModel} = this.state;
+            if(fcQtyDetailInsertEntityModel.length>0){
+                fcQtyDetailInsertEntityModel.find(function(el,index1) {
+                 
+                if(el.id == e.data.id){
+                    const index = fcQtyDetailInsertEntityModel.findIndex(item=>item.id === e.data.id);
+                    fcQtyDetailInsertEntityModel.splice(index, 1);
+                    fcQtyDetailInsertEntityModel.push(UpdatedData);
+                    
+                }else{
+                    fcQtyDetailInsertEntityModel.push(UpdatedData);
+                }
+              }); 
+            }else{
+                fcQtyDetailInsertEntityModel.push(UpdatedData);
+            }
+
+            const key = 'id';
+            const arrayUniqueByKey = [...new Map(fcQtyDetailInsertEntityModel.map(item =>
+                [item[key], item])).values()];
+
+            this.state.saveQtyDetailItems = {
+                "hid":e.data.fcHead_ID,
+                "entityID": "st",
+                "buyCode": this.state.BuyerDivisionList[0].buyerCode,
+                "buyDivcode": this.state.BuyerdivisionValue[0].value,
+                "loccode": this.state.location[0].value,
+                "seasonCode": this.state.season[0].value,
+                "seasonYear": this.state.year[0].value,
+                "fCtype": this.state.forecastItem[0].value,
+                "createdBy": "1",
+                "modifyBy": "1",
+                "cancel": "N",
+                "hostName": "admin",
+                "fcQtyDetailInsertEntityModel":arrayUniqueByKey,
+                "forecastActivityEntityModel": [
+                    {
+                      "id": 0,
+                      "fcHead_ID": 0,
+                      "activity": "string",
+                      "dueDt": "2021-11-02T06:23:14.481Z",
+                      "cancel": "N",
+                      "createdBy": "string",
+                      "modifyBy": "string",
+                      "hostName": "string"
+                    }
+                  ]
+            }
+          }
         getEmployeePayrolls() {   
                     
             api.get('Buyer/GetBuyerDropDown')
@@ -173,7 +479,7 @@ function TabContainer({ children }) {
                 this.setState({ forecastType: response.data.result.data });
             })
 
-            api.get('ForecastQtyDetailEntity')
+            api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
             .then((response) => {            
                 this.setState({ QtyBreakUpList: response.data });
             })
@@ -186,12 +492,34 @@ function TabContainer({ children }) {
             .then((response) => {            
                 this.setState({ productTypes: response.data.result.data });
             })
-
-            api.get('ForecastQtyDetailEntity/GetForecastGrid')
+            api.get('StyleDivision/GetStyleDivisionList')
+            .then((response) => {            
+                this.setState({ subproductTypes: response.data.result.data });
+            })
+            api.get('ForecastEntity/GetForecastHeaderList')
             .then((response) => {  
                 // console.log(response.data.data,'response.data.result.data')          
                 this.setState({ forecastinglists: response.data.data });
             })
+
+            api.get('Miscellaneous/GetMiscellaneousList?MType=year')
+            .then((response) => {
+                
+                this.setState({ yearlists: response.data.result.data });
+            })
+
+            api.get('SeasonMaster/GetSeasonList')
+            .then((response) => {
+                
+                this.setState({ seasonlists: response.data.result.data });
+            })
+            // api.post('ForecastqtyDetailEntity/SaveForecastqtyDetails',saveData) .then((response) => {
+                              
+            //     NotificationManager.success('Added Sucessfully');
+            // })
+            // .catch(error => {
+            //     // error handling
+            // })
             
         }
         getBuyerDivision1(val){
@@ -285,7 +613,7 @@ function TabContainer({ children }) {
        
      }
      handleDateChange = (date) => {
-		this.setState({ selectedDate: date });
+		this.setState({ selectedDate: moment(date).format('YYYY-MM-DD hh:mm:s a') });
 	};
      handleChange(event, value) {
         this.setState({ activeIndex: value });
@@ -329,7 +657,11 @@ function TabContainer({ children }) {
           template: 'deleteButton'
         });
       }
-	
+      onSaving (e)  {
+        //e.cancel = true;
+        console.log(dataSource);
+        //e.promise = saveChange(dispatch, e.changes[0]);
+      }
     render() {
          
         const { employeePayroll } = this.state;
@@ -361,6 +693,20 @@ function TabContainer({ children }) {
             BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
         }
         
+        const yearoptions = [];
+        for (const item of this.state.yearlists) {           
+            yearoptions.push({value:item.code,label:item.codeDesc});
+        }
+
+        const seasonoptions = [];
+        for (const item of this.state.seasonlists) {           
+            seasonoptions.push({value:item.seasonCode,label:item.seasonName});
+        }
+        
+        const subproductType = [];
+        for (const item of this.state.subproductTypes) {           
+            subproductType.push({value:item.subProductType,label:item.subProductType});
+        }
         const data = [
             ["Buyer 1","1st Division","Autumn","2021","Bangalore","10","10","6","Active"],
             ["Buyer 2","2nd Division","Summer","2021","Bangalore","10","10","6","Active"],
@@ -435,9 +781,9 @@ function TabContainer({ children }) {
                                         //   multi
                                             createNewLabel="Forecast Type"
                                             options={ForecastTypeItemOptions}
-                                            onChange={values => this.setState({ forecastType:values })}
+                                            onChange={values => this.setState({ forecastItem:values })}
                                             placeholder="Forecast Type"
-                                            values={this.state.Forecasttype}
+                                            values={this.state.forecastItem}
                                         />  
                                      
                                     </div>
@@ -446,24 +792,18 @@ function TabContainer({ children }) {
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Season</option> 
-                                            <option>Autumn</option> 
-                                            <option>Summer</option> 
-                                            <option>Winter</option> 
-                                        </select> 
+                                    <Select1 dropdownPosition="auto" createNewLabel="Season"  options={seasonoptions}
+                                                onChange={values => this.setState({ season:values })} placeholder="Select Season"
+                                                values={this.state.season} />
                                     </div>  
                                 </div>
                             </div>
                             <div className="col-sm-6 col-md-6 col-xl-3">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Year</option> 
-                                            <option>2021</option> 
-                                            <option>2020</option> 
-                                            <option>2019</option> 
-                                        </select> 
+                                        <Select1 dropdownPosition="auto" createNewLabel="Year"  options={yearoptions}
+                                                onChange={values => this.setState({ year:values })} placeholder="Year"
+                                                values={this.state.year} />
                                     </div>  
                                 </div>
                             </div>
@@ -492,7 +832,8 @@ function TabContainer({ children }) {
                             <TabContainer>
                                 <div className=""> 
                                     <div id="data-grid-demo">
-                                    <DataGrid dataSource={this.state.QtyBreakUpList.data} keyExpr="" showBorders={true} >
+                                    <DataGrid dataSource={this.state.QtyBreakUpList.data} keyExpr="" showBorders={true} 
+                                     onRowUpdated={this.onRowUpdated}  onRowRemoving={this.onRowRemoving}>
                                         <Paging enabled={false} />
                                         <Editing mode="cell" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
                                                 selectTextOnEditStart={this.state.selectTextOnEditStart}
@@ -503,21 +844,21 @@ function TabContainer({ children }) {
                                                 <Button name="delete" hint="Clone" icon="repeat"  />
                                             </Column>   
                                         <Column dataField="qty" width={110} caption="Quantity">
-                                            <RequiredRule />
+                                           
                                         </Column>
                                         <Column dataField="productType" caption="Product type" >
-                                        <RequiredRule />
+                                       
                                             <Lookup dataSource={this.state.productTypes} valueExpr="productType" displayExpr="productType" />
                                         </Column>
                                         <Column dataField="SubProductTypeId" caption="Sub-Product type" >
-                                            <RequiredRule />
-                                            <Lookup dataSource={sub_product_types} valueExpr="ID" displayExpr="Name" />
+                                            {/* */}
+                                            <Lookup dataSource={subproductType} valueExpr="value" displayExpr="value" />
                                         </Column>
-                                        <Column dataField="avgSAM" width={110} caption="Average SAM"><RequiredRule /></Column>
-                                        <Column dataField="pcd" dataType="date" ><RequiredRule /></Column>
-                                        <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" ><RequiredRule /></Column>
-                                        <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" ><RequiredRule /></Column>
-                                        <Column dataField="AvgSAM" caption="Available capacity"><RequiredRule /></Column>
+                                        <Column dataField="avgSAM" width={110} caption="Average SAM"></Column>
+                                        <Column dataField="pcd" dataType="date" ></Column>
+                                        <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" ></Column>
+                                        <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" ></Column>
+                                        <Column dataField="capacity" caption="Available capacity"></Column>
                                       
                                          <Summary>
                                             <TotalItem column="Quantity" summaryType="sum"  valueFormat="#0.00" />
@@ -548,7 +889,7 @@ function TabContainer({ children }) {
                                     <div className="row tb-pro mt-10">
                                         <div className="w-100">
                                             <div className="float-right">
-                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast('qty')}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                             </div>
                                         </div>
                                     </div>
@@ -558,7 +899,7 @@ function TabContainer({ children }) {
                                 <div className="row mt-15 new-form">
                                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div className="form-group">
-                                            <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"/>
+                                            <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.handleChangesingledropdown('activityName')}/>
                                         </div>
                                     </div>
                                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -595,7 +936,7 @@ function TabContainer({ children }) {
                                     </div>
                                 </div>
                                 <div className="table-responsive">
-                                    <DataGrid dataSource={this.state.activityList.data} keyExpr="id" showBorders={true} >
+                                    <DataGrid dataSource={this.state.activityList.data} keyExpr="id" showBorders={true} onRowUpdated={ this.onRowUpdatedActiv}  onRowRemoving={this.onRowRemovingActiv}>
                                         <Paging enabled={false} />
                                         <Editing mode="cell" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
                                                 selectTextOnEditStart={this.state.selectTextOnEditStart}
@@ -613,7 +954,7 @@ function TabContainer({ children }) {
                                 <div className="tb-pro mt-10">
                                     <div className="w-100">
                                         <div className="float-right">
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast('activity')}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -749,15 +1090,15 @@ function TabContainer({ children }) {
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
                                 </td>
-                                <td className="text-center"> {n.buyerName}</td>
-                                <td className="text-center">{n.buyerDivName}</td>
-                                <td>{n.seasonName}</td>
+                                <td className="text-center"> {n.buyCode}</td>
+                                <td className="text-center">{n.buyDivcode}</td>
+                                <td>{n.seasonCode}</td>
                                 <td>{n.seasonYear}</td>
-                                <td>{n.locName}</td>
-                                <td>{n.forecastQty}</td>
-                                <td>{n.projectionQty}</td>
-                                <td>{n.confirmedQty}</td>
-                                <td>{n.activity}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
+                                <td>{n.loccode}</td>
                             </tr>
 										 );
 									 })}

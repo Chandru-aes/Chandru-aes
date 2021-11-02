@@ -281,6 +281,56 @@ export const states = [{
   'Name': 'North Dakota'
 }];
 export const activityItems = [];
+
+export const saveData ={
+  "id": 0,
+  "forecastNo": "string",
+  "entityID": "st",
+  "buyCode": "string",
+  "buyDivcode": "string",
+  "loccode": "string",
+  "seasonCode": "str",
+  "seasonYear": 0,
+  "fCtype": "string",
+  "createdDt": "2021-11-01T11:43:18.132Z",
+  "createdBy": "string",
+  "modifyDt": "2021-11-01T11:43:18.132Z",
+  "modifyBy": "string",
+  "hostName": "string",
+  "fcQtyDetailInsertEntityModel": [
+    {
+      "fcDetailID": 0,
+      "fcHead_ID": 0,
+      "productType": "string",
+      "subProductType": "string",
+      "qty": 0,
+      "avgSAM": 0,
+      "pcd": "2021-11-01T11:43:18.132Z",
+      "exfacDt": "2021-11-01T11:43:18.132Z",
+      "confirmDt": "2021-11-01T11:43:18.132Z",
+      "cancel": "s",
+      "createdBy": "string",
+      "createdDt": "2021-11-01T11:43:18.132Z",
+      "modifyBy": "string",
+      "modifyDt": "2021-11-01T11:43:18.132Z",
+      "hostName": "string"
+    }
+  ],
+  "forecastActivityEntityModel": [
+    {
+      "id": 0,
+      "fcHead_ID": 0,
+      "activity": "string",
+      "dueDt": "2021-11-01T11:43:18.132Z",
+      "cancel": "s",
+      "createdDt": "2021-11-01T11:43:18.132Z",
+      "createdBy": "string",
+      "modifyDt": "2021-11-01T11:43:18.132Z",
+      "modifyBy": "string",
+      "hostName": "string"
+    }
+  ]
+};
 // export const activityItems = [{
 //   'ID': 1,  
 //   'Activity': 'Design',  
