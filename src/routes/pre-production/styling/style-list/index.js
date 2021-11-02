@@ -70,17 +70,30 @@
          openViewUserDialog: false, // view user dialog box
          editUser: null,
          allSelected: false,
-         selectedUsers: 0
+         selectedUsers: 0,
+         stylelists:[]
      }
  
      componentDidMount() {
-         api.get('userManagement.js')
-             .then((response) => {
-                 this.setState({ users: response.data });
-             })
-             .catch(error => {
-                 // error hanlding
-             })
+         this.listdata();
+        //  api.get('userManagement.js')
+        //      .then((response) => {
+        //          this.setState({ users: response.data });
+        //      })
+        //      .catch(error => {
+        //          // error hanlding
+        //      })
+     }
+
+     listdata(){
+        api.get('StyleHeader/GetStyleGridList')
+        .then((response) => {
+            console.log(response.data,'------------')
+            this.setState({ stylelists: response.data.data });
+        })
+        .catch(error => {
+            // error handling
+        })
      }
  
      /**
@@ -335,12 +348,16 @@
                                      <th>Location</th>
                                      <th>Qty</th>
                                      <th>PCD</th>
-                                     <th>Status</th>
-                                     <th>Pending</th>
+                                     <th>Stage</th>
+                                     <th>Status</th>  
                                  </tr>
                              </thead>
                              <tbody>
                                  {/* {users && users.map((user, key) => ( */}
+                                    {this.state.stylelists.map((n,index) => {
+                                    
+                                    return (
+
                                      <tr>                                       
                                          <td>
                                              <div className="media">
@@ -356,31 +373,31 @@
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
+                                                     <h5 className="mb-5 fw-bold">{n.styleNo}</h5>
                                                      <Badge color="warning">17H# 253101</Badge>
                                                  </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
+                                                <h5 className="mb-5 fw-bold">{n.styleDesc}</h5>
                                                 <Badge color="warning">BRWB</Badge>
                                                 <Badge color="warning">SP-20</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
+                                             <h5 className="mb-5 fw-bold">{n.location}</h5>
                                                 <Badge color="warning">CROWN</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">70</h5>
+                                                <h5 className="mb-5 fw-bold">{n.expOrdQty}</h5>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
+                                                <h5 className="mb-5 fw-bold">{n.pcd}</h5>
                                                 <Badge color="warning">B>p>c</Badge>
                                             </div>
                                          </td>                                       
@@ -389,30 +406,29 @@
                                         </td>      
                                         <td>
                                             <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
+                                            <div className="progress-bar bg-danger ft-lft w-d-25">
+                                                3
                                                 </div>
                                                 <div className="progress-bar bg-warning ft-lft w-d-25" >
                                                 7
                                                 </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
+                                                <div className="progress-bar bg-success ft-lft w-d-25" >
+                                                5
                                                 </div>
+                                                
+                                                
                                             </div>
                                              <ActionMenu />
                                         </td>                                        
                                      </tr>
-                                     <tr>                                       
+                                       );
+                                    })}
+                                     {/* <tr>                                       
                                          <td>
                                              <div className="media">
                                                 
                                                      <img src={require('Assets/avatars/style-img2.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                                    
                                              </div>
                                          </td>
                                          <td>
@@ -468,12 +484,7 @@
                                              <div className="media">
                                                 
                                                      <img src={require('Assets/avatars/style-img3.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                                    
                                              </div>
                                          </td>
                                          <td>
@@ -529,12 +540,7 @@
                                              <div className="media">
                                                 
                                                      <img src={require('Assets/avatars/style-img23png.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                                   
                                              </div>
                                          </td>
                                          <td>
@@ -590,12 +596,7 @@
                                              <div className="media">
                                                 
                                                      <img src={require('Assets/avatars/style-img2.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                                  
                                              </div>
                                          </td>
                                          <td>
@@ -651,12 +652,7 @@
                                              <div className="media">
                                                 
                                                      <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                                    
                                              </div>
                                          </td>
                                          <td>
@@ -712,12 +708,7 @@
                                              <div className="media">
                                                 
                                                      <img src={require('Assets/avatars/style-img3.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     {/* : <Avatar className="mr-15">{user.name.charAt(0)}</Avatar> */}
-                                               
-                                                 {/* <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{user.name}</h5>
-                                                     <Badge color="warning">{user.type}</Badge>
-                                                 </div> */}
+                                                     
                                              </div>
                                          </td>
                                          <td>
@@ -767,7 +758,7 @@
                                             </div>
                                              <ActionMenu />
                                         </td>                                          
-                                     </tr>
+                                     </tr> */}
                                      
                                  {/* )) */}
                              </tbody>

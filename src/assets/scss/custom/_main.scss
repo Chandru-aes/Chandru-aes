@@ -1119,7 +1119,10 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 					.dropzone .dz-preview .dz-image img{width: 100%;}
 					.dropzone .dz-preview .dz-details .dz-filename{display: none;}
 					.dropzone .dz-preview .dz-details .dz-size{display: none;}	
-					
+					.med-pop-up-h .MuiDialog-paperWidthSm{max-width: 900px!important;}
+					.med-pop-up-h .MuiDialog-paper{overflow-y: inherit;}
+					.med-pop-up-h .MuiDialogContent-root{overflow-y: inherit;}
+					.MuiTypography-h6{font-family: "HelveticaNeue" !important;}
 					/* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }
