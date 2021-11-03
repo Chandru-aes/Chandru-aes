@@ -145,9 +145,9 @@ import { DateTimePicker} from '@material-ui/pickers';
         fabdesc:'',
         subproducttypelists:[],
         subproducttype:[],
-        pcd:moment(new Date()).format('YYYY-MM-DD h:m:s a'),
-        tendeliverydate:moment(new Date()).format('YYYY-MM-DD h:m:s a'),
-        confduedate:moment(new Date()).format('YYYY-MM-DD h:m:s a'),
+        pcd:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
+        tendeliverydate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
+        confduedate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
         expcqty:'',
         availableqty:'',
         projectiondata:[],
@@ -208,15 +208,15 @@ import { DateTimePicker} from '@material-ui/pickers';
      }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
-        this.setState({ pcd: moment(date).format('YYYY-MM-DD h:m:s a') });
+        this.setState({ pcd: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
     };
 
     handleDateChange1 = (date) => {
-        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD h:m:s a') });
+        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
     };
 
     handleDateChange2 = (date) => {
-        this.setState({ confduedate: moment(date).format('YYYY-MM-DD h:m:s a') });
+        this.setState({ confduedate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
     };
 
     handleChangeCheckbox = name => (event, checked) => {
@@ -397,44 +397,56 @@ import { DateTimePicker} from '@material-ui/pickers';
 
 
       }
-      projectsave(){
-          const {projectiondata} = this.state;
-          if(this.state.expcqty!=''){
-            let data = {
-                "id": 0,
-                "styleMast_ID": 0,
-                "expOrdQty": this.state.expcqty,
-                "pcd": this.state.pcd,//"2021-10-30T10:38:00.634Z",
-                "expExfacDt": this.state.tendeliverydate,//"2021-10-30T10:38:00.634Z",
-                "projClosrDt": this.state.confduedate,//"2021-10-30T10:38:00.634Z",
-                "cancel": "q",
-                "createdBy": "q",
-                "createdDt": "2021-10-30T10:38:00.634Z",
-                "modifyBy": "q",
-                "modifyDt": "2021-10-30T10:38:00.634Z",
-                "hostName": "q"
-                }
-                projectiondata.push(data);
-                this.setState({projectiondata:projectiondata})
-            // this.state.projectiondata.push(data);
-            // this.setState({expcqty:0,pcd:new Date(),
-            //     tendeliverydate:new Date(),
-            //     confduedate:new Date()})
-            console.log(this.state.projectiondata,'this.state.projectiondata')
-          }  else{
-            NotificationManager.error('Please Enter all values');
 
-        }
+      projectsave(){
+        const {projectiondata} = this.state;
+        if(this.state.expcqty!=''){
+          let data = {
+              "id": 0,
+              "styleMast_ID": 0,
+              "expOrdQty": this.state.expcqty,
+              "pcd": this.state.pcd,//"2021-10-30T10:38:00.634Z",
+              "expExfacDt": this.state.tendeliverydate,//"2021-10-30T10:38:00.634Z",
+              "projClosrDt": this.state.confduedate,//"2021-10-30T10:38:00.634Z",
+              "cancel": "q",
+              "createdBy": "q",
+              "createdDt": "2021-10-30T10:38:00.634Z",
+              "modifyBy": "q",
+              "modifyDt": "2021-10-30T10:38:00.634Z",
+              "hostName": "q"
+              }
+              projectiondata.push(data);
+              this.setState({projectiondata:projectiondata})
+          // this.state.projectiondata.push(data);
+          this.setState({expcqty:0})
+          console.log(this.state.projectiondata,'this.state.projectiondata')
+        }  else{
+          NotificationManager.error('Please Enter all values');
+
+      }
+     
+    }
+
+   
+
+      projectdelete(item){
+          const {projectiondata} = this.state;
+
+          
+                if (projectiondata.indexOf(item) !== -1) {
+                    projectiondata.splice(projectiondata.indexOf(item), 1);
+                } 
+             this.setState({projectiondata:projectiondata})
+             console.log(this.state.projectiondata,'projectiondata')
+        
        
       }
       save () {
         console.log(this.state,'-----------------------')
-
-        // this.state.parent_menu_id[0].value
         
 
         if(this.state.buyer.length>0){
-
+ 
             let data =
           {
             "id": 0,
@@ -446,7 +458,7 @@ import { DateTimePicker} from '@material-ui/pickers';
             "loccode": this.state.location[0].value,
             "baseStyleno": this.state.styleno,
             "refStyleNo": this.state.refstyleno,
-            "masterStyle": 53,
+            "masterStyle": 0,
             "styleDesc": this.state.desc,
             "designStyleNo": this.state.designStyleNo,
             "fabricDesc": this.state.fabdesc,
@@ -472,8 +484,9 @@ import { DateTimePicker} from '@material-ui/pickers';
             "modifyBy": "A",
             "modifyDt": "2021-10-29T08:01:11.048Z",
             "hostName": "A",
-            "styleDetailEntityModel": [
+            "styleDetailEntityModel": 
                 this.state.projectiondata
+                // [
                 // {
                 // "id": 0,
                 // "styleMast_ID": 0,
@@ -488,22 +501,23 @@ import { DateTimePicker} from '@material-ui/pickers';
                 // "modifyDt": "2021-10-30T10:38:00.634Z",
                 // "hostName": "q"
                 // }
-            ],
-            "styleImageEntityModel": [
-                {
-                "id": 0,
-                "styleMast_ID": 0,
-                "masterStyle": 1,
-                "versionNo": 2,
-                "fName": "test.jpg",
-                "cancel": "q",
-                "createdBy": "q",
-                "createdDt": "2021-10-30T10:38:00.634Z",
-                "modifyBy": "q",
-                "modifyDt": "2021-10-30T10:38:00.634Z",
-                "hostName": "q"
-                }
-            ],
+            // ]
+            ,
+            // "styleImageEntityModel": [
+            //     {
+            //     "id": 0,
+            //     "styleMast_ID": 0,
+            //     "masterStyle": 1,
+            //     "versionNo": 2,
+            //     "fName": "test.jpg",
+            //     "cancel": "q",
+            //     "createdBy": "q",
+            //     "createdDt": "2021-10-30T10:38:00.634Z",
+            //     "modifyBy": "q",
+            //     "modifyDt": "2021-10-30T10:38:00.634Z",
+            //     "hostName": "q"
+            //     }
+            // ],
             "styleResPeEntityrModel": [
                 {
                 "id": 0,
@@ -516,24 +530,24 @@ import { DateTimePicker} from '@material-ui/pickers';
                 "modifyDt": "2021-10-30T11:16:24.931Z",
                 "hostName": "q"
                 }
-            ],
-            "styleFileUploadEntityModel": [
-                {
-                "id": 0,
-                "styleMast_ID": 0,
-                "filetype": "w",
-                "fit": this.state.fit[0].value,
-                "stage": this.state.stage[0].value,
-                "versionNo": this.state.versionno,
-                "fName": "test.jpg",
-                "cancel": "w",
-                "createdBy": "w",
-                "createdDt": "2021-10-30T11:16:24.931Z",
-                "modifyBy": "w",
-                "modifyDt": "2021-10-30T11:16:24.931Z",
-                "hostName": "w"
-                }
             ]
+            // "styleFileUploadEntityModel": [
+            //     {
+            //     "id": 0,
+            //     "styleMast_ID": 0,
+            //     "filetype": "w",
+            //     "fit": this.state.fit[0].value,
+            //     "stage": this.state.stage[0].value,
+            //     "versionNo": this.state.versionno,
+            //     "fName": "test.jpg",
+            //     "cancel": "w",
+            //     "createdBy": "w",
+            //     "createdDt": "2021-10-30T11:16:24.931Z",
+            //     "modifyBy": "w",
+            //     "modifyDt": "2021-10-30T11:16:24.931Z",
+            //     "hostName": "w"
+            //     }
+            // ]
         };
 console.log(data,'datadatadata')
 
@@ -800,7 +814,7 @@ console.log(data,'datadatadata')
                                      <td className="">
                                    
  
-                                   <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                   <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.projectdelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                    {/* <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
                                   
                                         {/* <button className="save">Save</button>
@@ -827,7 +841,8 @@ console.log(data,'datadatadata')
  
  
                   <div  className={isActiveOrder ? "s-panel-1 active" : 's-panel-1'}>
-                      { !isActiveOrder &&
+                  {/* !isActiveOrder */}
+                      { isActiveOrder &&
                           <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle2}><span className="MuiButton-label">Order Specification{isActiveOrder} <i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
                        { isActiveOrder &&
@@ -1253,7 +1268,7 @@ console.log(data,'datadatadata')
                         </div> 
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="form-group mt-15">
-                            <button type="button" class="btn btn-outline-primary w-100" onClick={this.handleClickOpen}>Reference version {this.state.designStyleNo} <i class="zmdi zmdi-arrow-right-top"></i></button>
+                            <button type="button" class="btn btn-outline-primary w-100" onClick={this.handleClickOpen}>Base Style {this.state.designStyleNo} <i class="zmdi zmdi-arrow-right-top"></i></button>
                                 {/* <Button variant="contained" className="btn-secondary text-white btn-block" onClick={this.handleClickOpen}>Base Style</Button> */}
                                 <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                                     <DialogTitle id="form-dialog-title">Base Style</DialogTitle>
