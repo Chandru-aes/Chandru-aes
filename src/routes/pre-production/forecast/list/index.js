@@ -162,16 +162,38 @@ function TabContainer({ children }) {
         this.cloneIconClick = this.cloneIconClick.bind(this);
         this.onRowUpdated = this.onRowUpdated.bind(this);
         this.onRowUpdatedActiv= this.onRowUpdatedActiv.bind(this);
+        this.onRowRemovingActiv = this.onRowRemovingActiv.bind(this);
+        this.onRowRemoving = this.onRowRemoving.bind(this);
       }
       handleChangesingledropdown = name => event => {
-		this.setState({ [name]: event.target.value });
-	};
-    
+            this.setState({ [name]: event.target.value });
+        };
+        
+        getForecastdetail(ForecastId){
+            api.get('ForecastQtyDetailEntity/GetForecastGrid?ForecastID='+ForecastId)
+            .then((response) => { 
+                this.setState({
+                    BuyerValue:[{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}],
+                    BuyerdivisionValue:[{value:response.data.data[0].buyDivcode,label:response.data.data[0].buyerDivName}],
+                    lpcationItemValue:[{value:response.data.data[0].loccode,label:response.data.data[0].locName}],
+                    season:[{value:response.data.data[0].seasonCode,label:response.data.data[0].seasonName}],
+                    year:[{value:response.data.data[0].seasonYear,label:response.data.data[0].seasonYear}]
+                });
+               // this.state.BuyerValue ({}); = [{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}];
+                //console.log(response.data.data[0].buyCode)             
+               //this.setState({ BuyerDivisionList: response.data.result.data });
+
+               
+            })        
+            .catch(error => {})
+        }
       // get employee payrols
         SaveForecast(type){
+            console.log(type)
             if(this.state.QtyBreakUpList.length==0 || this.state.activityList.length==0){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
             }else{
+                console.log(this.state.saveQtyDetailItems)
                 if(type=='qty'){
                     api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response) => {
                     
@@ -207,7 +229,7 @@ function TabContainer({ children }) {
                               "pcd": "2021-11-02T17:05:04.667Z",
                               "exfacDt": "2021-11-02T17:05:04.667Z",
                               "confirmDt": "2021-11-02T17:05:04.667Z",
-                              "cancel": "s",
+                              "cancel": "N",
                               "createdBy": "string",
                               "modifyBy": "string",
                               "hostName": "string"
@@ -217,8 +239,8 @@ function TabContainer({ children }) {
                             "id": 0,
                             "fcHead_ID": 0,
                             "activity": this.state.activityName,
-                            "dueDt": this.state.selectedDate,
-                            "cancel": "s",
+                            "dueDt": "2021-11-02T17:05:04.667Z",
+                            "cancel": "N",
                             "createdBy": "1",
                             "modifyBy": "1",
                             "hostName": "LOCALHOST"
@@ -227,7 +249,7 @@ function TabContainer({ children }) {
                    
                     }
 
-                    api.post('ForecastActivityEntity/SaveForecastActivity',this.state.saveActivityItems) .then((response) => {
+                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveActivityItems) .then((response) => {
                     
                         NotificationManager.success('Added Sucessfully');
                     })
@@ -250,14 +272,14 @@ function TabContainer({ children }) {
                 "loccode": e.data.loccode,
                 "seasonCode": e.data.seasonCode,
                 "seasonYear": e.data.seasonYear,
-                "fCtype":e.data.fCtype,
-                "createdBy": e.data.hCreatedBy,
-                "modifyBy": e.data.hModifyBy,
-                "cancel": e.data.hCancel,
+                "fCtype":"SEASONAL",
+                "createdBy": e.data.createdBy,
+                "modifyBy": e.data.modifyBy,
+                "cancel": "Y",
                 "hostName": e.data.hostName,
                 "fcQtyDetailInsertEntityModel":[{
-                    "id": 0,
-                    "fcHead_ID": 0,
+                    "id": e.data.id,
+                    "fcHead_ID":  e.data.fcHead_ID,
                     "productType": "string",
                     "subProductType": "string",
                     "qty": 0,
@@ -265,7 +287,7 @@ function TabContainer({ children }) {
                     "pcd": "2021-11-02T19:34:53.517Z",
                     "exfacDt": "2021-11-02T19:34:53.517Z",
                     "confirmDt": "2021-11-02T19:34:53.517Z",
-                    "cancel": "s",
+                    "cancel": "N",
                     "createdBy": "string",
                     "modifyBy": "string",
                     "hostName": "string"
@@ -275,7 +297,7 @@ function TabContainer({ children }) {
                       "id": e.data.id,
                       "fcHead_ID": e.data.fcHead_ID,
                       "activity": e.data.activity,
-                      "dueDt": e.data.dueDt,
+                      "dueDt": "2021-11-02T19:34:53.517Z",
                       "cancel": "Y",
                       "createdBy": "1",
                       "modifyBy": "1",
@@ -283,10 +305,16 @@ function TabContainer({ children }) {
                     }
                   ]
             }
-            
-            api.post('ForecastActivityEntity/SaveForecastActivity',tdeleteQtyDetailItems) .then((response) => {
+            console.log(tdeleteQtyDetailItems)
+            api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
                     
                 NotificationManager.success('Deleted Sucessfully');
+               if(response.data.data.status==true){
+                    api.get('ForecastActivityEntity/GetForecastActivityList')
+                    .then((response) => {            
+                        this.setState({ activityList: response.data });
+                    })
+               }               
                 e.cancel=false;
             })
             .catch(error => {
@@ -295,7 +323,7 @@ function TabContainer({ children }) {
         }
         onRowRemoving(e){    
             /*Stop removing the data in a row*/        
-                e.cancel=true;
+                //e.cancel=true;
             /**/
             const tdeleteQtyDetailItems = {
                 "hid":e.data.fcHead_ID,
@@ -308,7 +336,7 @@ function TabContainer({ children }) {
                 "fCtype":e.data.fCtype,
                 "createdBy": e.data.hCreatedBy,
                 "modifyBy": e.data.hModifyBy,
-                "cancel": e.data.hCancel,
+                "cancel": "Y",
                 "hostName": e.data.hostName,
                 "fcQtyDetailInsertEntityModel":[{
                     "id": e.data.id,
@@ -342,6 +370,14 @@ function TabContainer({ children }) {
             api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
                     
                 NotificationManager.success('Deleted Sucessfully');
+
+                console.log(response.data.status)
+                if(response.data.status==true){
+                    api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
+                    .then((response) => {            
+                        this.setState({ activityList: response.data });
+                    })
+               }  
                 e.cancel=false;
             })
             .catch(error => {
@@ -354,7 +390,8 @@ function TabContainer({ children }) {
 
             const {fcActivityInsertEntityModel} = this.state;
 
-            console.log(this.state.selectedDate);
+            console.log(UpdatedData);
+            console.log("here")
 
             if(fcActivityInsertEntityModel.length>0){
                 fcActivityInsertEntityModel.find(function(el,index1) {
@@ -379,12 +416,13 @@ function TabContainer({ children }) {
             this.state.saveActivityItems = {
                 "hid":e.data.fcHead_ID,
                 "entityID": "st",
-                "buyCode": this.state.BuyerDivisionList[0].buyerCode,
-                "buyDivcode": this.state.BuyerdivisionValue[0].value,
-                "loccode": this.state.location[0].value,
-                "seasonCode": this.state.season[0].value,
-                "seasonYear": this.state.year[0].value,
-                "fCtype": this.state.forecastItem[0].value,
+                "buyCode": (this.state.BuyerDivisionList.length>0)?this.state.BuyerDivisionList[0].buyerCode:e.data.buyCode,
+                "buyDivcode": (this.state.BuyerdivisionValue)?this.state.BuyerdivisionValue[0].value:e.data.buyDivcode,
+                "loccode": (this.state.location)?this.state.location[0].value:e.data.loccode,
+                "seasonCode": (this.state.season)?this.state.season[0].value:e.data.seasonCode,
+                "seasonYear": (this.state.year)?this.state.year[0].value:e.data.seasonYear,
+               // "fCtype": (this.state.forecastItem.length>0)?this.state.forecastItem[0].value:e.data.fCtype,
+               "fCtype": "SEASONAL",
                 "createdBy": "1",
                 "modifyBy": "1",
                 "cancel": "N",
@@ -400,7 +438,7 @@ function TabContainer({ children }) {
                       "pcd": "2021-11-02T17:05:04.667Z",
                       "exfacDt": "2021-11-02T17:05:04.667Z",
                       "confirmDt": "2021-11-02T17:05:04.667Z",
-                      "cancel": "s",
+                      "cancel": "N",
                       "createdBy": "string",
                       "modifyBy": "string",
                       "hostName": "string"
@@ -413,6 +451,16 @@ function TabContainer({ children }) {
            
             const UpdatedData = e.data;           
             const {fcQtyDetailInsertEntityModel} = this.state;
+            UpdatedData.subProductType = e.data.SubProductTypeId;
+            if(!e.data.id){
+                UpdatedData.cancel = "N";
+                UpdatedData.hostName = "Local Host";
+                UpdatedData.createdBy="1";
+                UpdatedData.modifyBy="1";
+                UpdatedData.id= 0;
+                UpdatedData.fcHead_ID= 0;
+            }
+           
             if(fcQtyDetailInsertEntityModel.length>0){
                 fcQtyDetailInsertEntityModel.find(function(el,index1) {
                  
@@ -432,16 +480,16 @@ function TabContainer({ children }) {
             const key = 'id';
             const arrayUniqueByKey = [...new Map(fcQtyDetailInsertEntityModel.map(item =>
                 [item[key], item])).values()];
-
+                
             this.state.saveQtyDetailItems = {
-                "hid":e.data.fcHead_ID,
+                "hid":(e.data.fcHead_ID)?e.data.fcHead_ID:0,
                 "entityID": "st",
-                "buyCode": this.state.BuyerDivisionList[0].buyerCode,
-                "buyDivcode": this.state.BuyerdivisionValue[0].value,
-                "loccode": this.state.location[0].value,
-                "seasonCode": this.state.season[0].value,
-                "seasonYear": this.state.year[0].value,
-                "fCtype": this.state.forecastItem[0].value,
+                "buyCode": (this.state.BuyerDivisionList.length>0)?this.state.BuyerDivisionList[0].buyerCode:e.data.buyCode,
+                "buyDivcode": (this.state.BuyerdivisionValue)?this.state.BuyerdivisionValue[0].value:e.data.buyDivcode,
+                "loccode": (this.state.location)?this.state.location[0].value:e.data.loccode,
+                "seasonCode": (this.state.season)?this.state.season[0].value:e.data.seasonCode,
+                "seasonYear": (this.state.year)?this.state.year[0].value:e.data.seasonYear,
+                "fCtype": (this.state.forecastItem.length>0)?this.state.forecastItem[0].value:e.data.fCtype,
                 "createdBy": "1",
                 "modifyBy": "1",
                 "cancel": "N",
@@ -513,25 +561,14 @@ function TabContainer({ children }) {
                 
                 this.setState({ seasonlists: response.data.result.data });
             })
-            // api.post('ForecastqtyDetailEntity/SaveForecastqtyDetails',saveData) .then((response) => {
-                              
-            //     NotificationManager.success('Added Sucessfully');
-            // })
-            // .catch(error => {
-            //     // error handling
-            // })
-            
+           
         }
         getBuyerDivision1(val){
-            console.log(val);
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
             .then((response) => {                
                 this.setState({ BuyerDivisionList: response.data.result.data });
-
-               
             })        
-            .catch(error => {})
-           
+            .catch(error => {})           
         }
       isChief(position) {
         return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
@@ -807,13 +844,11 @@ function TabContainer({ children }) {
                                     </div>  
                                 </div>
                             </div>
-                            <div className="col-lg-6 pr-0">
-                                <div className="form-group mt-15 text-right">
-                                    {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Add <i className="zmdi zmdi-file-plus"></i></span><span className="MuiTouchRipple-root"></span></button> */}
-                                    
+                            {/* <div className="col-lg-6 pr-0">
+                                <div className="form-group mt-15 text-right">                                  
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide</span><span className="MuiTouchRipple-root"></span></button>
                                 </div>
-                            </div> 
+                            </div>  */}
                         </div> 
 
                         <AppBar position="static" color="default">
@@ -833,7 +868,7 @@ function TabContainer({ children }) {
                                 <div className=""> 
                                     <div id="data-grid-demo">
                                     <DataGrid dataSource={this.state.QtyBreakUpList.data} keyExpr="" showBorders={true} 
-                                     onRowUpdated={this.onRowUpdated}  onRowRemoving={this.onRowRemoving}>
+                                     onRowUpdated={this.onRowUpdated}  onRowRemoving={this.onRowRemoving} onRowInserting={this.onRowUpdated}>
                                         <Paging enabled={false} />
                                         <Editing mode="cell" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
                                                 selectTextOnEditStart={this.state.selectTextOnEditStart}
@@ -1084,8 +1119,8 @@ function TabContainer({ children }) {
                                 {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button> */}
                                 
                                
-                                <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.getForecastdetail(n.id)}><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" ><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
