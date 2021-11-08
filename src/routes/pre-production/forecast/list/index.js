@@ -126,7 +126,9 @@ function TabContainer({ children }) {
         BuyerdivisionValue:[],
         forecastinglists:[],
         yearlists:[],
-        seasonlists:[]
+        seasonlists:[],
+        fields: {},
+        errors: {}
        // QtyBreakUpList:[]
 	}
     constructor(props) {
@@ -153,13 +155,12 @@ function TabContainer({ children }) {
             saveQtyDetailItems:{},
             saveActivityItems:{},
             deleteQtyDetailItems:{},
-            activityName:''
+            activityName:'',
+            fields: {},
+            errors: {}
         };
-        this.allowDeleting = this.allowDeleting.bind(this);
-        this.onRowValidating = this.onRowValidating.bind(this);
-        this.onEditorPreparing = this.onEditorPreparing.bind(this);
-        this.isCloneIconVisible = this.isCloneIconVisible.bind(this);
-        this.cloneIconClick = this.cloneIconClick.bind(this);
+     
+      
         this.onRowUpdated = this.onRowUpdated.bind(this);
         this.onRowUpdatedActiv= this.onRowUpdatedActiv.bind(this);
         this.onRowRemovingActiv = this.onRowRemovingActiv.bind(this);
@@ -179,13 +180,41 @@ function TabContainer({ children }) {
                     season:[{value:response.data.data[0].seasonCode,label:response.data.data[0].seasonName}],
                     year:[{value:response.data.data[0].seasonYear,label:response.data.data[0].seasonYear}]
                 });
-               // this.state.BuyerValue ({}); = [{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}];
-                //console.log(response.data.data[0].buyCode)             
-               //this.setState({ BuyerDivisionList: response.data.result.data });
-
-               
+             
             })        
             .catch(error => {})
+        }
+        deleteForecast(ForecastItem,ForecastId){
+            const deleteForecastHeaderitem={
+                "id": ForecastId,
+                "forecastNo": ForecastItem.forecastNo,
+                "entityID": ForecastItem.entityID,
+                "buyCode": ForecastItem.buyCode,
+                "buyDivcode": ForecastItem.buyDivcode,
+                "loccode": ForecastItem.loccode,
+                "seasonCode": ForecastItem.seasonCode,
+                "seasonYear": ForecastItem.seasonYear,
+                "fCtype": ForecastItem.fCtype,
+                "cancel": "Y",
+                "createdDt": ForecastItem.createdDt,
+                "createdBy": ForecastItem.createdBy,
+                "modifyBy": ForecastItem.modifyBy,
+                "hostName": ForecastItem.hostName
+            }
+            api.post('ForecastEntity/SaveForecastQtyDetails',deleteForecastHeaderitem) .then((response) => {
+                    
+                NotificationManager.success('Deleted Sucessfully');
+               if(response.data.status==true){
+                    api.get('ForecastEntity/GetForecastHeaderList')
+                    .then((response) => {         
+                    this.setState({ forecastinglists: response.data.data });
+                })
+               }               
+                e.cancel=false;
+            })
+            .catch(error => {
+                // error handling
+            })
         }
       // get employee payrols
         SaveForecast(type){
@@ -305,7 +334,7 @@ function TabContainer({ children }) {
                     }
                   ]
             }
-            console.log(tdeleteQtyDetailItems)
+           
             api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
                     
                 NotificationManager.success('Deleted Sucessfully');
@@ -509,7 +538,7 @@ function TabContainer({ children }) {
                   ]
             }
           }
-        getEmployeePayrolls() {   
+          getCommonData() {   
                     
             api.get('Buyer/GetBuyerDropDown')
             .then((response) => {                
@@ -563,141 +592,75 @@ function TabContainer({ children }) {
             })
            
         }
-        getBuyerDivision1(val){
+        getBuyerDivision1(val,field,e){
+            let fields = this.state.fields;
+            fields['buyername'] = val.BuyerValue[0].value;        
+            this.setState({fields});
+
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
             .then((response) => {                
                 this.setState({ BuyerDivisionList: response.data.result.data });
             })        
             .catch(error => {})           
         }
-      isChief(position) {
-        return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
-      }
-      allowDeleting(e) {
-        return !this.isChief(e.row.data.Position);
-      }
-      onRowValidating(e) {
-        const position = e.newData.Position;
-    
-        if(this.isChief(position)) {
-          e.errorText = `The company can have only one ${ position.toUpperCase() }. Please choose another position.`;
-          e.isValid = false;
-        }
-      }
-      onEditorPreparing(e) {
-        if(e.parentType === 'dataRow' && e.dataField === 'Position') {
-          e.editorOptions.readOnly = this.isChief(e.value);
-        }
-      }
-      isCloneIconVisible(e) {
-        return !e.row.isEditing && !this.isChief(e.row.data.Position);
-      }
-      cloneIconClick(e) {
-        const employees = [...this.state.employees];
-       // const clonedItem = { ...e.row.data, ID: service.getMaxID() };
-    
-        employees.splice(e.row.rowIndex, 0, clonedItem);
-        this.setState({ employees: employees });
-        e.event.preventDefault();
-      }
+     
     opnAddNewUserModal(e) {
         e.preventDefault();
         this.setState({ addNewUserModal: true });
     }
-    opnQuantityModal(e){
-        e.preventDefault();
-        this.setState({ addQuantityModal: true });
-    }
-    opnguideformmodal(e){
-        e.preventDefault();
-        this.setState({ guideformmodal: true });
-    }
+   
+  
     onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false,addQuantityModal:false,guideformmodal:false, editUser: null })
     }
 
     componentDidMount() {
-        this.getEmployeePayrolls();
+        this.getCommonData();
 	}
-    createNotification = (type) => {
-        return () => {
-           switch (type) {
-              case 'info':
-                 NotificationManager.info('Info message');
-                 break;
-              case 'success':
-                 NotificationManager.success('Success message');
-                 break;
-              case 'warning':
-                 NotificationManager.warning('Warning message');
-                 break;
-              case 'error':
-                 NotificationManager.error('Error message');
-                 break;
-              default:
-                 NotificationManager.success('Success message', 'Title here');
-                 break;
-           }
-        };
-     };
-
+   
      handleChangeIndex(index) {
         this.setState({ activeIndex: index });
      }
 
-     handleChangeradio = (event) => {
-        this.setState({ userlevel:  event.currentTarget.value });        
-       
-     }
      handleDateChange = (date) => {
 		this.setState({ selectedDate: moment(date).format('YYYY-MM-DD hh:mm:s a') });
 	};
      handleChange(event, value) {
         this.setState({ activeIndex: value });
      }
+     handleChangeValidate(field, e,val){    		
+        let fields = this.state.fields;
+        fields[field] = val;        
+        this.setState({fields});
+        this.setState({ BuyerdivisionValue:val })
+        //console.log(e.target.value)
+      }
     
-
-    handleRadioChange = (event) => {
-        console.log(event.currentTarget.value);
-        this.setState({
-          selectedRadio: event.currentTarget.value
-        })
-        console.log(this.state);
-      };
-      deleteButtonRender() {
-        return <Button
-          onClick={this.deleteRecords}
-          icon="trash"
-          disabled={!this.state.selectedItemKeys.length}
-          text="Delete Selected Records">
-        </Button>;
-      }
-      deleteRecords() {
-        this.state.selectedItemKeys.forEach((key) => {
-          dataSource.store().remove(key);
-        });
-        this.setState({
-          selectedItemKeys: []
-        });
-        dataSource.reload();
-      }
-      selectionChanged(data) {
-        this.setState({
-          selectedItemKeys: data.selectedRowKeys
-        });
-      }
-      onToolbarPreparing(e) {
-        e.toolbarOptions.items[0].showText = 'always';
+      contactSubmit(e,type){
+        e.preventDefault();
+        if(this.handleValidation()){
+            this.SaveForecast(type);
+        }else{
+          alert("Form has errors.")
+        }
     
-        e.toolbarOptions.items.push({
-          location: 'after',
-          template: 'deleteButton'
-        });
       }
-      onSaving (e)  {
-        //e.cancel = true;
-        console.log(dataSource);
-        //e.promise = saveChange(dispatch, e.changes[0]);
+      handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+       
+        if(!fields["buyername"]){
+          formIsValid = false;
+          errors["buyername"] = "Cannot be empty";
+        }
+        
+        if(!fields["buyerdivision"]){
+            formIsValid = false;
+            errors["buyerdivision"] = "Cannot be empty";
+          }
+        this.setState({errors: errors});
+        return formIsValid;
       }
     render() {
          
@@ -772,16 +735,18 @@ function TabContainer({ children }) {
                     <div className="col-sm-12 col-md-12 col-xl-12 p-0">
                     
                     <RctCollapsibleCard heading="">
+                    <form name="contactform" className="contactform">
                         <div className="row new-form mb-10">
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
                                         <Select1  dropdownPosition="auto"  createNewLabel="Buyer"
-                                            options={BuyerOptions}
-                                            onChange={values => this.getBuyerDivision1({ BuyerValue:values })}
+                                            options={BuyerOptions} ref="buyername"
+                                            onChange={values => this.getBuyerDivision1({ BuyerValue:values },this,"buyername")}
                                             placeholder="Buyer"                                              
                                             values={this.state.BuyerValue}
-                                        />                                   
+                                        />  
+                                         <span className="error">{this.state.errors["buyername"]}</span>                                 
                                     </div>
                                 </div>
                             </div>
@@ -789,11 +754,13 @@ function TabContainer({ children }) {
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
                                         <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
-                                            options={BuyerDivisionOptions}
+                                            options={BuyerDivisionOptions} ref="buyerdivision"
                                             placeholder="Buyer Division"
-                                            onChange={values => this.setState({ BuyerdivisionValue:values })}
+                                            onChange={this.handleChangeValidate.bind(this, "buyerdivision",this.state.BuyerdivisionValue)} 
+                                            //onChange={values => this.setState({ BuyerdivisionValue:values })}
                                             values={this.state.BuyerdivisionValue}
-                                        />                                   
+                                        />   
+                                        <span className="error">{this.state.errors["buyerdivision"]}</span>                                
                                     </div>
                                 </div>
                             </div>
@@ -843,12 +810,7 @@ function TabContainer({ children }) {
                                                 values={this.state.year} />
                                     </div>  
                                 </div>
-                            </div>
-                            {/* <div className="col-lg-6 pr-0">
-                                <div className="form-group mt-15 text-right">                                  
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.opnguideformmodal(e)}><span className="MuiButton-label">Guide</span><span className="MuiTouchRipple-root"></span></button>
-                                </div>
-                            </div>  */}
+                            </div>                         
                         </div> 
 
                         <AppBar position="static" color="default">
@@ -924,7 +886,8 @@ function TabContainer({ children }) {
                                     <div className="row tb-pro mt-10">
                                         <div className="w-100">
                                             <div className="float-right">
-                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast('qty')}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"   onClick={(e) => this.contactSubmit(e,'qty')}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                                {/* <button className="btn btn-lg pro" id="submit" value="Submit" onClick= {this.contactSubmit.bind(this)} >Send Message</button> */}
                                             </div>
                                         </div>
                                     </div>
@@ -995,7 +958,7 @@ function TabContainer({ children }) {
                                 </div>
                             </TabContainer>
                         </SwipeableViews>    
-
+                        </form>
                         <Modal isOpen={this.state.addNewUserModal} toggle={() => this.onAddUpdateUserModalClose()}>
                             <ModalHeader toggle={() => this.onAddUpdateUserModalClose()}>
                             Activity Form
@@ -1120,7 +1083,7 @@ function TabContainer({ children }) {
                                 
                                
                                 <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.getForecastdetail(n.id)}><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
-                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" ><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.deleteForecast(n,n.id)}><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}

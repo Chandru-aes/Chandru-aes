@@ -151,6 +151,9 @@ import { DateTimePicker} from '@material-ui/pickers';
         expcqty:'',
         availableqty:'',
         projectiondata:[],
+        dataitem:[],
+        fields: {},
+        errors: {}
 
      }
      handleDateChange11 = (date) => {
@@ -202,10 +205,23 @@ import { DateTimePicker} from '@material-ui/pickers';
         //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
         //   });
     }
-     handleChange(event, value) {
-        this.setState({ activeIndex: value });
-        this.setState({ [name]: checked });
-     }
+    //  handleChange(event, value) {
+    //     this.setState({ activeIndex: value });
+    //     this.setState({ [name]: checked });
+    //  }
+    handleChange(field, e){   
+        		
+        let fields = this.state.fields;
+        fields[field] = e[0].value;        
+        this.setState({fields});
+    //     console.log(name)
+
+    //     this.state = this.state.buyer;
+    //     this.setState({[field]:e});
+    //     //this.state.field = e;
+    //   console.log(this.state)  
+    //     console.log(e)
+      }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
         this.setState({ pcd: moment(date).format('YYYY-MM-DD') });
@@ -241,7 +257,54 @@ import { DateTimePicker} from '@material-ui/pickers';
          
 		this.setState({ [name]: event.target.value });
 	};
-
+    contactSubmit(e,type){
+        e.preventDefault();
+        if(this.handleValidation()){
+            this.save();
+        }else{
+          alert("Form has errors.")
+        }
+    
+      }
+      handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+        console.log(fields)
+        //Name
+        if(!fields["buyer"]){
+          formIsValid = false;
+          errors["buyer"] = "Cannot be empty";
+        }
+    
+        // if(typeof fields["name"] !== "undefined"){
+        //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
+        //     formIsValid = false;
+        //     errors["name"] = "Only letters";
+        //   }      	
+        // }
+    
+        // //Email
+        // if(!fields["email"]){
+        //   formIsValid = false;
+        //   errors["email"] = "Cannot be empty";
+        // }
+    
+        // if(typeof fields["email"] !== "undefined"){
+        //   let lastAtPos = fields["email"].lastIndexOf('@');
+        //   let lastDotPos = fields["email"].lastIndexOf('.');
+    
+        //   if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
+        //     formIsValid = false;
+        //     errors["email"] = "Email is not valid";
+        //   }
+        // }
+    
+    
+    
+        this.setState({errors: errors});
+        return formIsValid;
+      }
      getfilldropdownlists() {
 
         api.get('Buyer/GetBuyerDropDown')
@@ -882,9 +945,11 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fabric Type"
                                                         options={fabtypeoptions}
-                                                        onChange={values => this.setState({ fabtype:values })}
+                                                        onChange={this.handleChange.bind(this, "name")}
+                                                        //onChange={values => this.setState({ fabtype:values })}
                                                         placeholder="Fabric Type"
-                                                        values={this.state.fabtype}
+                                                        value={this.state.fabtype}
+                                                        //values={this.state.fabtype}
                                                         />
                                        
                                     </div>
@@ -1055,7 +1120,9 @@ console.log(data,'datadatadata')
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
                        
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.save()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} 
+                        // onClick={(e) =>this.save()}
+                        ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                    </div>    </div> </div>
                    {/* <div className="col-lg-12 mt-10">
                         <ul class="list-group list-group-horizontal-md">
@@ -1224,10 +1291,12 @@ console.log(data,'datadatadata')
                                                 //   multi
                                                   createNewLabel="Buyer"
                                                 options={buyeroptions}
-                                                onChange={values => this.setState({ buyer:values })}
+                                                onChange={this.handleChange.bind(this,'buyer')}
+                                               // onChange={values => this.setState({ buyer:values })}
                                                 placeholder="Buyer"
-                                                values={this.state.buyer}
+                                                value={this.state.buyer}
                                                 />
+                                                <span className="error">{this.state.errors["buyer"]}</span>
                                 
                                 {/* <select className="form-control select2 mt-15">
                                     <option>Buyer</option> 
@@ -1239,16 +1308,16 @@ console.log(data,'datadatadata')
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group select_label_name mt-15">
-                                            <Select1
-                                                dropdownPosition="auto"
-                                                //   multi
-                                                  createNewLabel="Buyer Division"
-                                                options={buyerdivoptions}
-                                                onChange={values => this.setState({ buyerdiv:values })}
-                                                placeholder="Buyer Division"
-                                                values={this.state.buyerdiv}
-                                                />
-                               
+                            <Select1
+                                dropdownPosition="auto"
+                                //   multi
+                                    createNewLabel="Buyer Division"
+                                options={buyerdivoptions}
+                                onChange={values => this.setState({ buyerdiv:values })}
+                                //onChange={this.handleChange.bind(this, "buyerdivision")}
+                                placeholder="Buyer Division"
+                                values={this.state.buyerdiv}
+                                />                               
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">

@@ -9,9 +9,10 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
+//const publicPath='http://app.ithred.io/';
 //const publicPath = 'http://172.16.9.251/afipl/';
 //const publicPath = 'http://alpha56.24x7a2z.com/acpl/dev1/';
- const publicPath = '/';
+const publicPath = '/';
 // Make sure any symlinks in the project folder are resolved:
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
