@@ -24,7 +24,7 @@
  import ActionMenu from './actionmenu';
  // api
  import api from 'Api';
- 
+ import { Link } from 'react-router-dom';
  // delete confirmation dialog
  import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
  
@@ -372,22 +372,20 @@
                                              </div>
                                          </td>
                                          <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">{n.styleNo}</h5>
-                                                     <Badge color="warning">17H# 253101</Badge>
-                                                 </div>
+                                         <Link to={'/app/pre-production/style/'+n.styleid}><h5 className="mb-5 fw-bold">{n.styleid}</h5>
+                                                     <Badge color="warning">{n.styleNo}</Badge></Link>
                                          </td>
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">{n.styleDesc}</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-20</Badge>
+                                                <Badge color="warning">{n.buyerName}</Badge>
+                                                <Badge color="warning">{n.seasonName}</Badge>
                                             </div>
                                          </td>
                                          <td>
                                              <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">{n.location}</h5>
-                                                <Badge color="warning">CROWN</Badge>
+                                             <h5 className="mb-5 fw-bold">{n.locName}</h5>
+                                                <Badge color="warning">{n.locName}</Badge>
                                             </div>
                                          </td>
                                          <td>

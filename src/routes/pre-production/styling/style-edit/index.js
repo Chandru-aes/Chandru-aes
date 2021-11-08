@@ -65,11 +65,11 @@ import { DateTimePicker} from '@material-ui/pickers';
           {children}
        </Typography>
     );
- }  
+ }
  class PreprodcutionTable extends Component {
      constructor(props) {
          super(props);
-    
+   
          // For a full list of possible configurations,
          // please consult http://www.dropzonejs.com/#configuration
          this.djsConfig = {
@@ -145,12 +145,13 @@ import { DateTimePicker} from '@material-ui/pickers';
         fabdesc:'',
         subproducttypelists:[],
         subproducttype:[],
-        pcd:moment(new Date()).format('YYYY-MM-DD'),
-        tendeliverydate:moment(new Date()).format('YYYY-MM-DD'),
-        confduedate:moment(new Date()).format('YYYY-MM-DD'),
+        pcd:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
+        tendeliverydate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
+        confduedate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
         expcqty:'',
         availableqty:'',
         projectiondata:[],
+        styleid:this.props.match.params.styleid,
 
      }
      handleDateChange11 = (date) => {
@@ -168,7 +169,9 @@ import { DateTimePicker} from '@material-ui/pickers';
      componentDidMount() {
         document.body.classList.add('med-pop-up-h');
         this.getfilldropdownlists();
-        
+        // console.log(this.props.match.params.styleid,'---------------------------')
+        // this.setState({styleid:this.props.params.styleid});
+        this.editdata(this.state.styleid);
         // $(document).on('click', '.edit', function() {
         //     $(this).parent().siblings('td.data').each(function() {
         //       var content = $(this).html();
@@ -208,15 +211,15 @@ import { DateTimePicker} from '@material-ui/pickers';
      }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
-        this.setState({ pcd: moment(date).format('YYYY-MM-DD') });
+        this.setState({ pcd: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
     };
 
     handleDateChange1 = (date) => {
-        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD') });
+        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
     };
 
     handleDateChange2 = (date) => {
-        this.setState({ confduedate: moment(date).format('YYYY-MM-DD') });
+        this.setState({ confduedate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
     };
 
     handleChangeCheckbox = name => (event, checked) => {
@@ -397,6 +400,20 @@ import { DateTimePicker} from '@material-ui/pickers';
 
 
       }
+
+
+      editdata(id){
+        api.get('StyleHeader/GetStyleGrid?StyleID='+id)
+        .then((response) => {
+            console.log(response.data.data[0],'------------')
+            let data = response.data.data[0];
+            this.setState({ buyer: {value:data.buyCode,label:data.buyCode} });
+        })
+        .catch(error => {
+            // error handling
+        })
+     } 
+
 
       projectsave(){
         const {projectiondata} = this.state;
@@ -719,13 +736,11 @@ console.log(data,'datadatadata')
            }
 
 
-           
-           
 
            
           return (
               
-             <RctCollapsibleCard heading="Style Create">
+             <RctCollapsibleCard heading="Style Edit">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div  className={isActive ? "s-panel active" : 's-panel'}>
                       { !isActive &&

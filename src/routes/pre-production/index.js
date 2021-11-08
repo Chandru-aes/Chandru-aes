@@ -10,6 +10,7 @@
      AsyncForecastlistComponent,
      AsyncForecastAddComponent,
      AsyncStyleAddComponent,
+     AsyncStyleEditComponent, 
      AsyncStyleListComponent,
      AsyncSinglewindowComponent,
      AsyncRequestGridOverallComponent,	
@@ -31,6 +32,7 @@
              <Route path={`${match.url}/forecasting`} component={AsyncForecastlistComponent} />
              <Route path={`${match.url}/add-forecasting`} component={AsyncForecastAddComponent} />
              <Route path={`${match.url}/style-creation`} component={AsyncStyleAddComponent} />
+             <Route path={`${match.url}/style/:styleid`} component={AsyncStyleEditComponent} />
              <Route path={`${match.url}/style-list`} component={AsyncStyleListComponent} />
              <Route path={`${match.url}/single-window`} component={AsyncSinglewindowComponent} />
              <Route path={`${match.url}/request-grid`} component={AsyncRequestGridOverallComponent} />	
