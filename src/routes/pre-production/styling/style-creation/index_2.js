@@ -65,11 +65,11 @@ import { DateTimePicker} from '@material-ui/pickers';
           {children}
        </Typography>
     );
- }
+ }  
  class PreprodcutionTable extends Component {
      constructor(props) {
          super(props);
-   
+    
          // For a full list of possible configurations,
          // please consult http://www.dropzonejs.com/#configuration
          this.djsConfig = {
@@ -145,13 +145,15 @@ import { DateTimePicker} from '@material-ui/pickers';
         fabdesc:'',
         subproducttypelists:[],
         subproducttype:[],
-        pcd:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
-        tendeliverydate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
-        confduedate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
+        pcd:moment(new Date()).format('YYYY-MM-DD'),
+        tendeliverydate:moment(new Date()).format('YYYY-MM-DD'),
+        confduedate:moment(new Date()).format('YYYY-MM-DD'),
         expcqty:'',
         availableqty:'',
         projectiondata:[],
-        styleid:this.props.match.params.styleid,
+        dataitem:[],
+        fields: {},
+        errors: {}
 
      }
      handleDateChange11 = (date) => {
@@ -169,9 +171,7 @@ import { DateTimePicker} from '@material-ui/pickers';
      componentDidMount() {
         document.body.classList.add('med-pop-up-h');
         this.getfilldropdownlists();
-        // console.log(this.props.match.params.styleid,'---------------------------')
-        // this.setState({styleid:this.props.params.styleid});
-        this.editdata(this.state.styleid);
+        
         // $(document).on('click', '.edit', function() {
         //     $(this).parent().siblings('td.data').each(function() {
         //       var content = $(this).html();
@@ -205,21 +205,34 @@ import { DateTimePicker} from '@material-ui/pickers';
         //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
         //   });
     }
-     handleChange(event, value) {
-        this.setState({ activeIndex: value });
-        this.setState({ [name]: checked });
-     }
+    //  handleChange(event, value) {
+    //     this.setState({ activeIndex: value });
+    //     this.setState({ [name]: checked });
+    //  }
+    handleChange(field, e){   
+        		
+        let fields = this.state.fields;
+        fields[field] = e[0].value;        
+        this.setState({fields});
+    //     console.log(name)
+
+    //     this.state = this.state.buyer;
+    //     this.setState({[field]:e});
+    //     //this.state.field = e;
+    //   console.log(this.state)  
+    //     console.log(e)
+      }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
-        this.setState({ pcd: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
+        this.setState({ pcd: moment(date).format('YYYY-MM-DD') });
     };
 
     handleDateChange1 = (date) => {
-        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
+        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD') });
     };
 
     handleDateChange2 = (date) => {
-        this.setState({ confduedate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
+        this.setState({ confduedate: moment(date).format('YYYY-MM-DD') });
     };
 
     handleChangeCheckbox = name => (event, checked) => {
@@ -244,7 +257,54 @@ import { DateTimePicker} from '@material-ui/pickers';
          
 		this.setState({ [name]: event.target.value });
 	};
-
+    contactSubmit(e,type){
+        e.preventDefault();
+        if(this.handleValidation()){
+            this.save();
+        }else{
+          alert("Form has errors.")
+        }
+    
+      }
+      handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+        console.log(fields)
+        //Name
+        if(!fields["buyer"]){
+          formIsValid = false;
+          errors["buyer"] = "Cannot be empty";
+        }
+    
+        // if(typeof fields["name"] !== "undefined"){
+        //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
+        //     formIsValid = false;
+        //     errors["name"] = "Only letters";
+        //   }      	
+        // }
+    
+        // //Email
+        // if(!fields["email"]){
+        //   formIsValid = false;
+        //   errors["email"] = "Cannot be empty";
+        // }
+    
+        // if(typeof fields["email"] !== "undefined"){
+        //   let lastAtPos = fields["email"].lastIndexOf('@');
+        //   let lastDotPos = fields["email"].lastIndexOf('.');
+    
+        //   if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
+        //     formIsValid = false;
+        //     errors["email"] = "Email is not valid";
+        //   }
+        // }
+    
+    
+    
+        this.setState({errors: errors});
+        return formIsValid;
+      }
      getfilldropdownlists() {
 
         api.get('Buyer/GetBuyerDropDown')
@@ -401,32 +461,6 @@ import { DateTimePicker} from '@material-ui/pickers';
 
       }
 
-
-      editdata(id){
-        api.get('StyleHeader/GetStyleGrid?StyleID='+id)
-        .then((response) => {
-            console.log(response.data.data[0],'------------')
-            let data = response.data.data[0];            
-
-            this.setState({ buyer: [{value:data.buyCode,label:data.buyCode}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasoncode,label:data.seasoncode}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],designStyleNo:data.designStyleNo,refstyleno:data.refStyleNo,
-                styleno:data.baseStyleno,producttype: [{value:data.producttype,label:data.producttype}],subproducttype: [{value:data.subProductType,label:data.subProductType}],
-                Washtype: [{value:data.washDesc,label:data.washDesc}],
-                printtype: [{value:data.printDesc,label:data.printDesc}],
-                embtype: [{value:data.embDesc,label:data.embDesc}],
-                GarDyeType: [{value:data.garDyeDesc,label:data.garDyeDesc}],
-                location: [{value:data.loccode,label:data.loccode}],
-                desc:data.styleDesc,
-                fabdesc:data.fabricDesc,
-                fabtype: [{value:data.fabricType,label:data.fabricType}],
-                FashionGRP: [{value:data.fashionGroup,label:data.fashionGroup}],
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-     } 
-
-
       projectsave(){
         const {projectiondata} = this.state;
         if(this.state.expcqty!=''){
@@ -492,7 +526,7 @@ import { DateTimePicker} from '@material-ui/pickers';
  
             let data =
           {
-            "id": this.state.styleid,
+            "id": 0,
             "entityID": "EC",
             "buyCode": this.state.buyer[0].value,
             "buyDivCode": this.state.buyerdiv[0].value,
@@ -596,7 +630,7 @@ console.log(data,'datadatadata')
 
             api.post('StyleHeader/SaveStyleHeader',data) .then((response) => {
                 // this.getMenulists();
-                NotificationManager.success('Updated Sucessfully');
+                NotificationManager.success('saved Sucessfully');
              
                 this.setState( {
                     // edit_add:false,
@@ -748,11 +782,13 @@ console.log(data,'datadatadata')
            }
 
 
+           
+           
 
            
           return (
               
-             <RctCollapsibleCard heading="Style Edit">
+             <RctCollapsibleCard heading="Style Create">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div  className={isActive ? "s-panel active" : 's-panel'}>
                       { !isActive &&
@@ -909,9 +945,11 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fabric Type"
                                                         options={fabtypeoptions}
-                                                        onChange={values => this.setState({ fabtype:values })}
+                                                        onChange={this.handleChange.bind(this, "name")}
+                                                        //onChange={values => this.setState({ fabtype:values })}
                                                         placeholder="Fabric Type"
-                                                        values={this.state.fabtype}
+                                                        value={this.state.fabtype}
+                                                        //values={this.state.fabtype}
                                                         />
                                        
                                     </div>
@@ -1082,7 +1120,9 @@ console.log(data,'datadatadata')
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
                        
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.save()}><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} 
+                        // onClick={(e) =>this.save()}
+                        ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                    </div>    </div> </div>
                    {/* <div className="col-lg-12 mt-10">
                         <ul class="list-group list-group-horizontal-md">
@@ -1251,10 +1291,12 @@ console.log(data,'datadatadata')
                                                 //   multi
                                                   createNewLabel="Buyer"
                                                 options={buyeroptions}
-                                                onChange={values => this.setState({ buyer:values })}
+                                                onChange={this.handleChange.bind(this,'buyer')}
+                                               // onChange={values => this.setState({ buyer:values })}
                                                 placeholder="Buyer"
-                                                values={this.state.buyer}
+                                                value={this.state.buyer}
                                                 />
+                                                <span className="error">{this.state.errors["buyer"]}</span>
                                 
                                 {/* <select className="form-control select2 mt-15">
                                     <option>Buyer</option> 
@@ -1266,16 +1308,16 @@ console.log(data,'datadatadata')
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group select_label_name mt-15">
-                                            <Select1
-                                                dropdownPosition="auto"
-                                                //   multi
-                                                  createNewLabel="Buyer Division"
-                                                options={buyerdivoptions}
-                                                onChange={values => this.setState({ buyerdiv:values })}
-                                                placeholder="Buyer Division"
-                                                values={this.state.buyerdiv}
-                                                />
-                               
+                            <Select1
+                                dropdownPosition="auto"
+                                //   multi
+                                    createNewLabel="Buyer Division"
+                                options={buyerdivoptions}
+                                onChange={values => this.setState({ buyerdiv:values })}
+                                //onChange={this.handleChange.bind(this, "buyerdivision")}
+                                placeholder="Buyer Division"
+                                values={this.state.buyerdiv}
+                                />                               
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">

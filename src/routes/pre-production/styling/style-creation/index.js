@@ -151,7 +151,6 @@ import { DateTimePicker} from '@material-ui/pickers';
         expcqty:'',
         availableqty:'',
         projectiondata:[],
-        dataitem:[],
         fields: {},
         errors: {}
 
@@ -205,23 +204,10 @@ import { DateTimePicker} from '@material-ui/pickers';
         //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
         //   });
     }
-    //  handleChange(event, value) {
-    //     this.setState({ activeIndex: value });
-    //     this.setState({ [name]: checked });
-    //  }
-    handleChange(field, e){   
-        		
-        let fields = this.state.fields;
-        fields[field] = e[0].value;        
-        this.setState({fields});
-    //     console.log(name)
-
-    //     this.state = this.state.buyer;
-    //     this.setState({[field]:e});
-    //     //this.state.field = e;
-    //   console.log(this.state)  
-    //     console.log(e)
-      }
+     handleChange(event, value) {
+        this.setState({ activeIndex: value });
+        this.setState({ [name]: checked });
+     }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
         this.setState({ pcd: moment(date).format('YYYY-MM-DD') });
@@ -257,6 +243,16 @@ import { DateTimePicker} from '@material-ui/pickers';
          
 		this.setState({ [name]: event.target.value });
 	};
+
+    setstatevaluedropdownfunction = name => event => {
+        let fields = this.state.fields;
+        fields[field] = event[0].value;        
+        this.setState({fields});
+        
+		this.setState({ [name]: event });
+	};
+
+
     contactSubmit(e,type){
         e.preventDefault();
         if(this.handleValidation()){
@@ -276,6 +272,40 @@ import { DateTimePicker} from '@material-ui/pickers';
           formIsValid = false;
           errors["buyer"] = "Cannot be empty";
         }
+
+        //buyerdiv
+        if(!fields["buyerdiv"]){
+            formIsValid = false;
+            errors["buyerdiv"] = "Cannot be empty";
+          }
+        //season
+        if(!fields["season"]){
+            formIsValid = false;
+            errors["season"] = "Cannot be empty";
+        }
+
+        //year
+        if(!fields["year"]){
+            formIsValid = false;
+            errors["year"] = "Cannot be empty";
+        }
+
+          //location
+          if(!fields["location"]){
+            formIsValid = false;
+            errors["location"] = "Cannot be empty";
+        }
+
+         //OrderType
+         if(!fields["OrderType"]){           
+            formIsValid = false;
+            errors["OrderType"] = "Cannot be empty";
+        }
+
+
+
+        
+          
     
         // if(typeof fields["name"] !== "undefined"){
         //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
@@ -305,6 +335,7 @@ import { DateTimePicker} from '@material-ui/pickers';
         this.setState({errors: errors});
         return formIsValid;
       }
+
      getfilldropdownlists() {
 
         api.get('Buyer/GetBuyerDropDown')
@@ -545,13 +576,13 @@ import { DateTimePicker} from '@material-ui/pickers';
             "subProductType": this.state.subproducttype[0].value,
             "OrderStage":  this.state.OrderType[0].value,
             "sam": 2,
-            "washReq":  this.state.Washtype[0].value,
+            "washReq":  'y',
             "washDesc": this.state.Washtype[0].label,
-            "printing":  this.state.printtype[0].value,
+            "printing":  'y',
             "printDesc":  this.state.printtype[0].label,
-            "embroidery":  this.state.embtype[0].value,
+            "embroidery":  'y',
             "embDesc":  this.state.embtype[0].label,
-            "garmentDye":  this.state.GarDyeType[0].value,
+            "garmentDye":  'y',
             "garDyeDesc":  this.state.GarDyeType[0].label,
             "tentativeFOB": 2,
             "remarks": "Remarks",
@@ -630,7 +661,7 @@ console.log(data,'datadatadata')
 
             api.post('StyleHeader/SaveStyleHeader',data) .then((response) => {
                 // this.getMenulists();
-                NotificationManager.success('saved Sucessfully');
+                NotificationManager.success('Saved Sucessfully');
              
                 this.setState( {
                     // edit_add:false,
@@ -945,12 +976,11 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fabric Type"
                                                         options={fabtypeoptions}
-                                                        onChange={this.handleChange.bind(this, "name")}
-                                                        //onChange={values => this.setState({ fabtype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('fabtype')}
                                                         placeholder="Fabric Type"
-                                                        value={this.state.fabtype}
-                                                        //values={this.state.fabtype}
+                                                        values={this.state.fabtype}
                                                         />
+
                                        
                                     </div>
                                 </div>
@@ -961,7 +991,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fit"
                                                         options={fitoptions}
-                                                        onChange={values => this.setState({ fit:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('fit')}
                                                         placeholder="Fit"
                                                         values={this.state.fit}
                                                         />
@@ -974,7 +1004,7 @@ console.log(data,'datadatadata')
                                                           multi
                                                         createNewLabel="Size"
                                                         options={sizeoptions}
-                                                        onChange={values => this.setState({ size:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('size')}
                                                         placeholder="Size"
                                                         values={this.state.size}
                                                         />
@@ -987,7 +1017,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Destination"
                                                         options={locationoptions}
-                                                        onChange={values => this.setState({ location:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('location')}
                                                         placeholder="Destination"
                                                         values={this.state.location}
                                                         />                          
@@ -1120,9 +1150,7 @@ console.log(data,'datadatadata')
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
                        
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} 
-                        // onClick={(e) =>this.save()}
-                        ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                    </div>    </div> </div>
                    {/* <div className="col-lg-12 mt-10">
                         <ul class="list-group list-group-horizontal-md">
@@ -1145,7 +1173,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Stage Details"
                                                         options={stagedetailsoptions}
-                                                        onChange={values => this.setState({ stagedetails:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('stagedetails')}
                                                         placeholder="Stage Details"
                                                         values={this.state.stagedetails}
                                                         />
@@ -1162,10 +1190,11 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Location"
                                                         options={locationoptions}
-                                                        onChange={values => this.setState({ location:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('location')}
                                                         placeholder="Location"
                                                         values={this.state.location}
                                                         />
+                                                         <span className="error">{this.state.errors["location"]}</span>
                         {/* <select className="form-control select2 mt-15">
                             <option>Location</option> 
                             <option>India</option> 
@@ -1217,7 +1246,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fit"
                                                         options={fitoptions}
-                                                        onChange={values => this.setState({ fit:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('fit')}
                                                         placeholder="Fit"
                                                         values={this.state.fit}
                                                         />
@@ -1231,7 +1260,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Stage"
                                                         options={stagedetailsoptions}
-                                                        onChange={values => this.setState({ stage:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('stage')}
                                                         placeholder="Stage"
                                                         values={this.state.stage}
                                                         />
@@ -1291,13 +1320,12 @@ console.log(data,'datadatadata')
                                                 //   multi
                                                   createNewLabel="Buyer"
                                                 options={buyeroptions}
-                                                onChange={this.handleChange.bind(this,'buyer')}
-                                               // onChange={values => this.setState({ buyer:values })}
+                                                //onChange={values => this.setState({ buyer:values })}
+                                                onChange={this.setstatevaluedropdownfunction('buyer')}
                                                 placeholder="Buyer"
-                                                value={this.state.buyer}
+                                                values={this.state.buyer}
                                                 />
-                                                <span className="error">{this.state.errors["buyer"]}</span>
-                                
+                                <span className="error">{this.state.errors["buyer"]}</span>
                                 {/* <select className="form-control select2 mt-15">
                                     <option>Buyer</option> 
                                     <option>Levis</option> 
@@ -1308,16 +1336,16 @@ console.log(data,'datadatadata')
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group select_label_name mt-15">
-                            <Select1
-                                dropdownPosition="auto"
-                                //   multi
-                                    createNewLabel="Buyer Division"
-                                options={buyerdivoptions}
-                                onChange={values => this.setState({ buyerdiv:values })}
-                                //onChange={this.handleChange.bind(this, "buyerdivision")}
-                                placeholder="Buyer Division"
-                                values={this.state.buyerdiv}
-                                />                               
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="Buyer Division"
+                                                options={buyerdivoptions}
+                                                onChange={this.setstatevaluedropdownfunction('buyerdiv')}
+                                                placeholder="Buyer Division"
+                                                values={this.state.buyerdiv}
+                                                />
+                               <span className="error">{this.state.errors["buyerdiv"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1327,11 +1355,11 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Season"
                                                         options={seasonoptions}
-                                                        onChange={values => this.setState({ season:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('season')}
                                                         placeholder="Season"
                                                         values={this.state.season}
                                                         />
-                               
+                               <span className="error">{this.state.errors["season"]}</span>
                             </div>
                         </div>
  
@@ -1342,10 +1370,11 @@ console.log(data,'datadatadata')
                                                 //   multi
                                                   createNewLabel="Year"
                                                 options={yearoptions}
-                                                onChange={values => this.setState({ year:values })}
+                                                onChange={this.setstatevaluedropdownfunction('year')}
                                                 placeholder="Year"
                                                 values={this.state.year}
                                                 />
+                                                 <span className="error">{this.state.errors["year"]}</span>
                                
                             </div>
                         </div> 
@@ -1365,7 +1394,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Buyer"
                                                         options={buyeroptions}
-                                                        onChange={values => this.setState({ buyer:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('buyer')}
                                                         placeholder="Buyer"
                                                         values={this.state.buyer}
                                                         />
@@ -1378,7 +1407,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Buyer Division"
                                                         options={buyerdivoptions}
-                                                        onChange={values => this.setState({ buyerdiv:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('buyerdiv')}
                                                         placeholder="Buyer Division"
                                                         values={this.state.buyerdiv}
                                                         />
@@ -1391,7 +1420,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Season"
                                                         options={seasonoptions}
-                                                        onChange={values => this.setState({ season:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('season')}
                                                         placeholder="Season"
                                                         values={this.state.season}
                                                         />
@@ -1405,7 +1434,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Year"
                                                         options={yearoptions}
-                                                        onChange={values => this.setState({ year:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('year')}
                                                         placeholder="Year"
                                                         values={this.state.year}
                                                         />
@@ -1438,11 +1467,11 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Order Category"
                                                         options={OrderTypeoptions}
-                                                        onChange={values => this.setState({ OrderType:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('OrderType')}
                                                         placeholder="Order Category"
                                                         values={this.state.OrderType}
                                                         />
-                          
+                          <span className="error">{this.state.errors["OrderType"]}</span>
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1475,7 +1504,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Product Type"
                                                         options={producttypeoptions}
-                                                        onChange={values => this.setState({ producttype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('producttype')}
                                                         placeholder="Product Type"
                                                         values={this.state.producttype}
                                                         />
@@ -1491,7 +1520,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Sub Product Type"
                                                         options={subproducttypeoptions}
-                                                        onChange={values => this.setState({ subproducttype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('subproducttype')}
                                                         placeholder="Sub Product Type"
                                                         values={this.state.subproducttype}
                                                         />
@@ -1504,7 +1533,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fashion Group"
                                                         options={FashionGRPoptions}
-                                                        onChange={values => this.setState({ FashionGRP:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('FashionGRP')}
                                                         placeholder="Fashion Group"
                                                         values={this.state.FashionGRP}
                                                         />
@@ -1529,7 +1558,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Print Type"
                                                         options={printtypeoptions}
-                                                        onChange={values => this.setState({ printtype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('printtype')}
                                                         placeholder="Print Type"
                                                         values={this.state.printtype}
                                                         />
@@ -1544,7 +1573,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Garment dye type"
                                                         options={GarDyeTypeoptions}
-                                                        onChange={values => this.setState({ GarDyeType:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('GarDyeType')}
                                                         placeholder="Garment dye type"
                                                         values={this.state.GarDyeType}
                                                         />
@@ -1559,7 +1588,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Wash Type"
                                                         options={Washtypeoptions}
-                                                        onChange={values => this.setState({ Washtype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('Washtype')}
                                                         placeholder="Wash Type"
                                                         values={this.state.Washtype}
                                                         />
@@ -1574,7 +1603,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Embroidery Type"
                                                         options={embtypeoptions}
-                                                        onChange={values => this.setState({ embtype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('embtype')}
                                                         placeholder="Embroidery Type"
                                                         values={this.state.embtype}
                                                         />
@@ -1592,7 +1621,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Fabric Type"
                                                         options={fabtypeoptions}
-                                                        onChange={values => this.setState({ fabtype:values })}
+                                                        onChange={this.setstatevaluedropdownfunction('fabtype')}
                                                         placeholder="Fabric Type"
                                                         values={this.state.fabtype}
                                                         />
