@@ -246,7 +246,7 @@ import { DateTimePicker} from '@material-ui/pickers';
 
     setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
-        fields[field] = event[0].value;        
+        fields[name] = event[0].value;        
         this.setState({fields});
         
 		this.setState({ [name]: event });

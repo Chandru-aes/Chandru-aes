@@ -145,9 +145,9 @@ import { DateTimePicker} from '@material-ui/pickers';
         fabdesc:'',
         subproducttypelists:[],
         subproducttype:[],
-        pcd:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
-        tendeliverydate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
-        confduedate:moment(new Date()).format('YYYY-MM-DD hh:mm:ss a'),
+        pcd:moment(new Date()).format('YYYY-MM-DD'),
+        tendeliverydate:moment(new Date()).format('YYYY-MM-DD'),
+        confduedate:moment(new Date()).format('YYYY-MM-DD'),
         expcqty:'',
         availableqty:'',
         projectiondata:[],
@@ -211,15 +211,15 @@ import { DateTimePicker} from '@material-ui/pickers';
      }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
-        this.setState({ pcd: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
+        this.setState({ pcd: moment(date).format('YYYY-MM-DD') });
     };
 
     handleDateChange1 = (date) => {
-        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
+        this.setState({ tendeliverydate: moment(date).format('YYYY-MM-DD') });
     };
 
     handleDateChange2 = (date) => {
-        this.setState({ confduedate: moment(date).format('YYYY-MM-DD hh:mm:ss a') });
+        this.setState({ confduedate: moment(date).format('YYYY-MM-DD') });
     };
 
     handleChangeCheckbox = name => (event, checked) => {
@@ -408,17 +408,17 @@ import { DateTimePicker} from '@material-ui/pickers';
             console.log(response.data.data[0],'------------')
             let data = response.data.data[0];            
 
-            this.setState({ buyer: [{value:data.buyCode,label:data.buyCode}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasoncode,label:data.seasoncode}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],designStyleNo:data.designStyleNo,refstyleno:data.refStyleNo,
+            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivname}],season: [{value:data.seasoncode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],designStyleNo:data.designStyleNo,refstyleno:data.refStyleNo,
                 styleno:data.baseStyleno,producttype: [{value:data.producttype,label:data.producttype}],subproducttype: [{value:data.subProductType,label:data.subProductType}],
-                Washtype: [{value:data.washDesc,label:data.washDesc}],
-                printtype: [{value:data.printDesc,label:data.printDesc}],
-                embtype: [{value:data.embDesc,label:data.embDesc}],
-                GarDyeType: [{value:data.garDyeDesc,label:data.garDyeDesc}],
+                Washtype: [{value:data.washDesc,label:data.washTypeCodeDesc}],
+                printtype: [{value:data.printDesc,label:data.printTypeCodeDesc}],
+                embtype: [{value:data.embDesc,label:data.embroideryTypeDesc}],
+                GarDyeType: [{value:data.garDyeDesc,label:data.garmentDyeTypeDesc}],
                 location: [{value:data.loccode,label:data.loccode}],
                 desc:data.styleDesc,
                 fabdesc:data.fabricDesc,
-                fabtype: [{value:data.fabricType,label:data.fabricType}],
-                FashionGRP: [{value:data.fashionGroup,label:data.fashionGroup}],
+                fabtype: [{value:data.fabricType,label:data.fabricTypeDesc}],
+                FashionGRP: [{value:data.fashionGroup,label:data.fashionGroupCodeDesc}],
              });
         })
         .catch(error => {
