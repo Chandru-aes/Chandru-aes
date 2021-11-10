@@ -46,6 +46,8 @@
  
  // rct section loader
  import RctSectionLoader from 'Components/RctSectionLoader/RctSectionLoader';
+
+ import Select1 from "react-dropdown-select";
  
  export default class UserProfile extends Component {
  
@@ -71,17 +73,32 @@
          openViewUserDialog: false, // view user dialog box
          editUser: null,
          allSelected: false,
-         selectedUsers: 0
+         selectedUsers: 0,
+         BuyerDivisionList:[],
+         BuyerdivisionValue:[],
+         seasonlists:[],
+         yearlists:[],
+         fields: {},
+            errors: {}
      }
- 
+     
      componentDidMount() {
-         api.get('userManagement.js')
-             .then((response) => {
-                 this.setState({ users: response.data });
-             })
-             .catch(error => {
-                 // error hanlding
-             })
+        api.get('BuyerDivision/GetBuyerDivisionDropDown')
+        .then((response) => {                
+            this.setState({ BuyerDivisionList: response.data.result.data });
+        })        
+        .catch(error => {})  
+        
+        api.get('SeasonMaster/GetSeasonList')
+            .then((response) => {                
+            this.setState({ seasonlists: response.data.result.data });
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=year')
+        .then((response) => {
+            
+            this.setState({ yearlists: response.data.result.data });
+        })
      }
  
      /**
@@ -238,7 +255,44 @@
              NotificationManager.success('User Updated!');
          }, 2000);
      }
- 
+     
+     setstatevaluedropdownfunction = name => event => {
+        let fields = this.state.fields;
+        fields[name] = event[0].value;        
+        this.setState({fields});
+        
+		this.setState({ [name]: event });
+	};
+    contactSubmit(e){
+        e.preventDefault();
+        if(this.handleValidation()){
+            //this.SaveForecast(type);
+        }    
+    }
+    handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+       
+        if(!fields["BuyerdivisionValue"]){
+            formIsValid = false;
+            errors["BuyerdivisionValue"] = "Cannot be empty";
+        }
+        if(!fields["season"]){
+            formIsValid = false;
+            errors["season"] = "Cannot be empty";
+        }
+        if(!fields["year"]){
+            formIsValid = false;
+            errors["year"] = "Cannot be empty";
+        }
+        if(!fields["styleno"]){
+            formIsValid = false;
+            errors["styleno"] = "Cannot be empty";
+        }
+        this.setState({errors: errors});
+        return formIsValid;
+      }
      //Select All user
      onSelectAllUser(e) {
          const { selectedUsers, users } = this.state;
@@ -260,6 +314,20 @@
  
      render() {
          const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
+         const BuyerDivisionOptions =[];
+         for (const item of this.state.BuyerDivisionList) {           
+             BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
+         }
+
+         const seasonoptions = [];
+         for (const item of this.state.seasonlists) {           
+             seasonoptions.push({value:item.seasonCode,label:item.seasonName});
+         }
+
+         const yearoptions = [];
+         for (const item of this.state.yearlists) {           
+             yearoptions.push({value:item.code,label:item.codeDesc});
+         }
          return (
              <div className="user-management">
                  <Helmet>
@@ -276,43 +344,49 @@
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                 <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Buyer Division</option> 
-                                            <option>Levis</option> 
-                                            <option>Allen</option> 
-                                            <option>Solly</option> 
-                                        </select> 
+                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
+                                        options={BuyerDivisionOptions} ref="buyerdivision"
+                                        placeholder="Buyer Division"
+                                        onChange={this.setstatevaluedropdownfunction('BuyerdivisionValue')}
+                                        //onChange={this.handleChangeValidate.bind(this, "buyerdivision",this.state.BuyerdivisionValue)} 
+                                        //onChange={values => this.setState({ BuyerdivisionValue:values })}
+                                        values={this.state.BuyerdivisionValue}
+                                    /> 
+                                    <span className="error">{this.state.errors["BuyerdivisionValue"]}</span>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Season</option> 
-                                            <option>Autumn</option> 
-                                            <option>Summer</option> 
-                                            <option>Winter</option> 
-                                        </select> 
+                                    <Select1 dropdownPosition="auto" 
+                                        createNewLabel="Season"  
+                                        options={seasonoptions}
+                                       // onChange={values => this.setState({ season:values })} 
+                                        onChange={this.setstatevaluedropdownfunction('season')}
+                                        placeholder="Select Season"
+                                        values={this.state.season} />
+                                        <span className="error">{this.state.errors["season"]}</span> 
                                     </div>  
                                 </div>
                             </div>
                             <div className="col-sm-6 col-md-6 col-xl-3">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Year</option> 
-                                            <option>2021</option> 
-                                            <option>2020</option> 
-                                            <option>2019</option> 
-                                        </select> 
+                                    <Select1 dropdownPosition="auto" createNewLabel="Year"  options={yearoptions}
+                                        // onChange={values => this.setState({ year:values })} 
+                                        onChange={this.setstatevaluedropdownfunction('year')}
+                                        placeholder="Year"
+                                        values={this.state.year} />
+                                        <span className="error">{this.state.errors["year"]}</span>
                                     </div>  
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="StyleNumber" fullWidth label="Style Number" placeholder="Style Number"/>
+                                        <TextField id="StyleNumber" fullWidth label="Style Number" placeholder="Style Number" onChange={this.setstatevaluedropdownfunction('styleno')} value={this.state.styleno}/>
+                                        <span className="error">{this.state.errors["styleno"]}</span>
                                     </div>                                   
                                 </div>
                             </div>
@@ -327,7 +401,12 @@
                                         </select> 
                                     </div>
                                 </div>
-                            </div>                          
+                            </div>  
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group"> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                </div>   
+                            </div>                     
                         </div> 
                      <div className="table-responsive no-padding-top overall-border">
                          <div className="d-flex justify-content-between border-bottom">

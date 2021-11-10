@@ -1,7 +1,7 @@
 /**
  * Simple Line Icons
  */
- import React, { Component, Fragment } from 'react';
+ import React, { Component, Fragment,useRef } from 'react';
  import api from 'Api';
  import {
 	Button,Modal,
@@ -106,6 +106,8 @@ import DataGrid, {
 
   const BuyerDivisionOptions=[];
 
+  //const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)   
+  //const buyername = useRef();
 /****/
 function TabContainer({ children }) {
     return (
@@ -166,6 +168,7 @@ function TabContainer({ children }) {
         this.onRowRemovingActiv = this.onRowRemovingActiv.bind(this);
         this.onRowRemoving = this.onRowRemoving.bind(this);
       }
+      
       handleChangesingledropdown = name => event => {
             this.setState({ [name]: event.target.value });
         };
@@ -227,6 +230,15 @@ function TabContainer({ children }) {
                     api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response) => {
                     
                         NotificationManager.success('Added Sucessfully');
+                         api.get('ForecastActivityEntity/GetForecastActivityList')
+                        .then((response) => {            
+                            this.setState({ activityList: response.data });
+                        })
+                        api.get('ForecastEntity/GetForecastHeaderList')
+                        .then((response) => {  
+                            // console.log(response.data.data,'response.data.result.data')          
+                            this.setState({ forecastinglists: response.data.data });
+                        })
                     })
                     .catch(error => {
                         // error handling
@@ -278,9 +290,18 @@ function TabContainer({ children }) {
                    
                     }
 
-                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveActivityItems) .then((response) => {
-                    
+                    console.log(this.state.saveActivityItems);
+                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveActivityItems) .then((response) => {                    
                         NotificationManager.success('Added Sucessfully');
+                        api.get('ForecastActivityEntity/GetForecastActivityList')
+                        .then((response) => {            
+                            this.setState({ activityList: response.data });
+                        })
+                        api.get('ForecastEntity/GetForecastHeaderList')
+                        .then((response) => {  
+                            // console.log(response.data.data,'response.data.result.data')          
+                            this.setState({ forecastinglists: response.data.data });
+                        })
                     })
                     .catch(error => {
                         // error handling
@@ -336,12 +357,17 @@ function TabContainer({ children }) {
             }
            
             api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
-                    
-                NotificationManager.success('Deleted Sucessfully');
+                                    NotificationManager.success('Deleted Sucessfully');
                if(response.data.data.status==true){
                     api.get('ForecastActivityEntity/GetForecastActivityList')
                     .then((response) => {            
                         this.setState({ activityList: response.data });
+                    })
+
+                    api.get('ForecastEntity/GetForecastHeaderList')
+                    .then((response) => {  
+                        // console.log(response.data.data,'response.data.result.data')          
+                        this.setState({ forecastinglists: response.data.data });
                     })
                }               
                 e.cancel=false;
@@ -404,7 +430,12 @@ function TabContainer({ children }) {
                 if(response.data.status==true){
                     api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
                     .then((response) => {            
-                        this.setState({ activityList: response.data });
+                        this.setState({ QtyBreakUpList: response.data });
+                    })
+                    api.get('ForecastEntity/GetForecastHeaderList')
+                    .then((response) => {  
+                        // console.log(response.data.data,'response.data.result.data')          
+                        this.setState({ forecastinglists: response.data.data });
                     })
                }  
                 e.cancel=false;
@@ -419,23 +450,39 @@ function TabContainer({ children }) {
 
             const {fcActivityInsertEntityModel} = this.state;
 
-            console.log(UpdatedData);
-            console.log("here")
 
             if(fcActivityInsertEntityModel.length>0){
+                const index = fcActivityInsertEntityModel.findIndex(item=>item.id === e.data.id);
                 fcActivityInsertEntityModel.find(function(el,index1) {
-                 
+                   
                 if(el.id == e.data.id){
-                    const index = fcActivityInsertEntityModel.findIndex(item=>item.id === e.data.id);
+                    
                     fcActivityInsertEntityModel.splice(index, 1);
+                    fcActivityInsertEntityModel[index]['cancel']='N';
+                    fcActivityInsertEntityModel[index]['fcHead_ID']=(e.data.fcHead_ID)?e.data.fcHead_ID:0;
+                    fcActivityInsertEntityModel[index]['createdBy']='Admin';
+                    fcActivityInsertEntityModel[index]['modifyBy']='Admin';
+                    fcActivityInsertEntityModel[index]['hostName']='Localhost';
                     fcActivityInsertEntityModel.push(UpdatedData);
                     
                 }else{
+                    fcActivityInsertEntityModel[index]['cancel']='N';
+                    fcActivityInsertEntityModel[index]['id']=(e.data.id>0)?e.data.id:0;
+                    fcActivityInsertEntityModel[index]['fcHead_ID']=(e.data.fcHead_ID)?e.data.fcHead_ID:0;
+                    fcActivityInsertEntityModel[index]['createdBy']='Admin';
+                    fcActivityInsertEntityModel[index]['modifyBy']='Admin';
+                    fcActivityInsertEntityModel[index]['hostName']='Localhost';
                     fcActivityInsertEntityModel.push(UpdatedData);
                 }
               }); 
             }else{
                 fcActivityInsertEntityModel.push(UpdatedData);
+                fcActivityInsertEntityModel[0]['id']=(e.data.id>0)?e.data.id:0;;
+                fcActivityInsertEntityModel[0]['fcHead_ID']=(e.data.fcHead_ID)?e.data.fcHead_ID:0;
+                fcActivityInsertEntityModel[0]['createdBy']='Admin';
+                fcActivityInsertEntityModel[0]['modifyBy']='Admin';
+                fcActivityInsertEntityModel[0]['hostName']='Localhost';
+                fcActivityInsertEntityModel[0]['cancel']='N';
             }
 
             const key = 'id';
@@ -597,6 +644,7 @@ function TabContainer({ children }) {
             fields['buyername'] = val.BuyerValue[0].value;        
             this.setState({fields});
 
+            this.setState({ BuyerValue: val.BuyerValue });
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
             .then((response) => {                
                 this.setState({ BuyerDivisionList: response.data.result.data });
@@ -628,22 +676,32 @@ function TabContainer({ children }) {
      handleChange(event, value) {
         this.setState({ activeIndex: value });
      }
+     /*
      handleChangeValidate(field, e,val){    		
         let fields = this.state.fields;
         fields[field] = val;        
         this.setState({fields});
         this.setState({ BuyerdivisionValue:val })
-        //console.log(e.target.value)
       }
-    
+      */
+      setstatevaluedropdownfunction = name => event => {
+        let fields = this.state.fields;
+        fields[name] = event[0].value;        
+        this.setState({fields});
+        
+		this.setState({ [name]: event });
+	};
       contactSubmit(e,type){
-        e.preventDefault();
-        if(this.handleValidation()){
+         
+          if(Object.keys(this.state.saveActivityItems).length === 0){
+            e.preventDefault();
+            if(this.handleValidation()){
+                this.SaveForecast(type);
+            }        
+          }else{
             this.SaveForecast(type);
-        }else{
-          alert("Form has errors.")
-        }
-    
+          }
+       
       }
       handleValidation(){
         let fields = this.state.fields;
@@ -655,10 +713,34 @@ function TabContainer({ children }) {
           errors["buyername"] = "Cannot be empty";
         }
         
-        if(!fields["buyerdivision"]){
+        if(!fields["BuyerdivisionValue"]){
             formIsValid = false;
-            errors["buyerdivision"] = "Cannot be empty";
-          }
+            errors["BuyerdivisionValue"] = "Cannot be empty";
+        }
+        if(!fields["location"]){
+            formIsValid = false;
+            errors["location"] = "Cannot be empty";
+        }
+        if(!fields["forecastItem"]){
+            formIsValid = false;
+            errors["forecastItem"] = "Cannot be empty";
+        }
+        if(!fields["season"]){
+            formIsValid = false;
+            errors["season"] = "Cannot be empty";
+        }
+        if(!fields["year"]){
+            formIsValid = false;
+            errors["year"] = "Cannot be empty";
+        }
+        
+        if(!formIsValid){
+            console.log("here")
+            // const buyername = useRef(null)
+            //const executeScroll = () => scrollToRef(buyername)
+           // window.scrollTo({ top: 0, behavior: 'smooth' })
+           // buyername.current.focus();
+        }
         this.setState({errors: errors});
         return formIsValid;
       }
@@ -720,6 +802,8 @@ function TabContainer({ children }) {
         const options = {
             filterType: 'dropdown'
         };
+       
+       // const executeScroll = () => scrollToRef(buyername)
         return (
             <div className="formelements-wrapper main-layout-class">
                 {/* <PageTitleBar title={"Menu Rights<IntlMessages id="sidebar.simpleform" />} match={this.props.match} /> */}
@@ -753,14 +837,16 @@ function TabContainer({ children }) {
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
+                                    
                                         <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
                                             options={BuyerDivisionOptions} ref="buyerdivision"
                                             placeholder="Buyer Division"
-                                            onChange={this.handleChangeValidate.bind(this, "buyerdivision",this.state.BuyerdivisionValue)} 
+                                            onChange={this.setstatevaluedropdownfunction('BuyerdivisionValue')}
+                                            //onChange={this.handleChangeValidate.bind(this, "buyerdivision",this.state.BuyerdivisionValue)} 
                                             //onChange={values => this.setState({ BuyerdivisionValue:values })}
                                             values={this.state.BuyerdivisionValue}
                                         />   
-                                        <span className="error">{this.state.errors["buyerdivision"]}</span>                                
+                                        <span className="error">{this.state.errors["BuyerdivisionValue"]}</span>                                
                                     </div>
                                 </div>
                             </div>
@@ -771,10 +857,12 @@ function TabContainer({ children }) {
                                         //   multi
                                             createNewLabel="Location"
                                             options={locationItemOptions}
-                                            onChange={values => this.setState({ location:values })}
+                                            onChange={this.setstatevaluedropdownfunction('location')}
+                                            //onChange={values => this.setState({ location:values })}
                                             placeholder="Location"
                                             values={this.state.lpcationItemValue}
-                                        />  
+                                        /> 
+                                        <span className="error">{this.state.errors["location"]}</span> 
                                     </div>                                   
                                 </div>
                             </div>
@@ -785,20 +873,26 @@ function TabContainer({ children }) {
                                         //   multi
                                             createNewLabel="Forecast Type"
                                             options={ForecastTypeItemOptions}
-                                            onChange={values => this.setState({ forecastItem:values })}
+                                            onChange={this.setstatevaluedropdownfunction('forecastItem')}
+                                            //onChange={values => this.setState({ forecastItem:values })}
                                             placeholder="Forecast Type"
                                             values={this.state.forecastItem}
                                         />  
-                                     
+                                      <span className="error">{this.state.errors["forecastItem"]}</span> 
                                     </div>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                    <Select1 dropdownPosition="auto" createNewLabel="Season"  options={seasonoptions}
-                                                onChange={values => this.setState({ season:values })} placeholder="Select Season"
-                                                values={this.state.season} />
+                                    <Select1 dropdownPosition="auto" 
+                                        createNewLabel="Season"  
+                                        options={seasonoptions}
+                                       // onChange={values => this.setState({ season:values })} 
+                                        onChange={this.setstatevaluedropdownfunction('season')}
+                                        placeholder="Select Season"
+                                        values={this.state.season} />
+                                        <span className="error">{this.state.errors["season"]}</span> 
                                     </div>  
                                 </div>
                             </div>
@@ -806,8 +900,11 @@ function TabContainer({ children }) {
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
                                         <Select1 dropdownPosition="auto" createNewLabel="Year"  options={yearoptions}
-                                                onChange={values => this.setState({ year:values })} placeholder="Year"
+                                                // onChange={values => this.setState({ year:values })} 
+                                                onChange={this.setstatevaluedropdownfunction('year')}
+                                                placeholder="Year"
                                                 values={this.state.year} />
+                                                <span className="error">{this.state.errors["year"]}</span>
                                     </div>  
                                 </div>
                             </div>                         
@@ -927,14 +1024,14 @@ function TabContainer({ children }) {
                                             </Fragment>
                                         </div>
                                     </div>
-                                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div className="form-group mt-15">                                       
                                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"  onClick={(e) => this.opnAddNewUserModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="table-responsive">
-                                    <DataGrid dataSource={this.state.activityList.data} keyExpr="id" showBorders={true} onRowUpdated={ this.onRowUpdatedActiv}  onRowRemoving={this.onRowRemovingActiv}>
+                                    <DataGrid dataSource={this.state.activityList.data} keyExpr="id" showBorders={true} onRowUpdated={ this.onRowUpdatedActiv}  onRowRemoving={this.onRowRemovingActiv} onRowInserting={this.onRowUpdatedActiv}>
                                         <Paging enabled={false} />
                                         <Editing mode="cell" allowUpdating={true}  allowAdding={true}  allowDeleting={true}
                                                 selectTextOnEditStart={this.state.selectTextOnEditStart}
@@ -952,7 +1049,7 @@ function TabContainer({ children }) {
                                 <div className="tb-pro mt-10">
                                     <div className="w-100">
                                         <div className="float-right">
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.SaveForecast('activity')}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e,'activity')}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -1064,6 +1161,7 @@ function TabContainer({ children }) {
                             <table className="table">
                             <thead className="thead-light">
                             <th className="text-center w-10">Actions</th>
+                            <th className="text-center w-10">Forecast Id</th>
                             <th className="text-center w-10">Buyer</th>
                             <th className="text-center w-10">Division</th>
                             <th className="w-10" >Season</th>
@@ -1088,6 +1186,7 @@ function TabContainer({ children }) {
                                     {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
                                 </td>
+                                <td className="text-center"> {n.forecastNo}</td>
                                 <td className="text-center"> {n.buyCode}</td>
                                 <td className="text-center">{n.buyDivcode}</td>
                                 <td>{n.seasonCode}</td>
