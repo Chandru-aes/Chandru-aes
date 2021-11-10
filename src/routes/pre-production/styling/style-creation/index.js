@@ -662,7 +662,7 @@ console.log(data,'datadatadata')
             api.post('StyleHeader/SaveStyleHeader',data) .then((response) => {
                 // this.getMenulists();
                 NotificationManager.success('Saved Sucessfully');
-             
+                window.location.href = "/#/app/pre-production/style-list";
                 this.setState( {
                     // edit_add:false,
                     // menuId:0,
