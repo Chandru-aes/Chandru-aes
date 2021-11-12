@@ -51,7 +51,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
- 
+import Select1 from "react-dropdown-select";
  // const styles = {
  // 	checked: {
  // 		color: pink[500],
@@ -106,6 +106,68 @@ import Radio from '@material-ui/core/Radio';
         selectedDate: moment(),
         addNewUserModal: false,
         checkedA: true,
+        buyerlists:[],
+        buyerdivlists:[],
+        yearlists:[],
+        reqtypelists:[],
+        reqtype:[],
+
+        bodygrainlists:[],
+        bodygrain:[],
+
+        joblists:[],
+        job:[],
+
+        addoninfolists:[],
+        addoninfo:[],
+        prepseqlists:[],
+        prepseq:[],
+
+        stylenolists:[],
+        styleno:[],
+
+        materialtypelists:[],
+        materialtype:[],
+
+        sampletypelists:[],
+        sampletype:[],
+
+        valueaddlists:[],
+        valueadd:[],
+
+        valueaddtypelists:[],
+        valueaddtype:[],
+
+        markerforlists:[],
+        markerfor:[],
+                
+       
+        locationlists:[],
+        sizelists:[],
+        size:[],
+        location:[],
+        FashionGRP:[],
+        buyer:[],
+        buyerdiv:[],
+        year:[],
+       
+        stagedetailslists:[],
+        fitlists:[],
+        fabtypelists:[],
+        stagedetails:[],
+        stage:[],
+        fit:[],
+        fabtype:[],
+        seasonlists:[],
+        season:[],
+        // styleno:'',
+        refstyleno:'',
+        versionno:'',
+        designStyleNo:'',
+        desc:'',
+        fabdesc:'',
+        fields: {},
+        errors: {}
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -116,40 +178,325 @@ import Radio from '@material-ui/core/Radio';
         this.setState({ addNewUserModal: true });
     }
      componentDidMount() {
+        document.body.classList.add('med-pop-up-h');
+        this.getfilldropdownlists();
         
-        $(document).on('click', '.edit', function() {
-            $(this).parent().siblings('td.data').each(function() {
-              var content = $(this).html();
-              $(this).html('<input value="' + content + '" class="form-control"/>');
-            });
+        // $(document).on('click', '.edit', function() {
+        //     $(this).parent().siblings('td.data').each(function() {
+        //       var content = $(this).html();
+        //       $(this).html('<input value="' + content + '" class="form-control"/>');
+        //     });
             
-            $(this).siblings('.save').show();
-            $(this).siblings('.delete').hide();
-            $(this).hide();
-          });
+        //     $(this).siblings('.save').show();
+        //     $(this).siblings('.delete').hide();
+        //     $(this).hide();
+        //   });
           
-          $(document).on('click', '.save', function() {
+        //   $(document).on('click', '.save', function() {
             
-            $('input').each(function() {
-              var content = $(this).val();
-              $(this).html(content);
-              $(this).contents().unwrap();
-            });
-            $(this).siblings('.edit').show();
-            $(this).siblings('.delete').show();
-            $(this).hide();
+        //     $('input').each(function() {
+        //       var content = $(this).val();
+        //       $(this).html(content);
+        //       $(this).contents().unwrap();
+        //     });
+        //     $(this).siblings('.edit').show();
+        //     $(this).siblings('.delete').show();
+        //     $(this).hide();
             
-          });
+        //   });
           
           
-          $(document).on('click', '.delete', function() {
-            $(this).parents('tr').remove();
-          });
+        //   $(document).on('click', '.delete', function() {
+        //     $(this).parents('tr').remove();
+        //   });
           
-          $('.add').click(function() {
-            $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
-          });
+        //   $('.add').click(function() {
+        //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
+        //   });
     }
+
+    
+    getfilldropdownlists() {
+
+        api.get('Buyer/GetBuyerDropDown')
+        .then((response) => {
+            
+            this.setState({ buyerlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+        api.get('BuyerDivision/GetBuyerDivisionList')
+        .then((response) => {
+            
+            this.setState({ buyerdivlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('StyleHeader/GetStyleGridList')
+        .then((response) => {
+            console.log(response.data.data,'response.data.data')
+            this.setState({ stylenolists: response.data.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=ORDSTAGE')
+        .then((response) => {
+            
+            this.setState({ stagedetailslists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+       
+        api.get('Miscellaneous/GetMiscellaneousList?MType=REQTYPE')
+        .then((response) => {
+            
+            this.setState({ reqtypelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=GRAIN')
+        .then((response) => {
+            
+            this.setState({ bodygrainlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
+        api.get('Miscellaneous/GetMiscellaneousList?MType=JOB')
+        .then((response) => {
+            
+            this.setState({ joblists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=ADDONINFO')
+        .then((response) => {
+            
+            this.setState({ addoninfolists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=PREPSEQ')
+        .then((response) => {
+            
+            this.setState({ prepseqlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=VALUEADD')
+        .then((response) => {
+            
+            this.setState({ valueaddlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=SAMPLETYPE')
+        .then((response) => {
+            
+            this.setState({ sampletypelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=MARKPUR')
+        .then((response) => {
+            
+            this.setState({ markerforlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=fit')
+        .then((response) => {
+            
+            this.setState({ fitlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=fabtype')
+        .then((response) => {
+            
+            this.setState({ fabtypelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
+
+        api.get('Location/GetLocationList')
+        .then((response) => {
+            
+            this.setState({ locationlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('SeasonMaster/GetSeasonDropDown')
+        .then((response) => {
+            
+            this.setState({ seasonlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
+        api.get('Size/GetSizeList')
+        .then((response) => {
+            
+            this.setState({ sizelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
+
+
+        
+        
+        api.get('Miscellaneous/GetMiscellaneousList?MType=year')
+        .then((response) => {
+            
+            this.setState({ yearlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+      }
+
+      setstatevaluefunction = name => event => {
+         
+		this.setState({ [name]: event.target.value });
+	};
+
+
+      setstatevaluedropdownfunction = name => event => {
+        let fields = this.state.fields;
+        fields[name] = event[0].value;        
+        this.setState({fields});
+        
+		this.setState({ [name]: event });
+	};
+
+
+    contactSubmit(e,type){
+        e.preventDefault();
+        if(this.handleValidation()){
+            this.save();
+        }else{
+          alert("Form has errors.")
+        }
+    
+      }
+      handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+        console.log(fields)
+        //Name
+        if(!fields["buyer"]){
+          formIsValid = false;
+          errors["buyer"] = "Cannot be empty";
+        }
+
+        //buyerdiv
+        if(!fields["buyerdiv"]){
+            formIsValid = false;
+            errors["buyerdiv"] = "Cannot be empty";
+          }
+        //season
+        if(!fields["season"]){
+            formIsValid = false;
+            errors["season"] = "Cannot be empty";
+        }
+
+        //year
+        if(!fields["year"]){
+            formIsValid = false;
+            errors["year"] = "Cannot be empty";
+        }
+
+          //location
+          if(!fields["location"]){
+            formIsValid = false;
+            errors["location"] = "Cannot be empty";
+        }
+
+         //OrderType
+         if(!fields["OrderType"]){           
+            formIsValid = false;
+            errors["OrderType"] = "Cannot be empty";
+        }
+
+
+
+        
+          
+    
+        // if(typeof fields["name"] !== "undefined"){
+        //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
+        //     formIsValid = false;
+        //     errors["name"] = "Only letters";
+        //   }      	
+        // }
+    
+        // //Email
+        // if(!fields["email"]){
+        //   formIsValid = false;
+        //   errors["email"] = "Cannot be empty";
+        // }
+    
+        // if(typeof fields["email"] !== "undefined"){
+        //   let lastAtPos = fields["email"].lastIndexOf('@');
+        //   let lastDotPos = fields["email"].lastIndexOf('.');
+    
+        //   if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
+        //     formIsValid = false;
+        //     errors["email"] = "Email is not valid";
+        //   }
+        // }
+    
+    
+    
+        this.setState({errors: errors});
+        return formIsValid;
+      }
+
+
      handleChange(event, value) {
         this.setState({ activeIndex: value });
         this.setState({ [name]: checked });
@@ -220,6 +567,102 @@ import Radio from '@material-ui/core/Radio';
              this.setState({ isActive: false });
            };
            const isActive = this.state.isActive;
+
+
+           const buyeroptions = [];
+           for (const item of this.state.buyerlists) {           
+               buyeroptions.push({value:item.buyerCode,label:item.buyerName});
+           }
+
+           const buyerdivoptions = [];
+           for (const item of this.state.buyerdivlists) {           
+               buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
+           }
+
+           const yearoptions = [];
+           for (const item of this.state.yearlists) {           
+               yearoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+
+           const reqtypeoptions = [];
+           for (const item of this.state.reqtypelists) {           
+               reqtypeoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const bodygrainoptions = [];
+           for (const item of this.state.bodygrainlists) {           
+               bodygrainoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+
+           const joboptions = [];
+           for (const item of this.state.joblists) {           
+               joboptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const addoninfooptions = [];
+           for (const item of this.state.addoninfolists) {           
+               addoninfooptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const prepseqoptions = [];
+           for (const item of this.state.prepseqlists) {           
+               prepseqoptions.push({value:item.code,label:item.codeDesc});
+           }
+         
+
+           const locationoptions = [];
+           for (const item of this.state.locationlists) {           
+               locationoptions.push({value:item.locCode,label:item.locName});
+           }
+
+           const sizeoptions = [];
+           for (const item of this.state.sizelists) {           
+               sizeoptions.push({value:item.sizecode,label:item.sizeIndex});
+           }
+
+
+           const fitoptions = [];
+           for (const item of this.state.fitlists) {           
+               fitoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const fabtypeoptions = [];
+           for (const item of this.state.fabtypelists) {           
+               fabtypeoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const stagedetailsoptions = [];
+           for (const item of this.state.stagedetailslists) {           
+               stagedetailsoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const seasonoptions = [];
+           for (const item of this.state.seasonlists) {           
+               seasonoptions.push({value:item.seasonCode,label:item.seasonName});
+           }
+
+
+           const markerforoptions = [];
+           for (const item of this.state.markerforlists) {           
+               markerforoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const valueaddoptions = [];
+           for (const item of this.state.valueaddlists) {           
+               valueaddoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const sampletypeoptions = [];
+           for (const item of this.state.sampletypelists) {           
+               sampletypeoptions.push({value:item.code,label:item.codeDesc});
+           }
+
+           const stylenooptions = [];
+           for (const item of this.state.stylenolists) {           
+               stylenooptions.push({value:item.styleid,label:item.styleNo});
+           }
           return (
               
              <RctCollapsibleCard heading="Single Window">
@@ -492,74 +935,71 @@ import Radio from '@material-ui/core/Radio';
                 <div className="w-75 float-left pr-15">
                 <div className="row">  
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Buyer</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                        </div>
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Buyer"
+                                                        options={buyeroptions}
+                                                        onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                        placeholder="Buyer"
+                                                        values={this.state.buyer}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Buyer Division"
+                                                        options={buyerdivoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('buyerdiv')}
+                                                        placeholder="Buyer Division"
+                                                        values={this.state.buyerdiv}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Season"
+                                                        options={seasonoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('season')}
+                                                        placeholder="Season"
+                                                        values={this.state.season}
+                                                        />
+                               
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Year"
+                                                        options={yearoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('year')}
+                                                        placeholder="Year"
+                                                        values={this.state.year}
+                                                        />
+                                                    </div>
+                                                </div> 
+
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Div</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Season</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Year</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Style No</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
+                        <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Style No"
+                                                        options={stylenooptions}
+                                                        onChange={this.setstatevaluedropdownfunction('styleno')}
+                                                        placeholder="Style No"
+                                                        values={this.state.styleno}
+                                                        />
+                                                    </div>
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
@@ -586,31 +1026,40 @@ import Radio from '@material-ui/core/Radio';
                                         <div className="col border pb-10">                       
                                             <div className="row no-f-mb">
                                                
+                                            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Fit"
+                                                        options={fitoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('fit')}
+                                                        placeholder="Fit"
+                                                        values={this.state.fit}
+                                                        />
+                                                       
+                                                    </div>
+                                                </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                        <select className="form-control select2 mt-15">
-                                                            <option>FIT</option> 
-                                                            <option>Levis</option> 
-                                                            <option>Allen</option> 
-                                                            <option>Solly</option> 
-                                                        </select>
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Stage"
+                                                        options={stagedetailsoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('stage')}
+                                                        placeholder="Stage"
+                                                        values={this.state.stage}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                     <div className="form-group">
-                                                        <select className="form-control select2 mt-15">
-                                                            <option>Stage</option> 
-                                                            <option>Autumn</option> 
-                                                            <option>Summer</option> 
-                                                            <option>Winter</option> 
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                        <TextField id="Buyer" fullWidth label="Version Number" placeholder="Version No"/>
+                                                        
+                                                        <TextField id="versionno" value={this.state.versionno}  onChange={this.setstatevaluefunction('versionno')} fullWidth label="Version Number" placeholder="Version No"/>
                                                     </div>
                                                 </div> 
+                                                
                                                 <div className="col-lg-12 col-md-6 col-sm-6 col-xs-12 mt-15">
                                                     <div className="form-group">
                                                         <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
@@ -651,17 +1100,18 @@ import Radio from '@material-ui/core/Radio';
                 <div className="w-100 col border mt-10 pb-10">
                 <div className="row no-f-mb">
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Req Type</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
+                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Req Type"
+                                                        options={reqtypeoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('reqtype')}
+                                                        placeholder="Req Type"
+                                                        values={this.state.reqtype}
+                                                        />
+                               
+                             
                         </div>
  
                     </div> 
@@ -786,44 +1236,57 @@ import Radio from '@material-ui/core/Radio';
                                     <DialogContent>                                   
                                         <div className="col border">                       
                                             <div className="row no-f-mb">
-                                                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                        <select className="form-control select2 mt-15">
-                                                            <option>Buyer</option> 
-                                                            <option>Levis</option> 
-                                                            <option>Allen</option> 
-                                                            <option>Solly</option> 
-                                                        </select> 
+                                            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Buyer"
+                                                        options={buyeroptions}
+                                                        onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                        placeholder="Buyer"
+                                                        values={this.state.buyer}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                        <select className="form-control select2 mt-15">
-                                                            <option>Buyer Division</option> 
-                                                            <option>Levis</option> 
-                                                            <option>Allen</option> 
-                                                            <option>Solly</option> 
-                                                        </select>
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Buyer Division"
+                                                        options={buyerdivoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('buyerdiv')}
+                                                        placeholder="Buyer Division"
+                                                        values={this.state.buyerdiv}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                        <select className="form-control select2 mt-15">
-                                                            <option>Season</option> 
-                                                            <option>Autumn</option> 
-                                                            <option>Summer</option> 
-                                                            <option>Winter</option> 
-                                                        </select>
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Season"
+                                                        options={seasonoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('season')}
+                                                        placeholder="Season"
+                                                        values={this.state.season}
+                                                        />
+                               
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                        <select className="form-control select2 mt-15">
-                                                            <option>Year</option> 
-                                                            <option>2021</option> 
-                                                            <option>2020</option> 
-                                                            <option>2019</option> 
-                                                        </select>
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Year"
+                                                        options={yearoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('year')}
+                                                        placeholder="Year"
+                                                        values={this.state.year}
+                                                        />
                                                     </div>
                                                 </div> 
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -866,46 +1329,56 @@ import Radio from '@material-ui/core/Radio';
                         </div>
                     </div> */}
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="age-simple">Body grain</InputLabel>
-                                <Select value={this.state.age} onChange={this.handleChange}
-                                inputProps={{ name: 'age', id: 'age-simple', }}>
-                                <MenuItem value=""><em>None</em></MenuItem>
-                                <MenuItem value={10}>Autumn</MenuItem>
-                                <MenuItem value={20}>Summer</MenuItem>
-                                <MenuItem value={30}>Winter</MenuItem>
-                                </Select>
-                            </FormControl>
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Body Grain"
+                                                        options={bodygrainoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('bodygrain')}
+                                                        placeholder="Body Grain"
+                                                        values={this.state.bodygrain}
+                                                        />
+                               
+                             
                         </div>
                     </div>
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple"> Nature of Job</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
+                     <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Nature of Job"
+                                                        options={joboptions}
+                                                        onChange={this.setstatevaluedropdownfunction('job')}
+                                                        placeholder="Nature of Job"
+                                                        values={this.state.job}
+                                                        />
+                               
+                             
                         </div>
+
+                     
                     </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div className="form-group">
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="age-simple">Add on info</InputLabel>
-                    <Select value={this.state.age} onChange={this.handleChange}
-                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value={10}>Autumn</MenuItem>
-                    <MenuItem value={20}>Summer</MenuItem>
-                    <MenuItem value={30}>Winter</MenuItem>
-                    </Select>
-                </FormControl>
-            </div>
+
+            <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Add on info"
+                                                        options={addoninfooptions}
+                                                        onChange={this.setstatevaluedropdownfunction('addoninfo')}
+                                                        placeholder="Add on info"
+                                                        values={this.state.addoninfo}
+                                                        />
+                               
+                             
+                        </div>
+
+                     
+
+           
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group mt-15">
@@ -937,14 +1410,17 @@ import Radio from '@material-ui/core/Radio';
                                                             </div>
                                                         </div>   
                                                         <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
-                                                            <div className="form-group">
-                                                                <select className="form-control select2 mt-15">
-                                                                    <option>Size</option> 
-                                                                    <option>Levis</option> 
-                                                                    <option>Allen</option> 
-                                                                    <option>Solly</option> 
-                                                                </select> 
-                                                            </div>
+                                                        <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Size"
+                                                                            options={sizeoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            placeholder="Size"
+                                                                            values={this.state.size}
+                                                                            />
+                                                        </div>
                                                         </div>  
                                                 </div> 
 
@@ -966,14 +1442,17 @@ import Radio from '@material-ui/core/Radio';
                                                             </div>
                                                         </div>   
                                                         <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
-                                                            <div className="form-group">
-                                                                <select className="form-control select2 mt-15">
-                                                                    <option>Size</option> 
-                                                                    <option>Levis</option> 
-                                                                    <option>Allen</option> 
-                                                                    <option>Solly</option> 
-                                                                </select> 
-                                                            </div>
+                                                        <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Size"
+                                                                            options={sizeoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            placeholder="Size"
+                                                                            values={this.state.size}
+                                                                            />
+                                                        </div>
                                                         </div>  
                                                 </div> 
                                                                             
@@ -1087,32 +1566,33 @@ import Radio from '@material-ui/core/Radio';
                 </div>
             </div>
             <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="age-simple">Preparation sequence</InputLabel>
-                    <Select value={this.state.age} onChange={this.handleChange}
-                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value={10}>Autumn</MenuItem>
-                    <MenuItem value={20}>Summer</MenuItem>
-                    <MenuItem value={30}>Winter</MenuItem>
-                    </Select>
-                </FormControl>
+                <div className="form-group select_label_name mt-15">
+                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Preparation sequence"
+                                                        options={prepseqoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('prepseq')}
+                                                        placeholder="Preparation sequence"
+                                                        values={this.state.prepseq}
+                                                        />
+             
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="age-simple">Material type</InputLabel>
-                    <Select value={this.state.age} onChange={this.handleChange}
-                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value={10}>Autumn</MenuItem>
-                    <MenuItem value={20}>Summer</MenuItem>
-                    <MenuItem value={30}>Winter</MenuItem>
-                    </Select>
-                </FormControl>
+            <div className="form-group select_label_name mt-15">
+                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Material type"
+                                                        options={prepseqoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('materialtype')}
+                                                        placeholder="Material type"
+                                                        values={this.state.materialtype}
+                                                        />
+             
                 </div>
+                
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
@@ -1139,18 +1619,17 @@ import Radio from '@material-ui/core/Radio';
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="age-simple">Size</InputLabel>
-                    <Select value={this.state.age} onChange={this.handleChange}
-                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value={10}>32</MenuItem>
-                    <MenuItem value={20}>34</MenuItem>
-                    <MenuItem value={30}>36</MenuItem>
-                    </Select>
-                </FormControl>
-                </div>
+            <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Size"
+                                                                            options={sizeoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            placeholder="Size"
+                                                                            values={this.state.size}
+                                                                            />
+                                                        </div>
             </div>
 
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1159,18 +1638,18 @@ import Radio from '@material-ui/core/Radio';
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="age-simple">Sample type</InputLabel>
-                    <Select value={this.state.age} onChange={this.handleChange}
-                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value={10}>32</MenuItem>
-                    <MenuItem value={20}>34</MenuItem>
-                    <MenuItem value={30}>36</MenuItem>
-                    </Select>
-                </FormControl>
-                </div>
+            <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Sample type"
+                                                                            options={sampletypeoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('sampletype')}
+                                                                            placeholder="Sample type"
+                                                                            values={this.state.sampletype}
+                                                                            />
+                                                        </div>
+               
             </div>
           
 
@@ -1316,18 +1795,18 @@ import Radio from '@material-ui/core/Radio';
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Material type</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
+                    <div className="form-group select_label_name mt-15">
+                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Material type"
+                                                        options={prepseqoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('materialtype')}
+                                                        placeholder="Material type"
+                                                        values={this.state.materialtype}
+                                                        />
+             
+                </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
@@ -1354,18 +1833,17 @@ import Radio from '@material-ui/core/Radio';
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Size</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>32</MenuItem>
-                            <MenuItem value={20}>34</MenuItem>
-                            <MenuItem value={30}>36</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
+                    <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Size"
+                                                                            options={sizeoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            placeholder="Size"
+                                                                            values={this.state.size}
+                                                                            />
+                                                        </div>
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1483,33 +1961,33 @@ import Radio from '@material-ui/core/Radio';
                      <div className="clearfix"></div>
                      <div className="row">
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div className="form-group">
-                                <FormControl fullWidth>
-                                    <InputLabel htmlFor="age-simple">Value Add</InputLabel>
-                                    <Select value={this.state.age} onChange={this.handleChange}
-                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value={10}>Autumn</MenuItem>
-                                    <MenuItem value={20}>Summer</MenuItem>
-                                    <MenuItem value={30}>Winter</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
+                        <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Value Add"
+                                                                            options={valueaddoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('valueadd')}
+                                                                            placeholder="Value Add"
+                                                                            values={this.state.valueadd}
+                                                                            />
+                                                        </div>
+
                         </div>
 
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="age-simple">Value Add Type</InputLabel>
-                                <Select value={this.state.age} onChange={this.handleChange}
-                                inputProps={{ name: 'age', id: 'age-simple', }}>
-                                <MenuItem value=""><em>None</em></MenuItem>
-                                <MenuItem value={10}>Autumn</MenuItem>
-                                <MenuItem value={20}>Summer</MenuItem>
-                                <MenuItem value={30}>Winter</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
+                        <div className="form-group select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            multi
+                                                                            createNewLabel="Value Add Type"
+                                                                            options={valueaddoptions}
+                                                                            onChange={this.setstatevaluedropdownfunction('valueaddtype')}
+                                                                            placeholder="Value Add Type"
+                                                                            values={this.state.valueaddtype}
+                                                                            />
+                                                        </div>
+                        
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">

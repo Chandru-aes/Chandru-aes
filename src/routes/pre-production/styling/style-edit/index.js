@@ -152,6 +152,7 @@ import { DateTimePicker} from '@material-ui/pickers';
         availableqty:'',
         projectiondata:[],
         styleid:this.props.match.params.styleid,
+        styleDetailID:0
 
      }
      handleDateChange11 = (date) => {
@@ -172,6 +173,7 @@ import { DateTimePicker} from '@material-ui/pickers';
         // console.log(this.props.match.params.styleid,'---------------------------')
         // this.setState({styleid:this.props.params.styleid});
         this.editdata(this.state.styleid);
+        this.editdataprojectiondt(this.state.styleid);
         // $(document).on('click', '.edit', function() {
         //     $(this).parent().siblings('td.data').each(function() {
         //       var content = $(this).html();
@@ -424,6 +426,17 @@ import { DateTimePicker} from '@material-ui/pickers';
         .catch(error => {
             // error handling
         })
+    }
+editdataprojectiondt(id){
+        api.get('StyleHeader/GetStyleDetailGridList?SParentID='+id)
+        .then((response) => {
+            console.log(response.data.data,'------------')
+            
+            this.setState({ projectiondata: response.data.data});
+        })
+        .catch(error => {
+            // error handling
+        })
      } 
 
 
@@ -431,24 +444,37 @@ import { DateTimePicker} from '@material-ui/pickers';
         const {projectiondata} = this.state;
         if(this.state.expcqty!=''){
           let data = {
-              "id": 0,
-              "styleMast_ID": 0,
+              "id": this.state.styleDetailID,
+              "styleMast_ID": this.state.styleid,
               "expOrdQty": this.state.expcqty,
-              "pcd": this.state.pcd,//"2021-10-30T10:38:00.634Z",
-              "expExfacDt": this.state.tendeliverydate,//"2021-10-30T10:38:00.634Z",
-              "projClosrDt": this.state.confduedate,//"2021-10-30T10:38:00.634Z",
-              "cancel": "q",
+              "pcd": this.state.pcd,
+              "expExfacDt": this.state.tendeliverydate,
+              "projClosrDt": this.state.confduedate,
+              "cancel": "N",
               "createdBy": "q",
               "createdDt": "2021-10-30T10:38:00.634Z",
               "modifyBy": "q",
               "modifyDt": "2021-10-30T10:38:00.634Z",
               "hostName": "q"
               }
-              projectiondata.push(data);
-              this.setState({projectiondata:projectiondata})
+            //   projectiondata.push(data);
+            //   this.setState({projectiondata:projectiondata})
+
+              api.post('StyleHeader/SaveStyleDetail',{"styleDetailEntityModel":[data]}) .then((response) => {
+                // this.getMenulists();
+                NotificationManager.success('Updated Sucessfully');
+                this.setState({styleDetailID:0});
+                this.editdataprojectiondt(this.state.styleid);
+                // window.location.href = "/#/app/pre-production/style-list";
+               
+            })
+            .catch(error => {
+                // error handling
+            })
+
           // this.state.projectiondata.push(data);
           this.setState({expcqty:0})
-          console.log(this.state.projectiondata,'this.state.projectiondata')
+          
         }  else{
           NotificationManager.error('Please Enter all values');
 
@@ -459,14 +485,43 @@ import { DateTimePicker} from '@material-ui/pickers';
    
 
       projectdelete(item){
-          const {projectiondata} = this.state;
+        //   const {projectiondata} = this.state;
 
           
-                if (projectiondata.indexOf(item) !== -1) {
-                    projectiondata.splice(projectiondata.indexOf(item), 1);
-                } 
-             this.setState({projectiondata:projectiondata})
-             console.log(this.state.projectiondata,'projectiondata')
+        //         if (projectiondata.indexOf(item) !== -1) {
+        //             projectiondata.splice(projectiondata.indexOf(item), 1);
+        //         } 
+        //      this.setState({projectiondata:projectiondata})
+             
+        let data = {
+            "id": item.styleDetailID,
+            "styleMast_ID": this.state.styleid,
+            "expOrdQty": item.expcqty,
+            "pcd": item.pcd,
+            "expExfacDt": item.tendeliverydate,
+            "projClosrDt": item.confduedate,
+            "cancel": "Y",
+            "createdBy": "q",
+            "createdDt": "2021-10-30T10:38:00.634Z",
+            "modifyBy": "q",
+            "modifyDt": "2021-10-30T10:38:00.634Z",
+            "hostName": "q"
+            }
+          //   projectiondata.push(data);
+          //   this.setState({projectiondata:projectiondata})
+
+            api.post('StyleHeader/SaveStyleDetail',{"styleDetailEntityModel":[data]}) .then((response) => {
+              // this.getMenulists();
+              NotificationManager.success('Deleted Sucessfully');
+              this.setState({styleDetailID:0});
+              this.editdataprojectiondt(this.state.styleid);
+              // window.location.href = "/#/app/pre-production/style-list";
+             
+          })
+          .catch(error => {
+              // error handling
+          })
+
         
        
       }
@@ -474,15 +529,16 @@ import { DateTimePicker} from '@material-ui/pickers';
       projectedit(item){
         const {projectiondata} = this.state;
 
-        this.setState({expcqty:item.expOrdQty,pcd:item.pcd,tendeliverydate:item.expExfacDt,confduedate:item.projClosrDt});
-              if (projectiondata.indexOf(item) !== -1) {
-                  projectiondata.splice(projectiondata.indexOf(item), 1);
-              } 
-           this.setState({projectiondata:projectiondata})
-           console.log(this.state.projectiondata,'projectiondata')
+        this.setState({expcqty:item.expOrdQty,pcd:item.pcd,tendeliverydate:item.expExfacDt,confduedate:item.projClosrDt,styleDetailID:item.styleDetailID});
+        //       if (projectiondata.indexOf(item) !== -1) {
+        //           projectiondata.splice(projectiondata.indexOf(item), 1);
+        //       } 
+        //    this.setState({projectiondata:projectiondata})
+        //    console.log(this.state.projectiondata,'projectiondata')
       
      
     }
+    
 
       save () {
         console.log(this.state,'-----------------------')
@@ -527,8 +583,8 @@ import { DateTimePicker} from '@material-ui/pickers';
             "modifyBy": "A",
             "modifyDt": "2021-10-29T08:01:11.048Z",
             "hostName": "A",
-            "styleDetailEntityModel": 
-                this.state.projectiondata
+            "styleDetailEntityModel": []
+                // this.state.projectiondata
                 // [
                 // {
                 // "id": 0,
@@ -754,7 +810,7 @@ console.log(data,'datadatadata')
               
              <RctCollapsibleCard heading="Style Edit">
                   <PageTitleBar title="Menu" match={this.props.match} />
-                  <div  className={isActive ? "s-panel active" : 's-panel'}>
+                  <div  className={isActive ? "s-panel s-panel-width active" : 's-panel'}>
                       { !isActive &&
                           <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details{isActive}<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
@@ -852,9 +908,8 @@ console.log(data,'datadatadata')
                                     return (
 
                                      <tr key={`list${index}`}>
-                                     <td className="">
-                                   
- 
+                                     <td className="text-center">
+                                         
                                    <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.projectdelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                    <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.projectedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
                                   
