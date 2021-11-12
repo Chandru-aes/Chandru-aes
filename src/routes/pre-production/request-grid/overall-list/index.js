@@ -49,8 +49,8 @@
 
  import Select1 from "react-dropdown-select";
  
- export default class UserProfile extends Component {
- 
+ class UserProfile extends Component {
+    
      state = {
          all: false,
          users: null, // initial user data
@@ -78,10 +78,18 @@
          BuyerdivisionValue:[],
          seasonlists:[],
          yearlists:[],
+         requesttypelist:[],
          fields: {},
-            errors: {}
+        errors: {},
+        styleno:'',
+        overalllists:[]
      }
-     
+     constructor(props) {
+        super(props);
+       // this.state = { employees: service.getEmployees() };
+       // this.states = service.getStates();
+      
+     }
      componentDidMount() {
         api.get('BuyerDivision/GetBuyerDivisionDropDown')
         .then((response) => {                
@@ -99,8 +107,16 @@
             
             this.setState({ yearlists: response.data.result.data });
         })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=REQTYPE')
+        .then((response) => {
+            
+            this.setState({ requesttypelist: response.data.result.data });
+        })
+
+        
      }
- 
+    
      /**
       * On Delete
       */
@@ -263,12 +279,36 @@
         
 		this.setState({ [name]: event });
 	};
-    contactSubmit(e){
+    
+    setTextboxvalue = name => event => {
+        let fields = this.state.fields;
+        fields[name] =event.target.value;
+        this.setState({fields});
+
+		this.setState({ [name]: event.target.value });
+	};
+    viewRequestList(e){
         e.preventDefault();
         if(this.handleValidation()){
-            //this.SaveForecast(type);
+            this.getRequestGridList();
         }    
     }
+    getRequestGridList(){
+       
+        api.get('SWRequestGrid/GetRequestGridData?BuyDivCode='+this.state.fields.BuyerdivisionValue+'&SeasonCode='+this.state.fields.season+'&year='+this.state.fields.year+'&styleNo='+this.state.fields.styleno+'&RequestType='+this.state.fields.requesttype+'')
+        .then((response) => response.data.data)
+        .then(overalllists => {
+            this.setState({ overalllists: overalllists });
+        });
+        // .then((response) => {  
+                    
+        //     this.setState({ overalllists: response.data.data });
+
+            
+        // })
+    }
+
+    
     handleValidation(){
         let fields = this.state.fields;
         let errors = {};
@@ -289,6 +329,11 @@
         if(!fields["styleno"]){
             formIsValid = false;
             errors["styleno"] = "Cannot be empty";
+        }
+
+        if(!fields["requesttype"]){
+            formIsValid = false;
+            errors["requesttype"] = "Cannot be empty";
         }
         this.setState({errors: errors});
         return formIsValid;
@@ -311,8 +356,9 @@
              this.setState({ selectedUsers: 0, users: unselectedUsers });
          }
      }
- 
+     
      render() {
+       
          const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
          const BuyerDivisionOptions =[];
          for (const item of this.state.BuyerDivisionList) {           
@@ -328,7 +374,37 @@
          for (const item of this.state.yearlists) {           
              yearoptions.push({value:item.code,label:item.codeDesc});
          }
+
+         const requesttypeoptions = [];
+         for (const item of this.state.requesttypelist) {           
+            requesttypeoptions.push({value:item.code,label:item.codeDesc});
+        }
+        //console.log(this.state.overalllists)
+        let buyerrightlistshtml = null;
+        if(this.state.overalllists.length>0){
+            buyerrightlistshtml= this.state.overalllists.map((n,index) => {                                    
+            return (
+                <tr>               
+                    <td>
+                        <div className="media">                                                
+                                <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
+                        </div>
+                    </td>
+                    <td>{n.fit}</td> 
+                    <td>{n.requestNumber}</td>
+                    <td>{n.requestType}</td>
+                    <td>{n.requestDate}</td>
+                    <td><Link to='/app/pre-production/request-style-list'>{n.styleNumber}</Link></td>                    
+                    <td>{n.purpose}</td>                                    
+                    <td>{n.noOfActivity}</td>     
+                    <td><span className={`badge badge-success badge-pill ft-lft`}>{n.colorStatus}</span></td>    
+                </tr>
+            );
+        }) }else{
+            buyerrightlistshtml = <tr><td colSpan="9" className="no-records-data"><span>No records found</span></td></tr> ;
+        }
          return (
+           
              <div className="user-management">
                  <Helmet>
                  <title>Ambattur Fashion India Private Limited ( AFIPL)</title>
@@ -385,7 +461,8 @@
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="StyleNumber" fullWidth label="Style Number" placeholder="Style Number" onChange={this.setstatevaluedropdownfunction('styleno')} value={this.state.styleno}/>
+                                        <TextField id="StyleNumber" fullWidth label="Style Number" placeholder="Style Number" onChange={this.setTextboxvalue('styleno')} value={this.state.styleno}/>
+                                        
                                         <span className="error">{this.state.errors["styleno"]}</span>
                                     </div>                                   
                                 </div>
@@ -393,18 +470,18 @@
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Request Type</option> 
-                                            <option>Annual Buyer</option> 
-                                            <option>Monthly Buyer</option> 
-                                            <option>Weely</option> 
-                                        </select> 
+                                    <Select1 dropdownPosition="auto" createNewLabel="Request Type"  options={requesttypeoptions}
+                                        // onChange={values => this.setState({ year:values })} 
+                                        onChange={this.setstatevaluedropdownfunction('requesttype')}
+                                        placeholder="Request Type"
+                                        values={this.state.requesttype} />
+                                        <span className="error">{this.state.errors["requesttype"]}</span>
                                     </div>
                                 </div>
                             </div>  
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group"> 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                <div className="form-group mt-15"> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
                                 </div>   
                             </div>                     
                         </div> 
@@ -477,101 +554,9 @@
                                  </tr>
                              </thead>
                              <tbody>
-                                 {/* {users && users.map((user, key) => ( */}
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         <td>Slim</td> 
-                                         <td>859</td>
-                                         <td> Style product Top</td>
-                                         <td>2021-10-15 </td>
-                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                          
-                                         <td>Design</td>                                    
-                                         <td>10</td>     
-                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                     
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         <td>Medium</td> 
-                                         <td>859</td>
-                                         <td> Style product Top</td>
-                                         <td>2021-10-15 </td>
-                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>Design</td>                                      
-                                         <td>10</td>   
-                                         <td><span className={`badge badge-warning badge-pill ft-lft`}>In process</span></td>                                     
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         <td>Large</td>
-                                         <td>859</td>
-                                         <td> Style product Top</td>
-                                         <td>2021-10-15 </td>
-                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>Design</td>                                      
-                                         <td>10</td> 
-                                         <td><span className={`badge badge-danger badge-pill ft-lft`}>Yet to process</span></td>                                       
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         
-                                         <td>Slim</td>     
-                                         <td>859</td>
-                                         <td> Style product Top</td>
-                                         <td>2021-10-15 </td>
-                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>Design</td>                                  
-                                         <td>10</td>  
-                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                      
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         
-                                         <td>medium</td>     
-                                         <td>859</td>
-                                         <td> Style product Top</td>
-                                         <td>2021-10-15 </td>
-                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>Design</td>                                      
-                                         <td>10</td> 
-                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                       
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>                                         
-                                         <td>small</td>  
-                                         <td>859</td>
-                                         <td> Style product Top</td>
-                                         <td>2021-10-15 </td>
-                                         <td><Link to='/app/pre-production/request-style-list'>PCD88885</Link></td>
-                                         <td>Design</td>                                     
-                                         <td>10</td>  
-                                         <td><span className={`badge badge-warning badge-pill ft-lft`}>completed</span></td>                                      
-                                     </tr>
-                                 {/* )) */}
+                             { buyerrightlistshtml &&
+                             buyerrightlistshtml}
+                            
                              </tbody>
                              <tfoot className="border-top">
                                  <tr>
@@ -680,4 +665,5 @@
          );
      }
  }
+ export default UserProfile;
  

@@ -176,16 +176,28 @@ function TabContainer({ children }) {
         getForecastdetail(ForecastId){
             api.get('ForecastQtyDetailEntity/GetForecastGrid?ForecastID='+ForecastId)
             .then((response) => { 
-                this.setState({
-                    BuyerValue:[{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}],
-                    BuyerdivisionValue:[{value:response.data.data[0].buyDivcode,label:response.data.data[0].buyerDivName}],
-                    lpcationItemValue:[{value:response.data.data[0].loccode,label:response.data.data[0].locName}],
-                    season:[{value:response.data.data[0].seasonCode,label:response.data.data[0].seasonName}],
-                    year:[{value:response.data.data[0].seasonYear,label:response.data.data[0].seasonYear}]
-                });
-             
+               
+                    this.setState({
+                        BuyerValue:[{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}],
+                        BuyerdivisionValue:[{value:response.data.data[0].buyDivcode,label:response.data.data[0].buyerDivName}],
+                        lpcationItemValue:[{value:response.data.data[0].loccode,label:response.data.data[0].locName}],
+                        season:[{value:response.data.data[0].seasonCode,label:response.data.data[0].seasonName}],
+                        year:[{value:response.data.data[0].seasonYear,label:response.data.data[0].seasonYear}],
+                       forecastItem:[{value:response.data.data[0].fcType,label:response.data.data[0].fcTypeDesc}]
+                    });
+               
             })        
             .catch(error => {})
+
+            api.get('ForecastQtyDetailEntity/GetForecastQtyDetails?FCID='+ForecastId)
+            .then((response) => {            
+                this.setState({ QtyBreakUpList: response.data });
+            })
+
+            api.get('ForecastActivityEntity/GetForecastActivityList?FID='+ForecastId)
+            .then((response) => {            
+                this.setState({ activityList: response.data });
+            })
         }
         deleteForecast(ForecastItem,ForecastId){
             const deleteForecastHeaderitem={
@@ -221,8 +233,10 @@ function TabContainer({ children }) {
         }
       // get employee payrols
         SaveForecast(type){
-            console.log(type)
-            if(this.state.QtyBreakUpList.length==0 || this.state.activityList.length==0){
+            console.log("sdfsdfs")
+            console.log(this.state.QtyBreakUpList)
+            console.log(this.state.activityList)
+            if(this.state.QtyBreakUpList.data.length==0 && this.state.activityList.data.length==0){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
             }else{
                 console.log(this.state.saveQtyDetailItems)
@@ -426,7 +440,6 @@ function TabContainer({ children }) {
                     
                 NotificationManager.success('Deleted Sucessfully');
 
-                console.log(response.data.status)
                 if(response.data.status==true){
                     api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
                     .then((response) => {            
@@ -497,8 +510,8 @@ function TabContainer({ children }) {
                 "loccode": (this.state.location)?this.state.location[0].value:e.data.loccode,
                 "seasonCode": (this.state.season)?this.state.season[0].value:e.data.seasonCode,
                 "seasonYear": (this.state.year)?this.state.year[0].value:e.data.seasonYear,
-               // "fCtype": (this.state.forecastItem.length>0)?this.state.forecastItem[0].value:e.data.fCtype,
-               "fCtype": "SEASONAL",
+               "fCtype": (this.state.forecastItem.length>0)?this.state.forecastItem[0].value:e.data.fCtype,
+               //"fCtype": "SEASONAL",
                 "createdBy": "1",
                 "modifyBy": "1",
                 "cancel": "N",
