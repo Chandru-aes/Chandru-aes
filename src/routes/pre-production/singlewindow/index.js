@@ -59,6 +59,7 @@ import Select1 from "react-dropdown-select";
     
  // };
  import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers';
+ import { NotificationContainer, NotificationManager } from 'react-notifications';
  const $ = require('jquery');
  function TabContainer({ children }) {
     return (
@@ -167,7 +168,26 @@ import Select1 from "react-dropdown-select";
         desc:'',
         fabdesc:'',
         fields: {},
-        errors: {}
+        errors: {},
+
+        samaddmoredata:[],
+        optionType:'',
+        valueaddaddmoredata:[],
+        valueaddcolor:'',
+        // valueadd:[],
+        // valueaddtype:[],
+        color:'',
+        noofpieces:0,
+        purposelists:[],
+        purpose:[],
+        costingwarp:'',
+        costingweft:'',
+        costingsize:[],
+        samplesize:[],
+        samplewarp:'',
+        sampleweft:'',
+        ref_version:'',
+        ref_styleno:'',
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -395,6 +415,17 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
+        api.get('Purpose/GetPurposeDropDown')
+        .then((response) => {
+            
+            this.setState({ purposelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+        
 
       }
 
@@ -537,9 +568,127 @@ import Select1 from "react-dropdown-select";
         this.setState({ cloneopen: false });
      };
 
+     samaddmoresave(){
+        const {samaddmoredata} = this.state;
+        if(this.state.optionType!=''){
+          let data = {
+            "id": 0,
+            "swH_Id": 0,
+            "optionType": this.state.optionType,
+            "baseSAM": "s",
+            "cancel": "s",
+            "createdBy": "string",
+            "createdDt": "2021-11-15T06:14:33.552Z",
+            "modifyBy": "string",
+            "modifyDt": "2021-11-15T06:14:33.552Z",
+            "hostName": "string"
+              }
+              samaddmoredata.push(data);
+              this.setState({samaddmoredata:samaddmoredata})
+          // this.state.samaddmoredata.push(data);
+          this.setState({optionType:''})
+          console.log(this.state.samaddmoredata,'this.state.samaddmoredata')
+        }  else{
+          NotificationManager.error('Please Enter all values');
+
+      }
+     
+    }
+
+   
+
+      samaddmoredelete(item){
+          const {samaddmoredata} = this.state;
+
+          
+                if (samaddmoredata.indexOf(item) !== -1) {
+                    samaddmoredata.splice(samaddmoredata.indexOf(item), 1);
+                } 
+             this.setState({samaddmoredata:samaddmoredata})
+             console.log(this.state.samaddmoredata,'samaddmoredata')
+        
+       
+      }
+
+      samaddmoreedit(item){
+        const {samaddmoredata} = this.state;
+
+        this.setState({optionType:item.optionType});
+              if (samaddmoredata.indexOf(item) !== -1) {
+                  samaddmoredata.splice(samaddmoredata.indexOf(item), 1);
+              } 
+           this.setState({samaddmoredata:samaddmoredata})
+           console.log(this.state.samaddmoredata,'samaddmoredata')
+      
+     
+    }
+
+
+    valueaddaddmoresave(){
+      console.log(this.state.valueadd,this.state.valueaddtype,'valueaddtypevalueaddtype')
+        const {valueaddaddmoredata} = this.state;
+        if(this.state.valueadd.length>0 || this.state.noofpieces!=0){
+          let data = {
+            "id": 0,
+            "swH_Id": 0,
+            "valueAdd": this.state.valueadd[0].value,
+            "valueAddType": this.state.valueaddtype[0].value,
+            "valueaddtypeDesc": this.state.valueaddtype[0].label,
+            "color": this.state.valueaddcolor,
+            "pcs": this.state.noofpieces,
+            "typeOfGarment": "string",
+            "cancel": "s",
+            "createdBy": "string",
+            "createdDt": "2021-11-15T06:14:33.552Z",
+            "modifyBy": "string",
+            "modifyDt": "2021-11-15T06:14:33.552Z",
+            "hostName": "string"
+              }
+              valueaddaddmoredata.push(data);
+              this.setState({valueaddaddmoredata:valueaddaddmoredata})
+          // this.state.valueaddaddmoredata.push(data);
+        //   this.setState({valueadd:[],valueaddtype:[],noofpieces:0})
+        this.setState({valueaddcolor:'',noofpieces:0})
+        //   console.log(this.state.valueaddaddmoredata,'this.state.valueaddaddmoredata')
+        }  else{
+          NotificationManager.error('Please Enter all values');
+
+      }
+     
+    }
+
+   
+
+      valueaddaddmoredelete(item){
+          const {valueaddaddmoredata} = this.state;
+
+          
+                if (valueaddaddmoredata.indexOf(item) !== -1) {
+                    valueaddaddmoredata.splice(valueaddaddmoredata.indexOf(item), 1);
+                } 
+             this.setState({valueaddaddmoredata:valueaddaddmoredata})
+             console.log(this.state.valueaddaddmoredata,'valueaddaddmoredata')
+        
+       
+      }
+
+      valueaddaddmoreedit(item){
+        const {valueaddaddmoredata} = this.state;
+      
+        this.setState({noofpieces:item.pcs,valueaddcolor:item.color,valueadd: [{value:item.valueAdd,label:item.valueAdd}],valueaddtype: [{value:item.valueAddType,label:item.valueaddtypeDesc}]});
+              if (valueaddaddmoredata.indexOf(item) !== -1) {
+                  valueaddaddmoredata.splice(valueaddaddmoredata.indexOf(item), 1);
+              } 
+           this.setState({valueaddaddmoredata:valueaddaddmoredata})
+           console.log(this.state.valueaddaddmoredata,'valueaddaddmoredata')
+      
+     
+    }
+
+
 
      render() {
-         const { employeePayroll } = this.state;
+         const { employeePayroll,samaddmoredata,valueaddaddmoredata } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -584,7 +733,12 @@ import Select1 from "react-dropdown-select";
                yearoptions.push({value:item.code,label:item.codeDesc});
            }
 
+           const purposeoptions = [];
+           for (const item of this.state.purposelists) {           
+               purposeoptions.push({value:item.parntslno,label:item.purpose});
+           }
 
+           
            const reqtypeoptions = [];
            for (const item of this.state.reqtypelists) {           
                reqtypeoptions.push({value:item.code,label:item.codeDesc});
@@ -1116,18 +1270,18 @@ import Select1 from "react-dropdown-select";
  
                     </div> 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Purpose</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Purpose"
+                                                        options={purposeoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('purpose')}
+                                                        placeholder="Purpose"
+                                                        values={this.state.purpose}
+                                                        />
+                                                    </div>
+
  
                     </div> 
 
@@ -1291,12 +1445,12 @@ import Select1 from "react-dropdown-select";
                                                 </div> 
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                     <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Style No" placeholder="Style No"/>
+                                                    <TextField id="ref_styleno" value={this.state.ref_styleno}  onChange={this.setstatevaluefunction('ref_styleno')} fullWidth label="Style No" placeholder="Style No"/>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                     <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Version" placeholder="Version"/>
+                                                    <TextField id="ref_version" value={this.state.ref_version}  onChange={this.setstatevaluefunction('ref_version')} fullWidth label="Version" placeholder="Version"/>
                                                     </div>
                                                 </div>                                             
                                             </div>
@@ -1401,12 +1555,12 @@ import Select1 from "react-dropdown-select";
                                                 
                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                            <TextField id="Buyer" fullWidth label="Warp %" placeholder="Warp %"/>
+                                                            <TextField id="samplewarp" value={this.state.samplewarp}  onChange={this.setstatevaluefunction('samplewarp')} fullWidth label="Warp %" placeholder="Warp %"/>
                                                             </div>
                                                         </div>   
                                                         <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                            <TextField id="Buyer" fullWidth label="Weft %" placeholder="Weft %"/>
+                                                            <TextField id="sampleweft" value={this.state.sampleweft}  onChange={this.setstatevaluefunction('sampleweft')} fullWidth label="Weft %" placeholder="Weft %"/>
                                                             </div>
                                                         </div>   
                                                         <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
@@ -1416,9 +1570,9 @@ import Select1 from "react-dropdown-select";
                                                                             multi
                                                                             createNewLabel="Size"
                                                                             options={sizeoptions}
-                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            onChange={this.setstatevaluedropdownfunction('samplesize')}
                                                                             placeholder="Size"
-                                                                            values={this.state.size}
+                                                                            values={this.state.samplesize}
                                                                             />
                                                         </div>
                                                         </div>  
@@ -1433,12 +1587,12 @@ import Select1 from "react-dropdown-select";
                                                         </div>  
                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                            <TextField id="Buyer" fullWidth label="Warp %" placeholder="Warp %"/>
+                                                            <TextField id="costingwarp" value={this.state.costingwarp}  onChange={this.setstatevaluefunction('costingwarp')} fullWidth label="Warp %" placeholder="Warp %"/>
                                                             </div>
                                                         </div>   
                                                         <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                            <TextField id="Buyer" fullWidth label="Weft %" placeholder="Weft %"/>
+                                                            <TextField id="costingweft" value={this.state.costingweft}  onChange={this.setstatevaluefunction('costingweft')} fullWidth label="Weft %" placeholder="Weft %"/>
                                                             </div>
                                                         </div>   
                                                         <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
@@ -1448,9 +1602,9 @@ import Select1 from "react-dropdown-select";
                                                                             multi
                                                                             createNewLabel="Size"
                                                                             options={sizeoptions}
-                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            onChange={this.setstatevaluedropdownfunction('costingsize')}
                                                                             placeholder="Size"
-                                                                            values={this.state.size}
+                                                                            values={this.state.costingsize}
                                                                             />
                                                         </div>
                                                         </div>  
@@ -1606,16 +1760,7 @@ import Select1 from "react-dropdown-select";
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
-                <FormControl fullWidth>
-                    <InputLabel htmlFor="age-simple">Color</InputLabel>
-                    <Select value={this.state.age} onChange={this.handleChange}
-                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                    <MenuItem value=""><em>None</em></MenuItem>
-                    <MenuItem value={10}>Red</MenuItem>
-                    <MenuItem value={20}>White</MenuItem>
-                    <MenuItem value={30}>Black</MenuItem>
-                    </Select>
-                </FormControl>
+                <TextField id="Buyer" fullWidth label="Color" placeholder="Color"/>
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1681,7 +1826,7 @@ import Select1 from "react-dropdown-select";
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     <tr>
+                                     {/* <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1716,7 +1861,7 @@ import Select1 from "react-dropdown-select";
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
-                                     </tr>
+                                     </tr> */}
                                  </tbody>
                                  
                                  </table>
@@ -1759,7 +1904,7 @@ import Select1 from "react-dropdown-select";
                      <div className="row">
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <TextField id="Buyer" fullWidth label="Reference version" placeholder="Reference version"/>
+                            <TextField id="marker_ref_version" value={this.state.marker_ref_version}  onChange={this.setstatevaluefunction('marker_ref_version')} fullWidth label="Reference version" placeholder="Reference version"/>
                         </div>
                     </div>
 
@@ -1820,16 +1965,7 @@ import Select1 from "react-dropdown-select";
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Color</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Red</MenuItem>
-                            <MenuItem value={20}>White</MenuItem>
-                            <MenuItem value={30}>Black</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <TextField id="Buyer" fullWidth label="Color" placeholder="Color"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1905,7 +2041,7 @@ import Select1 from "react-dropdown-select";
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     <tr>
+                                     {/* <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1940,7 +2076,7 @@ import Select1 from "react-dropdown-select";
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
-                                     </tr>
+                                     </tr> */}
                                  </tbody>
                                  
                                  </table>
@@ -1964,7 +2100,7 @@ import Select1 from "react-dropdown-select";
                         <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Value Add"
                                                                             options={valueaddoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('valueadd')}
@@ -1979,7 +2115,7 @@ import Select1 from "react-dropdown-select";
                         <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Value Add Type"
                                                                             options={valueaddoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('valueaddtype')}
@@ -1992,21 +2128,12 @@ import Select1 from "react-dropdown-select";
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="age-simple">Color</InputLabel>
-                                <Select value={this.state.age} onChange={this.handleChange}
-                                inputProps={{ name: 'age', id: 'age-simple', }}>
-                                <MenuItem value=""><em>None</em></MenuItem>
-                                <MenuItem value={10}>Red</MenuItem>
-                                <MenuItem value={20}>White</MenuItem>
-                                <MenuItem value={30}>Black</MenuItem>
-                                </Select>
-                            </FormControl>
+                        <TextField id="valueaddcolor" value={this.state.valueaddcolor}  onChange={this.setstatevaluefunction('valueaddcolor')} fullWidth label="Color" placeholder="Color"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
+                            <TextField id="noofpieces" value={this.state.noofpieces}  onChange={this.setstatevaluefunction('noofpieces')} fullWidth label="No of Pieces" placeholder="No of Pieces"/>
                         </div>
                     </div>
                     
@@ -2033,15 +2160,16 @@ import Select1 from "react-dropdown-select";
                      <div className="table-responsive mt-0">
                       <div className="w-20 float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" onClick={(e) =>this.valueaddaddmoresave()}  type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                             {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
+                                     <th className="w-25 text-center">Actions  </th>
                                      <th className="w-25">Value Add</th>
                                      <th className="w-25">Value Add Type</th>
                                      <th className="w-25">Color</th>
@@ -2050,27 +2178,29 @@ import Select1 from "react-dropdown-select";
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
+                                 {valueaddaddmoredata.map((n,index) => {
+                                    
+                                    return (
+
+                                     <tr key={`list${index}`}>
+                                     <td className="">
+                                   
+ 
+                                   <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.valueaddaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                   <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.valueaddaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                  
+                                        {/* <button className="save">Save</button>
+                                        <button className="edit">Edit</button>
+                                        <button className="delete">Delete</button> */}
+                                    </td>
+                                     <td className="data">{n.valueAdd}</td>
+                                     <td className="data">{n.valueaddtypeDesc}</td>
+                                     <td className="data">{n.color}</td>
+                                     <td className="data">{n.pcs}</td>
+                                     <td className="data"></td>
                                      </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
+                                        );
+                                    })}
                                    
                                  </tbody>
                                  
@@ -2090,12 +2220,12 @@ import Select1 from "react-dropdown-select";
                      <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
-                     <div className="clearfix"></div>
+                     <div className="clearfix"></div> 
                      <div className="row">
                                 
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Option type" placeholder="Option type"/>
+                                <TextField id="optionType" value={this.state.optionType}  onChange={this.setstatevaluefunction('optionType')} fullWidth label="Option type" placeholder="Option type"/>
                             </div>
                         </div>
                     
@@ -2104,28 +2234,40 @@ import Select1 from "react-dropdown-select";
                      <div className="table-responsive mt-0">
                       <div className="w-20 float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" onClick={(e) =>this.samaddmoresave()} tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                             {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
+                                     <th className="w-25 text-center">Actions  </th>
                                      <th className="w-25">Option type</th>
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     <tr>
-                                         <td>Demo </td>
+                                 {samaddmoredata.map((n,index) => {
+                                    
+                                    return (
+
+                                     <tr key={`list${index}`}>
+                                     <td className="">
+                                   
+ 
+                                   <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.samaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                   <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.samaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                  
+                                        {/* <button className="save">Save</button>
+                                        <button className="edit">Edit</button>
+                                        <button className="delete">Delete</button> */}
+                                    </td>
+                                     <td className="data">{n.optionType}</td>
+                                     
                                      </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                     </tr>
+                                        );
+                                    })}
                                  </tbody>
                                  
                                  </table>
@@ -2146,7 +2288,7 @@ import Select1 from "react-dropdown-select";
                 </div>
                
  
-               
+                
            
                 
             </RctCollapsibleCard>

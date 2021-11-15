@@ -16,7 +16,8 @@
      AsyncRequestGridOverallComponent,	
 	AsyncRequestGridStyleComponent,
     AsyncRequeststatusComponent,
-    AsyncProductionRequestComponent
+    AsyncProductionRequestComponent,
+    AsyncProductivityGridComponent
  } from 'Components/AsyncComponent/AsyncComponent';
   
  //console.log(match.url); 
@@ -39,6 +40,7 @@
              <Route path={`${match.url}/request-style-list`} component={AsyncRequestGridStyleComponent} />
              <Route path={`${match.url}/request-status`} component={AsyncRequeststatusComponent} />
              <Route path={`${match.url}/production-request`} component={AsyncProductionRequestComponent} />
+             <Route path={`${match.url}/productivity-grid`} component={AsyncProductivityGridComponent} />	
          </Switch>
      </div>
  );

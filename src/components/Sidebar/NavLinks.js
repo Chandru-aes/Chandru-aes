@@ -608,6 +608,11 @@ export default {
                   "new_item": false,	
                   "menu_title": "Production Request"	
                },
+               {	
+                  "path": "/app/pre-production/productivity-grid",	
+                  "new_item": false,	
+                  "menu_title": "Productivity Grid"	
+               }
               
             ]
          }

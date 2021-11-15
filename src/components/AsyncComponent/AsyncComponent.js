@@ -662,6 +662,14 @@ const AsyncProductionRequestComponent = Loadable({
 	loader: () => import("Routes/pre-production/styling/production-request"),
 	loading: () => <RctPageLoader />,
 });
+
+const AsyncProductivityGridComponent = Loadable({	
+	loader: () => import("Routes/pre-production/productivity-grid"),	
+	loading: () => <RctPageLoader />,	
+});	
+
+
+
 export {
 	AsyncRequestGridOverallComponent,	
 	AsyncRequestGridStyleComponent,
@@ -774,5 +782,6 @@ export {
 	AsyncStyleListComponent,
 	AsyncSinglewindowComponent,
 	AsyncRequeststatusComponent,
-	AsyncProductionRequestComponent
+	AsyncProductionRequestComponent,
+	AsyncProductivityGridComponent
 }; 
