@@ -49,7 +49,7 @@
 
  import Select1 from "react-dropdown-select";
  
- class UserProfile extends Component {
+ class Productivitygrid extends Component {
     
      state = {
          all: false,
@@ -664,5 +664,5 @@
          );
      }
  }
- export default UserProfile;
+ export default Productivitygrid;
  

@@ -129,6 +129,7 @@ import Select1 from "react-dropdown-select";
 
         materialtypelists:[],
         materialtype:[],
+        sample_materialtype:[],
 
         sampletypelists:[],
         sampletype:[],
@@ -146,6 +147,7 @@ import Select1 from "react-dropdown-select";
         locationlists:[],
         sizelists:[],
         size:[],
+        sample_size:[],
         location:[],
         FashionGRP:[],
         buyer:[],
@@ -173,6 +175,8 @@ import Select1 from "react-dropdown-select";
         samaddmoredata:[],
         optionType:'',
         valueaddaddmoredata:[],
+        markeraddmoredata:[],
+        sampleaddmoredata:[],
         valueaddcolor:'',
         // valueadd:[],
         // valueaddtype:[],
@@ -188,6 +192,23 @@ import Select1 from "react-dropdown-select";
         sampleweft:'',
         ref_version:'',
         ref_styleno:'',
+
+        sample_color:'',
+        sample_desc:'',
+        sample_pieces:'',
+        sample_placement:'',
+
+        marker_bodygrain:'',
+        marker_changesin:'',
+        marker_color:'',
+        marker_desc:'',
+        marker_pieces:'',
+        marker_placement:'',
+        marker_ref_version:'',
+        marker_repeat:'',
+        marker_shrinkage:'',
+        marker_width:'',
+
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -257,14 +278,14 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
-        api.get('StyleHeader/GetStyleGridList')
-        .then((response) => {
-            console.log(response.data.data,'response.data.data')
-            this.setState({ stylenolists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        // api.get('StyleHeader/GetStyleGridList')
+        // .then((response) => {
+        //     console.log(response.data.data,'response.data.data')
+        //     this.setState({ stylenolists: response.data.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
         
 
@@ -344,6 +365,16 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
+        api.get('Materialtype/GetItemTypeDropDown')
+        .then((response) => {
+            
+            this.setState({ materialtypelists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
         api.get('Miscellaneous/GetMiscellaneousList?MType=MARKPUR')
         .then((response) => {
             
@@ -444,6 +475,155 @@ import Select1 from "react-dropdown-select";
 	};
 
 
+    save () {
+        console.log(this.state,'-----------------------')
+        
+
+        if(this.state.buyer.length>0){
+ 
+            let data ={
+                "id": 0,
+                "entityId": "st",
+                "buyCode": this.state.buyer[0].value,
+                "buyDivcode": this.state.buyerdiv[0].value,
+                "seasonCode": this.state.season[0].value,
+                "seasonYear": this.state.year[0].value,
+                "styleNo": this.state.styleno[0].value,
+                "masterStyle": 0,
+                "baseStyleno": "string",
+                "unitCode": "string",
+                "reqNo": "string",
+                "reqDate": "2021-11-16T05:00:55.509Z",
+                "fit":  this.state.fit[0].value,
+                "purpose": this.state.purpose[0].value,
+                "fabricDesc": "string",
+                "fabricType": "string",
+                "cancel": "s",
+                "createdBy": "string",
+                "createdDt": "2021-11-16T05:00:55.509Z",
+                "modifyBy": "string",
+                "modifyDt": "2021-11-16T05:00:55.509Z",
+                "hostName": "string",
+                "singleWindowDetEntityModel": [
+                  {
+                    "id": 0,
+                    "swH_Id": 0,
+                    "reqType": this.state.reqtype[0].value,
+                    "createdBy": "string",
+                    "createdDt": "2021-11-16T05:00:55.509Z",
+                    "modifyBy": "string",
+                    "modifyDt": "2021-11-16T05:00:55.509Z",
+                    "hostName": "string"
+                  }
+                ],
+                "swPatternHeadEntityModel": {
+                  "id": 0,
+                  "swH_Id": 0,
+                  "verRef": "string",
+                  "bodyGrain": this.state.bodygrain[0].value,
+                  "addOnInfo": this.state.addoninfo[0].value,
+                  "samShr": "s",
+                  "samShrWarp": this.state.samplewarp,
+                  "samShrWeft":  this.state.sampleweft,
+                  "samNilShr":  "string",
+                  "costShr": "s",
+                  "costShrWarp":  this.state.costingwarp,
+                  "costShrWeft": this.state.costingweft,
+                  "costNilShr": "string",
+                  "size": "string",
+                  "createdBy": "string",
+                  "createdDt": "2021-11-16T05:00:55.509Z",
+                  "modifyBy": "string",
+                  "modifyDt": "2021-11-16T05:00:55.509Z",
+                  "hostName": "string",
+                  "swPatternDetEntityModel": [
+                    {
+                      "id": 0,
+                      "swH_Id": 0,
+                      "natureOfJob": this.state.job[0].value,
+                      "cancel": "s",
+                      "createdBy": "string",
+                      "createdDt": "2021-11-16T05:00:55.509Z",
+                      "modifyBy": "string",
+                      "modifyDt": "2021-11-16T05:00:55.509Z",
+                      "hostName": "string"
+                    }
+                  ]
+                },
+                "swSampleHeadEntityModel": {
+                  "id": 0,
+                  "swH_Id": 0,
+                  "verRef": "string",
+                  "expDeliDate": "2021-11-16T05:00:55.509Z",
+                  "prepSeq": this.state.prepseq[0].value,
+                  "sampleType": this.state.sampletype[0].value,
+                  "totPcs": 0,
+                  "createdBy": "string",
+                  "createdDt": "2021-11-16T05:00:55.509Z",
+                  "modifyBy": "string",
+                  "modifyDt": "2021-11-16T05:00:55.509Z",
+                  "hostName": "string",
+                  "swSampleDetEntityModel": 
+                      this.state.sampleaddmoredata
+                    
+                  
+                },
+                "swMarkerHeadEntityModel": {
+                  "id": 0,
+                  "swH_Id": 0,
+                  "verRef": "string",
+                  "changesIn": this.state.marker_changesin,
+                  "bodyGrain": this.state.marker_bodygrain,
+                  "shrinkage": this.state.marker_shrinkage,
+                  "markerFor": this.state.markerfor[0].value,
+                  "createdBy": "string",
+                  "createdDt": "2021-11-16T05:00:55.509Z",
+                  "modifyBy": "string",
+                  "modifyDt": "2021-11-16T05:00:55.509Z",
+                  "hostName": "string",
+                  "swMarkerDetEntityModel": 
+                   this.state.markeraddmoredata
+                  
+                },
+                "swValueAddEntityModel": 
+                  this.state.valueaddaddmoredata
+                ,
+                "swsamReqEntityModel": 
+                  this.state.samaddmoredata
+                
+              };
+console.log(data,'datadatadata')
+
+            api.post('SingleWindowRequestheader/SaveSingleWindowRequestDetails',data) .then((response) => {
+                // this.getMenulists();
+                NotificationManager.success('Saved Sucessfully');
+                window.location.href = "/#/app/pre-production/request-grid";
+                this.setState( {
+                    // edit_add:false,
+                    // menuId:0,
+                    // parent_menu_id:[],
+                    // module:[],
+                    // menu_type:[],
+                    // menuname:'',
+                    // menuurl:'',
+                    // menudesc:'',
+                    // active_status:'',
+                    // isparent:'',
+                    // displayindex:''
+                });
+            })
+            .catch(error => {
+                // error handling
+            })
+
+        } else{
+            NotificationManager.error('Please Select Buyer');
+
+        }
+                
+
+      }
+
     contactSubmit(e,type){
         e.preventDefault();
         if(this.handleValidation()){
@@ -481,16 +661,16 @@ import Select1 from "react-dropdown-select";
             errors["year"] = "Cannot be empty";
         }
 
-          //location
-          if(!fields["location"]){
+          //styleno
+          if(!fields["styleno"]){
             formIsValid = false;
-            errors["location"] = "Cannot be empty";
+            errors["styleno"] = "Cannot be empty";
         }
 
-         //OrderType
-         if(!fields["OrderType"]){           
+         //reqtype
+         if(!fields["reqtype"]){           
             formIsValid = false;
-            errors["OrderType"] = "Cannot be empty";
+            errors["reqtype"] = "Cannot be empty";
         }
 
 
@@ -686,9 +866,131 @@ import Select1 from "react-dropdown-select";
     }
 
 
+    
+
+    markeraddmoresave(){
+        console.log(this.state.marker,this.state.markertype,'markertypemarkertype')
+          const {markeraddmoredata} = this.state;
+          if(this.state.markerfor.length>0 ){
+            let data =  {
+                "id": 0,
+                "swH_Id": 0,
+                "matType": this.state.materialtype[0].value,
+                "description": this.state.marker_desc,
+                "placement":this.state.marker_placement,
+                "color":this.state.marker_color,
+                "size":this.state.size[0].value,
+                "pcs": this.state.marker_pieces,
+                "width": this.state.marker_width,
+                "repeat": this.state.marker_repeat,
+                "baseMarker": "s",
+                "cancel": "s",
+                "createdBy": "string",
+                "createdDt": "2021-11-16T05:00:55.509Z",
+                "modifyBy": "string",
+                "modifyDt": "2021-11-16T05:00:55.509Z",
+                "hostName": "string"
+              }
+                markeraddmoredata.push(data);
+                this.setState({markeraddmoredata:markeraddmoredata})
+                
+          this.setState({marker_desc:'',marker_placement:'',marker_color:'',marker_pieces:'',marker_width:'',marker_repeat:''})
+          }  else{
+            NotificationManager.error('Please Enter all values');
+  
+        }
+       
+      }
+  
+     
+  
+        markeraddmoredelete(item){
+            const {markeraddmoredata} = this.state;
+  
+            
+                  if (markeraddmoredata.indexOf(item) !== -1) {
+                      markeraddmoredata.splice(markeraddmoredata.indexOf(item), 1);
+                  } 
+               this.setState({markeraddmoredata:markeraddmoredata})
+          
+         
+        }
+  
+        markeraddmoreedit(item){
+          const {markeraddmoredata} = this.state;
+        
+          this.setState({noofpieces:item.pcs,markercolor:item.color,marker: [{value:item.marker,label:item.marker}],markertype: [{value:item.markerType,label:item.markertypeDesc}]});
+                if (markeraddmoredata.indexOf(item) !== -1) {
+                    markeraddmoredata.splice(markeraddmoredata.indexOf(item), 1);
+                } 
+             this.setState({markeraddmoredata:markeraddmoredata})
+        
+       
+      }
+
+
+      
+    sampleaddmoresave(){
+        
+          const {sampleaddmoredata} = this.state;
+          if(this.state.sample_materialtype.length>0 ){
+            let data =  {
+                "id": 0,
+                "swH_Id": 0,
+                "matType": this.state.sample_materialtype[0].value,
+                "matDesc": this.state.sample_desc,
+                "placement":this.state.sample_placement,
+                "color":this.state.sample_color,
+                "size":this.state.sample_size[0].value,
+                "pcs": this.state.sample_pieces,
+                "cancel": "s",
+                "createdBy": "string",
+                "createdDt": "2021-11-16T05:00:55.509Z",
+                "modifyBy": "string",
+                "modifyDt": "2021-11-16T05:00:55.509Z",
+                "hostName": "string"
+              }
+                sampleaddmoredata.push(data);
+                this.setState({sampleaddmoredata:sampleaddmoredata})
+                
+          this.setState({sample_desc:'',sample_placement:'',sample_color:'',sample_pieces:''})
+          }  else{
+            NotificationManager.error('Please Enter all values');
+  
+        }
+       
+      }
+  
+     
+  
+        sampleaddmoredelete(item){
+            const {sampleaddmoredata} = this.state;
+  
+            
+                  if (sampleaddmoredata.indexOf(item) !== -1) {
+                      sampleaddmoredata.splice(sampleaddmoredata.indexOf(item), 1);
+                  } 
+               this.setState({sampleaddmoredata:sampleaddmoredata})
+          
+         
+        }
+  
+        sampleaddmoreedit(item){
+          const {sampleaddmoredata} = this.state;
+
+          this.setState({sample_pieces:item.pcs,sample_color:item.color,sample_desc:item.matDesc,sample_placement:item.placement,sample_materialtype: [{value:item.matType,label:item.matType}],sample_size: [{value:item.size,label:item.size}]});
+                if (sampleaddmoredata.indexOf(item) !== -1) {
+                    sampleaddmoredata.splice(sampleaddmoredata.indexOf(item), 1);
+                } 
+             this.setState({sampleaddmoredata:sampleaddmoredata})
+        
+       
+      }
+  
+
 
      render() {
-         const { employeePayroll,samaddmoredata,valueaddaddmoredata } = this.state;
+         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -817,6 +1119,14 @@ import Select1 from "react-dropdown-select";
            for (const item of this.state.stylenolists) {           
                stylenooptions.push({value:item.styleid,label:item.styleNo});
            }
+
+           const materialtypeoptions = [];
+           for (const item of this.state.materialtypelists) {           
+               materialtypeoptions.push({value:item.mattype,label:item.matDesc});
+           }
+
+
+           
           return (
               
              <RctCollapsibleCard heading="Single Window">
@@ -1009,7 +1319,7 @@ import Select1 from "react-dropdown-select";
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
                        
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                    </div> 
                    <div className="clearfix"></div>
 
@@ -1099,6 +1409,7 @@ import Select1 from "react-dropdown-select";
                                                         placeholder="Buyer"
                                                         values={this.state.buyer}
                                                         />
+                                                         <span className="error">{this.state.errors["buyer"]}</span>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1112,6 +1423,7 @@ import Select1 from "react-dropdown-select";
                                                         placeholder="Buyer Division"
                                                         values={this.state.buyerdiv}
                                                         />
+                                                         <span className="error">{this.state.errors["buyerdiv"]}</span>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1125,7 +1437,7 @@ import Select1 from "react-dropdown-select";
                                                         placeholder="Season"
                                                         values={this.state.season}
                                                         />
-                               
+                                <span className="error">{this.state.errors["season"]}</span>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1139,6 +1451,7 @@ import Select1 from "react-dropdown-select";
                                                         placeholder="Year"
                                                         values={this.state.year}
                                                         />
+                                                         <span className="error">{this.state.errors["year"]}</span>
                                                     </div>
                                                 </div> 
 
@@ -1153,9 +1466,10 @@ import Select1 from "react-dropdown-select";
                                                         placeholder="Style No"
                                                         values={this.state.styleno}
                                                         />
+                                                         <span className="error">{this.state.errors["styleno"]}</span>
                                                     </div>
                         </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <FormControl fullWidth>
                             <InputLabel htmlFor="age-simple">Req no/ Date</InputLabel>
@@ -1168,7 +1482,7 @@ import Select1 from "react-dropdown-select";
                             </Select>
                         </FormControl>
                         </div>
-                        </div>
+                        </div> */}
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                             <div className="w-100 float-left m-btop-10">
@@ -1264,7 +1578,7 @@ import Select1 from "react-dropdown-select";
                                                         placeholder="Req Type"
                                                         values={this.state.reqtype}
                                                         />
-                               
+                               <span className="error">{this.state.errors["reqtype"]}</span>
                              
                         </div>
  
@@ -1370,9 +1684,9 @@ import Select1 from "react-dropdown-select";
                          </div>
                      </AccordionSummary>
                      <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
+                     {/* <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                     </div>
+                     </div> */}
                      <div className="clearfix"></div>
                      {/* <div className="row"> */}
                          {/* <div className="w-25">
@@ -1567,7 +1881,7 @@ import Select1 from "react-dropdown-select";
                                                         <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Size"
                                                                             options={sizeoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('samplesize')}
@@ -1599,7 +1913,7 @@ import Select1 from "react-dropdown-select";
                                                         <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Size"
                                                                             options={sizeoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('costingsize')}
@@ -1695,9 +2009,9 @@ import Select1 from "react-dropdown-select";
                          </div>
                      </AccordionSummary>
                      <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
+                     {/* <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                     </div>
+                     </div> */}
                      <div className="clearfix"></div>
                      <div className="row">  
                      <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
@@ -1739,10 +2053,10 @@ import Select1 from "react-dropdown-select";
                                                         dropdownPosition="auto"
                                                         //   multi
                                                         createNewLabel="Material type"
-                                                        options={prepseqoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('materialtype')}
+                                                        options={materialtypeoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('sample_materialtype')}
                                                         placeholder="Material type"
-                                                        values={this.state.materialtype}
+                                                        values={this.state.sample_materialtype}
                                                         />
              
                 </div>
@@ -1750,43 +2064,43 @@ import Select1 from "react-dropdown-select";
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
-                <TextField id="Buyer" fullWidth label="Description" placeholder="Description"/>
+                <TextField id="sample_desc" value={this.state.sample_desc}  onChange={this.setstatevaluefunction('sample_desc')}  fullWidth label="Description" placeholder="Description"/>
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
-                <TextField id="Buyer" fullWidth label="Placement" placeholder="Placement"/>
+                <TextField id="sample_placement" value={this.state.sample_placement}  onChange={this.setstatevaluefunction('sample_placement')}  fullWidth label="Placement" placeholder="Placement"/>
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
-                <TextField id="Buyer" fullWidth label="Color" placeholder="Color"/>
+                <TextField id="sample_color" value={this.state.sample_color}  onChange={this.setstatevaluefunction('sample_color')}  fullWidth label="Color" placeholder="Color"/>
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Size"
                                                                             options={sizeoptions}
-                                                                            onChange={this.setstatevaluedropdownfunction('size')}
+                                                                            onChange={this.setstatevaluedropdownfunction('sample_size')}
                                                                             placeholder="Size"
-                                                                            values={this.state.size}
+                                                                            values={this.state.sample_size}
                                                                             />
                                                         </div>
             </div>
 
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
-                <TextField id="Buyer" fullWidth label="Pieces" placeholder="Pieces"/>
+                <TextField id="sample_pieces" value={this.state.sample_pieces}  onChange={this.setstatevaluefunction('sample_pieces')}  fullWidth label="Pieces" placeholder="Pieces"/>
                 </div>
             </div>
             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Sample type"
                                                                             options={sampletypeoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('sampletype')}
@@ -1807,15 +2121,16 @@ import Select1 from "react-dropdown-select";
                      <div className="table-responsive mt-0">
                       <div className="w-20 float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.sampleaddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                             {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
+                                     <th className="w-25 text-center">Actions</th>
                                      <th className="w-20">Material Type</th>
                                      <th className="w-20">Description</th>
                                      <th className="w-20">Placement</th>
@@ -1826,6 +2141,32 @@ import Select1 from "react-dropdown-select";
                                      </tr>
                                  </thead>
                                  <tbody>
+                                 {sampleaddmoredata.map((n,index) => {
+                                    
+                                    return (
+
+                                     <tr key={`list${index}`}>
+                                     <td className="">
+                                   
+ 
+                                   <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.sampleaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                   <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.sampleaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                  
+                                        {/* <button className="save">Save</button>
+                                        <button className="edit">Edit</button>
+                                        <button className="delete">Delete</button> */}
+                                      
+                                    </td>
+                                     <td className="data">{n.matType}</td>
+                                     <td className="data">{n.matDesc}</td>
+                                     <td className="data">{n.placement}</td>
+                                     <td className="data">{n.color}</td>
+                                     <td className="data">{n.size}</td>
+                                     <td className="data">{n.pcs}</td>
+                                     <td className="data"></td>
+                                     </tr>
+                                        );
+                                    })}
                                      {/* <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1897,9 +2238,9 @@ import Select1 from "react-dropdown-select";
                          </div>
                      </AccordionSummary>
                      <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
+                     {/* <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                     </div>
+                     </div> */}
                      <div className="clearfix"></div>
                      <div className="row">
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1910,33 +2251,34 @@ import Select1 from "react-dropdown-select";
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <TextField id="Buyer" fullWidth label="Changes In" placeholder="Changes In"/>
+                            <TextField id="marker_changesin" value={this.state.marker_changesin}  onChange={this.setstatevaluefunction('marker_changesin')} fullWidth label="Changes In" placeholder="Changes In"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <TextField id="Buyer" fullWidth label="Body grain" placeholder="Body grain"/>
+                            <TextField id="marker_bodygrain" value={this.state.marker_bodygrain}  onChange={this.setstatevaluefunction('marker_bodygrain')} fullWidth label="Body grain" placeholder="Body grain"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <TextField id="Buyer" fullWidth label="Shrinkage" placeholder="Shrinkage"/>
+                            <TextField id="marker_shrinkage" value={this.state.marker_shrinkage}  onChange={this.setstatevaluefunction('marker_shrinkage')} fullWidth label="Shrinkage" placeholder="Shrinkage"/>
                         </div>
                     </div>
                         
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="age-simple">Marker for</InputLabel>
-                                <Select value={this.state.age} onChange={this.handleChange}
-                                inputProps={{ name: 'age', id: 'age-simple', }}>
-                                <MenuItem value=""><em>Pattern Version</em></MenuItem>
-                                <MenuItem value={10}>Autumn</MenuItem>
-                                <MenuItem value={20}>Summer</MenuItem>
-                                <MenuItem value={30}>Winter</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
+                     <div className="form-group select_label_name mt-15">
+                            <Select1
+                             dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Marker for"
+                                                                    options={markerforoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('markerfor')}
+                                                                    placeholder="Marker for"
+                                                                    values={this.state.markerfor}
+                                                                    />
+                        
+                            </div>
+                        
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1945,7 +2287,7 @@ import Select1 from "react-dropdown-select";
                                                         dropdownPosition="auto"
                                                         //   multi
                                                         createNewLabel="Material type"
-                                                        options={prepseqoptions}
+                                                        options={materialtypeoptions}
                                                         onChange={this.setstatevaluedropdownfunction('materialtype')}
                                                         placeholder="Material type"
                                                         values={this.state.materialtype}
@@ -1955,24 +2297,24 @@ import Select1 from "react-dropdown-select";
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Description" placeholder="Description"/>
+                        <TextField id="marker_desc" value={this.state.marker_desc}  onChange={this.setstatevaluefunction('marker_desc')} fullWidth label="Description" placeholder="Description"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Placement" placeholder="Placement"/>
+                        <TextField id="marker_placement" value={this.state.marker_placement}  onChange={this.setstatevaluefunction('marker_placement')} fullWidth label="Placement" placeholder="Placement"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Color" placeholder="Color"/>
+                        <TextField id="marker_color" value={this.state.marker_color}  onChange={this.setstatevaluefunction('marker_color')} fullWidth label="Color" placeholder="Color"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div className="form-group select_label_name mt-15">
                                                                         <Select1
                                                                             dropdownPosition="auto"
-                                                                            multi
+                                                                            // multi
                                                                             createNewLabel="Size"
                                                                             options={sizeoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('size')}
@@ -1984,27 +2326,27 @@ import Select1 from "react-dropdown-select";
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Pieces" placeholder="Pieces"/>
+                        <TextField id="marker_pieces" value={this.state.marker_pieces}  onChange={this.setstatevaluefunction('marker_pieces')} fullWidth label="Pieces" placeholder="Pieces"/>
                         </div>
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Width" placeholder="Width"/>
+                        <TextField id="marker_width" value={this.state.marker_width}  onChange={this.setstatevaluefunction('marker_width')} fullWidth label="Width" placeholder="Width"/>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Repeat" placeholder="Repeat"/>
+                        <TextField id="marker_repeat" value={this.state.marker_repeat}  onChange={this.setstatevaluefunction('marker_repeat')} fullWidth label="Repeat" placeholder="Repeat"/>
                         </div>
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Base marker</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <InputLabel htmlFor="basemarker-simple">Base marker</InputLabel>
+                            <Select value={this.state.basemarker} onChange={this.handleChange}
+                            inputProps={{ name: 'basemarker', id: 'basemarker-simple', }}>
                             <MenuItem value=""><em>None</em></MenuItem>
                             <MenuItem value={10}>Yes</MenuItem>
                             <MenuItem value={20}>NO</MenuItem>
@@ -2018,16 +2360,17 @@ import Select1 from "react-dropdown-select";
                      <div className="table-responsive mt-0">
                       <div className="w-20 float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.markeraddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                             {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                          </div>
                      </div>
  
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="w-25">Marker For</th>
+                                     <th className="w-25 text-center">Actions  </th>
+                                     {/* <th className="w-25">Marker For</th> */}
                                      <th className="w-25">Material Type</th>
                                      <th className="w-25">Description</th>
                                      <th className="w-25">Placement</th>
@@ -2041,6 +2384,33 @@ import Select1 from "react-dropdown-select";
                                      </tr>
                                  </thead>
                                  <tbody>
+                                 {markeraddmoredata.map((n,index) => {
+                                    
+                                    return (
+
+                                     <tr key={`list${index}`}>
+                                     <td className="">
+                                   
+ 
+                                   <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.markeraddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                   <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.markeraddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                  
+                                        {/* <button className="save">Save</button>
+                                        <button className="edit">Edit</button>
+                                        <button className="delete">Delete</button> */}
+                                    </td>
+                                     <td className="data">{n.matType}</td>
+                                     <td className="data">{n.description}</td>
+                                     <td className="data">{n.placement}</td>
+                                     <td className="data">{n.color}</td>
+                                     <td className="data">{n.size}</td>
+                                     <td className="data">{n.pcs}</td>
+                                     <td className="data">{n.width}</td>
+                                     <td className="data">{n.repeat}</td>
+                                     <td className="data">{n.baseMarker}</td>
+                                     </tr>
+                                        );
+                                    })}
                                      {/* <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -2091,9 +2461,9 @@ import Select1 from "react-dropdown-select";
                          </div>
                      </AccordionSummary>
                      <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
+                     {/* <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                     </div>
+                     </div> */}
                      <div className="clearfix"></div>
                      <div className="row">
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -2217,9 +2587,9 @@ import Select1 from "react-dropdown-select";
                          </div>
                      </AccordionSummary>
                      <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
+                     {/* <div className="float-right pr-0 but-tp">
                      <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                     </div>
+                     </div> */}
                      <div className="clearfix"></div> 
                      <div className="row">
                                 
