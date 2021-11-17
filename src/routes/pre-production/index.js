@@ -37,6 +37,7 @@
              <Route path={`${match.url}/style-list`} component={AsyncStyleListComponent} />
              <Route path={`${match.url}/single-window`} component={AsyncSinglewindowComponent} />
              <Route path={`${match.url}/request-grid`} component={AsyncRequestGridOverallComponent} />	
+             <Route path={`${match.url}/request-style-list/:styleno`} component={AsyncRequestGridStyleComponent} />
              <Route path={`${match.url}/request-style-list`} component={AsyncRequestGridStyleComponent} />
              <Route path={`${match.url}/request-status`} component={AsyncRequeststatusComponent} />
              <Route path={`${match.url}/production-request`} component={AsyncProductionRequestComponent} />

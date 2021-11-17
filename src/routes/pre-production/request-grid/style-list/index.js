@@ -45,6 +45,8 @@
  
  // rct section loader
  import RctSectionLoader from 'Components/RctSectionLoader/RctSectionLoader';
+
+ import TextField from '@material-ui/core/TextField';
  
  export default class UserProfile extends Component {
  
@@ -54,209 +56,37 @@
          selectedUser: null, // selected user to perform operations
          loading: false, // loading activity
          addNewUserModal: false, // add new user form modal
-         addNewUserDetail: {
-             id: '',
-             name: '',
-             avatar: '',
-             type: '',
-             emailAddress: '',
-             status: 'Active',
-             lastSeen: '',
-             accountType: '',
-             badgeClass: 'badge-success',
-             dateCreated: 'Just Now',
-             checked: false
-         },
+        
          openViewUserDialog: false, // view user dialog box
          editUser: null,
          allSelected: false,
-         selectedUsers: 0
+         selectedUsers: 0,
+         styleno:this.props.match.params.styleno,
+         stylelistData:[],
+         //requestNumber:0
      }
  
      componentDidMount() {
-         api.get('userManagement.js')
-             .then((response) => {
-                 this.setState({ users: response.data });
-             })
-             .catch(error => {
-                 // error hanlding
-             })
+       
+        api.get('SWRequestGrid/StyleGridData?StyleNumber='+this.state.styleno)
+        .then((response) => {                
+            this.setState({ stylelistData: response.data.data });
+        })        
+        .catch(error => {})  
      }
  
-     /**
-      * On Delete
-      */
-     onDelete(data) {
-         this.refs.deleteConfirmationDialog.open();
-         this.setState({ selectedUser: data });
-     }
- 
-     /**
-      * Delete User Permanently
-      */
-     deleteUserPermanently() {
-         const { selectedUser } = this.state;
-         let users = this.state.users;
-         let indexOfDeleteUser = users.indexOf(selectedUser);
-         users.splice(indexOfDeleteUser, 1);
-         this.refs.deleteConfirmationDialog.close();
-         this.setState({ loading: true });
-         let self = this;
-         setTimeout(() => {
-             self.setState({ loading: false, users, selectedUser: null });
-             NotificationManager.success('User Deleted!');
-         }, 2000);
-     }
- 
-     /**
-      * Open Add New User Modal
-      */
-     opnAddNewUserModal(e) {
-         e.preventDefault();
-         this.setState({ addNewUserModal: true });
-     }
- 
-     /**
-      * On Reload
-      */
-     onReload(e) {
-         e.preventDefault();
-         this.setState({ loading: true });
-         let self = this;
-         setTimeout(() => {
-             self.setState({ loading: false });
-         }, 2000);
-     }
- 
-     /**
-      * On Select User
-      */
-     onSelectUser(user) {
-         user.checked = !user.checked;
-         let selectedUsers = 0;
-         let users = this.state.users.map(userData => {
-             if (userData.checked) {
-                 selectedUsers++;
-             }
-             if (userData.id === user.id) {
-                 if (userData.checked) {
-                     selectedUsers++;
-                 }
-                 return user;
-             } else {
-                 return userData;
-             }
-         });
-         this.setState({ users, selectedUsers });
-     }
- 
-     /**
-      * On Change Add New User Details
-      */
-     onChangeAddNewUserDetails(key, value) {
-         this.setState({
-             addNewUserDetail: {
-                 ...this.state.addNewUserDetail,
-                 [key]: value
-             }
-         });
-     }
- 
-     /**
-      * Add New User
-      */
-     addNewUser() {
-         const { name, emailAddress } = this.state.addNewUserDetail;
-         if (name !== '' && emailAddress !== '') {
-             let users = this.state.users;
-             let newUser = {
-                 ...this.state.addNewUserDetail,
-                 id: new Date().getTime()
-             }
-             users.push(newUser);
-             this.setState({ addNewUserModal: false, loading: true });
-             let self = this;
-             setTimeout(() => {
-                 self.setState({ loading: false, users });
-                 NotificationManager.success('User Created!');
-             }, 2000);
-         }
-     }
- 
-     /**
-      * View User Detail Hanlder
-      */
-     viewUserDetail(data) {
-         this.setState({ openViewUserDialog: true, selectedUser: data });
-     }
- 
-     /**
-      * On Edit User
-      */
-     onEditUser(user) {
-         this.setState({ addNewUserModal: true, editUser: user });
-     }
- 
-     /**
-      * On Add & Update User Modal Close
-      */
-     onAddUpdateUserModalClose() {
-         this.setState({ addNewUserModal: false, editUser: null })
-     }
- 
-     /**
-      * On Update User Details
-      */
-     onUpdateUserDetails(key, value) {
-         this.setState({
-             editUser: {
-                 ...this.state.editUser,
-                 [key]: value
-             }
-         });
-     }
- 
-     /**
-      * Update User
-      */
-     updateUser() {
-         const { editUser } = this.state;
-         let indexOfUpdateUser = '';
-         let users = this.state.users;
-         for (let i = 0; i < users.length; i++) {
-             const user = users[i];
-             if (user.id === editUser.id) {
-                 indexOfUpdateUser = i
-             }
-         }
-         users[indexOfUpdateUser] = editUser;
-         this.setState({ loading: true, editUser: null, addNewUserModal: false });
-         let self = this;
-         setTimeout(() => {
-             self.setState({ users, loading: false });
-             NotificationManager.success('User Updated!');
-         }, 2000);
-     }
- 
-     //Select All user
-     onSelectAllUser(e) {
-         const { selectedUsers, users } = this.state;
-         let selectAll = selectedUsers < users.length;
-         if (selectAll) {
-             let selectAllUsers = users.map(user => {
-                 user.checked = true
-                 return user
-             });
-             this.setState({ users: selectAllUsers, selectedUsers: selectAllUsers.length })
-         } else {
-             let unselectedUsers = users.map(user => {
-                 user.checked = false
-                 return user;
-             });
-             this.setState({ selectedUsers: 0, users: unselectedUsers });
-         }
-     }
- 
+     viewRequestList(e){
+        api.get('SWRequestGrid/StyleRequestList?RequestNumber='+this.state.requestNumber)
+        .then((response) => {                
+            this.setState({ stylelistData: response.data.data });
+        })        
+        .catch(error => {})    
+    }
+    onNameEdited(event){        
+        this.setState({requestNumber:event.target.value});
+        console.log(this.state.requestNumber)
+
+    }
      render() {
          const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
          return (
@@ -271,7 +101,7 @@
                  />
                  <RctCollapsibleCard fullBlock>
                      <div className="table-responsive">
-                         <div className="d-flex justify-content-between py-20 px-10 border-bottom">
+                         <div className="d-flex justify-content-between px-10">
                              <div>
                                 <h3 className="m-btop-10">Style List</h3>
                              </div>
@@ -312,6 +142,22 @@
                                     </div>
                                 </div>
                          </div>
+                         <div className="row new-form overall-border no-padding-bottom">  
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <div className="form-group select_label_name"> 
+                                            <TextField id="Requestno" fullWidth label="Style Number" placeholder="Request Number"  defaultValue={this.state.requestNumber} onChange={this.onNameEdited.bind(this)}/>
+{/*                                                 
+                                            <span className="error">{this.state.errors["styleno"]}</span> */}
+                                        </div>                                   
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-15"> 
+                                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">Search <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                    </div>   
+                                </div> 
+                            </div>
                             <table className="table table-middle table-hover mb-0">
                                 <thead>
                                     <tr>                                   
@@ -328,42 +174,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                {this.state.stylelistData.map((n,index) => {                                   
+                                return (
                                     <tr>                                       
-                                        <td>AU554</td>
-                                        <td>v1</td>
-                                        <td>23.5</td>
-                                        <td>2191</td>
-                                        <td>Proto</td>
-                                        <td>3</td>  
-                                        <td>4</td>                                    
-                                        <td>1.32</td>    
-                                        <td>2</td> 
-                                        <td>2</td>                                   
+                                        <td>{n.fit}</td>
+                                        <td>{n.techpack}</td>
+                                        <td>{n.sam}</td>
+                                        <td>{n.sam}</td>
+                                        <td>{n.purpose}</td>   
+                                        <td>{n.pattern}</td>   
+                                        <td>{n.sample}</td> 
+                                        <td>{n.marker}</td>   
+                                        <td>{n.valueAdd}</td>  
+                                        <td>{n.outpcs}</td>                        
                                     </tr>
-                                    <tr>                                       
-                                        <td>AU554</td>
-                                        <td>v1</td>
-                                        <td>23.5</td>
-                                        <td>2191</td>
-                                        <td>Add</td>
-                                        <td>3</td>  
-                                        <td>4</td>                                    
-                                        <td>1.32</td>    
-                                        <td>2</td> 
-                                        <td>2</td>                                   
-                                    </tr>
-                                    <tr>                                       
-                                        <td>AU554</td>
-                                        <td>v1</td>
-                                        <td>23.5</td>
-                                        <td>2191</td>
-                                        <td>Proto 123</td>
-                                        <td>3</td>  
-                                        <td>4</td>                                    
-                                        <td>1.32</td>    
-                                        <td>2</td> 
-                                        <td>2</td>                                   
-                                    </tr>
+                                )
+                                })
+                            }                                  
                              </tbody>
                              <tfoot className="border-top">
                                  <tr>
@@ -427,13 +254,7 @@
                          }
                      </ModalHeader>
                      <ModalBody>
-                         {/* {editUser === null ?
-                             <AddNewUserForm
-                                 addNewUserDetails={this.state.addNewUserDetail}
-                                 onChangeAddNewUserDetails={this.onChangeAddNewUserDetails.bind(this)}
-                             />
-                             : <UpdateUserForm user={editUser} onUpdateUserDetail={this.onUpdateUserDetails.bind(this)} />
-                         } */}
+                        
                      </ModalBody>
                      <ModalFooter>
                          {editUser === null ?

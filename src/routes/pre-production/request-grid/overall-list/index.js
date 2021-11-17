@@ -394,7 +394,7 @@
                     <td>{n.requestNumber}</td>
                     <td>{n.requestType}</td>
                     <td>{n.requestDate}</td>
-                    <td><Link to='/app/pre-production/request-style-list'>{n.styleNumber}</Link></td>                    
+                    <td><Link to={'/app/pre-production/request-style-list/'+n.styleNumber}>{n.styleNumber}</Link></td>                    
                     <td>{n.purpose}</td>                                    
                     <td>{n.noOfActivity}</td>     
                     <td><span className={`badge badge-success badge-pill ft-lft`}>{n.colorStatus}</span></td>    

@@ -284,7 +284,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                      title={<IntlMessages id="sidebar.userManagement" />}
                      match={this.props.match}
                  />
-                 <RctCollapsibleCard fullBlock heading="Production Request">
+                 <RctCollapsibleCard fullBlock heading="Productivity Request">
                   
                     <div className="row new-form overall-border no-padding-bottom">  
                              <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">

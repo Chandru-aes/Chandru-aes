@@ -25,6 +25,7 @@
  import FormControl from '@material-ui/core/FormControl';
  
  import Select from '@material-ui/core/Select';
+ import Select1 from "react-dropdown-select";
  // page title bar
  import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
  import DropzoneComponent from 'react-dropzone-component';
@@ -84,84 +85,101 @@
             showFiletypeIcon: true,
             postUrl: '/'
          };
-   
-         // If you want to attach multiple callbacks, simply
-         // create an array filled with all your callbacks.
-         // this.callbackArray = [() => console.log('Hi!'), () => console.log('Ho!')];
-   
-         // // Simple callbacks work too, of course
-         // this.callback = () => console.log('Hello!');
-   
-         // this.success = file => console.log('uploaded', file);
-   
-         // this.removedfile = file => console.log('removing...', file);
-   
          this.dropzone = null;
+         this.state={
+            requestoptions:[],
+            requestitems:[],
+            requestView:[],
+            patternVersion:[],
+            patternNatureofJobItems:[],
+            patternType:[],
+            patternStatusGridList:[]
+           
          }
-     state = {
-        activeIndex: 0,
-        open: false,
-        cloneopen: false,
-        ropen: false,
-        tpopen: false,
-        selectedDate: moment(),
-        addNewUserModal: false,
-        checkedA: true,
-     }
-     onAddUpdateUserModalClose() {
-        this.setState({ addNewUserModal: false, editUser: null })
-    }
- 
-     opnAddNewUserModal(e) {
-        e.preventDefault();
-        this.setState({ addNewUserModal: true });
-    }
+         }
+        state = {
+            activeIndex: 0,
+            open: false,
+            cloneopen: false,
+            ropen: false,
+            tpopen: false,
+            selectedDate: moment(),
+            addNewUserModal: false,
+            checkedA: true,
+            fields: {},
+            errors: {},
+            requestitems:[],
+            requestView:[],
+            patternNatureofJobItems:[],
+            patternType:[],
+           
+        }
+     
      componentDidMount() {
-        document.body.classList.add('med-pop-up');
-        $(document).on('click', '.edit', function() {
-            $(this).parent().siblings('td.data').each(function() {
-              var content = $(this).html();
-              $(this).html('<input value="' + content + '" class="form-control"/>');
-            });
-            
-            $(this).siblings('.save').show();
-            $(this).siblings('.delete').hide();
-            $(this).hide();
-          });
-          
-          $(document).on('click', '.save', function() {
-            
-            $('input').each(function() {
-              var content = $(this).val();
-              $(this).html(content);
-              $(this).contents().unwrap();
-            });
-            $(this).siblings('.edit').show();
-            $(this).siblings('.delete').show();
-            $(this).hide();
-            
-          });
-          
-          
-          $(document).on('click', '.delete', function() {
-            $(this).parents('tr').remove();
-          });
-          
-          $('.add').click(function() {
-            $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
-          });
+        api.get('RequestStatus/GetRequestNoDropdown')
+        .then((response) => {            
+            this.setState({ requestitems: response.data.data });
+        })
+        .catch(error => {})
+
+        api.get('RequestStatus/GetNatureOfJobDropdown')
+        .then((response) => {            
+            this.setState({ patternNatureofJobItems: response.data.data });
+        })
+        .catch(error => {})
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=PATTYPE')
+        .then((response) => {            
+            this.setState({ patternType: response.data.result.data });
+        })
     }
-     handleChange(event, value) {
-        this.setState({ activeIndex: value });
-        this.setState({ [name]: checked });
-     }
-     handleDateChange = (date) => {
-        this.setState({ selectedDate: date });
-    };
-    handleChangeCheckbox = name => (event, checked) => {
-        console.log("name:: ", name);
-        this.setState({ [name]: checked });
-    };
+    setStateValueDropdown = name => event => {
+        // let fields = this.state.fields;
+        // fields[name] = event[0].value;        
+        // this.setState({fields});
+        
+		this.setState({ [name]: event });
+	};
+    setstatevaluedropdownfunction(val,field,e){
+        // let fields = this.state.fields;
+        // fields['requestno'] = val.RequestNo[0].value;        
+        // this.setState({fields});
+        
+        api.get('RequestStatus/GetRequestNoDetail?RequestNo='+val.RequestNo[0].label)
+        .then((response) => {      
+                
+            this.setState(
+                { updatedRequestNo: val.RequestNo[0].label,
+                styleNo: response.data.data[0].styleNo,
+                purpose: response.data.data[0].purpose,
+               baseStyleno: response.data.data[0].baseStyleno}
+            );
+            
+        })
+        .catch(error => {})  
+        
+        api.get('RequestStatus/GetRequestviewDropDown?RequestNo='+val.RequestNo[0].label)
+        .then((response) => {   
+                
+            this.setState({ requestView: response.data.data });            
+        })
+        .catch(error => {}) 
+
+        api.get('RequestStatus/GetPatternversionDropdown?RequestNo='+val.RequestNo[0].label)
+        .then((response) => {   
+                
+            this.setState({ patternVersion: response.data.data });            
+        })
+        .catch(error => {}) 
+
+        api.get('RequestStatus/GetPatternStatusGridList?RequestNo='+val.RequestNo[0].label)
+        .then((response) => {   
+                
+            this.setState({ patternStatusGridList: response.data.data });            
+        })
+        .catch(error => {}) 
+    }
+   
     rhandleClickOpen = () => {
         this.setState({ ropen: true });
      };
@@ -176,7 +194,33 @@
          const { classes } = this.props;
          const config = this.componentConfig;
          const djsConfig = this.djsConfig;
-         
+
+         const requestnooptions = [];
+        for (const item of this.state.requestitems) {           
+            requestnooptions.push({value:item.id,label:item.reqNo});
+        }
+
+        const requestviewoptions = [];
+        for (const item of this.state.requestView) {           
+            requestviewoptions.push({value:item.id,label:item.reqType});
+        }
+
+        const patternVersionOptions = [];
+        for (const item of this.state.patternVersion) {           
+            patternVersionOptions.push({value:item.id,label:item.patVersion});
+        }
+
+        const natureofJobOptions =[];
+        for (const item of this.state.patternNatureofJobItems) {           
+            natureofJobOptions.push({value:item.code,label:item.typeDesc});
+        }
+
+        const patternTypeOptions = [];
+        for (const item of this.state.patternType) {           
+            patternTypeOptions.push({value:item.code,label:item.codeDesc});
+        }
+        
+        //:[]
            const handleToggle = () => {
              this.setState({ isActive: !this.state.isActive });
            };
@@ -187,293 +231,95 @@
              success: this.success,
              removedfile: this.removedfile
           }
-           const handleToggle1 = () => {
-             this.setState({ isActive: false });
-           };
-           const handleToggle2 = () => {
-             this.setState({ isActive: !this.state.isActive });
-           };
- 
-           const handleToggle3 = () => {
-             this.setState({ isActive: false });
-           };
+          
            const isActive = this.state.isActive;
           return ( 
               
              <RctCollapsibleCard heading="Request Status">
-                  <PageTitleBar title="Menu" match={this.props.match} />
-                  <div  className={isActive ? "s-panel active" : 's-panel'}>
-                      {/* { !isActive &&
-                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
-                      }
-                       { isActive &&
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle1} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
-                         } */}
-                      <div className="row new-form">
-                  <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
-                         <div className="form-group"> 
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="table-responsive mt-15">
-                     
- 
-                             <table className="table data w-100">
-                                 <thead>
-                                     <tr>
-                                     <th className="w-25">Activity</th>
-                                     <th className="w-25">Due By</th>
-                                     <th className="w-25">Number</th>
-                                     <th className="w-25 text-center">Actions  </th>
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
-                                     {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
- 
- <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
- 
-                                         {/* <button className="save">Save</button>
-                                         <button className="edit">Edit</button>
-                                         <button className="delete">Delete</button> */}
-                                     </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
-                                     {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
- 
- <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
- 
-                                         {/* <button className="save">Save</button>
-                                         <button className="edit">Edit</button>
-                                         <button className="delete">Delete</button> */}
-                                     </td>
-                                     </tr>
-                                 </tbody>
-                                 
-                                 </table>
-                             </div>
-                     </div>
-                  </div>
- 
- 
-                  <div  className={isActive ? "s-panel-1 active" : 's-panel-1'}>
-                      {/* { !isActive &&
-                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle2}><span className="MuiButton-label">Order Specification <i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
-                      }
-                       { isActive &&
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle3} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
-                         } */}
-                      <div className="row new-form">
-                  <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
-                         <div className="form-group">
-                         <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
-                         </div>
-                     </div>
-                     <div className="table-responsive mt-15">
-                     
- 
-                             <table className="table data w-100">
-                                 <thead>
-                                     <tr>
-                                     <th className="w-25">Activity</th>
-                                     <th className="w-25">Due By</th>
-                                     <th className="w-25">Number</th>
-                                     <th className="w-25 text-center">Actions  </th>
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
-                                     {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
- 
- <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
- 
-                                         {/* <button className="save">Save</button>
-                                         <button className="edit">Edit</button>
-                                         <button className="delete">Delete</button> */}
-                                     </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="data">John Doe</td>
-                                     <td className="data">johndoe@john.com</td>
-                                     <td className="data">666-666-666</td>
-                                     <td className="text-center">
-                                     {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
-                                     <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
- 
- <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                                 <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
- 
-                                         {/* <button className="save">Save</button>
-                                         <button className="edit">Edit</button>
-                                         <button className="delete">Delete</button> */}
-                                     </td>
-                                     </tr>
-                                 </tbody>
-                                 
-                                 </table>
-                             </div>
-                     </div>
-                  </div>
- 
-                  <div className="row">
-                <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12">
-                <div className="w-100">
-                <div className="float-right n-bt-top">
-                        
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
-                        
-                       
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                   </div> 
-                   <div className="clearfix"></div>
-                <div className="row p-20">
-                
-                <div className="w-75 col border pb-10">
-                <div className="row no-f-mb">
-                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Request No</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
- 
-                    </div> 
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Style Number" placeholder="Style Number"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Purpose" placeholder="Purpose"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Base Style" placeholder="Base Style"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                           
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Accept" />
-                           
-                           
-                        </RadioGroup>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                           
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Hold" />
-                           
-                           
-                        </RadioGroup>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                           
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Cancel" />
-                           
-                           
-                        </RadioGroup>
-                        </div>
+                  <PageTitleBar title="Menu" match={this.props.match} />  
+                    <div className="row">
+                        <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12">
+                            <div className="w-100">
+                                <div className="float-right n-bt-top">                        
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>  
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                </div> 
+                                <div className="clearfix"></div>
+                                <div className="row p-20">
+                                    <div className="w-75 col border pb-10">
+                                        <div className="row no-f-mb">
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="RequestNo"
+                                                        options={requestnooptions}
+                                                        onChange={values => this.setstatevaluedropdownfunction({ RequestNo:values },this,"requestno")}
+                                                        //onChange={this.setstatevaluedropdownfunction('requestno')}
+                                                        placeholder="Request No"
+                                                        values={this.state.requestno}
+                                                        />
+                                                </div>
+                                            </div> 
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group  mt-15">
+                                                    <input placeholder="Style Number" value={this.state.styleNo} className="MuiInputBase-input textbox-width" readOnly                                                   
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                 <div className="form-group  mt-15">
+                                                    <input placeholder="Purpose" value={this.state.purpose} className="MuiInputBase-input textbox-width" readOnly                                                   
+                                                    />
+                                                </div>                                              
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group  mt-15">
+                                                    <input placeholder="Base Style" value={this.state.baseStyleno} className="MuiInputBase-input textbox-width" readOnly                                                   
+                                                    />
+                                                </div> 
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                <RadioGroup row aria-label="anchorReference" name="anchorReference">                           
+                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Accept" />
+                                                </RadioGroup>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                <RadioGroup row aria-label="anchorReference" name="anchorReference">                           
+                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Hold" />
+                                                </RadioGroup>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Cancel" />
+                                                </RadioGroup>
+                                            </div>
 
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Reason" placeholder="Reason"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Request View</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
- 
-                    </div> 
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <TextField id="Buyer" fullWidth label="Reason" placeholder="Reason"/>
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Request View"
+                                                        options={requestviewoptions}
+                                                        //onChange={values => this.setstatevaluedropdownfunction({ RequestView:values },this,"requestview")}
+                                                        onChange={this.setStateValueDropdown('requestView')}
+                                                        placeholder="Request View"
+                                                        values={this.state.requestview}
+                                                        />
+                                                </div>
+                                            </div> 
                     
                    
                
@@ -497,46 +343,46 @@
                      </div>
                      <div className="w-75 row pl-15">
                      <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple"> Nature of Job</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
-     </div>
+                        <div className="form-group select_label_name mt-15">
+                            <Select1
+                                dropdownPosition="auto"
+                                //   multi
+                                createNewLabel="Nature Of Job"
+                                options={natureofJobOptions}
+                                //onChange={values => this.setstatevaluedropdownfunction({ RequestNo:values },this,"requestno")}
+                                //onChange={this.setstatevaluedropdownfunction('requestno')}
+                                placeholder="Nature Of Job"
+                                values={this.state.natureofJob}
+                                />
+                        </div>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div className="form-group select_label_name mt-15">
+                            <Select1
+                                dropdownPosition="auto"
+                                //   multi
+                                createNewLabel="Pattern Version"
+                                options={patternVersionOptions}
+                                //onChange={values => this.setstatevaluedropdownfunction({ RequestView:values },this,"requestview")}
+                                onChange={this.setStateValueDropdown('patternversion')}
+                                placeholder="Pattern Version"
+                                values={this.state.patternversion}
+                                />
+                        </div>
+                    </div>
      <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple"> Version</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
-     </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Pattern Type</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
+         <div className="form-group select_label_name mt-15">
+            <Select1
+                dropdownPosition="auto"
+                //   multi
+                createNewLabel="Pattern Type"
+                options={patternTypeOptions}
+                //onChange={values => this.setstatevaluedropdownfunction({ RequestView:values },this,"requestview")}
+                onChange={this.setStateValueDropdown('patterntype')}
+                placeholder="Pattern Type"
+                values={this.state.patternversion}
+                />
+        </div>
      </div>
      <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
     
@@ -611,55 +457,31 @@
                                      </tr>
                                  </thead>
                                  <tbody>
+                                 {this.state.patternStatusGridList.map((n,index) => {                                   
+                                return (
                                      <tr>
                                          <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
+                                         <td>{n.naturejobcode} </td>
+                                         <td>{n.patVersion} </td>
+                                         <td> {n.storageArea}</td>
+                                         <td> {n.donebyName}</td>
+                                         <td>{n.checkbyName} </td>
+                                         <td>{n.checkbyName} </td>
+                                         <td>{n.checkbyName} </td>
+                                         <td>{n.checkbyName} </td>
+                                         <td>{n.checkbyName} </td>
+                                         {/* <td> </td>
+                                         <td> </td>
+                                         <td> </td> */}
                                         
                                      </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
+                                ) } )
+                                }
+                                {this.state.patternStatusGridList.length==0 &&
+                                        <tr>
+                                            <td colSpan="8" className="no-records-data">No Records Found</td>
+                                        </tr>
+                                }
                                  </tbody>
                                  
                                  </table>

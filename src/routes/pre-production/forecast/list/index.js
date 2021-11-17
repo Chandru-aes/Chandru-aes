@@ -188,7 +188,7 @@ function TabContainer({ children }) {
                
             })        
             .catch(error => {})
-
+            this.setState({currentForecastId:ForecastId});
             api.get('ForecastQtyDetailEntity/GetForecastQtyDetails?FCID='+ForecastId)
             .then((response) => {            
                 this.setState({ QtyBreakUpList: response.data });
@@ -222,8 +222,8 @@ function TabContainer({ children }) {
                if(response.data.status==true){
                     api.get('ForecastEntity/GetForecastHeaderList')
                     .then((response) => {         
-                    this.setState({ forecastinglists: response.data.data });
-                })
+                        this.setState({ forecastinglists: response.data.data });
+                    })
                }               
                 e.cancel=false;
             })
@@ -233,10 +233,10 @@ function TabContainer({ children }) {
         }
       // get employee payrols
         SaveForecast(type){
-            console.log("sdfsdfs")
+           
             console.log(this.state.QtyBreakUpList)
             console.log(this.state.activityList)
-            if(this.state.QtyBreakUpList.data.length==0 && this.state.activityList.data.length==0){
+            if((this.state.QtyBreakUpList.data.length==0 && this.state.activityList.data.length==0)){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
             }else{
                 console.log(this.state.saveQtyDetailItems)
@@ -244,10 +244,12 @@ function TabContainer({ children }) {
                     api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response) => {
                     
                         NotificationManager.success('Added Sucessfully');
+
                          api.get('ForecastActivityEntity/GetForecastActivityList')
                         .then((response) => {            
                             this.setState({ activityList: response.data });
                         })
+                        
                         api.get('ForecastEntity/GetForecastHeaderList')
                         .then((response) => {  
                             // console.log(response.data.data,'response.data.result.data')          
@@ -373,7 +375,13 @@ function TabContainer({ children }) {
             api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
                                     NotificationManager.success('Deleted Sucessfully');
                if(response.data.data.status==true){
+                   /*
                     api.get('ForecastActivityEntity/GetForecastActivityList')
+                    .then((response) => {            
+                        this.setState({ activityList: response.data });
+                    })
+                    */
+                    api.get('ForecastActivityEntity/GetForecastActivityList?FID='+this.state.currentForecastId)
                     .then((response) => {            
                         this.setState({ activityList: response.data });
                     })
@@ -441,9 +449,13 @@ function TabContainer({ children }) {
                 NotificationManager.success('Deleted Sucessfully');
 
                 if(response.data.status==true){
-                    api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
+                    // api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
+                    // .then((response) => {            
+                    //     this.setState({ QtyBreakUpList: response.data });
+                    // })
+                    api.get('ForecastQtyDetailEntity/GetForecastQtyDetails?FID='+this.state.currentForecastId)
                     .then((response) => {            
-                        this.setState({ QtyBreakUpList: response.data });
+                        this.setState({ activityList: response.data });
                     })
                     api.get('ForecastEntity/GetForecastHeaderList')
                     .then((response) => {  
@@ -537,10 +549,11 @@ function TabContainer({ children }) {
             }
         }
         onRowUpdated(e) {
-           
+           console.log(e.data)
             const UpdatedData = e.data;           
             const {fcQtyDetailInsertEntityModel} = this.state;
-            UpdatedData.subProductType = e.data.SubProductTypeId;
+            UpdatedData.subProductType = e.data.subProductType;
+            UpdatedData.qty = 0;
             if(!e.data.id){
                 UpdatedData.cancel = "N";
                 UpdatedData.hostName = "Local Host";
@@ -615,16 +628,20 @@ function TabContainer({ children }) {
             .then((response) => {            
                 this.setState({ forecastType: response.data.result.data });
             })
-
+            this.state.QtyBreakUpList.data =[];
+            this.state.activityList.data =[];
+            /*
             api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
             .then((response) => {            
                 this.setState({ QtyBreakUpList: response.data });
             })
+            */
+           /*
             api.get('ForecastActivityEntity/GetForecastActivityList')
             .then((response) => {            
                 this.setState({ activityList: response.data });
             })
-            
+            */
             api.get('ProductType/GetProductTypeDropDown')
             .then((response) => {            
                 this.setState({ productTypes: response.data.result.data });
@@ -798,10 +815,10 @@ function TabContainer({ children }) {
             seasonoptions.push({value:item.seasonCode,label:item.seasonName});
         }
         
-        const subproductType = [];
-        for (const item of this.state.subproductTypes) {           
-            subproductType.push({value:item.subProductType,label:item.subProductType});
-        }
+        // const subproductType = [];
+        // for (const item of this.state.subproductTypes) {           
+        //     subproductType.push({value:item.subProductType,label:item.subProductType});
+        // }
         const data = [
             ["Buyer 1","1st Division","Autumn","2021","Bangalore","10","10","6","Active"],
             ["Buyer 2","2nd Division","Summer","2021","Bangalore","10","10","6","Active"],
@@ -957,9 +974,9 @@ function TabContainer({ children }) {
                                        
                                             <Lookup dataSource={this.state.productTypes} valueExpr="productType" displayExpr="productType" />
                                         </Column>
-                                        <Column dataField="SubProductTypeId" caption="Sub-Product type" >
+                                        <Column dataField="subProductType" caption="Sub-Product type" >
                                             {/* */}
-                                            <Lookup dataSource={subproductType} valueExpr="value" displayExpr="value" />
+                                            <Lookup dataSource={this.state.subproductTypes} valueExpr="subProductType" displayExpr="subProductType" />
                                         </Column>
                                         <Column dataField="avgSAM" width={110} caption="Average SAM"></Column>
                                         <Column dataField="pcd" dataType="date" ></Column>

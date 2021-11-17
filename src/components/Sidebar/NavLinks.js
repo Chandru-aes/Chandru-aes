@@ -606,7 +606,7 @@ export default {
                {	
                   "path": "/app/pre-production/production-request",	
                   "new_item": false,	
-                  "menu_title": "Production Request"	
+                  "menu_title": "Productivity Request"	
                },
                {	
                   "path": "/app/pre-production/productivity-grid",	
