@@ -85,6 +85,8 @@
         styleno:[],
         buyerlists:[],
         buyer:[],
+        docnumberlists:[],
+        docnumber:[],
      }
      constructor(props) {
         super(props);
@@ -110,13 +112,22 @@
 
         api.get('StyleHeader/GetStyleGridList')
         .then((response) => {
-            console.log(response.data.data,'response.data.data')
+            
             this.setState({ stylenolists: response.data.data });
         })
         .catch(error => {
             // error handling
         })
 
+        api.get('ProductivityGrid/GetProductivityDocNoDropDown')
+        .then((response) => {
+            
+            this.setState({ docnumberlists: response.data.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+        
         
      }
     
@@ -298,7 +309,7 @@
     }
     getRequestGridList(){
        
-        api.get('ProductivityGrid/GetProductivityGridData?Buyer='+this.state.fields.buyer+'&Buyerdivision='+this.state.fields.BuyerdivisionValue+'&Style='+this.state.fields.styleno+'&DocNum=PR2200001')
+        api.get('ProductivityGrid/GetProductivityGridData?Buyer='+this.state.fields.buyer+'&Buyerdivision='+this.state.fields.BuyerdivisionValue+'&Style='+this.state.fields.styleno+'&DocNum='+this.state.fields.docnumber)
         .then((response) => response.data.data)
         .then(overalllists => {
             this.setState({ overalllists: overalllists });
@@ -331,6 +342,11 @@
             errors["styleno"] = "Cannot be empty";
         }
 
+        if(!fields["docnumber"]){
+            formIsValid = false;
+            errors["docnumber"] = "Cannot be empty";
+        }
+        
       
         this.setState({errors: errors});
         return formIsValid;
@@ -375,6 +391,11 @@
              stylenooptions.push({value:item.styleid,label:item.styleNo});
          }
 
+         const docnumberoptions = [];
+         for (const item of this.state.docnumberlists) {           
+             docnumberoptions.push({value:item.prReqNo,label:item.prReqNo});
+         }
+         
         
         //console.log(this.state.overalllists)
         let buyerrightlistshtml = null;
@@ -466,14 +487,14 @@
                                 <div className="form-group">
                                 <div className="form-group select_label_name mt-15"> 
                                     <Select1  dropdownPosition="auto"  createNewLabel="Document number"
-                                        options={stylenooptions} ref="styleno"
+                                        options={docnumberoptions} ref="docnumber"
                                         placeholder="Document number"
-                                        onChange={this.setstatevaluedropdownfunction('styleno')}
-                                        //onChange={this.handleChangeValidate.bind(this, "styleno",this.state.styleno)} 
-                                        //onChange={values => this.setState({ styleno:values })}
-                                        values={this.state.styleno}
+                                        onChange={this.setstatevaluedropdownfunction('docnumber')}
+                                        //onChange={this.handleChangeValidate.bind(this, "docnumber",this.state.docnumber)} 
+                                        //onChange={values => this.setState({ docnumber:values })}
+                                        values={this.state.docnumber}
                                     /> 
-                                    <span className="error">{this.state.errors["styleno"]}</span>
+                                    <span className="error">{this.state.errors["docnumber"]}</span>
                                     </div>
                                 </div>
                             </div>
@@ -522,7 +543,7 @@
                                         <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                             <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                         </svg></span></button>
-                                        <Link to='/app/pre-production/style-creation'><Badge className="mb-10 mr-10" color="dark">Add New</Badge></Link>
+                                        <Link to='/app/pre-production/production-request'><Badge className="mb-10 mr-10" color="dark">Add New</Badge></Link>
                                     </div>
                                 </div>
                          </div>
