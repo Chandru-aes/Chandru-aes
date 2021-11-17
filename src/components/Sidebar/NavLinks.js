@@ -612,6 +612,11 @@ export default {
                   "path": "/app/pre-production/productivity-grid",	
                   "new_item": false,	
                   "menu_title": "Productivity Grid"	
+               },
+               {	
+                  "path": "/app/pre-production/itemmaster-grid",	
+                  "new_item": false,	
+                  "menu_title": "Item Master Grid"	
                }
               
             ]

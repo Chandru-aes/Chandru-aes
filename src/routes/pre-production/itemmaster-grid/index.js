@@ -49,7 +49,7 @@
 
  import Select1 from "react-dropdown-select";
  
- class Productivitygrid extends Component {
+ class Itemmastergrid extends Component {
     
      state = {
          all: false,
@@ -81,12 +81,7 @@
         errors: {},
         // styleno:'',
         overalllists:[],
-        stylenolists:[],
-        styleno:[],
-        buyerlists:[],
-        buyer:[],
-        docnumberlists:[],
-        docnumber:[],
+        purchaseinfolists:[],
      }
      constructor(props) {
         super(props);
@@ -95,42 +90,25 @@
       
      }
      componentDidMount() {
-        api.get('Buyer/GetBuyerDropDown')
+        api.get('ItemCreation/GetMaterialMasterList')
         .then((response) => {
             
-            this.setState({ buyerlists: response.data.result.data });
+            this.setState({ overalllists: response.data.data });
         })
         .catch(error => {
             // error handling
         })
 
-        api.get('BuyerDivision/GetBuyerDivisionDropDown')
+        api.get('ItemCreation/GetPurchaseInfoRecordt')
         .then((response) => {                
-            this.setState({ BuyerDivisionList: response.data.result.data });
+            this.setState({ purchaseinfolists: response.data.data });
         })        
         .catch(error => {})  
 
-        api.get('StyleHeader/GetStyleHeaderList')
-        .then((response) => {
-            
-            this.setState({ stylenolists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('ProductivityGrid/GetProductivityDocNoDropDown')
-        .then((response) => {
-            
-            this.setState({ docnumberlists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-        
         
      }
-         /**
+    
+     /**
       * On Delete
       */
      onDelete(data) {
@@ -307,57 +285,7 @@
 
 		this.setState({ [name]: event.target.value });
 	};
-    viewRequestList(e){
-        e.preventDefault();
-        if(this.handleValidation()){
-            this.getRequestGridList();
-        }    
-    }
-    getRequestGridList(){
-       
-        api.get('ProductivityGrid/GetProductivityGridData?Buyer='+this.state.fields.buyer+'&Buyerdivision='+this.state.fields.BuyerdivisionValue+'&Style='+this.state.fields.styleno+'&DocNum='+this.state.fields.docnumber)
-        .then((response) => response.data.data)
-        .then(overalllists => {
-            this.setState({ overalllists: overalllists });
-        });
-        // .then((response) => {  
-                    
-        //     this.setState({ overalllists: response.data.data });
-
-            
-        // })
-    }
-
     
-    handleValidation(){
-        let fields = this.state.fields;
-        let errors = {};
-        let formIsValid = true;
-       
-        if(!fields["buyer"]){
-            formIsValid = false;
-            errors["buyer"] = "Cannot be empty";
-        }
-        if(!fields["BuyerdivisionValue"]){
-            formIsValid = false;
-            errors["BuyerdivisionValue"] = "Cannot be empty";
-        }
-        
-        if(!fields["styleno"]){
-            formIsValid = false;
-            errors["styleno"] = "Cannot be empty";
-        }
-
-        if(!fields["docnumber"]){
-            formIsValid = false;
-            errors["docnumber"] = "Cannot be empty";
-        }
-        
-      
-        this.setState({errors: errors});
-        return formIsValid;
-      }
-     //Select All user
      onSelectAllUser(e) {
          const { selectedUsers, users } = this.state;
          let selectAll = selectedUsers < users.length;
@@ -381,52 +309,50 @@
          const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
     
 
-         const buyeroptions = [];
-         for (const item of this.state.buyerlists) {           
-             buyeroptions.push({value:item.buyerCode,label:item.buyerName});
-         }
-
-
-         const BuyerDivisionOptions =[];
-         for (const item of this.state.BuyerDivisionList) {           
-             BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
-         }
-
-         const stylenooptions = [];
-         for (const item of this.state.stylenolists) {           
-             stylenooptions.push({value:item.masterStyle,label:item.masterStyle});
-         }
-
-         const docnumberoptions = [];
-         for (const item of this.state.docnumberlists) {           
-             docnumberoptions.push({value:item.prReqNo,label:item.prReqNo});
-         }
-         
-        
         //console.log(this.state.overalllists)
-        let buyerrightlistshtml = null;
+        let itemmasterlistshtml = null;
         if(this.state.overalllists.length>0){
-            buyerrightlistshtml= this.state.overalllists.map((n,index) => {                                    
+            itemmasterlistshtml= this.state.overalllists.map((n,index) => {                                    
             return (
-                <tr>               
-                    <td>
-                        <div className="media">                                                
-                                <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                        </div>
-                    </td>
-                    <td>{n.docNum}</td> 
-                    <td>{n.createdDate}</td>
-                    <td>{n.style}</td>
-                    <td>{n.orderQuantity}</td>
-                    {/* <td><Link to='/app/pre-production/request-style-list'>{n.styleNumber}</Link></td>                     */}
-                    <td>{n.sam}</td>                                    
-                    <td>{n.productivity}</td>     
-                    {/* <td><span className={`badge badge-success badge-pill ft-lft`}>{n.colorStatus}</span></td>     */}
+                <tr>
+                    
+                    <td>{n.materialType}</td> 
+                    <td>{n.group}</td>
+                    <td>{n.subGroup}</td>
+                    <td>{n.materialCode}</td> 
+                    <td>{n.description}</td>
+                    <td>{n.commonArticleNumber}</td>
+                    <td>{n.active}</td>
+                    <td>{n.approved}</td>
                 </tr>
             );
         }) }else{
-            buyerrightlistshtml = <tr><td colSpan="7" className="no-records-data"><span>No records found</span></td></tr> ;
+            itemmasterlistshtml = <tr><td colSpan="8" className="no-records-data"><span>No records found</span></td></tr> ;
         }
+ 
+        let purchaseinfolistshtml = null;
+        if(this.state.purchaseinfolists.length>0){
+            purchaseinfolistshtml= this.state.purchaseinfolists.map((n,index) => {                                    
+            return (
+                <tr>                    
+                    <td>{n.materialType}</td>
+                    <td>{n.group}</td>
+                    <td>{n.subGroup}</td>
+                    <td>{n.materialCode}</td>
+                    <td>{n.supplier}</td>
+                    <td>{n.supplierReference}</td>
+                    <td>{n.size}</td>
+                    <td>{n.description}</td>
+                    <td>{n.currency}</td>
+                    <td>{n.price}</td>
+                    <td>{n.active}</td>
+                    <td>{n.approved}</td>
+                </tr>
+            );
+        }) }else{
+            purchaseinfolistshtml = <tr><td colSpan="12" className="no-records-data"><span>No records found</span></td></tr> ;
+        }
+
          return (
            
              <div className="user-management">
@@ -438,81 +364,8 @@
                      title={<IntlMessages id="sidebar.userManagement" />}
                      match={this.props.match}
                  />
-                 <RctCollapsibleCard fullBlock heading="Productivity Request List">
-                  
-                    <div className="row new-form overall-border no-padding-bottom">   
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer "
-                                        options={buyeroptions} ref="buyer"
-                                        placeholder="Buyer "
-                                        onChange={this.setstatevaluedropdownfunction('buyer')}
-                                        //onChange={this.handleChangeValidate.bind(this, "buyer",this.state.buyer)} 
-                                        //onChange={values => this.setState({ buyer:values })}
-                                        values={this.state.buyer}
-                                    /> 
-                                    <span className="error">{this.state.errors["buyer"]}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
-                                        options={BuyerDivisionOptions} ref="buyerdivision"
-                                        placeholder="Buyer Division"
-                                        onChange={this.setstatevaluedropdownfunction('BuyerdivisionValue')}
-                                        //onChange={this.handleChangeValidate.bind(this, "buyerdivision",this.state.BuyerdivisionValue)} 
-                                        //onChange={values => this.setState({ BuyerdivisionValue:values })}
-                                        values={this.state.BuyerdivisionValue}
-                                    /> 
-                                    <span className="error">{this.state.errors["BuyerdivisionValue"]}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                    <Select1  dropdownPosition="auto"  createNewLabel="Style Number "
-                                        options={stylenooptions} ref="styleno"
-                                        placeholder="Style Number "
-                                        onChange={this.setstatevaluedropdownfunction('styleno')}
-                                        //onChange={this.handleChangeValidate.bind(this, "styleno",this.state.styleno)} 
-                                        //onChange={values => this.setState({ styleno:values })}
-                                        values={this.state.styleno}
-                                    /> 
-                                    <span className="error">{this.state.errors["styleno"]}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                    <Select1  dropdownPosition="auto"  createNewLabel="Document number"
-                                        options={docnumberoptions} ref="docnumber"
-                                        placeholder="Document number"
-                                        onChange={this.setstatevaluedropdownfunction('docnumber')}
-                                        //onChange={this.handleChangeValidate.bind(this, "docnumber",this.state.docnumber)} 
-                                        //onChange={values => this.setState({ docnumber:values })}
-                                        values={this.state.docnumber}
-                                    /> 
-                                    <span className="error">{this.state.errors["docnumber"]}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                           
-                           
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group mt-15"> 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
-                                </div>   
-                            </div>                     
-                        </div> 
+                 <RctCollapsibleCard fullBlock heading="Material Master List">
+                     
                      <div className="table-responsive no-padding-top overall-border">
                          <div className="d-flex justify-content-between border-bottom">
                              
@@ -556,32 +409,21 @@
                          <table className="table table-middle table-hover mb-0">
                              <thead>
                                  <tr>
-                                     {/* <th className="w-5">
-                                         <FormControlLabel
-                                             control={
-                                                 <Checkbox
-                                                     indeterminate={selectedUsers > 0 && selectedUsers < users.length}
-                                                     checked={selectedUsers > 0}
-                                                     onChange={(e) => this.onSelectAllUser(e)}
-                                                     value="all"
-                                                     color="primary"
-                                                 />
-                                             }
-                                             label="All"
-                                         />
-                                     </th> */}
-                                     <th>Style Image</th>
-                                     <th>Document number</th>
-                                     <th>Date</th>
-                                     <th>Style</th>
-                                     <th>Order quantity</th>
-                                     <th>SAM</th>                                    
-                                     <th>Productivity</th>
+                              
+
+                                     <th>Material Type</th>
+                                     <th>Group</th>
+                                     <th>Sub Group</th>
+                                     <th>Material Code</th>
+                                     <th>Description</th>
+                                     <th>Common Article Number</th>                                    
+                                     <th>Active</th>
+                                     <th>Approved</th>
                                  </tr>
                              </thead>
                              <tbody>
-                             { buyerrightlistshtml &&
-                             buyerrightlistshtml}
+                             { itemmasterlistshtml &&
+                             itemmasterlistshtml}
                             
                              </tbody>
                              <tfoot className="border-top">
@@ -633,6 +475,121 @@
                          <RctSectionLoader />
                      }
                  </RctCollapsibleCard>
+
+                 <RctCollapsibleCard fullBlock heading="Purchase Info Record">
+                     
+                     <div className="table-responsive no-padding-top overall-border">
+                         <div className="d-flex justify-content-between border-bottom">
+                             
+                                <div className="w-d-100">
+                                    <div className="float-right">
+                                        <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">                            
+                                            <span className="MuiIconButton-label">
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                                                </svg>
+                                            </span>
+                                        </button>                            
+                                        <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
+                                            <span className="MuiIconButton-label">                            
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">                            
+                                            <span className="MuiIconButton-label">                            
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
+                                                </svg>
+                                            </span>
+                                        </button>                            
+                                        <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
+                                            <span className="MuiIconButton-label">
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path>
+                                                </svg>
+                                            </span>
+                                        </button>                            
+                                        <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
+                                        </svg></span></button>
+                                        <Link to='/app/pre-production/production-request'><Badge className="mb-10 mr-10" color="dark">Add New</Badge></Link>
+                                    </div>
+                                </div>
+                         </div>
+                         <table className="table table-middle table-hover mb-0">
+                             <thead>
+                                 <tr>
+                                    <th>Material Type</th>
+                                    <th>Group</th>
+                                    <th>Sub-Group</th>
+                                    <th>Material Code</th>
+                                    <th>Supplier</th>
+                                    <th>Supplier Reference</th>
+                                    <th>Size</th>
+                                    <th>Description</th>
+                                    <th>Currency</th>
+                                    <th> Price</th>
+                                    <th> Active</th>
+                                    <th> Approved</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                             { purchaseinfolistshtml &&
+                             purchaseinfolistshtml}
+                            
+                             </tbody>
+                             <tfoot className="border-top">
+                                 <tr>
+                                     <td colSpan="100%">
+                                     <div className="row tb-pro mt-20">
+                                <div className="w-100">
+                                    <div className="w-25 float-left">
+                                        <div className="form-group">
+                                            <div className="w-50 float-left text-center">
+                                                <label for="exampleFormControlSelect1">Rows per page</label>
+                                            </div>
+                                            <div className="w-25 float-left">
+                                                <select className="form-control" id="exampleFormControlSelect1">
+                                                    <option>50</option>
+                                                    <option>100</option>
+                                                    <option>150</option>
+                                                    <option>200</option>
+                                                    <option>250</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-25 float-right">
+                                        <nav aria-label="Page navigation example">
+                                            <ul className="pagination justify-content-end">
+                                                <li className="page-item ">
+                                                {/* disabled */}
+                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
+                                                </li>
+                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
+                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
+                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
+                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
+                                                <li className="page-item">
+                                                    <a className="page-link" href="#">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                                     </td>
+                                 </tr>
+                             </tfoot>
+                         </table>
+                     </div>
+                     {loading &&
+                         <RctSectionLoader />
+                     }
+                 </RctCollapsibleCard>
+
                  <DeleteConfirmationDialog
                      ref="deleteConfirmationDialog"
                      title="Are You Sure Want To Delete?"
@@ -691,5 +648,5 @@
          );
      }
  }
- export default Productivitygrid;
+ export default Itemmastergrid;
  

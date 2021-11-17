@@ -485,7 +485,7 @@ import Select1 from "react-dropdown-select";
         
 
         if(this.state.buyer.length>0){
- 
+  
             let data ={
                 "id": 0,
                 "entityId": "st",
@@ -530,11 +530,13 @@ import Select1 from "react-dropdown-select";
                   "samShr": "s",
                   "samShrWarp": this.state.samplewarp,
                   "samShrWeft":  this.state.sampleweft,
-                  "samNilShr":  "string",
+                //   "samNilShr":  "string",
                   "costShr": "s",
                   "costShrWarp":  this.state.costingwarp,
                   "costShrWeft": this.state.costingweft,
-                  "costNilShr": "string",
+                //   "costNilShr": "string",
+                "SamSize":this.state.sample_size[0].value,
+                "CostSize":this.state.sample_size[0].value,
                   "size": "string",
                   "createdBy": "string",
                   "createdDt": "2021-11-16T05:00:55.509Z",
