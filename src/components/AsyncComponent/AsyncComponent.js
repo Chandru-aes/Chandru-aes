@@ -671,7 +671,10 @@ const AsyncItemmasterGridComponent = Loadable({
 	loader: () => import("Routes/pre-production/itemmaster-grid"),	
 	loading: () => <RctPageLoader />,	
 });	
-
+const AsyncItemCreatinComponent= Loadable({		
+	loader: () => import("Routes/pre-production/item-master-creation"),		
+	loading: () => <RctPageLoader />,		
+});
 
 
 export {
@@ -788,5 +791,6 @@ export {
 	AsyncRequeststatusComponent,
 	AsyncProductionRequestComponent,
 	AsyncProductivityGridComponent,
-	AsyncItemmasterGridComponent
+	AsyncItemmasterGridComponent,
+	AsyncItemCreatinComponent
 }; 

@@ -622,4 +622,11 @@ export default {
             ]
          }
       ],
+      category16: [	
+         {	
+            "menu_title": "Item Creation",	
+            "menu_icon": "zmdi zmdi-brush",	
+            "path": "/app/pre-production/item-creation/",	
+         }	
+      ],
 }

@@ -95,6 +95,7 @@ import DataGrid, {
   import Select1 from "react-dropdown-select";
   
   //import { Button } from 'devextreme-react/button';
+  import { Validator,StringLengthRule} from 'devextreme-react/validator';
   import { Template } from 'devextreme-react/core/template';
   
   import ArrayStore from 'devextreme/data/array_store';
@@ -130,7 +131,8 @@ function TabContainer({ children }) {
         yearlists:[],
         seasonlists:[],
         fields: {},
-        errors: {}
+        errors: {},
+        
        // QtyBreakUpList:[]
 	}
     constructor(props) {
@@ -159,7 +161,8 @@ function TabContainer({ children }) {
             deleteQtyDetailItems:{},
             activityName:'',
             fields: {},
-            errors: {}
+            errors: {},
+            IsEdit:false,
         };
      
       
@@ -233,26 +236,23 @@ function TabContainer({ children }) {
         }
       // get employee payrols
         SaveForecast(type){
-           
-            console.log(this.state.QtyBreakUpList)
-            console.log(this.state.activityList)
-            if((this.state.QtyBreakUpList.data.length==0 && this.state.activityList.data.length==0)){
+            console.log(this.state.IsEdit);
+            if((this.state.QtyBreakUpList.data.length==0 && this.state.activityList.data.length==0 && (!this.state.IsEdit))){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
             }else{
-                console.log(this.state.saveQtyDetailItems)
                 if(type=='qty'){
-                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response) => {
+                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response1) => {
                     
                         NotificationManager.success('Added Sucessfully');
-
-                         api.get('ForecastActivityEntity/GetForecastActivityList')
+                        let fcActivityId = response.data.data.data.forecastActivityEntityModel[0].fcHead_ID;
+                        
+                         api.get('ForecastQtyDetailEntity/GetForecastQtyDetails?FCID='+fcActivityId)
                         .then((response) => {            
-                            this.setState({ activityList: response.data });
+                            this.setState({ QtyBreakUpList: response.data });
                         })
                         
                         api.get('ForecastEntity/GetForecastHeaderList')
-                        .then((response) => {  
-                            // console.log(response.data.data,'response.data.result.data')          
+                        .then((response) => {          
                             this.setState({ forecastinglists: response.data.data });
                         })
                     })
@@ -260,6 +260,7 @@ function TabContainer({ children }) {
                         // error handling
                     })
                 }else{
+                    
                     if(this.state.activityName !='' && this.state.selectedDate!=''){
                         this.state.saveActivityItems =  
                         { 
@@ -296,7 +297,7 @@ function TabContainer({ children }) {
                             "id": 0,
                             "fcHead_ID": 0,
                             "activity": this.state.activityName,
-                            "dueDt": "2021-11-02T17:05:04.667Z",
+                            "dueDt": this.state.selectedDate,
                             "cancel": "N",
                             "createdBy": "1",
                             "modifyBy": "1",
@@ -306,16 +307,15 @@ function TabContainer({ children }) {
                    
                     }
 
-                    console.log(this.state.saveActivityItems);
                     api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveActivityItems) .then((response) => {                    
                         NotificationManager.success('Added Sucessfully');
-                        api.get('ForecastActivityEntity/GetForecastActivityList')
+                        let fcQtyId = response.data.data.data.fcQtyDetailInsertEntityModel[0].fcHead_ID;
+                        api.get('ForecastActivityEntity/GetForecastActivityList?FID='+fcQtyId)
                         .then((response) => {            
                             this.setState({ activityList: response.data });
                         })
                         api.get('ForecastEntity/GetForecastHeaderList')
-                        .then((response) => {  
-                            // console.log(response.data.data,'response.data.result.data')          
+                        .then((response) => {        
                             this.setState({ forecastinglists: response.data.data });
                         })
                     })
@@ -329,7 +329,7 @@ function TabContainer({ children }) {
               /*Stop removing the data in a row*/        
                 e.cancel=true;
               /**/
-              console.log(e)
+              
               const tdeleteQtyDetailItems = {
                 "hid":e.data.fcHead_ID,
                 "entityID": "st",
@@ -387,8 +387,7 @@ function TabContainer({ children }) {
                     })
 
                     api.get('ForecastEntity/GetForecastHeaderList')
-                    .then((response) => {  
-                        // console.log(response.data.data,'response.data.result.data')          
+                    .then((response) => {            
                         this.setState({ forecastinglists: response.data.data });
                     })
                }               
@@ -458,8 +457,7 @@ function TabContainer({ children }) {
                         this.setState({ activityList: response.data });
                     })
                     api.get('ForecastEntity/GetForecastHeaderList')
-                    .then((response) => {  
-                        // console.log(response.data.data,'response.data.result.data')          
+                    .then((response) => {           
                         this.setState({ forecastinglists: response.data.data });
                     })
                }  
@@ -475,7 +473,7 @@ function TabContainer({ children }) {
 
             const {fcActivityInsertEntityModel} = this.state;
 
-
+            this.setState({ IsEdit: true });
             if(fcActivityInsertEntityModel.length>0){
                 const index = fcActivityInsertEntityModel.findIndex(item=>item.id === e.data.id);
                 fcActivityInsertEntityModel.find(function(el,index1) {
@@ -549,8 +547,9 @@ function TabContainer({ children }) {
             }
         }
         onRowUpdated(e) {
-           console.log(e.data)
-            const UpdatedData = e.data;           
+            const UpdatedData = e.data;   
+            this.setState({ IsEdit: true });      
+            console.log(this.state.IsEdit)  
             const {fcQtyDetailInsertEntityModel} = this.state;
             UpdatedData.subProductType = e.data.subProductType;
             UpdatedData.qty = 0;
@@ -651,8 +650,7 @@ function TabContainer({ children }) {
                 this.setState({ subproductTypes: response.data.result.data });
             })
             api.get('ForecastEntity/GetForecastHeaderList')
-            .then((response) => {  
-                // console.log(response.data.data,'response.data.result.data')          
+            .then((response) => {           
                 this.setState({ forecastinglists: response.data.data });
             })
 
@@ -700,8 +698,8 @@ function TabContainer({ children }) {
         this.setState({ activeIndex: index });
      }
 
-     handleDateChange = (date) => {
-		this.setState({ selectedDate: moment(date).format('YYYY-MM-DD hh:mm:s a') });
+     handleDateChange = (date) => {        
+		this.setState({ selectedDate: moment(date).format('YYYY-MM-DD') });       
 	};
      handleChange(event, value) {
         this.setState({ activeIndex: value });
@@ -722,15 +720,16 @@ function TabContainer({ children }) {
 		this.setState({ [name]: event });
 	};
       contactSubmit(e,type){
-         
-          if(Object.keys(this.state.saveActivityItems).length === 0){
+       
+          //if(Object.keys(this.state.saveActivityItems).length === 0){
             e.preventDefault();
             if(this.handleValidation()){
                 this.SaveForecast(type);
             }        
-          }else{
-            this.SaveForecast(type);
-          }
+        //   }
+        //   else{
+        //     this.SaveForecast(type);
+        //   }
        
       }
       handleValidation(){
@@ -764,13 +763,7 @@ function TabContainer({ children }) {
             errors["year"] = "Cannot be empty";
         }
         
-        if(!formIsValid){
-            console.log("here")
-            // const buyername = useRef(null)
-            //const executeScroll = () => scrollToRef(buyername)
-           // window.scrollTo({ top: 0, behavior: 'smooth' })
-           // buyername.current.focus();
-        }
+       
         this.setState({errors: errors});
         return formIsValid;
       }
@@ -967,8 +960,8 @@ function TabContainer({ children }) {
                                                 <Button name="delete" />
                                                 <Button name="delete" hint="Clone" icon="repeat"  />
                                             </Column>   
-                                        <Column dataField="qty" width={110} caption="Quantity">
-                                           
+                                        <Column dataField="quantity" width={110} caption="Quantity">
+                                        <StringLengthRule max={10} message="Quantity should not more than 10 Digits"/>
                                         </Column>
                                         <Column dataField="productType" caption="Product type" >
                                        
@@ -982,7 +975,9 @@ function TabContainer({ children }) {
                                         <Column dataField="pcd" dataType="date" ></Column>
                                         <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" ></Column>
                                         <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" ></Column>
-                                        <Column dataField="capacity" caption="Available capacity"></Column>
+                                        <Column dataField="capacity" caption="Available capacity">
+                                       
+                                        </Column>
                                       
                                          <Summary>
                                             <TotalItem column="Quantity" summaryType="sum"  valueFormat="#0.00" />

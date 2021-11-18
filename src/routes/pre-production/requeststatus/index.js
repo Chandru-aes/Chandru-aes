@@ -89,11 +89,20 @@
          this.state={
             requestoptions:[],
             requestitems:[],
+            employeeList:[],
             requestView:[],
             patternVersion:[],
+            doneByitems:[],
+            checkedByItems:[],
             patternNatureofJobItems:[],
             patternType:[],
-            patternStatusGridList:[]
+            patternStatusGridList:[],
+            doneByList:[],
+            checkedbyList:[],
+            natureofJob:[],
+            fields: {},
+            errors: {},
+            PatternTempRowData:[]
            
          }
          }
@@ -112,7 +121,8 @@
             requestView:[],
             patternNatureofJobItems:[],
             patternType:[],
-           
+            doneByList:[],
+            checkedbyList:[]
         }
      
      componentDidMount() {
@@ -132,18 +142,17 @@
         .then((response) => {            
             this.setState({ patternType: response.data.result.data });
         })
+
+        api.get('Employee/GetEmployeeList')
+        .then((response) => {            
+            this.setState({ employeeList: response.data.result.data });
+        })
     }
-    setStateValueDropdown = name => event => {
-        // let fields = this.state.fields;
-        // fields[name] = event[0].value;        
-        // this.setState({fields});
-        
+    setStateValueDropdown = name => event => {      
 		this.setState({ [name]: event });
 	};
     setstatevaluedropdownfunction(val,field,e){
-        // let fields = this.state.fields;
-        // fields['requestno'] = val.RequestNo[0].value;        
-        // this.setState({fields});
+       
         
         api.get('RequestStatus/GetRequestNoDetail?RequestNo='+val.RequestNo[0].label)
         .then((response) => {      
@@ -172,14 +181,29 @@
         })
         .catch(error => {}) 
 
+
         api.get('RequestStatus/GetPatternStatusGridList?RequestNo='+val.RequestNo[0].label)
         .then((response) => {   
                 
             this.setState({ patternStatusGridList: response.data.data });            
         })
         .catch(error => {}) 
+
+
+
     }
-   
+
+    handleChangeTextField = name => event => {
+        this.setState({ [name]: event.target.value });
+    };
+    
+    setstatevalueDrop = name => event => {
+        let fields = this.state.fields;
+        fields[name] = event[0].value;        
+        this.setState({fields});
+        
+		this.setState({ [name]: event });
+	};
     rhandleClickOpen = () => {
         this.setState({ ropen: true });
      };
@@ -187,6 +211,15 @@
      rhandleClose = () => {
         this.setState({ ropen: false });
      };
+     addPatternGrid(){
+         const {PatternTempRowData} = this.state;
+
+         let patternItems = {
+            //  'NatureofJob':this.state.natureofJob[0].label,
+            //  'version':
+         }
+        console.log(this.state)
+     }
      render() {
          const { employeePayroll } = this.state;
          const { match } = this.props;
@@ -220,6 +253,14 @@
             patternTypeOptions.push({value:item.code,label:item.codeDesc});
         }
         
+        const doneByListOptions = [];
+        const checkedByListOptions = [];
+        for (const item of this.state.employeeList) {           
+            doneByListOptions.push({value:item.empCode,label:item.empName});
+            checkedByListOptions.push({value:item.empCode,label:item.empName});
+
+        }
+
         //:[]
            const handleToggle = () => {
              this.setState({ isActive: !this.state.isActive });
@@ -341,121 +382,110 @@
                      <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
                      </div>
                      </div>
-                     <div className="w-75 row pl-15">
-                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                            <Select1
-                                dropdownPosition="auto"
-                                //   multi
-                                createNewLabel="Nature Of Job"
-                                options={natureofJobOptions}
-                                //onChange={values => this.setstatevaluedropdownfunction({ RequestNo:values },this,"requestno")}
-                                //onChange={this.setstatevaluedropdownfunction('requestno')}
-                                placeholder="Nature Of Job"
-                                values={this.state.natureofJob}
+                    <div className="w-75 row pl-15">
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    //   multi
+                                    ref="natureofJob"
+                                    createNewLabel="Nature Of Job"
+                                    options={natureofJobOptions}
+                                    //onChange={values => this.setstatevaluedropdownfunction({ RequestNo:values },this,"requestno")}
+                                    onChange={this.setstatevalueDrop('natureofJob')}
+                                    placeholder="Nature Of Job"
+                                    values={this.state.natureofJob}
+                                    />
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Pattern Version"
+                                    options={patternVersionOptions}                                   
+                                    onChange={this.setstatevalueDrop('patternversion')}
+                                    placeholder="Pattern Version"
+                                    values={this.state.patternversion}
                                 />
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    //   multi
+                                    createNewLabel="Pattern Type"
+                                    options={patternTypeOptions}
+                                    onChange={this.setstatevalueDrop('patterntype')}
+                                    placeholder="Pattern Type"
+                                    values={this.state.patterntype}
+                                    />
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">    
+                            <div className="form-group">
+                                <TextField id="Buyer" fullWidth label="Storage Area" placeholder="Storage Area" onChange={this.handleChangeTextField('storageArea')} value={this.state.storageArea}/>
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Done by"
+                                    options={doneByListOptions}
+                                    onChange={this.setstatevalueDrop('doneByitems')}
+                                    placeholder="Done by"
+                                    values={this.state.doneByitems}
+                                    />
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Checked By"
+                                    options={checkedByListOptions}
+                                    onChange={this.setstatevalueDrop('checkedByItems')}                                    
+                                    placeholder="Checked By"
+                                    values={this.state.checkedByItems}
+                                    />
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group ">
+                                <TextField id="Buyer" fullWidth label="Date" placeholder="Date" onChange={this.handleChangeTextField('patterndate')} value={this.state.patterndate}/>
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group ">
+                                <TextField id="Buyer" fullWidth label="Time" placeholder="Time" onChange={this.handleChangeTextField('patterntime')} value={this.state.patterntime}/>
+                            </div>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                            <Select1
-                                dropdownPosition="auto"
-                                //   multi
-                                createNewLabel="Pattern Version"
-                                options={patternVersionOptions}
-                                //onChange={values => this.setstatevaluedropdownfunction({ RequestView:values },this,"requestview")}
-                                onChange={this.setStateValueDropdown('patternversion')}
-                                placeholder="Pattern Version"
-                                values={this.state.patternversion}
-                                />
-                        </div>
-                    </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-         <div className="form-group select_label_name mt-15">
-            <Select1
-                dropdownPosition="auto"
-                //   multi
-                createNewLabel="Pattern Type"
-                options={patternTypeOptions}
-                //onChange={values => this.setstatevaluedropdownfunction({ RequestView:values },this,"requestview")}
-                onChange={this.setStateValueDropdown('patterntype')}
-                placeholder="Pattern Type"
-                values={this.state.patternversion}
-                />
-        </div>
-     </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-    
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Storage Area" placeholder="Storage Area"/>
- </div>
-  
-     </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Done by</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
-     </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Checked by</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
-     </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <div className="form-group ">
- <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
- </div>
-     </div>
-     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <div className="form-group ">
- <TextField id="Buyer" fullWidth label="Time" placeholder="Time"/>
- </div>
-     </div>
-  </div>
                  
-  <div className="table-responsive mt-0">
-                      <div className="float-right">
-                         <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
-                         </div>
-                     </div>
+                    <div className="table-responsive mt-0">
+                        <div className="float-right">
+                            <div className="form-group">
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.addPatternGrid()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>                           
+                            </div>
+                        </div>
  
-                             <table className="table mt-10 data w-100 float-left">
-                                 <thead>
-                                     <tr>
-                                     <th className="">Actions</th>
-                                     <th className="">    Nature of Job </th>
-                                     <th className="">Version</th>
-                                     <th className="">Pattern Type  </th>
-                                     <th className="">    Storage Area    </th>
-                                     <th className="">Done By   </th>
-                                     <th className="">Checked By   </th>
-                                     <th className="">Revision    </th>
-                                     <th className="">    Date & Time     </th>
-                                     <th className="">    Remark     </th> 
-
-                                     </tr>
-                                 </thead>
+                        <table className="table mt-10 data w-100 float-left">
+                            <thead>
+                                <tr>
+                                    <th className="">Actions</th>
+                                    <th className="">Nature of Job</th>
+                                    <th className="">Version</th>
+                                    <th className="">Pattern Type</th>
+                                    <th className="">Storage Area</th>
+                                    <th className="">Done By</th>
+                                    <th className="">Checked By</th>
+                                    <th className="">Revision </th>
+                                    <th className="">Date & Time</th>
+                                    <th className="">Remark</th> 
+                                </tr>
+                            </thead>
                                  <tbody>
                                  {this.state.patternStatusGridList.map((n,index) => {                                   
                                 return (

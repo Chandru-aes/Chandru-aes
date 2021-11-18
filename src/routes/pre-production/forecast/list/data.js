@@ -303,7 +303,7 @@ export const saveData ={
       "fcHead_ID": 0,
       "productType": "string",
       "subProductType": "string",
-      "qty": 0,
+     
       "avgSAM": 0,
       "pcd": "2021-11-01T11:43:18.132Z",
       "exfacDt": "2021-11-01T11:43:18.132Z",
