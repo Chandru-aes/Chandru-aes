@@ -416,7 +416,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                 printtype: [{value:data.printDesc,label:data.printTypeCodeDesc}],
                 embtype: [{value:data.embDesc,label:data.embroideryTypeDesc}],
                 GarDyeType: [{value:data.garDyeDesc,label:data.garmentDyeTypeDesc}],
-                location: [{value:data.loccode,label:data.loccode}],
+                location: [{value:data.loccode,label:data.locationname}],
                 desc:data.styleDesc,
                 fabdesc:data.fabricDesc,
                 fabtype: [{value:data.fabricType,label:data.fabricTypeDesc}],

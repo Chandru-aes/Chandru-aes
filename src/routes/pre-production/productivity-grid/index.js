@@ -119,16 +119,24 @@
             // error handling
         })
 
-        api.get('ProductivityGrid/GetProductivityDocNoDropDown')
-        .then((response) => {
-            
-            this.setState({ docnumberlists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+    
         
         
+     }
+
+     docnumberfilter(){
+        
+        if(this.state.buyer.length>0 && this.state.BuyerdivisionValue.length>0 && this.state.styleno.length>0){
+            this.setState({docnumber:[]});
+            api.get('ProductivityGrid/GetProductivityDocNoDropDown?Bcode='+this.state.buyer[0].value+'&BDivCode='+this.state.BuyerdivisionValue[0].value+'&Style='+this.state.styleno[0].value)
+            .then((response) => {
+                
+                this.setState({ docnumberlists: response.data.data });
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
      }
          /**
       * On Delete
@@ -287,17 +295,23 @@
      
      setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
-        
+        this.setState({ [name]: event });
         if(event.length!=0){
+           
             fields[name] = event[0].value;        
             this.setState({fields});
         } else{
             fields[name] = '';        
             this.setState({fields});
         }
-        
-        
-		this.setState({ [name]: event });
+        if(name!="docnumber"){
+            setTimeout(() => {
+                this.docnumberfilter();
+            }, 200);
+        }
+       
+      
+		
 	};
     
     setTextboxvalue = name => event => {
@@ -610,14 +624,14 @@
                                             <ul className="pagination justify-content-end">
                                                 <li className="page-item ">
                                                 {/* disabled */}
-                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
+                                                    <a className="page-link" tabindex="-1">Previous</a>
                                                 </li>
-                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
+                                                <li className="page-item"><a className="page-link">1</a></li>
+                                                <li className="page-item"><a className="page-link">2</a></li>
+                                                <li className="page-item"><a className="page-link">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
+                                                <li className="page-item"><a className="page-link">100</a></li>
                                                 <li className="page-item">
-                                                    <a className="page-link" href="#">Next</a>
+                                                    <a className="page-link">Next</a>
                                                 </li>
                                             </ul>
                                         </nav>

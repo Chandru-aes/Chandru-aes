@@ -786,14 +786,14 @@
                                             <ul className="pagination justify-content-end">
                                                 <li className="page-item ">
                                                 {/* disabled */}
-                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
+                                                    <a className="page-link" tabindex="-1">Previous</a>
                                                 </li>
-                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
+                                                <li className="page-item"><a className="page-link">1</a></li>
+                                                <li className="page-item"><a className="page-link">2</a></li>
+                                                <li className="page-item"><a className="page-link">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
+                                                <li className="page-item"><a className="page-link">100</a></li>
                                                 <li className="page-item">
-                                                    <a className="page-link" href="#">Next</a>
+                                                    <a className="page-link">Next</a>
                                                 </li>
                                             </ul>
                                         </nav>

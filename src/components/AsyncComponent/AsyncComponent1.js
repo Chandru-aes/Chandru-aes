@@ -671,11 +671,6 @@ const AsyncItemmasterGridComponent = Loadable({
 	loader: () => import("Routes/pre-production/itemmaster-grid"),	
 	loading: () => <RctPageLoader />,	
 });	
-const AsyncItemCreatinComponent= Loadable({		
-	loader: () => import("Routes/pre-production/item-master-creation"),		
-	loading: () => <RctPageLoader />,		
-});
-
 
 const AsyncSinglewindowEditComponent = Loadable({
 	loader: () => import("Routes/pre-production/singlewindow/singlewindow-edit"),
@@ -797,6 +792,5 @@ export {
 	AsyncProductionRequestComponent,
 	AsyncProductivityGridComponent,
 	AsyncItemmasterGridComponent,
-	AsyncItemCreatinComponent,
 	AsyncSinglewindowEditComponent
 }; 

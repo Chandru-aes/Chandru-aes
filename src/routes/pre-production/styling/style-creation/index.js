@@ -241,7 +241,27 @@ import { DateTimePicker} from '@material-ui/pickers';
 
      setstatevaluefunction = name => event => {
          
-		this.setState({ [name]: event.target.value });
+        let fields = this.state.fields;
+        fields[name] = event.target.value;        
+        this.setState({fields});
+        this.setState({ [name]: event.target.value });
+        if(name=="expcqty" || name=="availableqty"){
+            if(!/^[0-9]+$/.test(event.target.value)){
+                NotificationManager.error('Please only enter numeric characters (Allowed input:0-9)');
+                this.setState({ [name]: 0 });                
+            } else{
+                this.setState({ [name]: event.target.value });
+            }
+            
+        }
+
+        if(name=="styleno"){
+            if(!event.target.value.match(/^[a-zA-Z0-9]+$/)){
+                NotificationManager.error('Input is not alphanumeric');              
+            }      	
+          }
+        
+		
 	};
 
     setstatevaluedropdownfunction = name => event => {
@@ -263,7 +283,8 @@ import { DateTimePicker} from '@material-ui/pickers';
         if(this.handleValidation()){
             this.save();
         }else{
-          alert("Form has errors.")
+            NotificationManager.error('Form has errors.');
+            
         }
     
       }
@@ -306,18 +327,14 @@ import { DateTimePicker} from '@material-ui/pickers';
             formIsValid = false;
             errors["OrderType"] = "Cannot be empty";
         }
-
-
-
-        
           
     
-        // if(typeof fields["name"] !== "undefined"){
-        //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
-        //     formIsValid = false;
-        //     errors["name"] = "Only letters";
-        //   }      	
-        // }
+        if(typeof fields["styleno"] !== "undefined"){
+          if(!fields["styleno"].match(/^[a-zA-Z0-9]+$/)){
+            formIsValid = false;
+            errors["styleno"] = "Input is not alphanumeric";
+          }      	
+        }
     
         // //Email
         // if(!fields["email"]){
@@ -872,7 +889,7 @@ console.log(data,'datadatadata')
                      </div>
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                          <div className="form-group">
-                         <TextField id="expcqty" value={this.state.expcqty}  onChange={this.setstatevaluefunction('expcqty')} fullWidth label="Expected Quantity" placeholder="Expected Quantity"/>
+                         <TextField  id="expcqty" value={this.state.expcqty}  onChange={this.setstatevaluefunction('expcqty')} fullWidth label="Expected Quantity" placeholder="Expected Quantity"/>
                          </div>
                      </div>
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
@@ -1482,6 +1499,7 @@ console.log(data,'datadatadata')
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group">
                             <TextField id="styleno" value={this.state.styleno}  onChange={this.setstatevaluefunction('styleno')} fullWidth label="Style Number" placeholder="Style number"/>
+                            <span className="error">{this.state.errors["styleno"]}</span>
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">

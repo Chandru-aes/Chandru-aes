@@ -68,7 +68,7 @@ import Select1 from "react-dropdown-select";
        </Typography>
     );
  }
- class SinglewindowElement extends Component {
+ class SinglewindoweditElement extends Component {
      constructor(props) {
          super(props);
    
@@ -210,7 +210,9 @@ import Select1 from "react-dropdown-select";
         marker_width:'',
 
         baseStyleno:'',fabricDesc:'',fabricType:'',
-        reference_version:''
+        reference_version:'',
+
+        swid:this.props.match.params.swid,
 
      }
      onAddUpdateUserModalClose() {
@@ -223,13 +225,13 @@ import Select1 from "react-dropdown-select";
     }
      componentDidMount() {
         document.body.classList.add('med-pop-up-h');
-        $('.patternclass').hide();
-        $('.samclass').hide();
-        $('.sampleclass').hide();
-        $('.markerclass').hide();
-        $('.valueaddclass').hide();
+        // $('.patternclass').hide();
+        // $('.samclass').hide();
+        // $('.sampleclass').hide();
+        // $('.markerclass').hide();
+        // $('.valueaddclass').hide();
         this.getfilldropdownlists();
-        
+        this.editdata(this.state.swid);
         // $(document).on('click', '.edit', function() {
         //     $(this).parent().siblings('td.data').each(function() {
         //       var content = $(this).html();
@@ -264,6 +266,23 @@ import Select1 from "react-dropdown-select";
         //   });
     }
 
+
+    editdata(id){
+        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo='+id)
+        .then((response) => {
+           
+            let data = response.data.data[0];            
+
+            this.setState({ buyer: [{value:data.buyCode,label:data.buyCode}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasonCode,label:data.seasonCode}],year: [{value:data.seasonYear,label:data.seasonYear}],baseStyleno:data.baseStyleno,fabricDesc:data.fabricDesc,fabricType:data.fabricType,
+                purpose: [{value:data.purpose,label:data.purpose}],
+                reqtype: [{value:data.reqType,label:data.reqType}],
+                styleno: [{value:data.styleNo,label:data.styleNo}],
+             });
+        })
+        .catch(error => {
+            // error handling
+        })
+    }
     
     getfilldropdownlists() {
 
@@ -475,7 +494,7 @@ import Select1 from "react-dropdown-select";
 
 
 
-      setstatevaluedropdownfunction = name => event => {
+    setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
         if(event.length!=0){
             fields[name] = event[0].value;        
@@ -550,7 +569,7 @@ import Select1 from "react-dropdown-select";
             if(this.state.reqtype[0].value=="PATTERN"){
                 patterndata ={
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "bodyGrain": this.state.bodygrain[0].value,
                     "addOnInfo": this.state.addoninfo[0].value,
@@ -573,7 +592,7 @@ import Select1 from "react-dropdown-select";
                     "swPatternDetEntityModel": [
                     {
                         "id": 0,
-                        "swH_Id": 0,
+                        "swH_Id": this.state.swid,
                         "natureOfJob": this.state.job[0].value,
                         "cancel": "s",
                         "createdBy": "string",
@@ -587,7 +606,7 @@ import Select1 from "react-dropdown-select";
             } else{
                 patterndata ={
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "bodyGrain": "string",
                     "addOnInfo": "string",
@@ -607,7 +626,7 @@ import Select1 from "react-dropdown-select";
                     "swPatternDetEntityModel": [
                       {
                         "id": 0,
-                        "swH_Id": 0,
+                        "swH_Id": this.state.swid,
                         "natureOfJob": "string",
                         "cancel": "s",
                         "createdBy": "string",
@@ -624,7 +643,7 @@ import Select1 from "react-dropdown-select";
             if(this.state.reqtype[0].value=="MARKER"){
                 markerdata = {
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "changesIn": this.state.marker_changesin,
                     "bodyGrain": this.state.marker_bodygrain,
@@ -642,7 +661,7 @@ import Select1 from "react-dropdown-select";
             } else{
                 markerdata ={
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "changesIn": "string",
                     "bodyGrain": "string",
@@ -656,7 +675,7 @@ import Select1 from "react-dropdown-select";
                     "swMarkerDetEntityModel": [
                       {
                         "id": 0,
-                        "swH_Id": 0,
+                        "swH_Id": this.state.swid,
                         "matType": "string",
                         "description": "string",
                         "placement": "string",
@@ -681,7 +700,7 @@ import Select1 from "react-dropdown-select";
             if(this.state.reqtype[0].value=="SAMPLE"){
                 sampledata = {
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "expDeliDate": this.state.selectedDate,
                     "prepSeq": this.state.prepseq[0].value,
@@ -700,7 +719,7 @@ import Select1 from "react-dropdown-select";
             } else {
                 sampledata ={
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "expDeliDate": "2021-11-18T12:07:22.603Z",
                     "prepSeq": "string",
@@ -714,7 +733,7 @@ import Select1 from "react-dropdown-select";
                     "swSampleDetEntityModel": [
                       {
                         "id": 0,
-                        "swH_Id": 0,
+                        "swH_Id": this.state.swid,
                         "matType": "string",
                         "matDesc": "string",
                         "placement": "string",
@@ -737,7 +756,7 @@ import Select1 from "react-dropdown-select";
                 samdata =[
                     {
                       "id": 0,
-                      "swH_Id": 0,
+                      "swH_Id": this.state.swid,
                       "optionType": "string",
                       "baseSAM": "s",
                       "cancel": "s",
@@ -758,7 +777,7 @@ import Select1 from "react-dropdown-select";
                 valueadddata =[
                     {
                       "id": 0,
-                      "swH_Id": 0,
+                      "swH_Id": this.state.swid,
                       "valueAdd": "string",
                       "valueAddType": "string",
                       "valueAddDesc": "string",
@@ -778,7 +797,7 @@ import Select1 from "react-dropdown-select";
             }
 
             let data ={
-                "id": 0,
+                "id": this.state.swid,
                 "entityId": "st",
                 "buyCode": this.state.buyer[0].value,
                 "buyDivcode": this.state.buyerdiv[0].value,
@@ -803,7 +822,7 @@ import Select1 from "react-dropdown-select";
                 "singleWindowDetEntityModel": [
                   {
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "reqType": this.state.reqtype[0].value,
                     "createdBy": "string",
                     "createdDt": "2021-11-16T05:00:55.509Z",
@@ -878,7 +897,7 @@ console.log(data,'datadatadata')
 
                   
     }
-
+    
     getvalueaddtype(val,field,e){
         let fields = this.state.fields;
         this.setState({ valueaddtypelists: [] });
@@ -909,8 +928,6 @@ console.log(data,'datadatadata')
 
                   
     }
-
-    
 
     contactSubmit(e,type){
         e.preventDefault();
@@ -1062,7 +1079,7 @@ console.log(data,'datadatadata')
         if(this.state.optionType!=''){
           let data = {
             "id": 0,
-            "swH_Id": 0,
+            "swH_Id": this.state.swid,
             "optionType": this.state.optionType,
             "baseSAM": "s",
             "cancel": "s",
@@ -1119,7 +1136,7 @@ console.log(data,'datadatadata')
         if(this.state.valueadd.length>0 || this.state.noofpieces!=0){
           let data = {
             "id": 0,
-            "swH_Id": 0,
+            "swH_Id": this.state.swid,
             "valueAdd": this.state.valueadd[0].value,
             "valueAddType": this.state.valueaddtype[0].value,
             "valueaddtypeDesc": this.state.valueaddtype[0].label,
@@ -1183,7 +1200,7 @@ console.log(data,'datadatadata')
           if(this.state.markerfor.length>0 ){
             let data =  {
                 "id": 0,
-                "swH_Id": 0,
+                "swH_Id": this.state.swid,
                 "matType": this.state.materialtype[0].value,
                 "description": this.state.marker_desc,
                 "placement":this.state.marker_placement,
@@ -1245,7 +1262,7 @@ console.log(data,'datadatadata')
           if(this.state.sample_materialtype.length>0 ){
             let data =  {
                 "id": 0,
-                "swH_Id": 0,
+                "swH_Id": this.state.swid,
                 "matType": this.state.sample_materialtype[0].value,
                 "matDesc": this.state.sample_desc,
                 "placement":this.state.sample_placement,
@@ -1299,7 +1316,7 @@ console.log(data,'datadatadata')
 
 
      render() {
-         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype } = this.state;
+         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -1423,7 +1440,6 @@ console.log(data,'datadatadata')
            for (const item of this.state.valueaddtypelists) {           
                valueaddtypeoptions.push({value:item.code,label:item.codeDesc});
            }
-
            
            const sampletypeoptions = [];
            for (const item of this.state.sampletypelists) {           
@@ -3026,6 +3042,6 @@ console.log(data,'datadatadata')
          );
      }
  }
- 
- export default SinglewindowElement;
+
+ export default SinglewindoweditElement;
  
