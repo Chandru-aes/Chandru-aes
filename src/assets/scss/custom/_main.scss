@@ -1124,6 +1124,11 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 					.med-pop-up-h .MuiDialogContent-root{overflow-y: inherit;}
 					.MuiTypography-h6{font-family: "HelveticaNeue" !important;}
 					.s-panel-width {width: 750px;}
+
+					.date-picker-react{
+						margin-top: 18px !important;
+						width: 100%;	
+					}
 					/* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }

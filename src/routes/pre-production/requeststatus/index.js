@@ -5,9 +5,10 @@
 /**
  * Basic Table
  */
- import React, { Component, Fragment } from 'react';
+ import React, { Component, Fragment,useState } from 'react';
  import Button from '@material-ui/core/Button';
  import FormControlLabel from '@material-ui/core/FormControlLabel';
+ import DateTimePicker from 'react-datetime-picker';
  import { Media, Badge,Modal,
     ModalHeader,
     ModalBody,
@@ -54,6 +55,8 @@
  import DialogContent from '@material-ui/core/DialogContent';
  import DialogContentText from '@material-ui/core/DialogContentText';
  import DialogTitle from '@material-ui/core/DialogTitle';
+ import { NotificationContainer, NotificationManager } from 'react-notifications';
+ 
  // const styles = {
  // 	checked: {
  // 		color: pink[500],
@@ -72,7 +75,7 @@
  class RequeststatusElement extends Component {
      constructor(props) {
          super(props);
-   
+         
          // For a full list of possible configurations,
          // please consult http://www.dropzonejs.com/#configuration
          this.djsConfig = {
@@ -93,16 +96,23 @@
             requestView:[],
             patternVersion:[],
             doneByitems:[],
+            MarkerdoneByitems:[],
             checkedByItems:[],
+            markercheckedByItems:[],
             patternNatureofJobItems:[],
             patternType:[],
+            departmentType:[],
             patternStatusGridList:[],
             doneByList:[],
             checkedbyList:[],
             natureofJob:[],
             fields: {},
             errors: {},
-            PatternTempRowData:[]
+            PatternTempRowData:[],
+            sampleListData:[],
+            markerListData:[],
+            reason:'',
+            storageArea:''
            
          }
          }
@@ -143,6 +153,11 @@
             this.setState({ patternType: response.data.result.data });
         })
 
+        api.get('Miscellaneous/GetMiscellaneousList?MType=SAMDEPT')
+        .then((response) => {            
+            this.setState({ departmentType: response.data.result.data });
+        })
+
         api.get('Employee/GetEmployeeList')
         .then((response) => {            
             this.setState({ employeeList: response.data.result.data });
@@ -151,14 +166,21 @@
     setStateValueDropdown = name => event => {      
 		this.setState({ [name]: event });
 	};
-    setstatevaluedropdownfunction(val,field,e){
+    setstateHeadervalueDrop= name => event => {
+        let fields = this.state.fields;
+        fields[name] = event[0].value;        
+        this.setState({fields});
+		this.setState({ [name]: event });
+        this.setstatevaluedropdownfunction(event[0].label);
+	};
+    setstatevaluedropdownfunction(val){
        
-        
-        api.get('RequestStatus/GetRequestNoDetail?RequestNo='+val.RequestNo[0].label)
+      
+        api.get('RequestStatus/GetRequestNoDetail?RequestNo='+val)
         .then((response) => {      
                 
             this.setState(
-                { updatedRequestNo: val.RequestNo[0].label,
+                { updatedRequestNo: val,
                 styleNo: response.data.data[0].styleNo,
                 purpose: response.data.data[0].purpose,
                baseStyleno: response.data.data[0].baseStyleno}
@@ -167,14 +189,14 @@
         })
         .catch(error => {})  
         
-        api.get('RequestStatus/GetRequestviewDropDown?RequestNo='+val.RequestNo[0].label)
+        api.get('RequestStatus/GetRequestviewDropDown?RequestNo='+val)
         .then((response) => {   
                 
             this.setState({ requestView: response.data.data });            
         })
         .catch(error => {}) 
 
-        api.get('RequestStatus/GetPatternversionDropdown?RequestNo='+val.RequestNo[0].label)
+        api.get('RequestStatus/GetPatternversionDropdown?RequestNo='+val)
         .then((response) => {   
                 
             this.setState({ patternVersion: response.data.data });            
@@ -182,7 +204,7 @@
         .catch(error => {}) 
 
 
-        api.get('RequestStatus/GetPatternStatusGridList?RequestNo='+val.RequestNo[0].label)
+        api.get('RequestStatus/GetPatternStatusGridList?RequestNo='+val)
         .then((response) => {   
                 
             this.setState({ patternStatusGridList: response.data.data });            
@@ -194,8 +216,28 @@
     }
 
     handleChangeTextField = name => event => {
+        
         this.setState({ [name]: event.target.value });
+
+        let fields = this.state.fields;
+        fields[name] = event.target.value;        
+        this.setState({fields});
+        
     };
+    setPatterntimeValue (value){
+        const Timevalue = value.patterndate;
+        const NewDate = moment(Timevalue).format("YYYY/MM/DD");
+
+        this.state.patterndate = NewDate;
+
+        console.log(value)
+        //this.setState({ [name]: event.target.value });
+    };
+    setPatterntimeStateValue(value){
+       this.state.patterntime = moment(value).format("hh:mm:ss A");
+
+       console.log(this.state)
+    }
     
     setstatevalueDrop = name => event => {
         let fields = this.state.fields;
@@ -211,15 +253,209 @@
      rhandleClose = () => {
         this.setState({ ropen: false });
      };
+     deletePatternGrid(item){
+        const {PatternTempRowData} = this.state; 
+            
+        if (PatternTempRowData.indexOf(item) !== -1) {
+            PatternTempRowData.splice(PatternTempRowData.indexOf(item), 1);
+        } 
+        this.setState({PatternTempRowData:PatternTempRowData})
+     }
      addPatternGrid(){
          const {PatternTempRowData} = this.state;
 
          let patternItems = {
-            //  'NatureofJob':this.state.natureofJob[0].label,
-            //  'version':
+             "id":0,
+             "swH_ID": 0,
+             'natureOfJob':this.state.natureofJob[0].label,
+             'patVersion':this.state.patternversion[0].label,
+             'patType':this.state.patterntype[0].label,
+             'storageArea':this.state.storageArea,
+             'preparedby':this.state.doneByitems[0].label,
+             'checkedby':this.state.doneByitems[0].label,  
+             "cancel": "N",
+             "outDate": "2021-11-19T02:38:39.740Z",
+             "createdBy": "Admin",
+             "hostName": "LOCALHOST",
+             'Revision':   this.state.reason,    
+             'patterndate':   this.state.patterndate,  
+             'patterntime':this.state.patterntime,
+             'remarks':this.state.patternremarks
          }
-        console.log(this.state)
+         /**Check whether object is already exists */
+         let IsMatch = false;
+         PatternTempRowData.map((item, index) => {
+            IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+            if(IsMatch){
+                return;
+            }           
+        });         
+        if(!IsMatch){
+            PatternTempRowData.push(patternItems);
+        }else{
+            NotificationManager.error('Added Items is already exists in List');
+        }      
+        
+         this.setState({PatternTempRowData:PatternTempRowData})
+       
      }
+     deleteSampleItem(item){
+        const {sampleListData} = this.state; 
+            
+        if (sampleListData.indexOf(item) !== -1) {
+            sampleListData.splice(sampleListData.indexOf(item), 1);
+        } 
+        this.setState({sampleListData:sampleListData})
+     }
+     addSampleGrid(){
+        const {sampleListData} = this.state;
+        let patternItems = {
+            "id": 0,
+            "swH_ID": 0,
+            "patVersion": this.state.samplepatternversion[0].label,
+            "patVersionLabel": this.state.samplepatternversion[0].label,
+            "pcs": this.state.noofpieces,
+            "department": this.state.department[0].value,
+            "departmentLabel": this.state.department[0].label,
+            "departmentSeq": 0,
+            "departmentFlag": "string",
+            "line": this.state.lineno,
+            "inDate": "2021-11-19T05:47:34.835Z",
+            "outdate": "2021-11-19T05:47:34.835Z",
+            "remarks": this.state.remarks,
+            "qcFlag": "string",
+            "qcRemarks": "string",
+            "createdBy": "Admin",
+            "hostName": "LOCALHOST"
+        }
+        /**Check whether object is already exists */
+        let IsMatch = false;
+        sampleListData.map((item, index) => {
+           IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+           if(IsMatch){
+               return;
+           }           
+       });         
+       if(!IsMatch){
+            sampleListData.push(patternItems);
+       }else{
+           NotificationManager.error('Added Items is already exists in List');
+       }      
+       
+        this.setState({sampleListData:sampleListData})
+     }
+
+    savePattern(e){
+        e.preventDefault();
+        if(this.handleValidation()){
+            this.savePatternItems();
+        }  
+    } 
+    handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+       
+        if(!fields["natureofJob"]){
+          formIsValid = false;
+          errors["natureofJob"] = "Cannot be empty";
+        }
+        if(!fields["patternversion"]){
+            formIsValid = false;
+            errors["patternversion"] = "Cannot be empty";
+        }
+        if(!fields["patterntype"]){
+            formIsValid = false;
+            errors["patterntype"] = "Cannot be empty";
+        }
+        if(!fields["storageArea"]){
+            formIsValid = false;
+            errors["storageArea"] = "Cannot be empty";
+        }
+        if(!fields["doneByitems"]){
+            formIsValid = false;
+            errors["doneByitems"] = "Cannot be empty";
+        }
+        if(!fields["checkedByItems"]){
+            formIsValid = false;
+            errors["checkedByItems"] = "Cannot be empty";
+        }
+        if(!fields["patternremarks"]){
+            formIsValid = false;
+            errors["patternremarks"] = "Cannot be empty";
+        }
+        if(!fields["requestno"]){
+            formIsValid = false;
+            errors["requestno"] = "Cannot be empty";
+        }
+        
+
+        this.setState({errors: errors});
+        return formIsValid;
+    }
+     savePatternItems(){
+
+        if(this.state.PatternTempRowData.length>0){
+            const {PatternTempRowData} = this.state;
+            const savePatternObject = {
+                "pdmPatternStatusModel":PatternTempRowData
+            }
+            api.post('RequestStatus/SavePattenStatus',savePatternObject) .then((response) => {
+                NotificationManager.success('Pattern Iten created Sucessfully');
+            });
+        }else{
+            NotificationManager.error('Pattern List Items should not be empty');
+        }
+        
+           
+     }
+     saveSample(){
+        const {sampleListData} = this.state;
+        const saveObject = {
+            "pdmSampleStatusModel":sampleListData
+        }
+        api.post('RequestStatus/SaveSampleStatus',saveObject) .then((response) => {
+            NotificationManager.success('Sample Item created Sucessfully');
+        });
+           
+     }
+     addMarkerGrid(){
+        const {markerListData} = this.state;
+        let patternItems = {
+            "id": 0,
+            "swH_ID": 0,            
+            "storageaArea": this.state.markerStoragearea,
+            "preparedby": this.state.MarkerdoneByitems[0].label,
+            "checkedBy":  this.state.markercheckedByItems[0].label,
+            "remarks": this.state.remarks,
+            "outDate": this.state.markerDate,
+            "createdBy": "Admin",
+            "hostName": "LocalHost",
+            "fabricdetails":"",
+            "width":"",
+            "size":"",
+            "Repeat":"",
+            "GAR qTy":"",
+            "Marker":"",
+            "Efficiency":"",
+        }
+        /**Check whether object is already exists */
+        let IsMatch = false;
+        markerListData.map((item, index) => {
+           IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+           if(IsMatch){
+               return;
+           }           
+       });         
+       if(!IsMatch){
+        markerListData.push(patternItems);
+       }else{
+           NotificationManager.error('Added Items is already exists in List');
+       }      
+       
+        this.setState({markerListData:markerListData})
+     }
+     
      render() {
          const { employeePayroll } = this.state;
          const { match } = this.props;
@@ -227,7 +463,7 @@
          const { classes } = this.props;
          const config = this.componentConfig;
          const djsConfig = this.djsConfig;
-
+         
          const requestnooptions = [];
         for (const item of this.state.requestitems) {           
             requestnooptions.push({value:item.id,label:item.reqNo});
@@ -253,6 +489,11 @@
             patternTypeOptions.push({value:item.code,label:item.codeDesc});
         }
         
+        const departmentTypeOptions=[];
+        for (const item of this.state.departmentType) {           
+            departmentTypeOptions.push({value:item.code,label:item.codeDesc});
+        }
+        
         const doneByListOptions = [];
         const checkedByListOptions = [];
         for (const item of this.state.employeeList) {           
@@ -274,6 +515,9 @@
           }
           
            const isActive = this.state.isActive;
+        //    const Datevalue = new Date();
+        //    const Timevalue=new Date();
+           
           return ( 
               
              <RctCollapsibleCard heading="Request Status">
@@ -281,10 +525,10 @@
                     <div className="row">
                         <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12">
                             <div className="w-100">
-                                <div className="float-right n-bt-top">                        
+                                {/* <div className="float-right n-bt-top">                        
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>  
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                                </div> 
+                                </div>  */}
                                 <div className="clearfix"></div>
                                 <div className="row p-20">
                                     <div className="w-75 col border pb-10">
@@ -296,11 +540,13 @@
                                                         //   multi
                                                         createNewLabel="RequestNo"
                                                         options={requestnooptions}
-                                                        onChange={values => this.setstatevaluedropdownfunction({ RequestNo:values },this,"requestno")}
+                                                        onChange={this.setstateHeadervalueDrop('requestno')}
+                                                       // onChange={values => this.setstatevaluedropdownfunction({ RequestNo:values },this,"requestno")}
                                                         //onChange={this.setstatevaluedropdownfunction('requestno')}
                                                         placeholder="Request No"
                                                         values={this.state.requestno}
                                                         />
+                                                     <span className="error">{this.state.errors["requestno"]}</span>   
                                                 </div>
                                             </div> 
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -339,12 +585,13 @@
 
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Reason" placeholder="Reason"/>
+                                                    <TextField id="Buyer" fullWidth label="Reason" placeholder="Reason" onChange={this.handleChangeTextField('reason')} value={this.state.reason}/>
+                                                    
                                                 </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div className="form-group">
-                                                <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+                                                <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks" onChange={this.handleChangeTextField('remarks')} value={this.state.remarks}/>
                                                 </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -373,7 +620,7 @@
                      </AccordionSummary>
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
-                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) =>this.savePattern(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">
@@ -396,6 +643,7 @@
                                     placeholder="Nature Of Job"
                                     values={this.state.natureofJob}
                                     />
+                                    <span className="error">{this.state.errors["natureofJob"]}</span> 
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -408,6 +656,7 @@
                                     placeholder="Pattern Version"
                                     values={this.state.patternversion}
                                 />
+                                 <span className="error">{this.state.errors["patternversion"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -421,11 +670,13 @@
                                     placeholder="Pattern Type"
                                     values={this.state.patterntype}
                                     />
+                                    <span className="error">{this.state.errors["patterntype"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">    
                             <div className="form-group">
                                 <TextField id="Buyer" fullWidth label="Storage Area" placeholder="Storage Area" onChange={this.handleChangeTextField('storageArea')} value={this.state.storageArea}/>
+                                <span className="error">{this.state.errors["storageArea"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -438,6 +689,7 @@
                                     placeholder="Done by"
                                     values={this.state.doneByitems}
                                     />
+                                    <span className="error">{this.state.errors["doneByitems"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -450,16 +702,27 @@
                                     placeholder="Checked By"
                                     values={this.state.checkedByItems}
                                     />
+                                    <span className="error">{this.state.errors["checkedByItems"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="form-group ">
                                 <TextField id="Buyer" fullWidth label="Date" placeholder="Date" onChange={this.handleChangeTextField('patterndate')} value={this.state.patterndate}/>
+                                {/* <DateTimePicker     className="date-picker-react"  /> */}
+                                {/* <DatePicker/> */}
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="form-group ">
                                 <TextField id="Buyer" fullWidth label="Time" placeholder="Time" onChange={this.handleChangeTextField('patterntime')} value={this.state.patterntime}/>
+                                {/* <DateTimePicker     className="date-picker-react" 
+                                /> */}
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div className="form-group ">
+                                <TextField id="PatternRemarks" fullWidth label="PatternRemarks" placeholder="Remarks" onChange={this.handleChangeTextField('patternremarks')} value={this.state.patternremarks}/>
+                                <span className="error">{this.state.errors["patternremarks"]}</span>
                             </div>
                         </div>
                     </div>
@@ -487,19 +750,20 @@
                                 </tr>
                             </thead>
                                  <tbody>
-                                 {this.state.patternStatusGridList.map((n,index) => {                                   
+                               
+                                 {this.state.PatternTempRowData.map((n,index) => {                                   
                                 return (
                                      <tr>
-                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         <td>{n.naturejobcode} </td>
+                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" onClick={(e) =>this.deletePatternGrid(n)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+                                         <td>{n.natureOfJob} </td>
                                          <td>{n.patVersion} </td>
                                          <td> {n.storageArea}</td>
-                                         <td> {n.donebyName}</td>
+                                         <td> {n.preparedby}</td>
+                                         <td>{n.checkedby} </td>
+                                         <td>{n.Revision} </td>
                                          <td>{n.checkbyName} </td>
-                                         <td>{n.checkbyName} </td>
-                                         <td>{n.checkbyName} </td>
-                                         <td>{n.checkbyName} </td>
-                                         <td>{n.checkbyName} </td>
+                                         <td>{n.patterndate} & {n.patterntime} </td>
+                                         <td>{n.remarks} </td>
                                          {/* <td> </td>
                                          <td> </td>
                                          <td> </td> */}
@@ -507,7 +771,7 @@
                                      </tr>
                                 ) } )
                                 }
-                                {this.state.patternStatusGridList.length==0 &&
+                                {this.state.PatternTempRowData.length==0 &&
                                         <tr>
                                             <td colSpan="8" className="no-records-data">No Records Found</td>
                                         </tr>
@@ -551,202 +815,148 @@
                      </AccordionSummary>
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
-                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.saveSample()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">  
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Pattern Version</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em> none</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Line</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Department</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-     <div className="row">
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+                        <div className="form-group select_label_name mt-15">
+                            <Select1
+                                dropdownPosition="auto"
+                                createNewLabel="Pattern Version"
+                                options={patternVersionOptions}                                   
+                                onChange={this.setstatevalueDrop('samplepatternversion')}
+                                placeholder="Pattern Version"
+                                values={this.state.samplepatternversion}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                            <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces" onChange={this.handleChangeTextField('noofpieces')} value={this.state.noofpieces}/>                            
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group ">
+                             <TextField id="Buyer" fullWidth label="Line No" placeholder="Line No" onChange={this.handleChangeTextField('lineno')} value={this.state.lineno}/>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group select_label_name mt-15">
+                            <Select1
+                                dropdownPosition="auto"
+                                createNewLabel="Department"
+                                options={departmentTypeOptions}                                   
+                                onChange={this.setstatevalueDrop('department')}
+                                placeholder="Department"
+                                values={this.state.department}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                        <div className="row">
+                            <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="In" />
+                            </RadioGroup>
 
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="In" />
-
-
-</RadioGroup>
-
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="Out" />
-
-
-</RadioGroup>
-</div>
-</div>
-<div className="col-lg-6 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-<div className="form-group">
- <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
- </div>
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-<div className="form-group mt-15">  
-<Button variant="contained" className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-0 text-white btn-icon b-md" onClick={this.rhandleClickOpen}>Additional tab</Button>
-</div>
-</div>
-
-
-<div classname="med-popup" >
-                                <Dialog open={this.state.ropen} onClose={this.rhandleClose} aria-labelledby="form-dialog-title">
-                                    <DialogTitle id="form-dialog-title">Additional tab</DialogTitle>
-                                    <DialogContent>                                   
-                                        <div className="col border pb-10">                       
-                                            <div className="row no-f-mb">
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Department</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>         
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
- </div>
- </div>
- <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
- <div className="form-group">
- <div className="w-100 p-0 mt-15">
-   <label for="formFile" class="form-label float-left w-20 p-10">Add File</label>
-   <input class="form-control w-80 float-left" type="file" id="formFile"/>
- </div>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
- </div>
- </div>  
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-     <div className="row">
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="Pass" />
-
-
-</RadioGroup>
-
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="Fail" />
-
-
-</RadioGroup>
-</div>
-</div>      
-<div className="clearfix"></div>   
-<div className="table-responsive mt-10">
-                      <div className="float-right mr-5">
-                         <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                            <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Out" />
+                            </RadioGroup>
                          </div>
-                     </div>
- 
-                             <table className="table mt-10 data w-100 float-left">
-                                 <thead>
-                                     <tr>
-                                     <th className="">Department</th>
-                                     <th className="">    No of Pieces </th>
-                                     <th className="">    Pass</th>
-                                     <th className="">    Fail </th>
-                                     <th className="">Date</th>
-                                     <th className="">Time</th>
-                                      
-                                     <th className="">    Remarks </th>
-                                     
+                    </div>
+                    {/* <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                        <div className="form-group">
+                            <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+                        </div>
+                    </div> */}
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                        <div className="form-group mt-15">  
+                            <Button variant="contained" className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-0 text-white btn-icon b-md" onClick={this.rhandleClickOpen}>Additional tab</Button>
+                        </div>
+                    </div>
 
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                   
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                    
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                 </tbody>
+                    <div classname="med-popup" >
+                        <Dialog open={this.state.ropen} onClose={this.rhandleClose} aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">Additional tab</DialogTitle>
+                                <DialogContent>                                   
+                                    <div className="col border pb-10">                       
+                                        <div className="row no-f-mb">
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <FormControl fullWidth>
+                                                        <InputLabel htmlFor="age-simple">Department</InputLabel>
+                                                        <Select value={this.state.age} onChange={this.handleChange}
+                                                        inputProps={{ name: 'age', id: 'age-simple', }}>
+                                                        <MenuItem value=""><em>None</em></MenuItem>
+                                                        <MenuItem value={10}>Autumn</MenuItem>
+                                                        <MenuItem value={20}>Summer</MenuItem>
+                                                        <MenuItem value={30}>Winter</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </div>
+                                            </div>         
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <div className="w-100 p-0 mt-15">
+                                                        <label for="formFile" class="form-label float-left w-20 p-10">Add File</label>
+                                                        <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
+                                                </div>
+                                            </div>  
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                <div className="row">
+                                                    <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Pass" />
+                                                    </RadioGroup>
+
+                                                    <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
+                                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="Fail" />
+                                                    </RadioGroup>
+                                                </div>
+                                            </div>      
+                                            <div className="clearfix"></div>   
+                                            <div className="table-responsive mt-10">
+                                                <div className="float-right mr-5">
+                                                    <div className="form-group">
+                                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" ><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>                                                     
+                                                </div>
+                                            </div> 
+                                            <table className="table mt-10 data w-100 float-left">
+                                                <thead>
+                                                    <tr>
+                                                    <th className="">Department</th>
+                                                    <th className=""> No of Pieces </th>
+                                                    <th className="">Pass</th>
+                                                    <th className="">Fail </th>
+                                                    <th className="">Date</th>
+                                                    <th className="">Time</th>                                                    
+                                                    <th className="">Remarks </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                
+                                                        <td>Demo </td>
+                                                        <td>Demo </td>
+                                                        <td>Demo </td>
+                                                        <td>Demo </td>
+                                                        <td>Demo </td>
+                                                        <td>Demo </td>
+                                                        <td>Demo </td>
+                                                    </tr>
+                                                </tbody>
                                  
-                                 </table>
+                                            </table>
                                  <div className="clearfix"></div>
                                  <div className="w-50 float-right">
                                  <div className="w-25 float-left">
@@ -780,7 +990,7 @@
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
-                                </div>
+                    </div>
 </div>
 
 
@@ -788,9 +998,8 @@
                      <div className="table-responsive mt-10">
                       <div className="float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.addSampleGrid()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                            
                          </div>
                      </div>
  
@@ -798,51 +1007,36 @@
                                  <thead>
                                      <tr>
                                      <th className="text-center">Actions</th>
-                                     <th className="">    Pattern Version </th>
-                                     <th className="">    No of Pieces </th>
-                                     <th className="">    Line </th>
+                                     <th className="">Pattern Version </th>
+                                     <th className="">No of Pieces </th>
+                                     <th className=""> Line </th>
                                      <th className="">Department</th>
                                      <th className="">In</th>
                                      <th className="">Out</th>
-                                     <th className="">    Remarks </th>
+                                     <th className=""> Remarks </th>
                                      
 
                                      </tr>
                                  </thead>
-                                 <tbody>
+                                 <tbody>                                 
+                                 {this.state.sampleListData.map((n,index) => {                                   
+                                return (
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button"  onClick={(e) =>this.deleteSampleItem(n)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+                                         <td>{n.patVersionLabel} </td>
+                                         <td>{n.pcs} </td>
+                                         <td>{n.line} </td>
+                                         <td>{n.departmentLabel} </td>
+                                         <td>In </td>
+                                         <td>Out </td>
+                                         <td>{n.remarks} </td>
                                      </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
+                                ) }) }
+                                    {this.state.sampleListData.length==0 &&
+                                        <tr>
+                                            <td colSpan="8" className="no-records-data">No Records Found</td>
+                                        </tr>
+                                }
                                  </tbody>
                                  
                                  </table>
@@ -883,73 +1077,62 @@
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">
-                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">    Pattern Version </InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>none</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Storage Area" placeholder=" Storage Area"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple"> Done by</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Checked by</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Time" placeholder="Time"/>
- </div></div>
- <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="    Remarks " placeholder="    Remarks "/>
- </div></div>
- </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Pattern Version"
+                                    options={patternVersionOptions}                                   
+                                    onChange={this.setstatevalueDrop('markerpatternversion')}
+                                    placeholder="Pattern Version"
+                                    values={this.state.markerpatternversion}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                                <TextField id="Buyer" fullWidth label="Storage Area" placeholder=" Storage Area" onChange={this.handleChangeTextField('markerStoragearea')} value={this.state.markerStoragearea}/>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Done by"
+                                    options={doneByListOptions}
+                                    onChange={this.setstatevalueDrop('MarkerdoneByitems')}
+                                    placeholder="Done by"
+                                    values={this.state.MarkerdoneByitems}
+                                    />
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Checked By"
+                                    options={checkedByListOptions}
+                                    onChange={this.setstatevalueDrop('markercheckedByItems')}                                    
+                                    placeholder="Checked By"
+                                    values={this.state.markercheckedByItems}
+                                    />
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                                <TextField id="Buyer" fullWidth label="Date" placeholder="Date" onChange={this.handleChangeTextField('markerDate')} value={this.state.markerDate}/>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                                <TextField id="Buyer" fullWidth label="Time" placeholder="Time"  onChange={this.handleChangeTextField('markertime')} value={this.state.markertime}/>
+                            </div>
+                        </div>                       
+                    </div>
                      <div className="table-responsive mt-10">
                       <div className="float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.addMarkerGrid()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>                            
                          </div>
                      </div>
  
@@ -969,6 +1152,8 @@
                                      </tr>
                                  </thead>
                                  <tbody>
+                                 {this.state.markerListData.map((n,index) => {                                   
+                                return (
                                      <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -980,39 +1165,12 @@
                                          <td>Demo </td>
                                          <td>Demo </td>
                                      </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
+                                ) }) }
+                                {this.state.markerListData.length==0 &&
+                                    <tr>
+                                        <td colSpan="8" className="no-records-data">No Records Found</td>
+                                    </tr>
+                                }  
                                  </tbody>
                                  
                                  </table>
