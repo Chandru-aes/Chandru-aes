@@ -680,7 +680,7 @@ import Select1 from "react-dropdown-select";
                 //   "costNilShr": "string",
                 "SamSize":this.state.sample_size[0].value,
                 "CostSize":this.state.sample_size[0].value,
-                    "size": "string",
+                    // "size": "string",
                     "createdBy": "string",
                     "createdDt": "2021-11-16T05:00:55.509Z",
                     "modifyBy": "string",
