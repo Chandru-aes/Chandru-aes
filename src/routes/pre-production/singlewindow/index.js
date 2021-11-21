@@ -210,7 +210,8 @@ import Select1 from "react-dropdown-select";
         marker_width:'',
 
         baseStyleno:'',fabricDesc:'',fabricType:'',
-        reference_version:''
+        reference_version:'',
+        swid:this.props.match.params.swid,
 
      }
      onAddUpdateUserModalClose() {
@@ -222,6 +223,7 @@ import Select1 from "react-dropdown-select";
         this.setState({ addNewUserModal: true });
     }
      componentDidMount() {
+         console.log(this.state.swid,'====================');
         document.body.classList.add('med-pop-up-h');
         $('.patternclass').hide();
         $('.samclass').hide();
@@ -480,27 +482,37 @@ import Select1 from "react-dropdown-select";
         if(event.length!=0){
             fields[name] = event[0].value;        
             this.setState({fields});
+
+          
+
             if(name=="reqtype"){
+
                 $('.patternclass').hide();
                 $('.samclass').hide();
                 $('.sampleclass').hide();
                 $('.markerclass').hide();
                 $('.valueaddclass').hide();
-                if(event[0].value=="PATTERN"){
+               
+               event.forEach(element => {
+                   
+                if(element.value=="PATTERN"){
                     $('.patternclass').show();
                 }
-                if(event[0].value=="SAM"){
+                if(element.value=="SAM"){
                     $('.samclass').show();
                 }
-                if(event[0].value=="SAMPLE"){
+                if(element.value=="SAMPLE"){
                     $('.sampleclass').show();
                 }
-                if(event[0].value=="VALUEADD"){
+                if(element.value=="VALUEADD"){
                     $('.valueaddclass').show();
                 }
-                if(event[0].value=="MARKER"){
+                if(element.value=="MARKER"){
                     $('.markerclass').show();
                 }
+
+               });
+                
             }
             
         } else{
@@ -546,8 +558,32 @@ import Select1 from "react-dropdown-select";
         
 
         if(this.state.buyer.length>0){
-        let patterndata ={};
-            if(this.state.reqtype[0].value=="PATTERN"){
+
+            let patterndata ={};
+            let markerdata ={};
+            let sampledata ={};
+            let samdata ={};
+            let valueadddata ={};
+            let reqtypedata = [];
+            this.state.reqtype.forEach(element => {
+                console.log(element,'elementelementelementelement');
+
+                
+                  let newdata =   {
+                      "id": 0,
+                      "swH_Id": 0,
+                      "reqType": element.value,
+                      "createdBy": "string",
+                      "createdDt": "2021-11-16T05:00:55.509Z",
+                      "modifyBy": "string",
+                      "modifyDt": "2021-11-16T05:00:55.509Z",
+                      "hostName": "string"
+                    };
+
+                    reqtypedata.push(newdata);
+                  
+                
+            if(element.value=="PATTERN"){
                 patterndata ={
                     "id": 0,
                     "swH_Id": 0,
@@ -584,44 +620,45 @@ import Select1 from "react-dropdown-select";
                     }
                     ]
                 }
-            } else{
-                patterndata ={
-                    "id": 0,
-                    "swH_Id": 0,
-                    "verRef": "string",
-                    "bodyGrain": "string",
-                    "addOnInfo": "string",
-                    "samShr": "s",
-                    "samShrWarp": 0,
-                    "samShrWeft": 0,
-                    "costShr": "s",
-                    "costShrWarp": 0,
-                    "costShrWeft": 0,
-                    "samSize": "string",
-                    "costSize": "string",
-                    "createdBy": "string",
-                    "createdDt": "2021-11-18T12:07:22.603Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-18T12:07:22.603Z",
-                    "hostName": "string",
-                    "swPatternDetEntityModel": [
-                      {
-                        "id": 0,
-                        "swH_Id": 0,
-                        "natureOfJob": "string",
-                        "cancel": "s",
-                        "createdBy": "string",
-                        "createdDt": "2021-11-18T12:07:22.603Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-18T12:07:22.603Z",
-                        "hostName": "string"
-                      }
-                    ]
-                  }
             }
+            //  else{
+            //     patterndata ={
+            //         "id": 0,
+            //         "swH_Id": 0,
+            //         "verRef": "string",
+            //         "bodyGrain": "string",
+            //         "addOnInfo": "string",
+            //         "samShr": "s",
+            //         "samShrWarp": 0,
+            //         "samShrWeft": 0,
+            //         "costShr": "s",
+            //         "costShrWarp": 0,
+            //         "costShrWeft": 0,
+            //         "samSize": "string",
+            //         "costSize": "string",
+            //         "createdBy": "string",
+            //         "createdDt": "2021-11-18T12:07:22.603Z",
+            //         "modifyBy": "string",
+            //         "modifyDt": "2021-11-18T12:07:22.603Z",
+            //         "hostName": "string",
+            //         "swPatternDetEntityModel": [
+            //           {
+            //             "id": 0,
+            //             "swH_Id": 0,
+            //             "natureOfJob": "string",
+            //             "cancel": "s",
+            //             "createdBy": "string",
+            //             "createdDt": "2021-11-18T12:07:22.603Z",
+            //             "modifyBy": "string",
+            //             "modifyDt": "2021-11-18T12:07:22.603Z",
+            //             "hostName": "string"
+            //           }
+            //         ]
+            //       }
+            // }
 
-            let markerdata ={};
-            if(this.state.reqtype[0].value=="MARKER"){
+            
+            if(element.value=="MARKER"){
                 markerdata = {
                     "id": 0,
                     "swH_Id": 0,
@@ -639,46 +676,48 @@ import Select1 from "react-dropdown-select";
                      this.state.markeraddmoredata
                     
                   }
-            } else{
-                markerdata ={
-                    "id": 0,
-                    "swH_Id": 0,
-                    "verRef": "string",
-                    "changesIn": "string",
-                    "bodyGrain": "string",
-                    "shrinkage": "string",
-                    "markerFor": "string",
-                    "createdBy": "string",
-                    "createdDt": "2021-11-18T12:07:22.603Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-18T12:07:22.603Z",
-                    "hostName": "string",
-                    "swMarkerDetEntityModel": [
-                      {
-                        "id": 0,
-                        "swH_Id": 0,
-                        "matType": "string",
-                        "description": "string",
-                        "placement": "string",
-                        "color": "string",
-                        "size": "string",
-                        "pcs": 0,
-                        "width": "string",
-                        "repeat": "string",
-                        "baseMarker": "s",
-                        "cancel": "s",
-                        "createdBy": "string",
-                        "createdDt": "2021-11-18T12:07:22.603Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-18T12:07:22.603Z",
-                        "hostName": "string"
-                      }
-                    ]
-                  }
-            }
+            } 
+            
+            // else{
+            //     markerdata ={
+            //         "id": 0,
+            //         "swH_Id": 0,
+            //         "verRef": "string",
+            //         "changesIn": "string",
+            //         "bodyGrain": "string",
+            //         "shrinkage": "string",
+            //         "markerFor": "string",
+            //         "createdBy": "string",
+            //         "createdDt": "2021-11-18T12:07:22.603Z",
+            //         "modifyBy": "string",
+            //         "modifyDt": "2021-11-18T12:07:22.603Z",
+            //         "hostName": "string",
+            //         "swMarkerDetEntityModel": [
+            //           {
+            //             "id": 0,
+            //             "swH_Id": 0,
+            //             "matType": "string",
+            //             "description": "string",
+            //             "placement": "string",
+            //             "color": "string",
+            //             "size": "string",
+            //             "pcs": 0,
+            //             "width": "string",
+            //             "repeat": "string",
+            //             "baseMarker": "s",
+            //             "cancel": "s",
+            //             "createdBy": "string",
+            //             "createdDt": "2021-11-18T12:07:22.603Z",
+            //             "modifyBy": "string",
+            //             "modifyDt": "2021-11-18T12:07:22.603Z",
+            //             "hostName": "string"
+            //           }
+            //         ]
+            //       }
+            // }
 
-            let sampledata ={};
-            if(this.state.reqtype[0].value=="SAMPLE"){
+            
+            if(element.value=="SAMPLE"){
                 sampledata = {
                     "id": 0,
                     "swH_Id": 0,
@@ -697,85 +736,91 @@ import Select1 from "react-dropdown-select";
                       
                     
                   }
-            } else {
-                sampledata ={
-                    "id": 0,
-                    "swH_Id": 0,
-                    "verRef": "string",
-                    "expDeliDate": "2021-11-18T12:07:22.603Z",
-                    "prepSeq": "string",
-                    "sampleType": "string",
-                    "totPcs": 0,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-18T12:07:22.603Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-18T12:07:22.603Z",
-                    "hostName": "string",
-                    "swSampleDetEntityModel": [
-                      {
-                        "id": 0,
-                        "swH_Id": 0,
-                        "matType": "string",
-                        "matDesc": "string",
-                        "placement": "string",
-                        "color": "string",
-                        "size": "string",
-                        "pcs": 0,
-                        "cancel": "s",
-                        "createdBy": "string",
-                        "createdDt": "2021-11-18T12:07:22.603Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-18T12:07:22.603Z",
-                        "hostName": "string"
-                      }
-                    ]
-                  }
-            }
+            } 
+            
+            // else {
+            //     sampledata ={
+            //         "id": 0,
+            //         "swH_Id": 0,
+            //         "verRef": "string",
+            //         "expDeliDate": "2021-11-18T12:07:22.603Z",
+            //         "prepSeq": "string",
+            //         "sampleType": "string",
+            //         "totPcs": 0,
+            //         "createdBy": "string",
+            //         "createdDt": "2021-11-18T12:07:22.603Z",
+            //         "modifyBy": "string",
+            //         "modifyDt": "2021-11-18T12:07:22.603Z",
+            //         "hostName": "string",
+            //         "swSampleDetEntityModel": [
+            //           {
+            //             "id": 0,
+            //             "swH_Id": 0,
+            //             "matType": "string",
+            //             "matDesc": "string",
+            //             "placement": "string",
+            //             "color": "string",
+            //             "size": "string",
+            //             "pcs": 0,
+            //             "cancel": "s",
+            //             "createdBy": "string",
+            //             "createdDt": "2021-11-18T12:07:22.603Z",
+            //             "modifyBy": "string",
+            //             "modifyDt": "2021-11-18T12:07:22.603Z",
+            //             "hostName": "string"
+            //           }
+            //         ]
+            //       }
+            // }
 
-            let samdata ={};
-            if(this.state.reqtype[0].value!="SAM"){
-                samdata =[
-                    {
-                      "id": 0,
-                      "swH_Id": 0,
-                      "optionType": "string",
-                      "baseSAM": "s",
-                      "cancel": "s",
-                      "createdBy": "string",
-                      "createdDt": "2021-11-18T12:07:22.603Z",
-                      "modifyBy": "string",
-                      "modifyDt": "2021-11-18T12:07:22.603Z",
-                      "hostName": "string"
-                    }
-                  ]
-            } else{
+            
+            if(element.value=="SAM"){
                 samdata =this.state.samaddmoredata;
-            }
+            } 
+            // else{
+            //     samdata =[
+            //         {
+            //           "id": 0,
+            //           "swH_Id": 0,
+            //           "optionType": "string",
+            //           "baseSAM": "s",
+            //           "cancel": "s",
+            //           "createdBy": "string",
+            //           "createdDt": "2021-11-18T12:07:22.603Z",
+            //           "modifyBy": "string",
+            //           "modifyDt": "2021-11-18T12:07:22.603Z",
+            //           "hostName": "string"
+            //         }
+            //       ]
+            // }
 
 
-            let valueadddata ={};
-            if(this.state.reqtype[0].value!="VALUEADD"){
-                valueadddata =[
-                    {
-                      "id": 0,
-                      "swH_Id": 0,
-                      "valueAdd": "string",
-                      "valueAddType": "string",
-                      "valueAddDesc": "string",
-                      "color": "string",
-                      "pcs": 0,
-                      "typeOfGarment": "string",
-                      "cancel": "s",
-                      "createdBy": "string",
-                      "createdDt": "2021-11-18T12:07:22.603Z",
-                      "modifyBy": "string",
-                      "modifyDt": "2021-11-18T12:07:22.603Z",
-                      "hostName": "string"
-                    }
-                  ]
-            } else{
+            
+            if(element.value!="VALUEADD"){
                 valueadddata =this.state.valueaddaddmoredata;
             }
+            // else{
+            //     valueadddata =[
+            //         {
+            //           "id": 0,
+            //           "swH_Id": 0,
+            //           "valueAdd": "string",
+            //           "valueAddType": "string",
+            //           "valueAddDesc": "string",
+            //           "color": "string",
+            //           "pcs": 0,
+            //           "typeOfGarment": "string",
+            //           "cancel": "s",
+            //           "createdBy": "string",
+            //           "createdDt": "2021-11-18T12:07:22.603Z",
+            //           "modifyBy": "string",
+            //           "modifyDt": "2021-11-18T12:07:22.603Z",
+            //           "hostName": "string"
+            //         }
+            //       ]
+            // } 
+            });
+        
 
             let data ={
                 "id": 0,
@@ -800,18 +845,7 @@ import Select1 from "react-dropdown-select";
                 "modifyBy": "string",
                 "modifyDt": "2021-11-16T05:00:55.509Z",
                 "hostName": "string",
-                "singleWindowDetEntityModel": [
-                  {
-                    "id": 0,
-                    "swH_Id": 0,
-                    "reqType": this.state.reqtype[0].value,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string"
-                  }
-                ],
+                "singleWindowDetEntityModel": reqtypedata,
                 "swPatternHeadEntityModel": patterndata,
                 "swSampleHeadEntityModel": sampledata,
                 "swMarkerHeadEntityModel":markerdata,
@@ -1889,7 +1923,7 @@ console.log(data,'datadatadata')
                 <div className="form-group select_label_name mt-15">
                                                     <Select1
                                                         dropdownPosition="auto"
-                                                        //   multi
+                                                          multi
                                                         createNewLabel="Req Type"
                                                         options={reqtypeoptions}
                                                         onChange={this.setstatevaluedropdownfunction('reqtype')}

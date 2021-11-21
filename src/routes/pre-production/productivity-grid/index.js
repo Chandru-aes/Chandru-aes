@@ -506,9 +506,9 @@
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                 <div className="form-group select_label_name mt-15"> 
-                                    <Select1  dropdownPosition="auto"  createNewLabel="Document number"
+                                    <Select1  dropdownPosition="auto"  createNewLabel="Document Number"
                                         options={docnumberoptions} ref="docnumber"
-                                        placeholder="Document number"
+                                        placeholder="Document Number"
                                         onChange={this.setstatevaluedropdownfunction('docnumber')}
                                         //onChange={this.handleChangeValidate.bind(this, "docnumber",this.state.docnumber)} 
                                         //onChange={values => this.setState({ docnumber:values })}
@@ -585,10 +585,10 @@
                                          />
                                      </th> */}
                                      <th>Style Image</th>
-                                     <th>Document number</th>
+                                     <th>Document Number</th>
                                      <th>Date</th>
                                      <th>Style</th>
-                                     <th>Order quantity</th>
+                                     <th>Order Quantity</th>
                                      <th>SAM</th>                                    
                                      <th>Productivity</th>
                                  </tr>

@@ -49,6 +49,7 @@
              <Route path={`${match.url}/itemmaster-grid`} component={AsyncItemmasterGridComponent} />	
              <Route path={`${match.url}/item-creation`} component={AsyncItemCreatinComponent} />
              <Route path={`${match.url}/singlewindow/:swid`} component={AsyncSinglewindowEditComponent} />
+             <Route path={`${match.url}/single-window/:swid`} component={AsyncSinglewindowComponent} />
          </Switch>
      </div>
  );
