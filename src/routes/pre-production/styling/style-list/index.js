@@ -321,7 +321,7 @@
                                         <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                             <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                         </svg></span></button>
-                                        <Badge className="mb-10 mr-10" color="dark">Add New</Badge>
+                                        <Link to='/app/pre-production/style-creation'><Badge className="mb-10 mr-10" color="dark">Add New</Badge></Link>
                                     </div>
                                 </div>
                          </div>
@@ -378,7 +378,7 @@
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">{n.styleDesc}</h5>
-                                                <Badge color="warning">{n.buyerName}</Badge>
+                                                {/* <Badge color="warning">{n.buyerName}</Badge> */}
                                                 <Badge color="warning">{n.seasonName}</Badge>
                                             </div>
                                          </td>

@@ -211,7 +211,7 @@ import Select1 from "react-dropdown-select";
 
         baseStyleno:'',fabricDesc:'',fabricType:'',
         reference_version:'',
-        swid:this.props.match.params.swid,
+        swid:0,
 
      }
      onAddUpdateUserModalClose() {
@@ -223,7 +223,7 @@ import Select1 from "react-dropdown-select";
         this.setState({ addNewUserModal: true });
     }
      componentDidMount() {
-         console.log(this.state.swid,'====================');
+       
         document.body.classList.add('med-pop-up-h');
         $('.patternclass').hide();
         $('.samclass').hide();
@@ -232,6 +232,10 @@ import Select1 from "react-dropdown-select";
         $('.valueaddclass').hide();
         this.getfilldropdownlists();
         
+        if(this.props.match.params.swid!=undefined){
+            this.setState({swid:this.props.match.params.swid})
+            this.editdata(this.props.match.params.swid);
+        }
         // $(document).on('click', '.edit', function() {
         //     $(this).parent().siblings('td.data').each(function() {
         //       var content = $(this).html();
@@ -264,6 +268,84 @@ import Select1 from "react-dropdown-select";
         //   $('.add').click(function() {
         //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
         //   });
+    }
+
+    editdata(id){
+        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo='+id)
+        .then((response) => {
+           
+            let data = response.data.data[0];            
+
+            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],baseStyleno:data.baseStyleno,fabricDesc:data.fabricDesc,fabricType:data.fabricType,
+                purpose: [{value:data.purpose,label:data.purpose}],
+                reqtype: [{value:data.reqType,label:data.reqType}],
+                styleno: [{value:data.styleNo,label:data.styleNo}],
+                fit:[{value:data.fit,label:data.fit}]
+             });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('SingleWindowRequestheader/GetSinGleWindowPatternList?IdRequestNo='+id)
+        .then((response) => {
+           
+            let data = response.data.data[0];            
+
+            this.setState({buyerdiv: [{value:data.buyDivcode,label:data.buyerDivName}],
+                samplewarp:data.samShrWarp,
+                sampleweft:data.samShrWeft,
+                costingwarp:data.costShrWarp,
+                costingweft:data.costShrWeft,
+                samplesize: [{value:data.samSize,label:data.samSize}],
+                costingsize: [{value:data.costSize,label:data.costSize}],
+                bodygrain: [{value:data.bodyGrain,label:data.bodyGrain}],
+                addoninfo: [{value:data.addOnInfo,label:data.addOnInfo}],
+                job: [{value:data.natureOfJob,label:data.natureOfJob}],
+                
+             });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('SingleWindowRequestheader/GetSinGleWindowSampleList?IdRequestNo='+id)
+        .then((response) => {
+           
+            let data = response.data.data[0];       
+            this.setState({sampleaddmoredata:response.data.data,samplewarp:data.expDeliDate,
+                prepseq: [{value:data.prepSeq,label:data.prepSeq}],               
+                
+             });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=35')
+        .then((response) => {
+           
+            let data = response.data.data[0];       
+            this.setState({valueaddaddmoredata:response.data.data
+             });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=43')
+        .then((response) => {
+           
+            let data = response.data.data[0];       
+            this.setState({samaddmoredata:response.data.data
+             });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        
+
     }
 
     
@@ -566,12 +648,10 @@ import Select1 from "react-dropdown-select";
             let valueadddata ={};
             let reqtypedata = [];
             this.state.reqtype.forEach(element => {
-                console.log(element,'elementelementelementelement');
-
                 
                   let newdata =   {
                       "id": 0,
-                      "swH_Id": 0,
+                      "swH_Id": this.state.swid,
                       "reqType": element.value,
                       "createdBy": "string",
                       "createdDt": "2021-11-16T05:00:55.509Z",
@@ -586,7 +666,7 @@ import Select1 from "react-dropdown-select";
             if(element.value=="PATTERN"){
                 patterndata ={
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "bodyGrain": this.state.bodygrain[0].value,
                     "addOnInfo": this.state.addoninfo[0].value,
@@ -609,7 +689,7 @@ import Select1 from "react-dropdown-select";
                     "swPatternDetEntityModel": [
                     {
                         "id": 0,
-                        "swH_Id": 0,
+                        "swH_Id": this.state.swid,
                         "natureOfJob": this.state.job[0].value,
                         "cancel": "s",
                         "createdBy": "string",
@@ -624,7 +704,7 @@ import Select1 from "react-dropdown-select";
             //  else{
             //     patterndata ={
             //         "id": 0,
-            //         "swH_Id": 0,
+            //         "swH_Id": this.state.swid,
             //         "verRef": "string",
             //         "bodyGrain": "string",
             //         "addOnInfo": "string",
@@ -644,7 +724,7 @@ import Select1 from "react-dropdown-select";
             //         "swPatternDetEntityModel": [
             //           {
             //             "id": 0,
-            //             "swH_Id": 0,
+            //             "swH_Id": this.state.swid,
             //             "natureOfJob": "string",
             //             "cancel": "s",
             //             "createdBy": "string",
@@ -661,7 +741,7 @@ import Select1 from "react-dropdown-select";
             if(element.value=="MARKER"){
                 markerdata = {
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "changesIn": this.state.marker_changesin,
                     "bodyGrain": this.state.marker_bodygrain,
@@ -681,7 +761,7 @@ import Select1 from "react-dropdown-select";
             // else{
             //     markerdata ={
             //         "id": 0,
-            //         "swH_Id": 0,
+            //         "swH_Id": this.state.swid,
             //         "verRef": "string",
             //         "changesIn": "string",
             //         "bodyGrain": "string",
@@ -695,7 +775,7 @@ import Select1 from "react-dropdown-select";
             //         "swMarkerDetEntityModel": [
             //           {
             //             "id": 0,
-            //             "swH_Id": 0,
+            //             "swH_Id": this.state.swid,
             //             "matType": "string",
             //             "description": "string",
             //             "placement": "string",
@@ -720,7 +800,7 @@ import Select1 from "react-dropdown-select";
             if(element.value=="SAMPLE"){
                 sampledata = {
                     "id": 0,
-                    "swH_Id": 0,
+                    "swH_Id": this.state.swid,
                     "verRef": "string",
                     "expDeliDate": this.state.selectedDate,
                     "prepSeq": this.state.prepseq[0].value,
@@ -741,7 +821,7 @@ import Select1 from "react-dropdown-select";
             // else {
             //     sampledata ={
             //         "id": 0,
-            //         "swH_Id": 0,
+            //         "swH_Id": this.state.swid,
             //         "verRef": "string",
             //         "expDeliDate": "2021-11-18T12:07:22.603Z",
             //         "prepSeq": "string",
@@ -755,7 +835,7 @@ import Select1 from "react-dropdown-select";
             //         "swSampleDetEntityModel": [
             //           {
             //             "id": 0,
-            //             "swH_Id": 0,
+            //             "swH_Id": this.state.swid,
             //             "matType": "string",
             //             "matDesc": "string",
             //             "placement": "string",
@@ -781,7 +861,7 @@ import Select1 from "react-dropdown-select";
             //     samdata =[
             //         {
             //           "id": 0,
-            //           "swH_Id": 0,
+            //           "swH_Id": this.state.swid,
             //           "optionType": "string",
             //           "baseSAM": "s",
             //           "cancel": "s",
@@ -803,7 +883,7 @@ import Select1 from "react-dropdown-select";
             //     valueadddata =[
             //         {
             //           "id": 0,
-            //           "swH_Id": 0,
+            //           "swH_Id": this.state.swid,
             //           "valueAdd": "string",
             //           "valueAddType": "string",
             //           "valueAddDesc": "string",
@@ -823,7 +903,7 @@ import Select1 from "react-dropdown-select";
         
 
             let data ={
-                "id": 0,
+                "id": this.state.swid,
                 "entityId": "st",
                 "buyCode": this.state.buyer[0].value,
                 "buyDivcode": this.state.buyerdiv[0].value,
@@ -890,7 +970,7 @@ console.log(data,'datadatadata')
 
       getBuyerDivision1(val,field,e){
         let fields = this.state.fields;
-        this.setState({ buyerdivlists: [] });
+        this.setState({ buyerdivlists: [],buyerdiv:[]  });
         if(val.buyer.length!=0){
             fields['buyer'] = val.buyer[0].value;        
             this.setState({fields});
@@ -1096,7 +1176,7 @@ console.log(data,'datadatadata')
         if(this.state.optionType!=''){
           let data = {
             "id": 0,
-            "swH_Id": 0,
+            "swH_Id": this.state.swid,
             "optionType": this.state.optionType,
             "baseSAM": "s",
             "cancel": "s",
@@ -1153,7 +1233,7 @@ console.log(data,'datadatadata')
         if(this.state.valueadd.length>0 || this.state.noofpieces!=0){
           let data = {
             "id": 0,
-            "swH_Id": 0,
+            "swH_Id": this.state.swid,
             "valueAdd": this.state.valueadd[0].value,
             "valueAddType": this.state.valueaddtype[0].value,
             "valueaddtypeDesc": this.state.valueaddtype[0].label,
@@ -1217,7 +1297,7 @@ console.log(data,'datadatadata')
           if(this.state.markerfor.length>0 ){
             let data =  {
                 "id": 0,
-                "swH_Id": 0,
+                "swH_Id": this.state.swid,
                 "matType": this.state.materialtype[0].value,
                 "description": this.state.marker_desc,
                 "placement":this.state.marker_placement,
@@ -1279,7 +1359,7 @@ console.log(data,'datadatadata')
           if(this.state.sample_materialtype.length>0 ){
             let data =  {
                 "id": 0,
-                "swH_Id": 0,
+                "swH_Id": this.state.swid,
                 "matType": this.state.sample_materialtype[0].value,
                 "matDesc": this.state.sample_desc,
                 "placement":this.state.sample_placement,
@@ -1667,9 +1747,22 @@ console.log(data,'datadatadata')
 
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
-                       
+                        {(() => {
+                           
+                           if (this.state.swid == 0) {
+                          return (
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                   </div> 
+                        )
+                    } 
+                     if (this.state.swid != 0) { 
+                    return (
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        )
+                            }
+                        })()}
+
+                        </div> 
+                  
                    <div className="clearfix"></div>
 
                    <Dialog open={this.state.cloneopen} onClose={this.Closeclone} aria-labelledby="form-dialog-title">
@@ -2599,7 +2692,7 @@ console.log(data,'datadatadata')
                                  
                                  </table>
                                  <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
+                                 {/* <div className="w-50 float-right">
                                  <div className="w-25 float-left">
                                  <label className="mt-5">Rows per page: </label>
                     </div>
@@ -2617,7 +2710,7 @@ console.log(data,'datadatadata')
                         <div className="w-30 float-left">
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
+                        </div></div> */}
                              </div>   
                      </AccordionDetails>
                  </Accordion>

@@ -169,6 +169,7 @@ import { DateTimePicker} from '@material-ui/pickers';
     }
      componentDidMount() {
         document.body.classList.add('med-pop-up-h');
+        $('.project-dt-pop').hide();
         this.getfilldropdownlists();
         
         // $(document).on('click', '.edit', function() {
@@ -255,7 +256,7 @@ import { DateTimePicker} from '@material-ui/pickers';
             
         }
 
-        if(name=="styleno"){
+        if(name=="styleno" || name=="fabdesc" || name=="refstyleno"){
             if(!event.target.value.match(/^[a-zA-Z0-9]+$/)){
                 NotificationManager.error('Input is not alphanumeric');              
             }      	
@@ -266,12 +267,24 @@ import { DateTimePicker} from '@material-ui/pickers';
 
     setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
+       
         if(event.length!=0){
             fields[name] = event[0].value;        
             this.setState({fields});
+            if(name=='OrderType'){            
+                $('.project-dt-pop').hide();
+                if(event[0].value=='PROJECTION'){
+                    $('.project-dt-pop').show();
+                }
+                
+            }
+
         } else{
             fields[name] = '';        
             this.setState({fields});
+            if(name=='OrderType'){            
+                $('.project-dt-pop').hide();
+            }
         }
         
 		this.setState({ [name]: event });
@@ -335,7 +348,21 @@ import { DateTimePicker} from '@material-ui/pickers';
             errors["styleno"] = "Input is not alphanumeric";
           }      	
         }
-    
+
+        if(typeof fields["fabdesc"] !== "undefined"){
+            if(!fields["fabdesc"].match(/^[a-zA-Z0-9]+$/)){
+              formIsValid = false;
+              errors["fabdesc"] = "Input is not alphanumeric";
+            }      	
+          }
+
+          if(typeof fields["refstyleno"] !== "undefined"){
+            if(!fields["refstyleno"].match(/^[a-zA-Z0-9]+$/)){
+              formIsValid = false;
+              errors["refstyleno"] = "Input is not alphanumeric";
+            }      	
+          }
+          
         // //Email
         // if(!fields["email"]){
         //   formIsValid = false;
@@ -370,14 +397,14 @@ import { DateTimePicker} from '@material-ui/pickers';
         })
 
 
-        api.get('BuyerDivision/GetBuyerDivisionList')
-        .then((response) => {
+        // api.get('BuyerDivision/GetBuyerDivisionList')
+        // .then((response) => {
             
-            this.setState({ buyerdivlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        //     this.setState({ buyerdivlists: response.data.result.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
 
 
@@ -711,6 +738,31 @@ console.log(data,'datadatadata')
 
       }
 
+      getBuyerDivision1(val,field,e){
+        let fields = this.state.fields;
+        this.setState({ buyerdivlists: [],buyerdiv:[] });
+        if(val.buyer.length!=0){
+            fields['buyer'] = val.buyer[0].value;        
+            this.setState({fields});
+
+            this.setState({ buyer: val.buyer });
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.buyer[0].value)
+            .then((response) => {                
+                this.setState({ buyerdivlists: response.data.result.data });
+            })        
+            .catch(error => {}) 
+            
+        } else{
+            fields['buyer'] = '';        
+            this.setState({fields});
+        }
+
+        // fields['buyer'] = val.buyer[0].value;        
+        // this.setState({fields});
+
+                  
+    }
+
      render() {
          const { employeePayroll,projectiondata } = this.state;
          const { match } = this.props;
@@ -845,7 +897,7 @@ console.log(data,'datadatadata')
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div  className={isActive ? "s-panel active" : 's-panel'}>
                       { !isActive &&
-                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details{isActive}<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
+                          <button className="MuiButtonBase-root MuiButton-root project-dt-pop MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details{isActive}<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
                        { isActive &&
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle1} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
@@ -1343,7 +1395,8 @@ console.log(data,'datadatadata')
                                                   createNewLabel="Buyer"
                                                 options={buyeroptions}
                                                 //onChange={values => this.setState({ buyer:values })}
-                                                onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
                                                 placeholder="Buyer"
                                                 values={this.state.buyer}
                                                 />
@@ -1511,12 +1564,14 @@ console.log(data,'datadatadata')
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <TextField id="ref_no" value={this.state.refstyleno}  onChange={this.setstatevaluefunction('refstyleno')} fullWidth label="Design Style Reference Number" placeholder="Design Style Reference Number"/>
+                        <span className="error">{this.state.errors["refstyleno"]}</span>
                         </div>
                     </div> 
  
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <TextField id="fabdesc" value={this.state.fabdesc}  onChange={this.setstatevaluefunction('fabdesc')} fullWidth label="Fabric" placeholder="Fabric"/>
+                        <span className="error">{this.state.errors["fabdesc"]}</span>
                         </div>
                     </div> 
  

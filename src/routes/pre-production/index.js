@@ -39,6 +39,7 @@
              <Route path={`${match.url}/style-creation`} component={AsyncStyleAddComponent} />
              <Route path={`${match.url}/style/:styleid`} component={AsyncStyleEditComponent} />
              <Route path={`${match.url}/style-list`} component={AsyncStyleListComponent} />
+             <Route path={`${match.url}/single-window/:swid`} component={AsyncSinglewindowComponent} />
              <Route path={`${match.url}/single-window`} component={AsyncSinglewindowComponent} />
              <Route path={`${match.url}/request-grid`} component={AsyncRequestGridOverallComponent} />	
              <Route path={`${match.url}/request-style-list/:styleno`} component={AsyncRequestGridStyleComponent} />
@@ -49,7 +50,7 @@
              <Route path={`${match.url}/itemmaster-grid`} component={AsyncItemmasterGridComponent} />	
              <Route path={`${match.url}/item-creation`} component={AsyncItemCreatinComponent} />
              <Route path={`${match.url}/singlewindow/:swid`} component={AsyncSinglewindowEditComponent} />
-             <Route path={`${match.url}/single-window/:swid`} component={AsyncSinglewindowComponent} />
+            
          </Switch>
      </div>
  );
