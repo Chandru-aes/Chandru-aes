@@ -210,7 +210,7 @@ import Select1 from "react-dropdown-select";
         marker_width:'',
 
         baseStyleno:'',fabricDesc:'',fabricType:'',
-        reference_version:'',
+        reference_version:[],
         swid:0,
 
      }
@@ -909,7 +909,7 @@ import Select1 from "react-dropdown-select";
                 "buyDivcode": this.state.buyerdiv[0].value,
                 "seasonCode": this.state.season[0].value,
                 "seasonYear": this.state.year[0].value,
-                "styleNo": this.state.styleno[0].value,
+                "styleNo": this.state.styleno[0].value,//"1233213",//
                 "masterStyle": 0,
                 "baseStyleno": this.state.baseStyleno,
                 "unitCode": "string",
