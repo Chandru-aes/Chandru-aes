@@ -612,6 +612,21 @@ export default {
                   "path": "/app/pre-production/productivity-grid",	
                   "new_item": false,	
                   "menu_title": "Productivity Grid"	
+               }
+               ,
+               {	
+                  "path": "/app/pre-production/pd-ta-master",	
+                  "new_item": false,	
+                  "menu_title": "Product Development T&A Master"	
+               },
+               {	
+                  "path": "/app/pre-production/pd-buyer-ta",	
+                  "new_item": false,	
+                  "menu_title": "Product Development Buyer T&A"	
+               },{	
+                  "path": "/app/pre-production/pd-internal-ta",	
+                  "new_item": false,	
+                  "menu_title": "Product Development Internal T&A"	
                },
                {	
                   "path": "/app/pre-production/itemmaster-grid",	

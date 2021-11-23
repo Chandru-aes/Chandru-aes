@@ -682,6 +682,20 @@ const AsyncSinglewindowEditComponent = Loadable({
 	loading: () => <RctPageLoader />,
 });
 
+const AsyncPdtamasterComponent = Loadable({
+	loader: () => import("Routes/pre-production/T&A/pd-ta-master"),
+	loading: () => <RctPageLoader />,
+});
+
+const AsyncPdbuyertaComponent = Loadable({
+	loader: () => import("Routes/pre-production/T&A/pd-buyer-ta"),
+	loading: () => <RctPageLoader />,
+});
+const AsyncPdinternaltaComponent = Loadable({
+	loader: () => import("Routes/pre-production/T&A/pd-internal-ta"),
+	loading: () => <RctPageLoader />,
+});
+
 export {
 	AsyncRequestGridOverallComponent,	
 	AsyncRequestGridStyleComponent,
@@ -798,5 +812,9 @@ export {
 	AsyncProductivityGridComponent,
 	AsyncItemmasterGridComponent,
 	AsyncItemCreatinComponent,
-	AsyncSinglewindowEditComponent
+	AsyncSinglewindowEditComponent,
+	AsyncPdtamasterComponent,
+	AsyncPdbuyertaComponent,
+	AsyncPdinternaltaComponent
+
 }; 

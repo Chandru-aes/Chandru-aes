@@ -635,7 +635,7 @@ import { DateTimePicker} from '@material-ui/pickers';
             "garDyeDesc":  this.state.GarDyeType[0].label,
             "tentativeFOB": 2,
             "remarks": "Remarks",
-            "active": "A",
+            "active": "Y",
             "createdBy": "A",
             "createdDt": "2021-10-29T08:01:11.048Z",
             "modifyBy": "A",

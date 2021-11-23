@@ -926,12 +926,12 @@ import Select1 from "react-dropdown-select";
                 "modifyDt": "2021-11-16T05:00:55.509Z",
                 "hostName": "string",
                 "singleWindowDetEntityModel": reqtypedata,
-                "swPatternHeadEntityModel": patterndata,
-                "swSampleHeadEntityModel": sampledata,
-                "swMarkerHeadEntityModel":markerdata,
-                "swValueAddEntityModel": 
-                valueadddata
-                ,
+                // "swPatternHeadEntityModel": patterndata,
+                // "swSampleHeadEntityModel": sampledata,
+                // "swMarkerHeadEntityModel":markerdata,
+                // "swValueAddEntityModel": 
+                // valueadddata
+                // ,
                 "swsamReqEntityModel": 
                 samdata
                 
@@ -2475,18 +2475,18 @@ console.log(data,'datadatadata')
                      <div className="clearfix"></div>
                      <div className="row">  
                      <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group">
-                            <FormControl fullWidth>
-                                <InputLabel htmlFor="reference_version-simple">Reference version</InputLabel>
-                                <Select value={this.state.reference_version} onChange={this.handleChange}
-                                inputProps={{ name: 'reference_version', id: 'reference_version-simple', }}>
-                                <MenuItem value=""><em> Pattern Version</em></MenuItem>
-                                <MenuItem value={10}>Autumn</MenuItem>
-                                <MenuItem value={20}>Summer</MenuItem>
-                                <MenuItem value={30}>Winter</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
+                     <div className="form-group select_label_name mt-15">
+                              <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Reference Version"
+                                                        options={prepseqoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('reference_version')}
+                                                        placeholder="Reference Version"
+                                                        values={this.state.reference_version}
+                                                        />
+             
+                </div>
                     </div>
             <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
 
