@@ -1843,24 +1843,7 @@ console.log(data,'datadatadata')
                                  </thead>
                                  <tbody>
                                      <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                         <td>Demo </td>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1877,7 +1860,7 @@ console.log(data,'datadatadata')
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
-                                         <td>Demo </td>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -1894,7 +1877,24 @@ console.log(data,'datadatadata')
                                          <td>Demo </td>
                                      </tr>
                                      <tr>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
                                          <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                     </tr>
+                                     <tr>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>

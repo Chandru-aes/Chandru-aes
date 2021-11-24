@@ -157,6 +157,8 @@ import { DateTimePicker} from '@material-ui/pickers';
         masterStyle:0,
         fields: {},
         errors: {},
+        unit:[],
+        unitlists:[]
 
      }
      handleDateChange11 = (date) => {
@@ -437,6 +439,16 @@ import { DateTimePicker} from '@material-ui/pickers';
         .then((response) => {
             
             this.setState({ locationlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
+        api.get('Unit/GetUnitDropDown')
+        .then((response) => {
+            
+            this.setState({ unitlists: response.data.result.data });
         })
         .catch(error => {
             // error handling
@@ -972,6 +984,10 @@ console.log(data,'datadatadata')
                locationoptions.push({value:item.locCode,label:item.locName});
            }
 
+           const unitoptions = [];
+           for (const item of this.state.unitlists) {           
+               unitoptions.push({value:item.uCode,label:item.uName});
+           }
            const sizeoptions = [];
            for (const item of this.state.sizelists) {           
                sizeoptions.push({value:item.sizecode,label:item.sizeIndex});
@@ -1395,8 +1411,17 @@ console.log(data,'datadatadata')
                             <option>Germany</option> 
                         </select> */}
                     </div>
-                    <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Unit" placeholder="Unit"/>
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Unit"
+                                                        options={unitoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('unit')}
+                                                        placeholder="Unit"
+                                                        values={this.state.unit}
+                                                        />
+                       
                     </div>
                     {/* <div className="form-group">
                         <select className="form-control select2 mt-15">

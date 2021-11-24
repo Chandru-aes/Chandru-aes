@@ -1556,258 +1556,472 @@ console.log(data,'datadatadata')
                   {/* className={isActive ? "s-panel active" : 's-panel'} */}
                       <div className="row new-form">
 
-                      <div className="w-100">
-                        <div className="float-right n-bt-top">
+                      <div className="w-100  p-10 no-f-mb mt-5">
+                <div className="float-right n-bt-top">
+  
 
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">    Generate  <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">Add <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
-                                
+                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label"> Generate <i className="zmdi zmdi-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
+        
+       
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+   </div> 
+   <div className="clearfix"></div>
+   <div className="w-100 float-left">
+                <div className="row">
+                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Buyer</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Buyer division</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Order Category</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
 
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
-                                
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Season</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Year</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Style number</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Order No</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Version</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Activity</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Sub activity</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+
+                    <div className="form-group">
+                         <TextField id="Buyer" fullWidth label="Schedule" placeholder="Schedule"/>
+                                                    </div>
+                 
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+
+                    <div className="form-group">
+                         <TextField id="Buyer" fullWidth label="Revised" placeholder="Revised"/>
+                                                    </div>
+                 
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+
+                    <div className="form-group">
+                         <TextField id="Buyer" fullWidth label="Completed" placeholder="Completed"/>
+                                                    </div>
+                 
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+
+                    <div className="form-group">
+                         <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/>
+                                                    </div>
+                 
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
+                    <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                            <div className="w-100 pt-10">
+                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Skip" />
+                            </div>
+                             
+                        </RadioGroup>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+
+
+                    <div className="form-group">
+                         <TextField id="Buyer" fullWidth label="Rmrk" placeholder="Rmrk"/>
+                                                    </div>
+                 
+                    </div>
+
+
+                    <div className="table-responsive mt-0">
+                     
+ 
+                             <table className="table mt-10 data w-100 float-left la-fix" >
+                                 <thead>
+                                     <tr>
+                                     <th className="">Stage</th>
+                                     <th className="">Fit</th>
+                                     <th className="">Activity</th>
+                                     <th className="">S.Activity</th>
+                                     <th className="">Days</th>
+                                     <th className="">Schedule</th>
+                                     <th className="">Revised</th>
+                                     <th className="">Completed</th>
+                                     <th className="">Delay</th>
+                                     <th className="">Skip</th>
+                                     <th className="">Rmrk</th>
+                                     
+
+
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <tr>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         
+                                     </tr>
+                                     <tr>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         
+                                     </tr>
+                                     <tr>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         
+                                     </tr>
+                                     <tr>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         
+                                     </tr>
+                                 </tbody>
+                                 
+                                 </table>
+                                 <div className="clearfix"></div>
+                                 <div className="w-50 float-right">
+                                 <div className="w-25 float-left">
+                                 <label className="mt-5">Rows per page: </label>
+                    </div>
+                    <div className="w-15 float-left">
+                    <select class="form-control">
+                                                            <option>10</option> 
+                                                            <option>20</option> 
+                                                            <option>30</option> 
+                                                            <option>40</option> 
+                                                        </select>
+        </div>
+        <div className="w-30 float-left pl-30">
+                        <label className="mt-5">1-10 of 50</label>
+                        </div>
+                        <div className="w-30 float-left">
+                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
+                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
+                        </div></div>
+                             </div> 
                             
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                        </div> 
-                        <div className="clearfix"></div>
-                        <div className="row">
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">Buyer</InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">Buyer division</InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">    Order category </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">    Season </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">    Year</InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">        Style number  </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">        Unit  </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Activity" placeholder="Activity"/>
+
+                                         </div>
+                                         </div>
+</div>
+
+{/* <div className="w-100  p-10 no-f-mb mt-5">
+                <div className="float-right n-bt-top">
+  
+
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
+        
+       
+   </div> 
+   <div className="clearfix"></div>
+   <div className="w-100 float-left">
+                <div className="row">
+                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Buyer</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Option" placeholder="Option"/>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Buyer div</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div className="form-group">
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="age-simple">Order Type</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            <MenuItem value={10}>Autumn</MenuItem>
+                            <MenuItem value={20}>Summer</MenuItem>
+                            <MenuItem value={30}>Winter</MenuItem>
+                            </Select>
+                        </FormControl>
                         </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/>
+                    </div>
+                    
+
+
+
+
+
+
+                    </div>
+                    </div>
+                    <div className="table-responsive mt-0">
+                      
+ 
+                             <table className="table mt-10 data w-100 float-left la-fix" >
+                                 <thead>
+                                     <tr>
+                                     <th className="text-center">Actions</th>
+                                     <th className="">Buyer</th>
+                                     <th className="">Buyer Div</th>
+                                     <th className="">Ord type</th>
+                                     <th className="">Style</th>
+                                     <th className="">Act1</th>
+                                     <th className="">Act2</th>
+                                     <th className="">Act3</th>
+
+                                     <th className="">Act4</th>
+
+                                     
+
+
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <tr>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                        
+                                     </tr>
+                                     <tr>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                        
+                                     </tr>
+                                     <tr>
+                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                         <td>Demo </td>
+                                        
+                                     </tr>
+                                 </tbody>
+                                 
+                                 </table>
+                                 <div className="clearfix"></div>
+                                 <div className="w-50 float-right">
+                                 <div className="w-25 float-left">
+                                 <label className="mt-5">Rows per page: </label>
+                    </div>
+                    <div className="w-15 float-left">
+                    <select class="form-control">
+                                                            <option>10</option> 
+                                                            <option>20</option> 
+                                                            <option>30</option> 
+                                                            <option>40</option> 
+                                                        </select>
+        </div>
+        <div className="w-30 float-left pl-30">
+                        <label className="mt-5">1-10 of 50</label>
                         </div>
-                                            </div>
-                                            </div>
-                                            <div className="table-responsive mt-20">
-                                            
-                        
+                        <div className="w-30 float-left">
+                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
+                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
+                        </div></div>
+                             </div> 
 
-                                            <table className="table mt-10 data w-100 float-left text-center">
-                                            <thead className="tbl-hh-br">
-                                <tr>
-                                    <th rowspan="4">Stage</th>
-                                    <th rowspan="4">Activity</th>
-                                    <th colspan="3">Option1</th>
-                                    <th colspan="3">Option2</th>
-                                </tr>
-                                <tr>
-                                    <th colspan="3" className="p-0">
-
-                                        <div className="w-50 float-left border-right p-5">Created Dt</div>
-                                        <div className="w-50 float-left p-5">Modified Dt</div>
-
-                                    </th>
-                                    <th colspan="3" className="p-0">
-
-                                        <div className="w-50 float-left border-right p-5">Created Dt</div>
-                                        <div className="w-50 float-left p-5">Modified Dt</div>
-
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th className="p-0">
-
-                                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                                    <div className="w-100">
-                                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                                    </div>
-                                                    
-                                                </RadioGroup></div>
-                                        <div className="w-50 float-left p-5">Base</div>
-
-                                    </th>
-                                    <th className="p-0">
-
-                                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                                    <div className="w-100">
-                                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                                    </div>
-                                                    
-                                                </RadioGroup></div>
-                                        <div className="w-50 float-left p-5">Confirmed</div>
-
-                                    </th>
-                                    <th></th>
-                                    <th className="p-0">
-
-                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                    <div className="w-100">
-                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                    </div>
-                                    
-                                </RadioGroup></div>
-                        <div className="w-50 float-left p-5">Base</div>
-
-                        </th>
-                        <th className="p-0">
-
-                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                    <div className="w-100">
-                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                    </div>
-                                    
-                                </RadioGroup></div>
-                        <div className="w-50 float-left p-5">Confirmed</div>
-
-                        </th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <th>Days</th>
-                                    <th>Date</th>
-                                    <th>Rmrk</th>
-                                    <th>Days</th>
-                                    <th>Date</th>
-                                    <th>Rmrk</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                </tr>
-                                <tr>
-                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                </tr>
-                                <tr>
-                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        </div>
-                        </div>
+</div> */}
 
                 </div>
                 </div>
