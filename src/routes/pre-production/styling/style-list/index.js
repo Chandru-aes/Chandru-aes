@@ -366,15 +366,31 @@
             errors["location"] = "Cannot be empty";
         }
           //stage
-          if(!fields["stage"]){
-            formIsValid = false;
-            errors["stage"] = "Cannot be empty";
-        }
+        //   if(!fields["stage"]){
+        //     formIsValid = false;
+        //     errors["stage"] = "Cannot be empty";
+        // }
 
       
         this.setState({errors: errors});
         return formIsValid;
       }
+
+      getRequestGridList(){
+       
+        api.get('StyleHeader/GetStyleGridList?Buyer='+this.state.fields.buyer+'&BuyerDivison='+this.state.fields.BuyerdivisionValue+'&location='+this.state.fields.location+'&year='+this.state.fields.year)
+        .then((response) => response.data.data)
+        .then(overalllists => {
+            this.setState({ stylelists: overalllists });
+        });
+        // .then((response) => {  
+                    
+        //     this.setState({ overalllists: response.data.data });
+
+            
+        // })
+    }
+
 
      /**
       * Update User
@@ -555,7 +571,7 @@
                                                         placeholder="Stage"
                                                         values={this.state.stage}
                                                         />
-                                        <span className="error">{this.state.errors["stage"]}</span>
+                                        {/* <span className="error">{this.state.errors["stage"]}</span> */}
                                     </div>
                                 </div>
                             </div>
