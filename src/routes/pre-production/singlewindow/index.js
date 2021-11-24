@@ -211,6 +211,9 @@ import Select1 from "react-dropdown-select";
 
         baseStyleno:'',fabricDesc:'',fabricType:'',
         reference_version:[],
+        reference_versionlists:[],
+        pattern_styleno:[],
+        pattern_stylenolists:[],
         swid:0,
 
      }
@@ -594,6 +597,10 @@ import Select1 from "react-dropdown-select";
                 }
 
                });
+
+               setTimeout(() => {
+                this.getrefversionno();
+            }, 100);
                 
             }
             
@@ -614,11 +621,11 @@ import Select1 from "react-dropdown-select";
         if(name=="styleno"){
             setTimeout(() => {
                 this.stylenochange();
-            }, 200);
+            }, 100);
         }
 
 	};
-
+    
 
     stylenochange(){
         
@@ -633,6 +640,34 @@ import Select1 from "react-dropdown-select";
                 // error handling
             })
         }
+     }
+
+     getrefversionno(){
+        this.setState({reference_versionlists:[],reference_version:[],pattern_stylenolists:[],pattern_styleno:[]});
+        if(this.state.styleno.length>0 && this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+            
+            api.get('SingleWindowRequestheader/GetRefVersion?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&syear='+this.state.year[0].value+'&StyleNumber='+this.state.styleno[0].value)
+            .then((response) => {
+                // let datas = response.data.data[0];
+                this.setState({reference_versionlists:response.data.data});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+
+        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0  && this.state.year.length>0){
+            
+            api.get('SingleWindowRequestheader/GetStyleNumber?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&syear='+this.state.year[0].value)
+            .then((response) => {
+                // let datas = response.data.data[0];
+                this.setState({pattern_stylenolists:response.data.data});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+
      }
 
     save () {
@@ -1489,8 +1524,18 @@ console.log(data,'datadatadata')
            for (const item of this.state.prepseqlists) {           
                prepseqoptions.push({value:item.code,label:item.codeDesc});
            }
-         
 
+           const reference_versionoptions = [];
+           for (const item of this.state.reference_versionlists) {           
+               reference_versionoptions.push({value:item.id,label:item.patVersion});
+           }
+
+           const pattern_stylenooptions = [];
+           for (const item of this.state.pattern_stylenolists) {           
+               pattern_stylenooptions.push({value:item.styleNo,label:item.styleNo});
+           }
+           
+           
            const locationoptions = [];
            for (const item of this.state.locationlists) {           
                locationoptions.push({value:item.locCode,label:item.locName});
@@ -2218,9 +2263,22 @@ console.log(data,'datadatadata')
                                                     </div>
                                                 </div> 
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                                    <div className="form-group">
-                                                    <TextField id="ref_styleno" value={this.state.ref_styleno}  onChange={this.setstatevaluefunction('ref_styleno')} fullWidth label="Style No" placeholder="Style No"/>
+
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Style No"
+                                                        options={pattern_stylenooptions}
+                                                        onChange={this.setstatevaluedropdownfunction('pattern_styleno')}
+                                                        placeholder="Style No"
+                                                        values={this.state.pattern_styleno}
+                                                        />
                                                     </div>
+
+                                                    {/* <div className="form-group">
+                                                    <TextField id="ref_styleno" value={this.state.ref_styleno}  onChange={this.setstatevaluefunction('ref_styleno')} fullWidth label="Style No" placeholder="Style No"/>
+                                                    </div> */}
                                                 </div>
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                     <div className="form-group">
@@ -2480,7 +2538,7 @@ console.log(data,'datadatadata')
                                                         dropdownPosition="auto"
                                                         //   multi
                                                         createNewLabel="Reference Version"
-                                                        options={prepseqoptions}
+                                                        options={reference_versionoptions}
                                                         onChange={this.setstatevaluedropdownfunction('reference_version')}
                                                         placeholder="Reference Version"
                                                         values={this.state.reference_version}
