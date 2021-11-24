@@ -43,6 +43,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
  
  // page title bar
  import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
+
+ import Select1 from "react-dropdown-select";
  
  // intl messages
  import IntlMessages from 'Util/IntlMessages';
@@ -79,97 +81,60 @@ import DialogTitle from '@material-ui/core/DialogTitle';
          openViewUserDialog: false, // view user dialog box
          editUser: null,
          allSelected: false,
-         selectedUsers: 0
+         selectedUsers: 0,
+         BuyerList:[],
+         BuyerDivisionList:[],
+         stylenolist:[],
+         fields: {},
+         errors: {},
+         documentNumber:'',
+         seasonlists:[],
+         yearlists:[],
+         UnitCodeList:[],
+         samstylelist:[],
+         RequestListData:[{'id':1}],
+         tableheaderitems:['SAM','OQ/OQR','No of Line','Operators','Number Of Days','Average productivity/day/line','Efficiency','Target/Hour','Step Up']
      }
  
      componentDidMount() {
-         api.get('userManagement.js')
-             .then((response) => {
-                 this.setState({ users: response.data });
-             })
-             .catch(error => {
-                 // error hanlding
-             })
+
+        api.get('ProductivityRequest/GetDocumentnumber')
+        .then((response) => {                
+            this.setState({ documentNumber: response.data.data });
+        })        
+        .catch(error => {})
+
+        api.get('Buyer/GetBuyerDropDown')
+        .then((response) => {                
+            this.setState({ BuyerList: response.data.result.data });
+        })        
+        .catch(error => {})
+
+        api.get('SeasonMaster/GetSeasonList')
+        .then((response) => {
+            
+            this.setState({ seasonlists: response.data.result.data });
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=year')
+        .then((response) => {
+            
+            this.setState({ yearlists: response.data.result.data });
+        })
+
+        api.get('Unit/GetUnitDropDown')
+        .then((response) => {            
+            this.setState({ UnitCodeList: response.data.result.data });
+        })
+
+        api.get('ProductivityRequest/GetSamStyleNoDropDown')
+        .then((response) => {            
+            this.setState({ samstylelist: response.data.data });
+        })
      }
  
-     /**
-      * On Delete
-      */
-     onDelete(data) {
-         this.refs.deleteConfirmationDialog.open();
-         this.setState({ selectedUser: data });
-     }
- 
-     /**
-      * Delete User Permanently
-      */
-     deleteUserPermanently() {
-         const { selectedUser } = this.state;
-         let users = this.state.users;
-         let indexOfDeleteUser = users.indexOf(selectedUser);
-         users.splice(indexOfDeleteUser, 1);
-         this.refs.deleteConfirmationDialog.close();
-         this.setState({ loading: true });
-         let self = this;
-         setTimeout(() => {
-             self.setState({ loading: false, users, selectedUser: null });
-             NotificationManager.success('User Deleted!');
-         }, 2000);
-     }
- 
-     /**
-      * Open Add New User Modal
-      */
-     opnAddNewUserModal(e) {
-         e.preventDefault();
-         this.setState({ addNewUserModal: true });
-     }
- 
-     /**
-      * On Reload
-      */
-     onReload(e) {
-         e.preventDefault();
-         this.setState({ loading: true });
-         let self = this;
-         setTimeout(() => {
-             self.setState({ loading: false });
-         }, 2000);
-     }
- 
-     /**
-      * On Select User
-      */
-     onSelectUser(user) {
-         user.checked = !user.checked;
-         let selectedUsers = 0;
-         let users = this.state.users.map(userData => {
-             if (userData.checked) {
-                 selectedUsers++;
-             }
-             if (userData.id === user.id) {
-                 if (userData.checked) {
-                     selectedUsers++;
-                 }
-                 return user;
-             } else {
-                 return userData;
-             }
-         });
-         this.setState({ users, selectedUsers });
-     }
- 
-     /**
-      * On Change Add New User Details
-      */
-     onChangeAddNewUserDetails(key, value) {
-         this.setState({
-             addNewUserDetail: {
-                 ...this.state.addNewUserDetail,
-                 [key]: value
-             }
-         });
-     }
+    
+    
      handleClickOpen = () => {
         this.setState({ open: true });
      };
@@ -177,103 +142,215 @@ import DialogTitle from '@material-ui/core/DialogTitle';
      handleClose = () => {
         this.setState({ open: false });
      };
-     /**
-      * Add New User
-      */
-     addNewUser() {
-         const { name, emailAddress } = this.state.addNewUserDetail;
-         if (name !== '' && emailAddress !== '') {
-             let users = this.state.users;
-             let newUser = {
-                 ...this.state.addNewUserDetail,
-                 id: new Date().getTime()
-             }
-             users.push(newUser);
-             this.setState({ addNewUserModal: false, loading: true });
-             let self = this;
-             setTimeout(() => {
-                 self.setState({ loading: false, users });
-                 NotificationManager.success('User Created!');
-             }, 2000);
-         }
-     }
- 
-     /**
-      * View User Detail Hanlder
-      */
-     viewUserDetail(data) {
-         this.setState({ openViewUserDialog: true, selectedUser: data });
-     }
- 
-     /**
-      * On Edit User
-      */
-     onEditUser(user) {
-         this.setState({ addNewUserModal: true, editUser: user });
-     }
- 
-     /**
-      * On Add & Update User Modal Close
-      */
-     onAddUpdateUserModalClose() {
-         this.setState({ addNewUserModal: false, editUser: null })
-     }
- 
-     /**
-      * On Update User Details
-      */
-     onUpdateUserDetails(key, value) {
-         this.setState({
-             editUser: {
-                 ...this.state.editUser,
-                 [key]: value
-             }
-         });
-     }
- 
-     /**
-      * Update User
-      */
-     updateUser() {
-         const { editUser } = this.state;
-         let indexOfUpdateUser = '';
-         let users = this.state.users;
-         for (let i = 0; i < users.length; i++) {
-             const user = users[i];
-             if (user.id === editUser.id) {
-                 indexOfUpdateUser = i
-             }
-         }
-         users[indexOfUpdateUser] = editUser;
-         this.setState({ loading: true, editUser: null, addNewUserModal: false });
-         let self = this;
-         setTimeout(() => {
-             self.setState({ users, loading: false });
-             NotificationManager.success('User Updated!');
-         }, 2000);
-     }
- 
-     //Select All user
-     onSelectAllUser(e) {
-         const { selectedUsers, users } = this.state;
-         let selectAll = selectedUsers < users.length;
-         if (selectAll) {
-             let selectAllUsers = users.map(user => {
-                 user.checked = true
-                 return user
-             });
-             this.setState({ users: selectAllUsers, selectedUsers: selectAllUsers.length })
-         } else {
-             let unselectedUsers = users.map(user => {
-                 user.checked = false
-                 return user;
-             });
-             this.setState({ selectedUsers: 0, users: unselectedUsers });
-         }
-     }
+     
+     getBuyerDivision1(val,field,e){
+        let fields = this.state.fields;
+        fields['buyername'] = val.BuyerValue[0].value;        
+        this.setState({fields});
+
+        this.setState({ BuyerValue: val.BuyerValue });
+        api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
+        .then((response) => {                
+            this.setState({ BuyerDivisionList: response.data.result.data });
+        })        
+        .catch(error => {})           
+    }
+    checkRequestValidation(e,type){
+          e.preventDefault();
+          if(this.handleValidation()){
+              this.createRequest();
+          }    
+    }
+    setstatevaluedropdownfunction = name => event => {
+        let fields = this.state.fields;
+        fields[name] = event[0].value;        
+        this.setState({fields});
+        
+		this.setState({ [name]: event });
+        
+       this.getStyleList();
+	};
+
+    createRequest(){
+        const saveObject = {
+            "pdmValueAddStatusModel":{
+            "id": 0,
+            "prReqNo": this.state.documentNumber,
+            "entityId": "st",
+            "buyCode": this.state.BuyerValue[0].value,
+            "buyDivcode": this.state.BuyerdivisionValue[0].value,
+            "seasonCode": this.state.season[0].value,
+            "seasonYear": this.state.year[0].value,
+            "unitcode": this.state.units[0].value,
+            "noOfFits": this.state.fits,
+            "noofColors": this.state.Colors,
+            "sam": 0,
+            "fabricDesc": "string",
+            "orderQty": 0,
+            "numberOflines": this.state.nooflines,
+            "noOfOperators": this.state.noofOperator,
+            "workingHrs": this.state.workinghours,//it should be dropdown value
+            "difficultyLevel": "string",
+            "acceptFlag": "Y",
+            "keyRequest": "Y",
+            "cancel": "N",
+            "createdBy": "Admin",
+            "hostName": "Localhost"
+        }
+    }
+        api.post('ProductivityRequest/SaveProdRequest',saveObject) .then((response) => {            
+            
+           if(response.data.status==true){
+                 NotificationManager.success('Request Created Sucessfully');
+                // api.get('ForecastEntity/GetForecastHeaderList')
+                // .then((response) => {         
+                //     this.setState({ forecastinglists: response.data.data });
+                // })
+           }               
+            e.cancel=false;
+        })
+        .catch(error => {
+            // error handling
+        })
+    }
+    getStyleList(){
+        if(this.state.BuyerValue && this.state.BuyerdivisionValue && this.state.year){
+            api.get('ProductivityRequest/GetStyleNoDropDown?BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+            .then((response) => {                
+                this.setState({ stylenolist: response.data.data });
+            })        
+            .catch(error => {})  
+        }
+    }
+    handleChangeTextField = name => event => {
+        
+        this.setState({ [name]: event.target.value });
+
+        let fields = this.state.fields;
+        fields[name] = event.target.value;        
+        this.setState({fields});
+        
+    };
+    handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+       
+        if(!fields["buyername"]){
+          formIsValid = false;
+          errors["buyername"] = "Cannot be empty";
+        }
+        
+        if(!fields["BuyerdivisionValue"]){
+            formIsValid = false;
+            errors["BuyerdivisionValue"] = "Cannot be empty";
+        }
+       
+        if(!fields["season"]){
+            formIsValid = false;
+            errors["season"] = "Cannot be empty";
+        }
+        if(!fields["year"]){
+            formIsValid = false;
+            errors["year"] = "Cannot be empty";
+        }
+        if(!fields["styleno"]){
+            formIsValid = false;
+            errors["styleno"] = "Cannot be empty";
+        }
+        if(!fields["units"]){
+            formIsValid = false;
+            errors["units"] = "Cannot be empty";
+        }
+        if(!fields["noofOperator"]){
+            formIsValid = false;
+            errors["noofOperator"] = "Cannot be empty";
+        }
+        if(!fields["nooflines"]){
+            formIsValid = false;
+            errors["nooflines"] = "Cannot be empty";
+        }
+        if(!fields["workinghours"]){
+            formIsValid = false;
+            errors["workinghours"] = "Cannot be empty";
+        }
+        if(!fields["Colors"]){
+            formIsValid = false;
+            errors["Colors"] = "Cannot be empty";
+        }
+        if(!fields["fits"]){
+            formIsValid = false;
+            errors["fits"] = "Cannot be empty";
+        }
+        console.log(errors);
+        console.log(formIsValid);
+        this.setState({errors: errors});
+        return formIsValid;
+      }
  
      render() {
-         const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
+         const { users, loading, selectedUser, editUser, allSelected, selectedUsers,documentNumber,tableheaderitems,RequestListData } = this.state;
+         
+         const BuyerOptions =[];
+         for (const item of this.state.BuyerList) {           
+             BuyerOptions.push({value:item.buyerCode,label:item.buyerName});
+         }
+
+         const BuyerDivisionOptions =[];
+         for (const item of this.state.BuyerDivisionList) {           
+             BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
+         }
+
+         const seasonoptions = [];
+        for (const item of this.state.seasonlists) {           
+            seasonoptions.push({value:item.seasonCode,label:item.seasonName});
+        }
+
+        const yearoptions = [];
+        for (const item of this.state.yearlists) {           
+            yearoptions.push({value:item.code,label:item.codeDesc});
+        }
+        const styleNooptions = [];
+        for (const item of this.state.stylenolist) {           
+            styleNooptions.push({value:item.id,label:item.refStyleNo});
+        }
+
+
+        const UnitItemOptions =[];
+        for (const item of this.state.UnitCodeList) {           
+            UnitItemOptions.push({value:item.uCode,label:item.uName});
+        }
+        const SamStyleOptions =[];
+        for (const item of this.state.samstylelist) {           
+            SamStyleOptions.push({value:item.id,label:item.refStyleNo});
+        }
+        
+        let buyerrightlistshtml = null;
+
+        if(this.state.tableheaderitems.length>0){
+            buyerrightlistshtml= this.state.tableheaderitems.map((n,index) => {                                    
+                return (
+                    <tr>
+                    <th className="w-20">{n}</th>
+                    {
+                        this.state.RequestListData.map((nd,index) => {     
+                            return (                              
+                            <span>
+                                <td>{nd.id}</td>
+                                {/* <td>35.3</td> */}
+                            </span>
+                            )
+                        }) 
+                     } 
+                    </tr>
+                );
+            });
+        console.log(this.state.RequestListData)
+    }else{
+            buyerrightlistshtml = <tr><td colSpan="9" className="no-records-data"><span>No records found</span></td></tr> ;
+        }
+        
+        
          return (
              <div className="user-management">
                  <Helmet>
@@ -290,119 +367,131 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                              <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="Docno" fullWidth label="Doc No" placeholder="Doc No"/>
+                                        <TextField id="Docno" fullWidth label="Doc No" placeholder="Doc No" value={this.state.documentNumber} disabled/>
                                     </div>                                   
                                  </div>
                             </div>  
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group  mt-15">
+                                    <div className="form-group select_label_name"> 
+                                        <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                    </div>                                   
+                                 </div>
+                            </div>  
+                            
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Buyer</option> 
-                                            <option>Levis</option> 
-                                            <option>Allen</option> 
-                                            <option>Solly</option> 
-                                        </select> 
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <Select1  dropdownPosition="auto"  createNewLabel="Buyer"
+                                            options={BuyerOptions} ref="buyername"
+                                            onChange={values => this.getBuyerDivision1({ BuyerValue:values },this,"buyername")}
+                                            placeholder="Buyer"                                              
+                                            values={this.state.BuyerValue}
+                                        />  
+                                         <span className="error">{this.state.errors["buyername"]}</span>                                 
                                     </div>
                                 </div>
                             </div> 
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
-                                <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Buyer Division</option> 
-                                            <option>Levis</option> 
-                                            <option>Allen</option> 
-                                            <option>Solly</option> 
-                                        </select> 
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
+                                            options={BuyerDivisionOptions} ref="buyerdivision"
+                                            placeholder="Buyer Division"
+                                            onChange={this.setstatevaluedropdownfunction('BuyerdivisionValue')}
+                                            //onChange={this.handleChangeValidate.bind(this, "buyerdivision",this.state.BuyerdivisionValue)} 
+                                            //onChange={values => this.setState({ BuyerdivisionValue:values })}
+                                            values={this.state.BuyerdivisionValue}
+                                        /> 
+                                        <span className="error">{this.state.errors["BuyerdivisionValue"]}</span>   
                                     </div>
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Season</option> 
-                                            <option>Autumn</option> 
-                                            <option>Summer</option> 
-                                            <option>Winter</option> 
-                                        </select> 
+                                        <Select1 dropdownPosition="auto" 
+                                        createNewLabel="Season"  
+                                        options={seasonoptions}
+                                       // onChange={values => this.setState({ season:values })} 
+                                        onChange={this.setstatevaluedropdownfunction('season')}
+                                        placeholder="Select Season"
+                                        values={this.state.season} />
+                                        <span className="error">{this.state.errors["season"]}</span> 
                                     </div>  
                                 </div>
                             </div>
                             <div className="col-sm-6 col-md-6 col-xl-3">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Year</option> 
-                                            <option>2021</option> 
-                                            <option>2020</option> 
-                                            <option>2019</option> 
-                                        </select> 
+                                        <Select1 dropdownPosition="auto" createNewLabel="Year"  options={yearoptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('year')}
+                                            placeholder="Year"
+                                            values={this.state.year} />
+                                            <span className="error">{this.state.errors["year"]}</span>
                                     </div>  
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Style</option> 
-                                            <option>Autumn</option> 
-                                            <option>Summer</option> 
-                                            <option>Winter</option> 
-                                        </select> 
+                                        <Select1 dropdownPosition="auto" createNewLabel="Style No"  options={styleNooptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('styleno')}
+                                            placeholder="Style No"
+                                            values={this.state.styleno} />
+                                            <span className="error">{this.state.errors["styleno"]}</span>
                                     </div>  
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="Units" fullWidth label="Units" placeholder="Units"/>
+                                        <Select1 dropdownPosition="auto" createNewLabel="Units"  options={UnitItemOptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('units')}
+                                            placeholder="Units"
+                                            values={this.state.units} />
+                                            <span className="error">{this.state.errors["units"]}</span>
                                     </div>                                   
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Fits</option> 
-                                            <option>Annual Buyer</option> 
-                                            <option>Monthly Buyer</option> 
-                                            <option>Weely</option> 
-                                        </select> 
+                                    <TextField id="Docno" fullWidth label="Fits" placeholder="Fits" onChange={this.handleChangeTextField('fits')} value={this.state.fits}/>
+                                    <span className="error">{this.state.errors["fits"]}</span>
                                     </div>
                                 </div>
                             </div>   
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
-                                        <select className="form-control select2">
-                                            <option>Colors</option> 
-                                            <option>Annual Buyer</option> 
-                                            <option>Monthly Buyer</option> 
-                                            <option>Weely</option> 
-                                        </select> 
+                                        <TextField id="Colors" fullWidth label="Colors" placeholder="Colors" onChange={this.handleChangeTextField('Colors')} value={this.state.Colors}/>
+                                        <span className="error">{this.state.errors["Colors"]}</span>
                                     </div>
                                 </div>
                             </div>  
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
+                                <div className="form-group mt-15">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="workingHours" fullWidth label="Working Hours" placeholder="Working Hours"/>
+                                        <TextField id="workingHours" fullWidth label="Working Hours" placeholder="Working Hours" onChange={this.handleChangeTextField('workinghours')} value={this.state.workinghours}/>
                                     </div>                                   
                                 </div>
                             </div>  
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div className="form-group">
+                                <div className="form-group mt-15">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="Fabric" fullWidth label="Fabric" placeholder="Fabric"/>
+                                        <TextField id="Fabric" fullWidth label="Fabric" placeholder="Fabric" disabled/>
                                     </div>                                   
                                 </div>
                             </div>    
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 mt-15">
+                            <div className="col-lg-5 col-md-3 col-sm-6 col-xs-12 mt-15">
                                 <div className="form-group">
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Generate <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>  
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">View OB</span><span className="MuiTouchRipple-root"></span></button> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.checkRequestValidation(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button> 
                                 </div>   
                             </div>           
                         </div> 
@@ -416,53 +505,18 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                         <div className="col-lg-1 col-md-4 col-sm-6 col-xs-12">
                                             <div className="form-group mt-15">
                                                 <Button variant="contained" className="btn-secondary text-white btn-block" onClick={this.handleClickOpen}>SAM</Button>
-                                                <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                                                    <DialogTitle id="form-dialog-title">SAM</DialogTitle>
-                                                    <DialogContent>                                   
-                                                        <div className="col border">                       
-                                                            <div className="row no-f-mb">
-                                                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                    <div className="form-group">
-                                                                        <select className="form-control select2 mt-15">
-                                                                            <option>Style Number</option> 
-                                                                            <option>Levis</option> 
-                                                                            <option>Allen</option> 
-                                                                            <option>Solly</option> 
-                                                                        </select> 
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                    <div className="form-group">
-                                                                        <select className="form-control select2 mt-15">
-                                                                            <option>SAM</option> 
-                                                                            <option>Levis</option> 
-                                                                            <option>Allen</option> 
-                                                                            <option>Solly</option> 
-                                                                        </select>
-                                                                    </div>
-                                                                </div>                                
-                                                            </div>
-                                                        </div>
-                                                    </DialogContent>
-                                                    <DialogActions>
-                                                        <Button variant="contained" onClick={this.handleClose} color="primary" className="text-white">
-                                                            Cancel
-                                                        </Button>
-                                                        <Button variant="contained" onClick={this.handleClose} className="btn-info text-white">
-                                                            Ok
-                                                        </Button>
-                                                    </DialogActions>
-                                                </Dialog>
+                                                
+                                             
                                             </div>
                                         </div> 
                                         <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <div className="form-group select_label_name"> 
-                                                    <TextField id="Orderqty" fullWidth label="Order qty" placeholder="Order qty"/>
+                                                    <TextField id="Orderqty" fullWidth label="Order qty" placeholder="Order qty" disabled/>
                                                 </div>                                   
                                             </div>
                                         </div>
-                                        <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                        {/* <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <div className="form-group select_label_name mt-15"> 
                                                     <select className="form-control select2">
@@ -473,18 +527,20 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                                     </select> 
                                                 </div>
                                             </div>
-                                        </div>  
+                                        </div>   */}
                                         <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <div className="form-group select_label_name"> 
-                                                    <TextField id="Nooflines" fullWidth label="No of Lines" placeholder="No of Lines"/>
+                                                    <TextField id="Nooflines" fullWidth label="No of Lines" placeholder="No of Lines" onChange={this.handleChangeTextField('nooflines')} value={this.state.nooflines}/>
+                                                    <span className="error">{this.state.errors["nooflines"]}</span>
                                                 </div>                                   
                                             </div>
                                         </div>
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <div className="form-group select_label_name"> 
-                                                    <TextField id="OperatorLine" fullWidth label="Operator/Line" placeholder="Operator/Line"/>
+                                                    <TextField id="OperatorLine" fullWidth label="Operator/Line" placeholder="Operator/Line" onChange={this.handleChangeTextField('noofOperator')} value={this.state.noofOperator}/>
+                                                    <span className="error">{this.state.errors["noofOperator"]}</span>
                                                 </div>                                   
                                             </div>
                                         </div>
@@ -495,72 +551,50 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                         </div>
                                         <table className="table">
                                             <tbody>
-                                                <tr>
-                                                <th className="w-20">SAM</th>
-                                                    <td>25.6</td>
-                                                    <td>35.3</td>
-                                                </tr>
-                                                <tr>
-                                                <th className="w-20">OQ/OQR</th>
-                                                    <td>36972</td>
-                                                    <td>45855</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">No of Lines</th>
-                                                    <td>1</td>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Operators</th>
-                                                    <td>48</td>
-                                                    <td>49</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">No of Days</th>
-                                                    <td>1</td>
-                                                    <td>3</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Avg Prdty/Day/Line</th>
-                                                    <td>1</td>
-                                                    <td>3</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Efficiency</th>
-                                                    <td>80</td>
-                                                    <td>80</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Target/HR</th>
-                                                    <td>80</td>
-                                                    <td>80</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Step Up D1</th>
-                                                    <td>80</td>
-                                                    <td>80</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Step Up D2</th>
-                                                    <td>80</td>
-                                                    <td>80</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Step Up D3</th>
-                                                    <td>80</td>
-                                                    <td>80</td>
-                                                </tr>
-                                                <tr>
-                                                    <th className="w-20">Step Up D4</th>
-                                                    <td>80</td>
-                                                    <td>80</td>
-                                                </tr>
+                                            {buyerrightlistshtml}
                                             </tbody>
                                         </table> 
                                     </div>
                                 </AccordionDetails>
                             </Accordion>
                         </div>
+                        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">SAM</DialogTitle>
+                            <DialogContent>                                   
+                                <div className="col border">                       
+                                    <div className="row no-f-mb">
+                                        <div className="col-lg-12 col-md-6 col-sm-6 col-xs-12">
+                                            <div className="form-group mt-15">
+                                            <Select1 dropdownPosition="auto" createNewLabel="Units"  options={SamStyleOptions}
+                                                // onChange={values => this.setState({ year:values })} 
+                                                onChange={this.setstatevaluedropdownfunction('samstyleno')}
+                                                placeholder="Style No"
+                                                values={this.state.samstyleno} />
+                                                <span className="error">{this.state.errors["samstyleno"]}</span>                                                                        
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-12 col-md-6 col-sm-6 col-xs-12">
+                                            <div className="form-group">
+                                                <select className="form-control select2 mt-15">
+                                                    <option>SAM</option> 
+                                                    <option>Levis</option> 
+                                                    <option>Allen</option> 
+                                                    <option>Solly</option> 
+                                                </select>
+                                            </div>
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button variant="contained" onClick={this.handleClose} color="primary" className="text-white">
+                                    Cancel
+                                </Button>
+                                <Button variant="contained" onClick={this.handleClose} className="btn-info text-white">
+                                    Ok
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         <div className="formelements-wrapper main-layout-class productivity-grid pd-bottom-10">
                             <Accordion key={2} className="mb-30 panel">
                                 <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>} className="m-0 panel-heading">

@@ -100,9 +100,12 @@
             checkedByItems:[],
             markercheckedByItems:[],
             patternNatureofJobItems:[],
+            samoptionItems:[],
             patternType:[],
             departmentType:[],
             patternStatusGridList:[],
+            valueAddGridList:[],
+            valueAddtypeGridList:[],
             doneByList:[],
             checkedbyList:[],
             natureofJob:[],
@@ -111,6 +114,8 @@
             PatternTempRowData:[],
             sampleListData:[],
             markerListData:[],
+            valueaddListData:[],
+            SamListData:[],
             reason:'',
             storageArea:''
            
@@ -162,6 +167,9 @@
         .then((response) => {            
             this.setState({ employeeList: response.data.result.data });
         })
+
+     
+        
     }
     setStateValueDropdown = name => event => {      
 		this.setState({ [name]: event });
@@ -173,6 +181,10 @@
 		this.setState({ [name]: event });
         this.setstatevaluedropdownfunction(event[0].label);
 	};
+    handleChangeradio = (event) => {
+        this.setState({ userlevel:  event.currentTarget.value,username:[],touser:[],buyerrightlists:[]});        
+       
+     }
     setstatevaluedropdownfunction(val){
        
       
@@ -212,6 +224,23 @@
         .catch(error => {}) 
 
 
+        api.get('RequestStatus/GetValueAddDropdown?RequestNo='+val)
+        .then((response) => { 
+            this.setState({ valueAddGridList: response.data.data });            
+        })
+        .catch(error => {}) 
+
+        api.get('RequestStatus/GetValueAddTypeDropdown?RequestNo='+val)
+        .then((response) => { 
+            this.setState({ valueAddtypeGridList: response.data.data });            
+        })
+        .catch(error => {}) 
+
+        api.get('RequestStatus/GetSamOptiontypeDropdown?RequestNo='+val)
+        .then((response) => {            
+            this.setState({ samoptionItems: response.data.data });
+        })
+        
 
     }
 
@@ -307,42 +336,68 @@
         } 
         this.setState({sampleListData:sampleListData})
      }
+     deleteSamItem(item){
+        const {SamListData} = this.state; 
+            
+        if (SamListData.indexOf(item) !== -1) {
+            SamListData.splice(SamListData.indexOf(item), 1);
+        } 
+        this.setState({SamListData:SamListData})
+     }
+     deleteMarkerItem(item){
+        const {markerListData} = this.state; 
+            
+        if (markerListData.indexOf(item) !== -1) {
+            markerListData.splice(markerListData.indexOf(item), 1);
+        } 
+        this.setState({markerListData:markerListData})
+     }
+     deleteValueAddItem(item){
+        const {valueaddListData} = this.state; 
+            
+        if (valueaddListData.indexOf(item) !== -1) {
+            valueaddListData.splice(valueaddListData.indexOf(item), 1);
+        } 
+        this.setState({valueaddListData:valueaddListData})
+     }
      addSampleGrid(){
-        const {sampleListData} = this.state;
-        let patternItems = {
-            "id": 0,
-            "swH_ID": 0,
-            "patVersion": this.state.samplepatternversion[0].label,
-            "patVersionLabel": this.state.samplepatternversion[0].label,
-            "pcs": this.state.noofpieces,
-            "department": this.state.department[0].value,
-            "departmentLabel": this.state.department[0].label,
-            "departmentSeq": 0,
-            "departmentFlag": "string",
-            "line": this.state.lineno,
-            "inDate": "2021-11-19T05:47:34.835Z",
-            "outdate": "2021-11-19T05:47:34.835Z",
-            "remarks": this.state.remarks,
-            "qcFlag": "string",
-            "qcRemarks": "string",
-            "createdBy": "Admin",
-            "hostName": "LOCALHOST"
-        }
-        /**Check whether object is already exists */
-        let IsMatch = false;
-        sampleListData.map((item, index) => {
-           IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
-           if(IsMatch){
-               return;
-           }           
-       });         
-       if(!IsMatch){
-            sampleListData.push(patternItems);
-       }else{
-           NotificationManager.error('Added Items is already exists in List');
-       }      
-       
-        this.setState({sampleListData:sampleListData})
+
+        
+            const {sampleListData} = this.state;
+            let patternItems = {
+                "id": 0,
+                "swH_ID": 0,
+                "patVersion": this.state.samplepatternversion[0].label,
+                "patVersionLabel": this.state.samplepatternversion[0].label,
+                "pcs": this.state.noofpieces,
+                "department": this.state.department[0].value,
+                "departmentLabel": this.state.department[0].label,
+                "departmentSeq": 0,
+                "departmentFlag": "string",
+                "line": this.state.lineno,
+                "inDate": "2021-11-19T05:47:34.835Z",
+                "outdate": "2021-11-19T05:47:34.835Z",
+                "remarks": this.state.remarks,
+                "qcFlag": "string",
+                "qcRemarks": "string",
+                "createdBy": "Admin",
+                "hostName": "LOCALHOST"
+            }
+            /**Check whether object is already exists */
+            let IsMatch = false;
+            sampleListData.map((item, index) => {
+               IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+               if(IsMatch){
+                   return;
+               }           
+           });         
+           if(!IsMatch){
+                sampleListData.push(patternItems);
+           }else{
+               NotificationManager.error('Added Items is already exists in List');
+           }      
+           
+            this.setState({sampleListData:sampleListData})
      }
 
     savePattern(e){
@@ -388,8 +443,6 @@
             formIsValid = false;
             errors["requestno"] = "Cannot be empty";
         }
-        
-
         this.setState({errors: errors});
         return formIsValid;
     }
@@ -409,16 +462,233 @@
         
            
      }
-     saveSample(){
-        const {sampleListData} = this.state;
-        const saveObject = {
-            "pdmSampleStatusModel":sampleListData
-        }
-        api.post('RequestStatus/SaveSampleStatus',saveObject) .then((response) => {
-            NotificationManager.success('Sample Item created Sucessfully');
-        });
-           
+     saveMarkerItem(e){
+        e.preventDefault();
+        if(this.markerValidation()){
+            this.saveMarkerData();
+        }  
      }
+     saveMarkerData(){
+        if(this.state.markerListData.length>0){
+            const {markerListData} = this.state;
+            const saveObject = {
+                "pdmMarkerStatusModel":markerListData
+            }
+            api.post('RequestStatus/SaveMarkerStatus',saveObject) .then((response) => {
+                NotificationManager.success('Marker Item created Sucessfully');
+            });
+        }
+        else{
+            NotificationManager.error('Marker List Items should not be empty');
+        }
+     }
+     markerValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+        if(!fields["markerpatternversion"]){
+            formIsValid = false;
+            errors["markerpatternversion"] = "Cannot be empty";
+        }
+        if(!fields["requestno"]){
+            formIsValid = false;
+            errors["requestno"] = "Cannot be empty";
+        }
+        if(!fields["markerStoragearea"]){
+            formIsValid = false;
+            errors["markerStoragearea"] = "Cannot be empty";
+        }
+        if(!fields["MarkerdoneByitems"]){
+            formIsValid = false;
+            errors["MarkerdoneByitems"] = "Cannot be empty";
+        }
+        if(!fields["markercheckedByItems"]){
+            formIsValid = false;
+            errors["markercheckedByItems"] = "Cannot be empty";
+        }
+        if(!fields["markerDate"]){
+            formIsValid = false;
+            errors["markerDate"] = "Cannot be empty";
+        }
+        if(!fields["markertime"]){
+            formIsValid = false;
+            errors["markertime"] = "Cannot be empty";
+        }
+        
+        this.setState({errors: errors});
+        return formIsValid;
+     }
+     saveSample(e){
+        e.preventDefault();
+        if(this.sampleValidation()){
+            this.saveSampleItems();
+        }  
+     }
+     sampleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+        if(!fields["requestno"]){
+            formIsValid = false;
+            errors["requestno"] = "Cannot be empty";
+        }
+        if(!fields["samplepatternversion"]){
+            formIsValid = false;
+            errors["samplepatternversion"] = "Cannot be empty";
+        }
+        if(!fields["noofpieces"]){
+            formIsValid = false;
+            errors["noofpieces"] = "Cannot be empty";
+        }
+        if(!fields["lineno"]){
+            formIsValid = false;
+            errors["lineno"] = "Cannot be empty";
+        }
+        if(!fields["department"]){
+            formIsValid = false;
+            errors["department"] = "Cannot be empty";
+        }
+        
+
+        this.setState({errors: errors});
+        return formIsValid;
+     }
+     saveSampleItems(){
+        if(this.state.sampleListData.length>0){
+            const {sampleListData} = this.state;
+            const saveObject = {
+                "pdmSampleStatusModel":sampleListData
+            }
+            api.post('RequestStatus/SaveSampleStatus',saveObject) .then((response) => {
+                NotificationManager.success('Sample Item created Sucessfully');
+            });
+        }
+        else{
+            NotificationManager.error('Sample List Items should not be empty');
+        }
+    } 
+    saveValueAddItem(e){
+        e.preventDefault();
+        if(this.valueAddValidation()){
+            this.saveValueAddData();
+        }  
+    }
+    saveSam(e){
+        e.preventDefault();
+        if(this.SAMValidation()){
+            this.saveSAMItem();
+        }  
+    }
+    SAMValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+
+        if(!fields["requestno"]){
+            formIsValid = false;
+            errors["requestno"] = "Cannot be empty";
+        }
+
+        if(!fields["optiontype"]){
+            formIsValid = false;
+            errors["optiontype"] = "Cannot be empty";
+        }
+        if(!fields["optionI"]){
+            formIsValid = false;
+            errors["optionI"] = "Cannot be empty";
+        }
+        if(!fields["sewsam"]){
+            formIsValid = false;
+            errors["sewsam"] = "Cannot be empty";
+        }
+        if(!fields["kbsam"]){
+            formIsValid = false;
+            errors["kbsam"] = "Cannot be empty";
+        }
+        if(!fields["manualsam"]){
+            formIsValid = false;
+            errors["manualsam"] = "Cannot be empty";
+        }
+        if(!fields["difficultylevel"]){
+            formIsValid = false;
+            errors["difficultylevel"] = "Cannot be empty";
+        }
+        
+        
+        
+        this.setState({errors: errors});
+        return formIsValid;
+    }
+    saveSAMItem(){
+        if(this.state.SamListData.length>0){
+            const {SamListData} = this.state;
+            const saveObject = {
+                "pdmSamStatusModel":SamListData
+            }
+            api.post('RequestStatus/SaveSamStatus',saveObject) .then((response) => {
+                NotificationManager.success('SAM Item created Sucessfully');
+            });
+        }
+        else{
+            NotificationManager.error('SAM  List Items should not be empty');
+        }
+    }
+    saveValueAddData(){
+        if(this.state.valueaddListData.length>0){
+            const {valueaddListData} = this.state;
+            const saveObject = {
+                "pdmValueAddStatusModel":valueaddListData
+            }
+            api.post('RequestStatus/SaveValueAddStatus',saveObject) .then((response) => {
+                NotificationManager.success('value Add Item created Sucessfully');
+            });
+        }
+        else{
+            NotificationManager.error('value Add List Items should not be empty');
+        }
+    } 
+    valueAddValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+
+        if(!fields["requestno"]){
+            formIsValid = false;
+            errors["requestno"] = "Cannot be empty";
+        }
+        
+        if(!fields["valueadd"]){
+            formIsValid = false;
+            errors["valueadd"] = "Cannot be empty";
+        }
+
+        if(!fields["valueaddtype"]){
+            formIsValid = false;
+            errors["valueaddtype"] = "Cannot be empty";
+        }
+
+        if(!fields["Valueaddnoofpieces"]){
+            formIsValid = false;
+            errors["Valueaddnoofpieces"] = "Cannot be empty";
+        }
+
+        if(!fields["washFormula"]){
+            formIsValid = false;
+            errors["washFormula"] = "Cannot be empty";
+        }
+        if(!fields["valueAddDescription"]){
+            formIsValid = false;
+            errors["valueAddDescription"] = "Cannot be empty";
+        }
+        if(!fields["valueAddRemarks"]){
+            formIsValid = false;
+            errors["valueAddRemarks"] = "Cannot be empty";
+        }
+        
+        
+        this.setState({errors: errors});
+        return formIsValid;
+    }
      addMarkerGrid(){
         const {markerListData} = this.state;
         let patternItems = {
@@ -428,16 +698,17 @@
             "preparedby": this.state.MarkerdoneByitems[0].label,
             "checkedBy":  this.state.markercheckedByItems[0].label,
             "remarks": this.state.remarks,
-            "outDate": this.state.markerDate,
+            "outDate": "2021-11-22T11:37:21.078Z",
             "createdBy": "Admin",
             "hostName": "LocalHost",
             "fabricdetails":"",
             "width":"",
             "size":"",
             "Repeat":"",
-            "GAR qTy":"",
+            "GARqTy":"",
             "Marker":"",
             "Efficiency":"",
+            "patternversion":this.state.markerpatternversion[0].label
         }
         /**Check whether object is already exists */
         let IsMatch = false;
@@ -455,7 +726,68 @@
        
         this.setState({markerListData:markerListData})
      }
+     addValueAddGrid(){
+        const {valueaddListData} = this.state;
+        let patternItems = {
+            "id": 0,
+            "swH_ID": 0,
+            "pcs": 0,
+            "washFormula": this.state.washFormula[0].label,
+            "description": this.state.valueAddDescription,
+            "remarks": this.state.valueAddRemarks,
+            "outDate": "2021-11-22T15:30:32.034Z",
+            "createdBy": "Admin",           
+            "hostName": "Localhost",
+            "Department":"",
+            "noofpieces":this.state.Valueaddnoofpieces
+        }
+        /**Check whether object is already exists */
+        let IsMatch = false;
+        valueaddListData.map((item, index) => {
+           IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+           if(IsMatch){
+               return;
+           }           
+       });         
+       if(!IsMatch){
+        valueaddListData.push(patternItems);
+       }else{
+           NotificationManager.error('Added Items is already exists in List');
+       }      
+       
+        this.setState({valueaddListData:valueaddListData})
+     }
      
+     addSAMAddGrid(){
+        const {SamListData} = this.state;
+        let patternItems = {
+            "id": 0,
+            "swH_ID": 0,
+            "optionType": this.state.optiontype[0].label,
+            "optionI": this.state.optionI[0].label,
+            "sewSam": this.state.sewsam,
+            "kbSam": this.state.kbsam,
+            "manualSam": this.state.manualsam,
+            "difficultyLevel": this.state.difficultylevel,            
+            "createdBy": "Admin",
+            "hostName": "LocalHost"
+        }
+        /**Check whether object is already exists */
+        let IsMatch = false;
+        SamListData.map((item, index) => {
+           IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+           if(IsMatch){
+               return;
+           }           
+       });         
+       if(!IsMatch){
+        SamListData.push(patternItems);
+       }else{
+           NotificationManager.error('Added Items is already exists in List');
+       }      
+       
+        this.setState({SamListData:SamListData})
+     }
      render() {
          const { employeePayroll } = this.state;
          const { match } = this.props;
@@ -479,10 +811,32 @@
             patternVersionOptions.push({value:item.id,label:item.patVersion});
         }
 
+        const valueAddOptions =[];
+        for (const item of this.state.valueAddGridList) {           
+            valueAddOptions.push({value:item.valueAdd,label:item.valueAdd});
+        }
+        
+        const valueAddtypeOptions = [];
+        for (const item of this.state.valueAddtypeGridList) {           
+            valueAddtypeOptions.push({value:item.valueAddType,label:item.valueAddType});
+        }
+       
+        const samoptiontypes = [];
+        for (const item of this.state.samoptionItems) {           
+            samoptiontypes.push({value:item.id,label:item.optionType});
+        }
+        
         const natureofJobOptions =[];
         for (const item of this.state.patternNatureofJobItems) {           
             natureofJobOptions.push({value:item.code,label:item.typeDesc});
         }
+
+
+        const optionsType =[];
+        for (const item of this.state.patternNatureofJobItems) {           
+            optionsType.push({value:item.code,label:item.typeDesc});
+        }
+
 
         const patternTypeOptions = [];
         for (const item of this.state.patternType) {           
@@ -567,22 +921,25 @@
                                                     />
                                                 </div> 
                                             </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                                                <RadioGroup row aria-label="anchorReference" name="anchorReference">                           
-                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Accept" />
-                                                </RadioGroup>
+                                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 rb-mb pt-10">
+                                            <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                                            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                {/* <RadioGroup row aria-label="anchorReference" name="anchorReference">  */}
+                                                    <FormControlLabel color="primary" value="singleuser" control={<Radio onChange={this.handleChangeradio} />} label="Accept" />                                                  
+                                                {/* </RadioGroup> */}
                                             </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                                                <RadioGroup row aria-label="anchorReference" name="anchorReference">                           
-                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Hold" />
-                                                </RadioGroup>
+                                            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                {/* <RadioGroup row aria-label="anchorReference" name="anchorReference">                            */}
+                                                    <FormControlLabel color="primary" value="copyuser" control={<Radio  onChange={this.handleChangeradio} />} label="Hold" />
+                                                {/* </RadioGroup> */}
                                             </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-                                                <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                                    <FormControlLabel color="primary" value="sample" control={<Radio />} label="Cancel" />
-                                                </RadioGroup>
+                                            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 rb-mb pt-10">
+                                                {/* <RadioGroup row aria-label="anchorReference" name="anchorReference"> */}
+                                                    <FormControlLabel color="primary" value="Cancel" control={<Radio  onChange={this.handleChangeradio} />} label="Cancel" />
+                                                {/* </RadioGroup> */}
                                             </div>
-
+                                            </RadioGroup>
+                                            </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div className="form-group">
                                                     <TextField id="Buyer" fullWidth label="Reason" placeholder="Reason" onChange={this.handleChangeTextField('reason')} value={this.state.reason}/>
@@ -815,7 +1172,7 @@
                      </AccordionSummary>
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
-                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.saveSample()}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.saveSample(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">  
@@ -829,16 +1186,19 @@
                                 placeholder="Pattern Version"
                                 values={this.state.samplepatternversion}
                             />
+                            <span className="error">{this.state.errors["samplepatternversion"]}</span>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
-                            <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces" onChange={this.handleChangeTextField('noofpieces')} value={this.state.noofpieces}/>                            
+                            <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces" onChange={this.handleChangeTextField('noofpieces')} value={this.state.noofpieces}/>        
+                            <span className="error">{this.state.errors["noofpieces"]}</span>                    
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group ">
                              <TextField id="Buyer" fullWidth label="Line No" placeholder="Line No" onChange={this.handleChangeTextField('lineno')} value={this.state.lineno}/>
+                             <span className="error">{this.state.errors["lineno"]}</span>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -851,16 +1211,17 @@
                                 placeholder="Department"
                                 values={this.state.department}
                             />
+                             <span className="error">{this.state.errors["department"]}</span>
                         </div>
                     </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                    <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
                         <div className="row">
                             <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="In" />
-                            </RadioGroup>
+                                <FormControlLabel color="primary" value="In" control={<Radio />} label="In" />
+                            {/* </RadioGroup> */}
 
-                            <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-                                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Out" />
+                            {/* <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6"> */}
+                                <FormControlLabel color="primary" value="Out" control={<Radio />} label="Out" />
                             </RadioGroup>
                          </div>
                     </div>
@@ -1073,7 +1434,7 @@
                      </AccordionSummary>
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
-                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.saveMarkerItem(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">
@@ -1087,11 +1448,13 @@
                                     placeholder="Pattern Version"
                                     values={this.state.markerpatternversion}
                                 />
+                                 <span className="error">{this.state.errors["markerpatternversion"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group">
                                 <TextField id="Buyer" fullWidth label="Storage Area" placeholder=" Storage Area" onChange={this.handleChangeTextField('markerStoragearea')} value={this.state.markerStoragearea}/>
+                                <span className="error">{this.state.errors["markerStoragearea"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1104,6 +1467,7 @@
                                     placeholder="Done by"
                                     values={this.state.MarkerdoneByitems}
                                     />
+                                    <span className="error">{this.state.errors["MarkerdoneByitems"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1116,16 +1480,19 @@
                                     placeholder="Checked By"
                                     values={this.state.markercheckedByItems}
                                     />
+                                    <span className="error">{this.state.errors["markercheckedByItems"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group">
                                 <TextField id="Buyer" fullWidth label="Date" placeholder="Date" onChange={this.handleChangeTextField('markerDate')} value={this.state.markerDate}/>
+                                <span className="error">{this.state.errors["markerDate"]}</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group">
                                 <TextField id="Buyer" fullWidth label="Time" placeholder="Time"  onChange={this.handleChangeTextField('markertime')} value={this.state.markertime}/>
+                                <span className="error">{this.state.errors["markertime"]}</span>
                             </div>
                         </div>                       
                     </div>
@@ -1139,31 +1506,32 @@
                              <table className="table mt-10 data w-100 float-left">
                                  <thead>
                                      <tr>
-                                     <th className="">Pattern Version</th>
-                                     <th className="">Fabric Details</th>
-                                     <th className="">Width </th>
-                                     <th className="">Size </th>
-                                     <th className="">Repeat </th>
-                                     <th className="">GAR Quantity</th>
-                                     <th className="">Marker</th>
-                                     <th className="">Efficiency</th>
-                                     <th className="">Remarks</th>
-
+                                        <th className="">Actions</th>
+                                        <th className="">Pattern Version</th>
+                                        <th className="">Fabric Details</th>
+                                        <th className="">Width </th>
+                                        <th className="">Size </th>
+                                        <th className="">Repeat </th>
+                                        <th className="">GAR Quantity</th>
+                                        <th className="">Marker</th>
+                                        <th className="">Efficiency</th>
+                                        <th className="">Remarks</th>
                                      </tr>
                                  </thead>
                                  <tbody>
                                  {this.state.markerListData.map((n,index) => {                                   
                                 return (
                                      <tr>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
+                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button"  onClick={(e) =>this.deleteMarkerItem(n)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+                                         <td>{n.markerpatternversion} </td>
+                                         <td>{n.markerpatternversion} </td>
+                                         <td>{n.fabricdetails} </td>
+                                         <td>{n.width} </td>
+                                         <td>{n.size} </td>
+                                         <td>{n.Repeat} </td>
+                                         <td>{n.GARqTy} </td>
+                                         <td>{n.Marker} </td>
+                                         <td>{n.Efficiency} </td>
                                      </tr>
                                 ) }) }
                                 {this.state.markerListData.length==0 &&
@@ -1206,82 +1574,75 @@
                      </AccordionSummary>
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
-                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) =>this.saveValueAddItem(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">
-                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Value Add</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Value Add Type</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
-     <div className="row">
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="In" />
-
-
-</RadioGroup>
-
-<RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-6">
-
-<FormControlLabel color="primary" value="sample" control={<Radio />} label="Out" />
-
-
-</RadioGroup>
-</div>
-</div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Wash Formula" placeholder="Wash Formula"/>
- </div>
- </div>
- <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Description" placeholder="Description"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="    Remarks " placeholder="    Remarks "/>
- </div>
- </div>
-                     </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                             <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Value Add"
+                                    options={valueAddOptions}
+                                    onChange={this.setstatevalueDrop('valueadd')}
+                                    placeholder="Value Add"
+                                    values={this.state.valueadd}
+                                    />
+                                <span className="error">{this.state.errors["valueadd"]}</span>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                <Select1
+                                    dropdownPosition="auto"
+                                    createNewLabel="Value Add Type"
+                                    options={valueAddtypeOptions}
+                                    onChange={this.setstatevalueDrop('valueaddtype')}
+                                    placeholder="Value Add Type"
+                                    values={this.state.valueaddtype}
+                                    />
+                                <span className="error">{this.state.errors["valueaddtype"]}</span>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 rb-mb pt-10">
+                            <div className="row">
+                                <RadioGroup row aria-label="anchorReference" name="anchorReference" className="col-lg-4 dips-css">
+                                    <FormControlLabel color="primary" value="In" control={<Radio />} label="In" />  
+                                    <FormControlLabel color="primary" value="Out" control={<Radio />} label="Out" />
+                                </RadioGroup>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                            {/* <TextField id="Buyer" fullWidth label="No of Pieces" placeholder="No of Pieces"/> */}
+                            <TextField id="No of Pieces" fullWidth label="No of Pieces" placeholder="No of Pieces"  onChange={this.handleChangeTextField('Valueaddnoofpieces')} value={this.state.Valueaddnoofpieces}/>
+                            <span className="error">{this.state.errors["Valueaddnoofpieces"]}</span>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                            <TextField id="washFormula" fullWidth label="Wash Formula" placeholder="Wash Formula"  onChange={this.handleChangeTextField('washFormula')} value={this.state.washFormula}/>
+                            <span className="error">{this.state.errors["washFormula"]}</span>
+                            </div>
+                        </div>
+                        <div className="col-lg-6 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                            <TextField id="valueAddDescription" fullWidth label="Description" placeholder="Description"  onChange={this.handleChangeTextField('valueAddDescription')} value={this.state.valueAddDescription}/>
+                            <span className="error">{this.state.errors["valueAddDescription"]}</span>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group">
+                            <TextField id="valueAddRemarks" fullWidth label="Remarks" placeholder="Remarks"  onChange={this.handleChangeTextField('valueAddRemarks')} value={this.state.valueAddRemarks}/>
+                            <span className="error">{this.state.errors["valueAddRemarks"]}</span>
+                            </div>
+                        </div>
+                    </div>
                      <div className="table-responsive mt-10">
                       <div className=" float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-0 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.addValueAddGrid()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                           
                          </div>
                      </div>
  
@@ -1289,46 +1650,36 @@
                                  <thead>
                                      <tr>
                                      <th className="text-center">Actions</th>
-                                     <th className="">    Department </th>
-                                     <th className="">    No of Pieces </th>
-                                     <th className="">    Description </th>
-                                     <th className="">     In </th>
-                                     <th className="">    Out </th>
-                                     <th className="">    Description </th>
+                                     <th className="">Department </th>
+                                     <th className="">No of Pieces </th>
+                                     <th className="">Description </th>
+                                     <th className=""> In </th>
+                                     <th className="">Out </th>
+                                     <th className="">Remarks </th>
 
                                      </tr>
                                  </thead>
                                  <tbody>
+                                 {this.state.valueaddListData.map((n,index) => {                                   
+                                return (
+                                 
                                      <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+                                          <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button"  onClick={(e) =>this.deleteValueAddItem(n)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+                                     {/* <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td> */}
                                          
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
+                                         <td>{n.Department} </td>
+                                         <td>{n.noofpieces} </td>
+                                         <td>{n.description} </td>
+                                         <td>In </td>
+                                         <td>Out </td>
+                                         <td>{n.remarks} </td>
                                      </tr>
-                                     <tr>
-                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                          
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                         
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
+                                     ) }) }
+                                {this.state.valueaddListData.length==0 &&
+                                    <tr>
+                                        <td colSpan="8" className="no-records-data">No Records Found</td>
+                                    </tr>
+                                }  
                                  </tbody>
                                  
                                  </table>
@@ -1365,70 +1716,74 @@
                      </AccordionSummary>
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
-                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) =>this.saveSam(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                      </div>
                      <div className="clearfix"></div>
                      <div className="row">
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">    Option Type </InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
+                        <div className="form-group select_label_name mt-15">
+                            <Select1
+                                dropdownPosition="auto"
+                                createNewLabel="Option Type"
+                                options={samoptiontypes}
+                                onChange={this.setstatevalueDrop('optiontype')}
+                                placeholder="Option Type"
+                                values={this.state.optiontype}
+                                />
+                            <span className="error">{this.state.errors["optiontype"]}</span>
+                        </div>
+                    </div>
                      <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group">
- <FormControl fullWidth>
-     <InputLabel htmlFor="age-simple">Option</InputLabel>
-     <Select value={this.state.age} onChange={this.handleChange}
-     inputProps={{ name: 'age', id: 'age-simple', }}>
-     <MenuItem value=""><em>None</em></MenuItem>
-     <MenuItem value={10}>Autumn</MenuItem>
-     <MenuItem value={20}>Summer</MenuItem>
-     <MenuItem value={30}>Winter</MenuItem>
-     </Select>
- </FormControl>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="SEW SAM" placeholder="SEW SAM"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="KB SAM" placeholder="KB SAM"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="Manual SAM" placeholder="Manual SAM"/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="    Difficulty Level " placeholder="    Difficulty Level "/>
- </div>
- </div>
- <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
- <div className="form-group">
- <TextField id="Buyer" fullWidth label="OB Link" placeholder="OB Link"/>
- </div>
- </div>
+                        <div className="form-group select_label_name mt-15">
+                            <Select1
+                                dropdownPosition="auto"
+                                createNewLabel="Option Type"
+                                options={samoptiontypes}
+                                onChange={this.setstatevalueDrop('optionI')}
+                                placeholder="Option Type"
+                                values={this.state.optionI}
+                                />
+                            <span className="error">{this.state.errors["optionI"]}</span>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                            {/* <TextField id="Buyer" fullWidth label="SEW SAM" placeholder="SEW SAM"/> */}
+                            <TextField id="sewsam" fullWidth label="SEW SAM" placeholder="SEW SAM"  onChange={this.handleChangeTextField('sewsam')} value={this.state.sewsam}/>
+                            <span className="error">{this.state.errors["sewsam"]}</span>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                            <TextField id="kbsam" fullWidth label="KB SAM" placeholder="KB SAM"  onChange={this.handleChangeTextField('kbsam')} value={this.state.kbsam}/>
+                            <span className="error">{this.state.errors["kbsam"]}</span>
+                            {/* <TextField id="Buyer" fullWidth label="KB SAM" placeholder="KB SAM"/> */}
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                            {/* <TextField id="Buyer" fullWidth label="Manual SAM" placeholder="Manual SAM"/> */}
+                            <TextField id="manualsam" fullWidth label="Manual SAM" placeholder="Manual SAM"  onChange={this.handleChangeTextField('manualsam')} value={this.state.manualsam}/>
+                            <span className="error">{this.state.errors["manualsam"]}</span>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group">
+                            <TextField id="difficultylevel" fullWidth label="Difficulty Level" placeholder="Difficulty Level"  onChange={this.handleChangeTextField('difficultylevel')} value={this.state.difficultylevel}/>
+                            <span className="error">{this.state.errors["difficultylevel"]}</span>
+                            {/* <TextField id="Buyer" fullWidth label="    Difficulty Level " placeholder="    Difficulty Level "/> */}
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                        </div>
+                    </div>
                      </div>
                      <div className="table-responsive mt-10">
                       <div className="float-right">
                          <div className="form-group">
-                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.addSAMAddGrid()} ><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                          </div>
                      </div>
  
@@ -1447,50 +1802,25 @@
                                      </tr>
                                  </thead>
                                  <tbody>
+                                 {this.state.SamListData.map((n,index) => {                                   
+                                return (
                                      <tr>
-                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
+                                         <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" onClick={(e) =>this.deleteSamItem(n)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
                                           
+                                         <td>{n.optionType}</td>
+                                         <td>{n.optionI} </td>
+                                         <td>{n.sewSam} </td>
+                                         <td>{n.kbSam} </td>
+                                         <td>{n.manualSam} </td>
                                          <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
+                                         <td>{n.difficultyLevel} </td>
                                      </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-                                     
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center"> <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> </td>
-
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                         <td>Demo </td>
-                                     </tr>
+                                     ) }) }
+                                     {this.state.SamListData.length==0 &&
+                                         <tr>
+                                             <td colSpan="8" className="no-records-data">No Records Found</td>
+                                         </tr>
+                                     }  
                                  </tbody>
                                  
                                  </table>

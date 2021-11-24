@@ -66,7 +66,8 @@ import Select1 from "react-dropdown-select";
  class ItenNasterCreation extends Component {
     
      state = {
-         all: false,        
+         all: false,   
+         ropen: false,     
      }
      constructor(props) {
         super(props);
@@ -78,10 +79,18 @@ import Select1 from "react-dropdown-select";
        
      }
     
-    
+     rhandleClickOpen = () => {
+        this.setState({ ropen: true });
+     };
+     rhandleClose = () => {
+        this.setState({ ropen: false });
+     };
     
      render() {
-           
+        const buyeroptions = []; 
+        const buyerdivoptions = [];
+        const seasonoptions =[];
+        const yearoptions = [];
       
          return (
            
@@ -94,554 +103,230 @@ import Select1 from "react-dropdown-select";
                      title={<IntlMessages id="sidebar.userManagement" />}
                      match={this.props.match}
                  />
-                 <RctCollapsibleCard fullBlock heading="Item Creation">
-                 <div className="w-100 float-left">
+                 <RctCollapsibleCard fullBlock heading="Costing Creation">
+                    <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                        <Accordion className="border mb-15 mt-15">
+                            <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
+                                <div className="acc_title_font">
+                                    <Typography>Acitvity</Typography>
+                                </div>
+                            </AccordionSummary>
 
-<div className="row">
+                            <AccordionDetails> 
+                            <div className="row">  
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-simple">Image</InputLabel>
+                                        <div className="form-group mt-15">
+                                            <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                        </div>
+                                    </FormControl>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-simple"> Buyer</InputLabel>
 
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <Select value={this.state.age} onChange={this.handleChange}
 
-<div className="form-group">
+                                        inputProps={{ name: 'age', id: 'age-simple', }}>
 
-        <FormControl fullWidth>
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-            <InputLabel htmlFor="age-simple">Parent Group</InputLabel>
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-            <Select value={this.state.age} onChange={this.handleChange}
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-            <MenuItem value=""><em>None</em></MenuItem>
+                                        </Select>
 
-            <MenuItem value={10}>Autumn</MenuItem>
+                                    </FormControl>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-simple"> Buyer Division</InputLabel>
 
-            <MenuItem value={20}>Summer</MenuItem>
+                                        <Select value={this.state.age} onChange={this.handleChange}
 
-            <MenuItem value={30}>Winter</MenuItem>
+                                        inputProps={{ name: 'age', id: 'age-simple', }}>
 
-            </Select>
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-        </FormControl>
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-        </div>
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-        </div>
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        </Select>
 
-<div className="form-group">
+                                    </FormControl>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-simple"> Season</InputLabel>
 
-        <FormControl fullWidth>
+                                        <Select value={this.state.age} onChange={this.handleChange}
 
-            <InputLabel htmlFor="age-simple">Material Type</InputLabel>
+                                        inputProps={{ name: 'age', id: 'age-simple', }}>
 
-            <Select value={this.state.age} onChange={this.handleChange}
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-            <MenuItem value={10}>Autumn</MenuItem>
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-            <MenuItem value={20}>Summer</MenuItem>
+                                        </Select>
 
-            <MenuItem value={30}>Winter</MenuItem>
+                                    </FormControl>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-simple"> Year</InputLabel>
 
-            </Select>
+                                        <Select value={this.state.age} onChange={this.handleChange}
 
-        </FormControl>
+                                        inputProps={{ name: 'age', id: 'age-simple', }}>
 
-        </div>
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-        </div>
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-<div className="form-group">
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-        <FormControl fullWidth>
+                                        </Select>
 
-            <InputLabel htmlFor="age-simple">Material Group & Material Sub</InputLabel>
+                                    </FormControl>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="age-simple"> Style</InputLabel>
 
-            <Select value={this.state.age} onChange={this.handleChange}
+                                        <Select value={this.state.age} onChange={this.handleChange}
 
-            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                        inputProps={{ name: 'age', id: 'age-simple', }}>
 
-            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-            <MenuItem value={10}>Autumn</MenuItem>
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-            <MenuItem value={20}>Summer</MenuItem>
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-            <MenuItem value={30}>Winter</MenuItem>
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-            </Select>
+                                        </Select>
 
-        </FormControl>
+                                    </FormControl>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <TextField id="Buyer" fullWidth label="Style Description" placeholder="Style Description"/>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <TextField id="Buyer" fullWidth label="Purpose" placeholder="Purpose"/>
+                                </div>
+                             
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-30">
+                                        <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>Reference version <i class="zmdi zmdi-arrow-right-top"></i></button>
+                                    </div>
+                                </div>
 
-        </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <TextField id="Buyer" fullWidth label="Costing Options" placeholder="Costing Options"/>
 
-        </div> 
+                                    </div>
+                                </div>
 
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
+                                    </div>
+                                </div>
 
-        <div className="form-group">
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-30">
+                                        <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>Marker version  & UOM<i class="zmdi zmdi-arrow-right-top"></i></button>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-30">
+                                        <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>Productivity<i class="zmdi zmdi-arrow-right-top"></i></button>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <TextField id="Locaiton" fullWidth label="Location" placeholder="Location"/>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
+                                        <TextField id="LineoFCost" fullWidth label="Line oF Cost" placeholder="LineoFCost"/>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-30">
+                                        <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>SAM<i class="zmdi zmdi-arrow-right-top"></i></button>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
 
-<TextField id="Buyer" fullWidth label="Material Code" placeholder="Material Code"/>
+                                        <FormControl fullWidth>
 
-</div></div>
+                                            <InputLabel htmlFor="age-simple">Currency</InputLabel>
 
+                                            <Select value={this.state.age} onChange={this.handleChange}
 
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
 
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-        <div className="form-group">
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-<TextField id="Buyer" fullWidth label="System Material Code" placeholder="System Material Code"/>
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-</div></div>
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-<div className="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
+                                            </Select>
 
-        <div className="form-group">
+                                        </FormControl>
 
-<TextField id="Buyer" fullWidth label="Material Description" placeholder="Material Description"/>
+                                    </div>
 
-</div></div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                    <div className="form-group">
 
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <FormControl fullWidth>
 
-<div className="form-group">
+                                            <InputLabel htmlFor="age-simple">Buyer T$A</InputLabel>
 
-        <FormControl fullWidth>
+                                            <Select value={this.state.age} onChange={this.handleChange}
 
-            <InputLabel htmlFor="age-simple">Buyer Division</InputLabel>
+                                            inputProps={{ name: 'age', id: 'age-simple', }}>
 
-            <Select value={this.state.age} onChange={this.handleChange}
+                                            <MenuItem value=""><em>None</em></MenuItem>
 
-            inputProps={{ name: 'age', id: 'age-simple', }}>
+                                            <MenuItem value={10}>Autumn</MenuItem>
 
-            <MenuItem value=""><em>None</em></MenuItem>
+                                            <MenuItem value={20}>Summer</MenuItem>
 
-            <MenuItem value={10}>Autumn</MenuItem>
+                                            <MenuItem value={30}>Winter</MenuItem>
 
-            <MenuItem value={20}>Summer</MenuItem>
+                                            </Select>
 
-            <MenuItem value={30}>Winter</MenuItem>
+                                        </FormControl>
 
-            </Select>
+                                    </div>
 
-        </FormControl>
+                                </div>
 
-        </div>
-
-        </div> 
-
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<div className="form-group">
-
-
-
-        <RadioGroup row aria-label="anchorReference" name="anchorReference">
-
-            <div className="w-33">
-
-                <FormControlLabel color="primary" value="sample" control={<Radio />} label="Activate" />
-
-            </div>
-
-             
-
-        </RadioGroup>
-
-        </div>
-
-        </div>
-
-
-
-        </div>
-
-    </div>
-
-
-
-    <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
-
-    <Accordion className="border mb-15 mt-15">
-
-     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-
-         <div className="acc_title_font">
-
-             <Typography>Fabric</Typography>
-
-         </div>
-
-     </AccordionSummary>
-
-     <AccordionDetails> 
-
-     <div className="row">  
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple">Fiber</InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple"> Content</InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-    </div>
-
-
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Fabric Content" placeholder="Fabric Content"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple">     Fabric Type </InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple">     Fabric Weave </InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple">     Dye Process </InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="w-100 float-left">
-
-        <div className="w-80 float-left">
-
-        <div className="form-group">
-
-        <TextField id="Buyer" fullWidth label="Yarn Wrap" placeholder="Yarn Wrap"/>
-
-        </div>
-
-        </div>
-
-        <div className="w-20 float-left text-center pt-15">
-
-        <button className="float-right MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-
-        </div>
-
-        </div>
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Wrap Yarn Blend" placeholder="Wrap Yarn Blend"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="w-100 float-left">
-
-        <div className="w-80 float-left">
-
-        <div className="form-group">
-
-        <TextField id="Buyer" fullWidth label="Yarn Weft" placeholder="Yarn Weft"/>
-
-        </div>
-
-        </div>
-
-        <div className="w-20 float-left text-center pt-15">
-
-        <button className="float-right MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary text-white btn-icon b-ic add" tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-
-        </div>
-
-        </div>
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Weft Yarn Blend" placeholder="Weft Yarn Blend"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Ends / Inches" placeholder="Ends / Inches"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Picks / Inches" placeholder="Picks / Inches"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Shrink Wrap" placeholder="Shrink Wrap"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Shrink Weft" placeholder="Shrink Weft"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<div className="form-group">
-
-        <FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple">Wash Method</InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-        </div>
-
-        </div>
-
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="FabWt_BW" placeholder="FabWt_BW"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="FabWt_AW" placeholder="FabWt_AW"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-<div className="form-group">
-
-        <FormControl fullWidth>
-
-            <InputLabel htmlFor="age-simple">    Weight UOM </InputLabel>
-
-            <Select value={this.state.age} onChange={this.handleChange}
-
-            inputProps={{ name: 'age', id: 'age-simple', }}>
-
-            <MenuItem value=""><em>None</em></MenuItem>
-
-            <MenuItem value={10}>Autumn</MenuItem>
-
-            <MenuItem value={20}>Summer</MenuItem>
-
-            <MenuItem value={30}>Winter</MenuItem>
-
-            </Select>
-
-        </FormControl>
-
-        </div>
-
-        </div>
-
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Actual Width" placeholder="Actual Width"/>
-
-</div>
-
-
-
-    </div>
-
-    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Cuttable Width" placeholder="Cuttable Width"/>
-
-</div>
-
-
-
-    </div>
+   
 
     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 
@@ -787,68 +472,174 @@ import Select1 from "react-dropdown-select";
 
          <div className="acc_title_font">
 
-             <Typography>Thread </Typography>
+             <Typography>Material Details </Typography>
 
          </div>
 
      </AccordionSummary>
 
      <AccordionDetails> 
+                            <div className="float-right tbl-filter-btn">
+                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">
+                            
+                                    <span className="MuiIconButton-label">
+                            
+                            
+                                    <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                                        </svg>
+                            
+                                    </span>
+                            
+                                </button>
+                            
+                                <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
+                            
+                            <span className="MuiIconButton-label">
+                            
+                            <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
+                                </svg></span>
+                            
+                            
+                            
+                            
+                            </button>
+                            <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">
+                            
+                                            <span className="MuiIconButton-label">
+                            
+                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
+                                                </svg></span></button>
+                            
+                                                <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
+                            
+                            
+                            
+                                                    <span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path>
+                                            </svg></span></button>
+                            
+                                            <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
+                                            </svg></span></button>
+                            </div>
+                            <table className="table">
+                            <thead className="thead-light">
+                            <th className="text-center w-10">Actions</th>
+                            <th className="text-center w-10">Material type</th>
+                            <th className="text-center w-10">Material Group</th>
+                            <th className="text-center w-10">Material Sub Group</th>
+                            <th className="w-10" >Supplier</th>
+                            <th className="" >Description</th>
+                            <th className="" >Sub REf#</th>
+                            <th className="">Buyer Marker</th>
+                            <th className="">Internal Marker</th>
+                            <th className="">Marker UOM</th>
+                            <th className="">Wastage %</th>
+                            <th className="">Finance %</th>
+                            <th className="">Material Unit Price</th>
+                            <th className="">Available CM</th>
+                        </thead>
+                        <tbody>
+                       
+                            <tr>                                               
+                                <td className="text-center">
+                                
+                                
+                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
 
-     <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                                </td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                            </tr>
+                            <tr>                                               
+                                <td className="text-center">
+                                
+                                
+                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
 
-     <div className="row">
+                                </td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                            </tr>
+                            <tr>                                               
+                                <td className="text-center">
+                                
+                                
+                                <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button>
 
-     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Quality" placeholder="Quality"/>
-
-</div></div>
-
-
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Tex" placeholder="Tex"/>
-
-</div></div>
-
-
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Tkt" placeholder="Tkt"/>
-
-</div></div>
-
-
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="No of Meter" placeholder="No of Meter"/>
-
-</div></div>
-
-
-
-</div>
-
-
-
-    </div>
-
-
-
-
-
+                                </td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                                <td className="text-center"> Demo</td>
+                            </tr>
+										
+                        </tbody>
+                            </table>                           
+                                 <div className="w-50 float-right">
+                                    <div className="w-25 float-left">
+                                        <label className="mt-5">Rows per page: </label>
+                                    </div>
+                                    <div className="w-15 float-left">
+                                        <select class="form-control">
+                                            <option>10</option> 
+                                            <option>20</option> 
+                                            <option>30</option> 
+                                            <option>40</option> 
+                                        </select>
+                                    </div>
+                                    <div className="w-30 float-left pl-30">
+                                        <label className="mt-5">1-10 of 50</label>
+                                    </div>
+                                    <div className="w-30 float-left">
+                                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
+                                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
+                                    </div>
+                                </div>
+                          
+                            
+                                {/* <RctCollapsibleCard heading="" fullBlock> */}
+                                {/* <MUIDataTable
+                                    // title={"Category List"}
+                                    data={data}
+                                    columns={columns}
+                                    options={options}
+                                /> */}
+                                {/* </RctCollapsibleCard> */}
          </AccordionDetails>
 
          </Accordion>
@@ -857,85 +648,7 @@ import Select1 from "react-dropdown-select";
 
 
 
-         <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
-
-    <Accordion className="border mb-15">
-
-     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-
-         <div className="acc_title_font">
-
-             <Typography>Details  </Typography>
-
-         </div>
-
-     </AccordionSummary>
-
-     <AccordionDetails> 
-
-     <div className="float-right pr-0 but-tp">
-
-     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Add <i className="zmdi zmdi-plus-circle"></i></span><span className="MuiTouchRipple-root"></span></button>
-
-     </div>
-
-     <div className="clearfix"></div>
-
-     <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
-
-     <div className="row">
-
-     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Group Article Number" placeholder="Group Article Number"/>
-
-</div></div>
-
-
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Product" placeholder="Product"/>
-
-</div></div>
-
-
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Finish" placeholder="Finish"/>
-
-</div></div>
-
-
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-    <div className="form-group">
-
-<TextField id="Buyer" fullWidth label="Remarks" placeholder="Remarks"/>
-
-</div></div>
-
-
-
-</div>
-
-
-
-    </div>
-
-         </AccordionDetails>
-
-         </Accordion>
-
-         </div>
+         
 
 
 
