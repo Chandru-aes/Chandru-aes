@@ -209,10 +209,6 @@ import Select1 from "react-dropdown-select";
         marker_shrinkage:'',
         marker_width:'',
 
-        baseStyleno:'',fabricDesc:'',fabricType:'',
-        reference_version:'',
-        swid:0,
-
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -223,19 +219,9 @@ import Select1 from "react-dropdown-select";
         this.setState({ addNewUserModal: true });
     }
      componentDidMount() {
-       
         document.body.classList.add('med-pop-up-h');
-        $('.patternclass').hide();
-        $('.samclass').hide();
-        $('.sampleclass').hide();
-        $('.markerclass').hide();
-        $('.valueaddclass').hide();
         this.getfilldropdownlists();
         
-        if(this.props.match.params.swid!=undefined){
-            this.setState({swid:this.props.match.params.swid})
-            this.editdata(this.props.match.params.swid);
-        }
         // $(document).on('click', '.edit', function() {
         //     $(this).parent().siblings('td.data').each(function() {
         //       var content = $(this).html();
@@ -270,84 +256,6 @@ import Select1 from "react-dropdown-select";
         //   });
     }
 
-    editdata(id){
-        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo='+id)
-        .then((response) => {
-           
-            let data = response.data.data[0];            
-
-            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],baseStyleno:data.baseStyleno,fabricDesc:data.fabricDesc,fabricType:data.fabricType,
-                purpose: [{value:data.purpose,label:data.purpose}],
-                reqtype: [{value:data.reqType,label:data.reqType}],
-                styleno: [{value:data.styleNo,label:data.styleNo}],
-                fit:[{value:data.fit,label:data.fit}]
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowPatternList?IdRequestNo='+id)
-        .then((response) => {
-           
-            let data = response.data.data[0];            
-
-            this.setState({buyerdiv: [{value:data.buyDivcode,label:data.buyerDivName}],
-                samplewarp:data.samShrWarp,
-                sampleweft:data.samShrWeft,
-                costingwarp:data.costShrWarp,
-                costingweft:data.costShrWeft,
-                samplesize: [{value:data.samSize,label:data.samSize}],
-                costingsize: [{value:data.costSize,label:data.costSize}],
-                bodygrain: [{value:data.bodyGrain,label:data.bodyGrain}],
-                addoninfo: [{value:data.addOnInfo,label:data.addOnInfo}],
-                job: [{value:data.natureOfJob,label:data.natureOfJob}],
-                
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSampleList?IdRequestNo='+id)
-        .then((response) => {
-           
-            let data = response.data.data[0];       
-            this.setState({sampleaddmoredata:response.data.data,samplewarp:data.expDeliDate,
-                prepseq: [{value:data.prepSeq,label:data.prepSeq}],               
-                
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=35')
-        .then((response) => {
-           
-            let data = response.data.data[0];       
-            this.setState({valueaddaddmoredata:response.data.data
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=43')
-        .then((response) => {
-           
-            let data = response.data.data[0];       
-            this.setState({samaddmoredata:response.data.data
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        
-
-    }
-
     
     getfilldropdownlists() {
 
@@ -361,23 +269,23 @@ import Select1 from "react-dropdown-select";
         })
 
 
-        // api.get('BuyerDivision/GetBuyerDivisionList')
-        // .then((response) => {
-            
-        //     this.setState({ buyerdivlists: response.data.result.data });
-        // })
-        // .catch(error => {
-        //     // error handling
-        // })
-
-        api.get('StyleHeader/GetStyleGridList')
+        api.get('BuyerDivision/GetBuyerDivisionList')
         .then((response) => {
             
-            this.setState({ stylenolists: response.data.data });
+            this.setState({ buyerdivlists: response.data.result.data });
         })
         .catch(error => {
             // error handling
         })
+
+        // api.get('StyleHeader/GetStyleGridList')
+        // .then((response) => {
+        //     console.log(response.data.data,'response.data.data')
+        //     this.setState({ stylenolists: response.data.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
         
 
@@ -558,352 +466,28 @@ import Select1 from "react-dropdown-select";
 	};
 
 
-
       setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
         if(event.length!=0){
             fields[name] = event[0].value;        
             this.setState({fields});
-
-          
-
-            if(name=="reqtype"){
-
-                $('.patternclass').hide();
-                $('.samclass').hide();
-                $('.sampleclass').hide();
-                $('.markerclass').hide();
-                $('.valueaddclass').hide();
-               
-               event.forEach(element => {
-                   
-                if(element.value=="PATTERN"){
-                    $('.patternclass').show();
-                }
-                if(element.value=="SAM"){
-                    $('.samclass').show();
-                }
-                if(element.value=="SAMPLE"){
-                    $('.sampleclass').show();
-                }
-                if(element.value=="VALUEADD"){
-                    $('.valueaddclass').show();
-                }
-                if(element.value=="MARKER"){
-                    $('.markerclass').show();
-                }
-
-               });
-                
-            }
-            
         } else{
-            if(name=="reqtype"){
-                $('.patternclass').hide();
-                $('.samclass').hide();
-                $('.sampleclass').hide();
-                $('.markerclass').hide();
-                $('.valueaddclass').hide();
-            }
             fields[name] = '';        
             this.setState({fields});
         }
         
 		this.setState({ [name]: event });
-
-        if(name=="styleno"){
-            setTimeout(() => {
-                this.stylenochange();
-            }, 200);
-        }
-
 	};
 
-
-    stylenochange(){
-        
-        if(this.state.styleno.length>0){
-            this.setState({baseStyleno:'',fabricDesc:'',fabricType:''});
-            api.get('StyleHeader/GetStyleHeaderList?SID='+this.state.styleno[0].value)
-            .then((response) => {
-                let datas = response.data.data[0];
-                this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType});
-            })
-            .catch(error => {
-                // error handling
-            })
-        }
-     }
 
     save () {
         console.log(this.state,'-----------------------')
         
 
         if(this.state.buyer.length>0){
-
-            let patterndata ={};
-            let markerdata ={};
-            let sampledata ={};
-            let samdata ={};
-            let valueadddata ={};
-            let reqtypedata = [];
-            this.state.reqtype.forEach(element => {
-                
-                  let newdata =   {
-                      "id": 0,
-                      "swH_Id": this.state.swid,
-                      "reqType": element.value,
-                      "createdBy": "string",
-                      "createdDt": "2021-11-16T05:00:55.509Z",
-                      "modifyBy": "string",
-                      "modifyDt": "2021-11-16T05:00:55.509Z",
-                      "hostName": "string"
-                    };
-
-                    reqtypedata.push(newdata);
-                  
-                
-            if(element.value=="PATTERN"){
-                patterndata ={
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "verRef": "string",
-                    "bodyGrain": this.state.bodygrain[0].value,
-                    "addOnInfo": this.state.addoninfo[0].value,
-                    "samShr": "s",
-                    "samShrWarp": this.state.samplewarp,
-                    "samShrWeft":  this.state.sampleweft,
-                //   "samNilShr":  "string",
-                    "costShr": "s",
-                    "costShrWarp":  this.state.costingwarp,
-                    "costShrWeft": this.state.costingweft,
-                //   "costNilShr": "string",
-                "SamSize":this.state.sample_size[0].value,
-                "CostSize":this.state.sample_size[0].value,
-                    // "size": "string",
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string",
-                    "swPatternDetEntityModel": [
-                    {
-                        "id": 0,
-                        "swH_Id": this.state.swid,
-                        "natureOfJob": this.state.job[0].value,
-                        "cancel": "s",
-                        "createdBy": "string",
-                        "createdDt": "2021-11-16T05:00:55.509Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-16T05:00:55.509Z",
-                        "hostName": "string"
-                    }
-                    ]
-                }
-            }
-            //  else{
-            //     patterndata ={
-            //         "id": 0,
-            //         "swH_Id": this.state.swid,
-            //         "verRef": "string",
-            //         "bodyGrain": "string",
-            //         "addOnInfo": "string",
-            //         "samShr": "s",
-            //         "samShrWarp": 0,
-            //         "samShrWeft": 0,
-            //         "costShr": "s",
-            //         "costShrWarp": 0,
-            //         "costShrWeft": 0,
-            //         "samSize": "string",
-            //         "costSize": "string",
-            //         "createdBy": "string",
-            //         "createdDt": "2021-11-18T12:07:22.603Z",
-            //         "modifyBy": "string",
-            //         "modifyDt": "2021-11-18T12:07:22.603Z",
-            //         "hostName": "string",
-            //         "swPatternDetEntityModel": [
-            //           {
-            //             "id": 0,
-            //             "swH_Id": this.state.swid,
-            //             "natureOfJob": "string",
-            //             "cancel": "s",
-            //             "createdBy": "string",
-            //             "createdDt": "2021-11-18T12:07:22.603Z",
-            //             "modifyBy": "string",
-            //             "modifyDt": "2021-11-18T12:07:22.603Z",
-            //             "hostName": "string"
-            //           }
-            //         ]
-            //       }
-            // }
-
-            
-            if(element.value=="MARKER"){
-                markerdata = {
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "verRef": "string",
-                    "changesIn": this.state.marker_changesin,
-                    "bodyGrain": this.state.marker_bodygrain,
-                    "shrinkage": this.state.marker_shrinkage,
-                    "markerFor": this.state.markerfor[0].value,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string",
-                    "swMarkerDetEntityModel": 
-                     this.state.markeraddmoredata
-                    
-                  }
-            } 
-            
-            // else{
-            //     markerdata ={
-            //         "id": 0,
-            //         "swH_Id": this.state.swid,
-            //         "verRef": "string",
-            //         "changesIn": "string",
-            //         "bodyGrain": "string",
-            //         "shrinkage": "string",
-            //         "markerFor": "string",
-            //         "createdBy": "string",
-            //         "createdDt": "2021-11-18T12:07:22.603Z",
-            //         "modifyBy": "string",
-            //         "modifyDt": "2021-11-18T12:07:22.603Z",
-            //         "hostName": "string",
-            //         "swMarkerDetEntityModel": [
-            //           {
-            //             "id": 0,
-            //             "swH_Id": this.state.swid,
-            //             "matType": "string",
-            //             "description": "string",
-            //             "placement": "string",
-            //             "color": "string",
-            //             "size": "string",
-            //             "pcs": 0,
-            //             "width": "string",
-            //             "repeat": "string",
-            //             "baseMarker": "s",
-            //             "cancel": "s",
-            //             "createdBy": "string",
-            //             "createdDt": "2021-11-18T12:07:22.603Z",
-            //             "modifyBy": "string",
-            //             "modifyDt": "2021-11-18T12:07:22.603Z",
-            //             "hostName": "string"
-            //           }
-            //         ]
-            //       }
-            // }
-
-            
-            if(element.value=="SAMPLE"){
-                sampledata = {
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "verRef": "string",
-                    "expDeliDate": this.state.selectedDate,
-                    "prepSeq": this.state.prepseq[0].value,
-                    "sampleType": this.state.sampletype[0].value,
-                    "totPcs": 0,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string",
-                    "swSampleDetEntityModel": 
-                        this.state.sampleaddmoredata
-                      
-                    
-                  }
-            } 
-            
-            // else {
-            //     sampledata ={
-            //         "id": 0,
-            //         "swH_Id": this.state.swid,
-            //         "verRef": "string",
-            //         "expDeliDate": "2021-11-18T12:07:22.603Z",
-            //         "prepSeq": "string",
-            //         "sampleType": "string",
-            //         "totPcs": 0,
-            //         "createdBy": "string",
-            //         "createdDt": "2021-11-18T12:07:22.603Z",
-            //         "modifyBy": "string",
-            //         "modifyDt": "2021-11-18T12:07:22.603Z",
-            //         "hostName": "string",
-            //         "swSampleDetEntityModel": [
-            //           {
-            //             "id": 0,
-            //             "swH_Id": this.state.swid,
-            //             "matType": "string",
-            //             "matDesc": "string",
-            //             "placement": "string",
-            //             "color": "string",
-            //             "size": "string",
-            //             "pcs": 0,
-            //             "cancel": "s",
-            //             "createdBy": "string",
-            //             "createdDt": "2021-11-18T12:07:22.603Z",
-            //             "modifyBy": "string",
-            //             "modifyDt": "2021-11-18T12:07:22.603Z",
-            //             "hostName": "string"
-            //           }
-            //         ]
-            //       }
-            // }
-
-            
-            if(element.value=="SAM"){
-                samdata =this.state.samaddmoredata;
-            } 
-            // else{
-            //     samdata =[
-            //         {
-            //           "id": 0,
-            //           "swH_Id": this.state.swid,
-            //           "optionType": "string",
-            //           "baseSAM": "s",
-            //           "cancel": "s",
-            //           "createdBy": "string",
-            //           "createdDt": "2021-11-18T12:07:22.603Z",
-            //           "modifyBy": "string",
-            //           "modifyDt": "2021-11-18T12:07:22.603Z",
-            //           "hostName": "string"
-            //         }
-            //       ]
-            // }
-
-
-            
-            if(element.value!="VALUEADD"){
-                valueadddata =this.state.valueaddaddmoredata;
-            }
-            // else{
-            //     valueadddata =[
-            //         {
-            //           "id": 0,
-            //           "swH_Id": this.state.swid,
-            //           "valueAdd": "string",
-            //           "valueAddType": "string",
-            //           "valueAddDesc": "string",
-            //           "color": "string",
-            //           "pcs": 0,
-            //           "typeOfGarment": "string",
-            //           "cancel": "s",
-            //           "createdBy": "string",
-            //           "createdDt": "2021-11-18T12:07:22.603Z",
-            //           "modifyBy": "string",
-            //           "modifyDt": "2021-11-18T12:07:22.603Z",
-            //           "hostName": "string"
-            //         }
-            //       ]
-            // } 
-            });
-        
-
+ 
             let data ={
-                "id": this.state.swid,
+                "id": 0,
                 "entityId": "st",
                 "buyCode": this.state.buyer[0].value,
                 "buyDivcode": this.state.buyerdiv[0].value,
@@ -911,29 +495,106 @@ import Select1 from "react-dropdown-select";
                 "seasonYear": this.state.year[0].value,
                 "styleNo": this.state.styleno[0].value,
                 "masterStyle": 0,
-                "baseStyleno": this.state.baseStyleno,
+                "baseStyleno": "string",
                 "unitCode": "string",
                 "reqNo": "string",
                 "reqDate": "2021-11-16T05:00:55.509Z",
                 "fit":  this.state.fit[0].value,
                 "purpose": this.state.purpose[0].value,
-                "fabricDesc": this.state.fabricDesc,
-                "fabricType": this.state.fabricType,
+                "fabricDesc": "string",
+                "fabricType": "string",
                 "cancel": "s",
                 "createdBy": "string",
                 "createdDt": "2021-11-16T05:00:55.509Z",
                 "modifyBy": "string",
                 "modifyDt": "2021-11-16T05:00:55.509Z",
                 "hostName": "string",
-                "singleWindowDetEntityModel": reqtypedata,
-                // "swPatternHeadEntityModel": patterndata,
-                // "swSampleHeadEntityModel": sampledata,
-                // "swMarkerHeadEntityModel":markerdata,
-                // "swValueAddEntityModel": 
-                // valueadddata
-                // ,
+                "singleWindowDetEntityModel": [
+                  {
+                    "id": 0,
+                    "swH_Id": 0,
+                    "reqType": this.state.reqtype[0].value,
+                    "createdBy": "string",
+                    "createdDt": "2021-11-16T05:00:55.509Z",
+                    "modifyBy": "string",
+                    "modifyDt": "2021-11-16T05:00:55.509Z",
+                    "hostName": "string"
+                  }
+                ],
+                "swPatternHeadEntityModel": {
+                  "id": 0,
+                  "swH_Id": 0,
+                  "verRef": "string",
+                  "bodyGrain": this.state.bodygrain[0].value,
+                  "addOnInfo": this.state.addoninfo[0].value,
+                  "samShr": "s",
+                  "samShrWarp": this.state.samplewarp,
+                  "samShrWeft":  this.state.sampleweft,
+                  "samNilShr":  "string",
+                  "costShr": "s",
+                  "costShrWarp":  this.state.costingwarp,
+                  "costShrWeft": this.state.costingweft,
+                  "costNilShr": "string",
+                  "size": "string",
+                  "createdBy": "string",
+                  "createdDt": "2021-11-16T05:00:55.509Z",
+                  "modifyBy": "string",
+                  "modifyDt": "2021-11-16T05:00:55.509Z",
+                  "hostName": "string",
+                  "swPatternDetEntityModel": [
+                    {
+                      "id": 0,
+                      "swH_Id": 0,
+                      "natureOfJob": this.state.job[0].value,
+                      "cancel": "s",
+                      "createdBy": "string",
+                      "createdDt": "2021-11-16T05:00:55.509Z",
+                      "modifyBy": "string",
+                      "modifyDt": "2021-11-16T05:00:55.509Z",
+                      "hostName": "string"
+                    }
+                  ]
+                },
+                "swSampleHeadEntityModel": {
+                  "id": 0,
+                  "swH_Id": 0,
+                  "verRef": "string",
+                  "expDeliDate": "2021-11-16T05:00:55.509Z",
+                  "prepSeq": this.state.prepseq[0].value,
+                  "sampleType": this.state.sampletype[0].value,
+                  "totPcs": 0,
+                  "createdBy": "string",
+                  "createdDt": "2021-11-16T05:00:55.509Z",
+                  "modifyBy": "string",
+                  "modifyDt": "2021-11-16T05:00:55.509Z",
+                  "hostName": "string",
+                  "swSampleDetEntityModel": 
+                      this.state.sampleaddmoredata
+                    
+                  
+                },
+                "swMarkerHeadEntityModel": {
+                  "id": 0,
+                  "swH_Id": 0,
+                  "verRef": "string",
+                  "changesIn": this.state.marker_changesin,
+                  "bodyGrain": this.state.marker_bodygrain,
+                  "shrinkage": this.state.marker_shrinkage,
+                  "markerFor": this.state.markerfor[0].value,
+                  "createdBy": "string",
+                  "createdDt": "2021-11-16T05:00:55.509Z",
+                  "modifyBy": "string",
+                  "modifyDt": "2021-11-16T05:00:55.509Z",
+                  "hostName": "string",
+                  "swMarkerDetEntityModel": 
+                   this.state.markeraddmoredata
+                  
+                },
+                "swValueAddEntityModel": 
+                  this.state.valueaddaddmoredata
+                ,
                 "swsamReqEntityModel": 
-                samdata
+                  this.state.samaddmoredata
                 
               };
 console.log(data,'datadatadata')
@@ -968,71 +629,12 @@ console.log(data,'datadatadata')
 
       }
 
-      getBuyerDivision1(val,field,e){
-        let fields = this.state.fields;
-        this.setState({ buyerdivlists: [],buyerdiv:[]  });
-        if(val.buyer.length!=0){
-            fields['buyer'] = val.buyer[0].value;        
-            this.setState({fields});
-
-            this.setState({ buyer: val.buyer });
-            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.buyer[0].value)
-            .then((response) => {                
-                this.setState({ buyerdivlists: response.data.result.data });
-            })        
-            .catch(error => {}) 
-            
-        } else{
-            fields['buyer'] = '';        
-            this.setState({fields});
-        }
-
-        // fields['buyer'] = val.buyer[0].value;        
-        // this.setState({fields});
-
-                  
-    }
-
-    getvalueaddtype(val,field,e){
-        let fields = this.state.fields;
-        this.setState({ valueaddtypelists: [] });
-        if(val.valueadd.length!=0){
-            fields['valueadd'] = val.valueadd[0].value;        
-            this.setState({fields});
-
-            this.setState({ valueadd: val.valueadd });
-
-            api.get('Miscellaneous/GetMiscellaneousList?MType='+val.valueadd[0].value)
-            .then((response) => {
-                
-                this.setState({ valueaddtypelists: response.data.result.data });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-           
-            
-        } else{
-            fields['valueadd'] = '';        
-            this.setState({fields});
-        }
-
-        // fields['buyer'] = val.buyer[0].value;        
-        // this.setState({fields});
-
-                  
-    }
-
-    
-
     contactSubmit(e,type){
         e.preventDefault();
         if(this.handleValidation()){
             this.save();
         }else{
-        //   alert("Form has errors.")
-        NotificationManager.error('Form has errors');
+          alert("Form has errors.")
         }
     
       }
@@ -1076,26 +678,8 @@ console.log(data,'datadatadata')
             errors["reqtype"] = "Cannot be empty";
         }
 
-         //purpose
-         if(!fields["purpose"]){           
-            formIsValid = false;
-            errors["purpose"] = "Cannot be empty";
-        }
-
-         //fit
-         if(!fields["fit"]){           
-            formIsValid = false;
-            errors["fit"] = "Fit Cannot be empty";
-        }
-
-          //stage
-          if(!fields["stage"]){           
-            formIsValid = false;
-            errors["stage"] = "Stage Cannot be empty";
-        }
 
 
-        
         
           
     
@@ -1133,10 +717,8 @@ console.log(data,'datadatadata')
         this.setState({ activeIndex: value });
         this.setState({ [name]: checked });
      }
-     handleDateChange = (date) => {        
-
-        this.setState({ selectedDate: moment(date).format('YYYY-MM-DD') });      
-
+     handleDateChange = (date) => {
+        this.setState({ selectedDate: date });
     };
     handleChangeCheckbox = name => (event, checked) => {
         console.log("name:: ", name);
@@ -1176,7 +758,7 @@ console.log(data,'datadatadata')
         if(this.state.optionType!=''){
           let data = {
             "id": 0,
-            "swH_Id": this.state.swid,
+            "swH_Id": 0,
             "optionType": this.state.optionType,
             "baseSAM": "s",
             "cancel": "s",
@@ -1233,7 +815,7 @@ console.log(data,'datadatadata')
         if(this.state.valueadd.length>0 || this.state.noofpieces!=0){
           let data = {
             "id": 0,
-            "swH_Id": this.state.swid,
+            "swH_Id": 0,
             "valueAdd": this.state.valueadd[0].value,
             "valueAddType": this.state.valueaddtype[0].value,
             "valueaddtypeDesc": this.state.valueaddtype[0].label,
@@ -1297,7 +879,7 @@ console.log(data,'datadatadata')
           if(this.state.markerfor.length>0 ){
             let data =  {
                 "id": 0,
-                "swH_Id": this.state.swid,
+                "swH_Id": 0,
                 "matType": this.state.materialtype[0].value,
                 "description": this.state.marker_desc,
                 "placement":this.state.marker_placement,
@@ -1359,7 +941,7 @@ console.log(data,'datadatadata')
           if(this.state.sample_materialtype.length>0 ){
             let data =  {
                 "id": 0,
-                "swH_Id": this.state.swid,
+                "swH_Id": 0,
                 "matType": this.state.sample_materialtype[0].value,
                 "matDesc": this.state.sample_desc,
                 "placement":this.state.sample_placement,
@@ -1413,7 +995,7 @@ console.log(data,'datadatadata')
 
 
      render() {
-         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype } = this.state;
+         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -1533,12 +1115,6 @@ console.log(data,'datadatadata')
                valueaddoptions.push({value:item.code,label:item.codeDesc});
            }
 
-           const valueaddtypeoptions = [];
-           for (const item of this.state.valueaddtypelists) {           
-               valueaddtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           
            const sampletypeoptions = [];
            for (const item of this.state.sampletypelists) {           
                sampletypeoptions.push({value:item.code,label:item.codeDesc});
@@ -1747,22 +1323,9 @@ console.log(data,'datadatadata')
 
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
-                        {(() => {
-                           
-                           if (this.state.swid == 0) {
-                          return (
+                       
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                        )
-                    } 
-                     if (this.state.swid != 0) { 
-                    return (
-                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                        )
-                            }
-                        })()}
-
-                        </div> 
-                  
+                   </div> 
                    <div className="clearfix"></div>
 
                    <Dialog open={this.state.cloneopen} onClose={this.Closeclone} aria-labelledby="form-dialog-title">
@@ -1847,8 +1410,7 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Buyer"
                                                         options={buyeroptions}
-                                                        // onChange={this.setstatevaluedropdownfunction('buyer')}
-                                                        onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
+                                                        onChange={this.setstatevaluedropdownfunction('buyer')}
                                                         placeholder="Buyer"
                                                         values={this.state.buyer}
                                                         />
@@ -1931,8 +1493,6 @@ console.log(data,'datadatadata')
                             <div className="w-100 float-left m-btop-10">
                                 <FormControl>
                                     <div class="item cursor-pointer mt-5"  onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
-                                    <span className="error">{this.state.errors["fit"]}</span>
-                                    <span className="error">{this.state.errors["stage"]}</span>
                                     <Dialog open={this.state.tpopen} onClose={this.CloseTechPack} aria-labelledby="form-dialog-title">
                                     <DialogTitle id="form-dialog-title">Tech Pack</DialogTitle>
                                     <DialogContent>                                   
@@ -2016,7 +1576,7 @@ console.log(data,'datadatadata')
                 <div className="form-group select_label_name mt-15">
                                                     <Select1
                                                         dropdownPosition="auto"
-                                                          multi
+                                                        //   multi
                                                         createNewLabel="Req Type"
                                                         options={reqtypeoptions}
                                                         onChange={this.setstatevaluedropdownfunction('reqtype')}
@@ -2039,40 +1599,29 @@ console.log(data,'datadatadata')
                                                         placeholder="Purpose"
                                                         values={this.state.purpose}
                                                         />
-                                                        <span className="error">{this.state.errors["purpose"]}</span>
                                                     </div>
 
  
                     </div> 
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
                     <div className="form-group">
-                                                    <TextField id="baseStyleno" value={this.state.baseStyleno}  onChange={this.setstatevaluefunction('baseStyleno')} fullWidth label="Base Style" placeholder="Base Style"/>
-                                                    </div>
-
-  
-                    {/* <div className="form-group">
                         <FormControl fullWidth>
-                            <InputLabel htmlFor="baseStyleno-simple">Base Style</InputLabel>
-                            <Select value={this.state.baseStyleno} onChange={this.handleChange}
-                            inputProps={{ name: 'baseStyleno', id: 'baseStyleno-simple', }}>
+                            <InputLabel htmlFor="age-simple">Base Style</InputLabel>
+                            <Select value={this.state.age} onChange={this.handleChange}
+                            inputProps={{ name: 'age', id: 'age-simple', }}>
                             <MenuItem value=""><em>None</em></MenuItem>
                             <MenuItem value={10}>Autumn</MenuItem>
                             <MenuItem value={20}>Summer</MenuItem>
                             <MenuItem value={30}>Winter</MenuItem>
                             </Select>
                         </FormControl>
-                        </div> */}
+                        </div>
  
                     </div> 
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                                                    <TextField id="fabricDesc" value={this.state.fabricDesc}  onChange={this.setstatevaluefunction('fabricDesc')} fullWidth label="Fabric composition" placeholder="Fabric composition"/>
-                                                    </div>
-
-                        {/* <div className="form-group">
+                        <div className="form-group">
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="age-simple">Fabric composition</InputLabel>
                                 <Select value={this.state.age} onChange={this.handleChange}
@@ -2083,15 +1632,11 @@ console.log(data,'datadatadata')
                                 <MenuItem value={30}>Winter</MenuItem>
                                 </Select>
                             </FormControl>
-                            </div> */}
+                            </div>
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div className="form-group">
-                                                    <TextField id="fabricType" value={this.state.fabricType}  onChange={this.setstatevaluefunction('fabricType')} fullWidth label="Fabric Type(Pluid)" placeholder="Fabric Type(Pluid)"/>
-                                                    </div>
-
-                        {/* <div className="form-group">
+                        <div className="form-group">
                             <FormControl fullWidth>
                                 <InputLabel htmlFor="age-simple">Fabric Type(Pluid)</InputLabel>
                                 <Select value={this.state.age} onChange={this.handleChange}
@@ -2102,7 +1647,7 @@ console.log(data,'datadatadata')
                                 <MenuItem value={30}>Winter</MenuItem>
                                 </Select>
                             </FormControl>
-                        </div> */}
+                        </div>
  
                     </div> 
                     
@@ -2137,7 +1682,7 @@ console.log(data,'datadatadata')
                         </div>
                     </div>
                     <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
-                    <Accordion className="border mb-15 mt-15 patternclass">
+                    <Accordion className="border mb-15 mt-15">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                          <div className="acc_title_font">
                              <Typography>Pattern</Typography>
@@ -2462,7 +2007,7 @@ console.log(data,'datadatadata')
                         </div>
                      </AccordionDetails>
                  </Accordion>
-                 <Accordion className="border mb-15 mt-15 sampleclass">
+                 <Accordion className="border">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                          <div className="acc_title_font">
                              <Typography>Sample</Typography>
@@ -2475,48 +2020,23 @@ console.log(data,'datadatadata')
                      <div className="clearfix"></div>
                      <div className="row">  
                      <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-                     <div className="form-group select_label_name mt-15">
-                              <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Reference Version"
-                                                        options={prepseqoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('reference_version')}
-                                                        placeholder="Reference Version"
-                                                        values={this.state.reference_version}
-                                                        />
-             
-                </div>
+                        <div className="form-group">
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="age-simple">Reference version</InputLabel>
+                                <Select value={this.state.age} onChange={this.handleChange}
+                                inputProps={{ name: 'age', id: 'age-simple', }}>
+                                <MenuItem value=""><em> Pattern Version</em></MenuItem>
+                                <MenuItem value={10}>Autumn</MenuItem>
+                                <MenuItem value={20}>Summer</MenuItem>
+                                <MenuItem value={30}>Winter</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
                     </div>
             <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
-
-            <Fragment>
-                                                <div className="rct-picker">
-                                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                                        <KeyboardDatePicker
-                                                            disableToolbar
-                                                            variant="inline"
-                                                            format="MM/dd/yyyy"
-                                                            margin="normal"
-                                                            id="date-picker-inline"
-                                                            KeyboardButtonProps={{
-                                                            'aria-label': 'change date',
-                                                            }}
-                                                            label="Choose a date"
-                                                            value={selectedDate}
-                                                            onChange={this.handleDateChange}
-                                                            animateYearScrolling={false}
-                                                            leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-                                                            rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-                                                            fullWidth
-                                                        />
-                                                    </MuiPickersUtilsProvider>
-                                                </div>
-                                            </Fragment>
-
-                {/* <div className="form-group">
+                <div className="form-group">
                 <TextField id="Buyer" fullWidth label="Expected delivery date" placeholder="Expected delivery date"/>
-                </div> */}
+                </div>
             </div>
             <div className="col-lg-4 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group select_label_name mt-15">
@@ -2692,7 +2212,7 @@ console.log(data,'datadatadata')
                                  
                                  </table>
                                  <div className="clearfix"></div>
-                                 {/* <div className="w-50 float-right">
+                                 <div className="w-50 float-right">
                                  <div className="w-25 float-left">
                                  <label className="mt-5">Rows per page: </label>
                     </div>
@@ -2710,13 +2230,13 @@ console.log(data,'datadatadata')
                         <div className="w-30 float-left">
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div> */}
+                        </div></div>
                              </div>   
                      </AccordionDetails>
                  </Accordion>
                  
  
-                 <Accordion className="border mb-15 mt-15 markerclass">
+                 <Accordion className="border mt-15">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                          <div className="acc_title_font">
                              <Typography>Marker</Typography>
@@ -2939,7 +2459,7 @@ console.log(data,'datadatadata')
                      </AccordionDetails>
                  </Accordion>
  
-                 <Accordion className="border mb-15 mt-15 valueaddclass">
+                 <Accordion className="border mt-15">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                          <div className="acc_title_font">
                              <Typography>Value Add </Typography>
@@ -2958,8 +2478,7 @@ console.log(data,'datadatadata')
                                                                             // multi
                                                                             createNewLabel="Value Add"
                                                                             options={valueaddoptions}
-                                                                            // onChange={this.setstatevaluedropdownfunction('valueadd')}
-                                                                            onChange={values => this.getvalueaddtype({ valueadd:values },this,"valueadd")}
+                                                                            onChange={this.setstatevaluedropdownfunction('valueadd')}
                                                                             placeholder="Value Add"
                                                                             values={this.state.valueadd}
                                                                             />
@@ -2973,7 +2492,6 @@ console.log(data,'datadatadata')
                                                                             dropdownPosition="auto"
                                                                             // multi
                                                                             createNewLabel="Value Add Type"
-                                                                            // options={valueaddtypeoptions}
                                                                             options={valueaddoptions}
                                                                             onChange={this.setstatevaluedropdownfunction('valueaddtype')}
                                                                             placeholder="Value Add Type"
@@ -3067,7 +2585,7 @@ console.log(data,'datadatadata')
                  </Accordion>
                 
  
-                 <Accordion className="border mb-15 mt-15 samclass">
+                 <Accordion className="border mt-15">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                          <div className="acc_title_font">
                              <Typography>SAM</Typography>

@@ -81,6 +81,9 @@ import QuantityFormClone from '../../forecast/add-forecasting/QuantityCloneForm'
 
 import GuideForm from '../../forecast/add-forecasting/GuideForm';
 
+
+import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
+
 /**Editable Grid section**/
 import DataGrid, {
     Column,
@@ -137,6 +140,7 @@ function TabContainer({ children }) {
 	}
     constructor(props) {
         super(props);
+        this.getSubproductType = this.getSubproductType.bind(this);
        // this.state = { employees: service.getEmployees() };
        // this.states = service.getStates();
         this.state = {
@@ -203,6 +207,14 @@ function TabContainer({ children }) {
             })
         }
         deleteForecast(ForecastItem,ForecastId){
+
+            this.refs.deleteConfirmationDialog.open();
+
+            this.setState({ deleteForecastdetail: ForecastItem,DForecastId:ForecastId });           
+        }
+        deleteForecastConfirm(){
+            const ForecastItem = this.state.deleteForecastdetail;
+            const ForecastId = this.state.DForecastId;
             const deleteForecastHeaderitem={
                 "id": ForecastId,
                 "forecastNo": ForecastItem.forecastNo,
@@ -220,7 +232,7 @@ function TabContainer({ children }) {
                 "hostName": ForecastItem.hostName
             }
             api.post('ForecastEntity/SaveForecastQtyDetails',deleteForecastHeaderitem) .then((response) => {
-                    
+                this.refs.deleteConfirmationDialog.close();
                 NotificationManager.success('Deleted Sucessfully');
                if(response.data.status==true){
                     api.get('ForecastEntity/GetForecastHeaderList')
@@ -641,14 +653,15 @@ function TabContainer({ children }) {
                 this.setState({ activityList: response.data });
             })
             */
-            api.get('ProductType/GetProductTypeDropDown')
-            .then((response) => {            
-                this.setState({ productTypes: response.data.result.data });
-            })
             api.get('StyleDivision/GetStyleDivisionList')
             .then((response) => {            
                 this.setState({ subproductTypes: response.data.result.data });
             })
+            api.get('ProductType/GetProductTypeDropDown')
+            .then((response) => {            
+                this.setState({ productTypes: response.data.result.data });
+            })
+           
             api.get('ForecastEntity/GetForecastHeaderList')
             .then((response) => {           
                 this.setState({ forecastinglists: response.data.data });
@@ -679,7 +692,22 @@ function TabContainer({ children }) {
             })        
             .catch(error => {})           
         }
-     
+        getSubproductType(options){
+           
+            return {
+                store: this.state.subproductTypes,
+                filter: options.data ? ['productType', '=', options.data.productType] : null,
+              };
+
+            // if(Object.keys(options).length >0){
+            //     api.get('StyleDivision/GetStyleDivisionList?ProductType='+options.data.productType)
+            //     .then((response) => {            
+            //         this.setState({ subproductTypes: response.data.result.data });
+            //     })
+            //     console.log(this.state.subproductTypes)
+            // }
+           
+        }
     opnAddNewUserModal(e) {
         e.preventDefault();
         this.setState({ addNewUserModal: true });
@@ -767,6 +795,10 @@ function TabContainer({ children }) {
         this.setState({errors: errors});
         return formIsValid;
       }
+
+      customizeText (e) {
+            return "Total: " + e.value;
+        };
     render() {
          
         const { employeePayroll } = this.state;
@@ -825,7 +857,7 @@ function TabContainer({ children }) {
         const options = {
             filterType: 'dropdown'
         };
-       
+        
        // const executeScroll = () => scrollToRef(buyername)
         return (
             <div className="formelements-wrapper main-layout-class">
@@ -961,26 +993,37 @@ function TabContainer({ children }) {
                                                 <Button name="delete" hint="Clone" icon="repeat"  />
                                             </Column>   
                                         <Column dataField="quantity" width={110} caption="Quantity">
-                                        <StringLengthRule max={10} message="Quantity should not more than 10 Digits"/>
+                                        <RequiredRule />
+                                        <StringLengthRule max={7} message="Quantity should not more than 7 Digits"/>
                                         </Column>
                                         <Column dataField="productType" caption="Product type" >
                                        
-                                            <Lookup dataSource={this.state.productTypes} valueExpr="productType" displayExpr="productType" />
+                                            <Lookup dataSource={this.state.productTypes} valueExpr="productType" displayExpr="productType"/>
+                                            <RequiredRule />
                                         </Column>
                                         <Column dataField="subProductType" caption="Sub-Product type" >
                                             {/* */}
-                                            <Lookup dataSource={this.state.subproductTypes} valueExpr="subProductType" displayExpr="subProductType" />
+                                            <Lookup dataSource={this.getSubproductType} valueExpr="subProductType" displayExpr="subProductType" />
+                                            <RequiredRule />
                                         </Column>
-                                        <Column dataField="avgSAM" width={110} caption="Average SAM"></Column>
-                                        <Column dataField="pcd" dataType="date" ></Column>
-                                        <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" ></Column>
-                                        <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" ></Column>
+                                        <Column dataField="avgSAM" width={110} caption="Average SAM">
+                                        <RequiredRule />
+                                        </Column>
+                                        <Column dataField="pcd" dataType="date" >
+                                        <RequiredRule />
+                                        </Column>
+                                        <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" >
+                                        <RequiredRule />
+                                        </Column>
+                                        <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" >
+                                        <RequiredRule />
+                                        </Column>
                                         <Column dataField="capacity" caption="Available capacity">
-                                       
+
                                         </Column>
                                       
                                          <Summary>
-                                            <TotalItem column="Quantity" summaryType="sum"  valueFormat="#0.00" />
+                                            <TotalItem column="Quantity" summaryType="sum"  customizeText={this.customizeText}  valueFormat="#0.00" />
                                         </Summary>
                                         
                                     </DataGrid>                                 
@@ -1081,6 +1124,12 @@ function TabContainer({ children }) {
                             </TabContainer>
                         </SwipeableViews>    
                         </form>
+                        <DeleteConfirmationDialog
+                            ref="deleteConfirmationDialog"
+                            title="Are You Sure Want To Delete?"
+                            message="Are You Sure Want To Delete Permanently."
+                            onConfirm={() => this.deleteForecastConfirm()}
+                        />
                         <Modal isOpen={this.state.addNewUserModal} toggle={() => this.onAddUpdateUserModalClose()}>
                             <ModalHeader toggle={() => this.onAddUpdateUserModalClose()}>
                             Activity Form

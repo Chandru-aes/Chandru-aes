@@ -152,7 +152,10 @@ import { DateTimePicker} from '@material-ui/pickers';
         availableqty:'',
         projectiondata:[],
         fields: {},
-        errors: {}
+        errors: {},
+        person_resp:[],
+        unit:[],
+        unitlists:[]
 
      }
      handleDateChange11 = (date) => {
@@ -169,6 +172,7 @@ import { DateTimePicker} from '@material-ui/pickers';
     }
      componentDidMount() {
         document.body.classList.add('med-pop-up-h');
+        $('.project-dt-pop').hide();
         this.getfilldropdownlists();
         
         // $(document).on('click', '.edit', function() {
@@ -255,7 +259,7 @@ import { DateTimePicker} from '@material-ui/pickers';
             
         }
 
-        if(name=="styleno"){
+        if(name=="styleno" || name=="fabdesc" || name=="refstyleno"){
             if(!event.target.value.match(/^[a-zA-Z0-9]+$/)){
                 NotificationManager.error('Input is not alphanumeric');              
             }      	
@@ -266,12 +270,24 @@ import { DateTimePicker} from '@material-ui/pickers';
 
     setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
+       
         if(event.length!=0){
             fields[name] = event[0].value;        
             this.setState({fields});
+            if(name=='OrderType'){            
+                $('.project-dt-pop').hide();
+                if(event[0].value=='PROJECTION'){
+                    $('.project-dt-pop').show();
+                }
+                
+            }
+
         } else{
             fields[name] = '';        
             this.setState({fields});
+            if(name=='OrderType'){            
+                $('.project-dt-pop').hide();
+            }
         }
         
 		this.setState({ [name]: event });
@@ -327,6 +343,25 @@ import { DateTimePicker} from '@material-ui/pickers';
             formIsValid = false;
             errors["OrderType"] = "Cannot be empty";
         }
+
+        //producttype        
+        if(!fields["producttype"]){           
+            formIsValid = false;
+            errors["producttype"] = "Cannot be empty";
+        }
+          
+
+        //subproducttype                
+        if(!fields["subproducttype"]){           
+            formIsValid = false;
+            errors["subproducttype"] = "Cannot be empty";
+        }
+
+         //FashionGRP                
+         if(!fields["FashionGRP"]){           
+            formIsValid = false;
+            errors["FashionGRP"] = "Cannot be empty";
+        }
           
     
         if(typeof fields["styleno"] !== "undefined"){
@@ -335,7 +370,21 @@ import { DateTimePicker} from '@material-ui/pickers';
             errors["styleno"] = "Input is not alphanumeric";
           }      	
         }
-    
+
+        if(typeof fields["fabdesc"] !== "undefined"){
+            if(!fields["fabdesc"].match(/^[a-zA-Z0-9]+$/)){
+              formIsValid = false;
+              errors["fabdesc"] = "Input is not alphanumeric";
+            }      	
+          }
+
+          if(typeof fields["refstyleno"] !== "undefined"){
+            if(!fields["refstyleno"].match(/^[a-zA-Z0-9]+$/)){
+              formIsValid = false;
+              errors["refstyleno"] = "Input is not alphanumeric";
+            }      	
+          }
+          
         // //Email
         // if(!fields["email"]){
         //   formIsValid = false;
@@ -370,21 +419,22 @@ import { DateTimePicker} from '@material-ui/pickers';
         })
 
 
-        api.get('BuyerDivision/GetBuyerDivisionList')
-        .then((response) => {
+        // api.get('BuyerDivision/GetBuyerDivisionList')
+        // .then((response) => {
             
-            this.setState({ buyerdivlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        //     this.setState({ buyerdivlists: response.data.result.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
 
 
         api.get('Miscellaneous/GetMiscellaneousList?MType=ORDSTAGE')
         .then((response) => {
             
-            this.setState({ OrderTypelists: response.data.result.data,stagedetailslists: response.data.result.data,stage: response.data.result.data });
+            this.setState({ OrderTypelists: response.data.result.data,stagedetailslists: response.data.result.data });
+            // ,stage: response.data.result.data
         })
         .catch(error => {
             // error handling
@@ -430,6 +480,15 @@ import { DateTimePicker} from '@material-ui/pickers';
         .then((response) => {
             
             this.setState({ locationlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Unit/GetUnitDropDown')
+        .then((response) => {
+            
+            this.setState({ unitlists: response.data.result.data });
         })
         .catch(error => {
             // error handling
@@ -524,7 +583,7 @@ import { DateTimePicker} from '@material-ui/pickers';
               "pcd": this.state.pcd,//"2021-10-30T10:38:00.634Z",
               "expExfacDt": this.state.tendeliverydate,//"2021-10-30T10:38:00.634Z",
               "projClosrDt": this.state.confduedate,//"2021-10-30T10:38:00.634Z",
-              "cancel": "q",
+              "cancel": "Y",
               "createdBy": "q",
               "createdDt": "2021-10-30T10:38:00.634Z",
               "modifyBy": "q",
@@ -573,8 +632,40 @@ import { DateTimePicker} from '@material-ui/pickers';
 
       save () {
         console.log(this.state,'-----------------------')
-        
+        let fabtype="";
+        if(this.state.fabtype.length>0){
+            fabtype=this.state.fabtype[0].value;
+        }
 
+
+        let Washtype="";
+        let Washtypeflag="N";
+        if(this.state.Washtype.length>0){
+            Washtype=this.state.Washtype[0].value;
+            Washtypeflag="Y";
+        }
+
+        let printtype="";
+        let printtypeflag="N";
+        if(this.state.printtype.length>0){
+            printtype=this.state.printtype[0].value;
+            printtypeflag="Y";
+        }
+
+        let embtype="";
+        let embtypeflag="N";
+        if(this.state.embtype.length>0){
+            embtype=this.state.embtype[0].value;
+            embtypeflag="Y";
+        }
+
+        let GarDyeType="";
+        let GarDyeTypeflag="N";
+        if(this.state.GarDyeType.length>0){
+            GarDyeType=this.state.GarDyeType[0].value;
+            GarDyeTypeflag="Y";
+        }
+        
         if(this.state.buyer.length>0){
  
             let data =
@@ -592,23 +683,23 @@ import { DateTimePicker} from '@material-ui/pickers';
             "styleDesc": this.state.desc,
             "designStyleNo": this.state.designStyleNo,
             "fabricDesc": this.state.fabdesc,
-            "fabricType": this.state.fabtype[0].value,
+            "fabricType": fabtype,
             "fashionGroup": this.state.FashionGRP[0].value,
             "producttype":  this.state.producttype[0].value,
             "subProductType": this.state.subproducttype[0].value,
             "OrderStage":  this.state.OrderType[0].value,
             "sam": 2,
-            "washReq":  'y',
-            "washDesc": this.state.Washtype[0].label,
-            "printing":  'y',
-            "printDesc":  this.state.printtype[0].label,
-            "embroidery":  'y',
-            "embDesc":  this.state.embtype[0].label,
-            "garmentDye":  'y',
-            "garDyeDesc":  this.state.GarDyeType[0].label,
+            "washReq":  Washtypeflag,
+            "washDesc": Washtype,
+            "printing":  printtypeflag,
+            "printDesc":  printtype,
+            "embroidery":  embtypeflag,
+            "embDesc":  embtype,
+            "garmentDye":  GarDyeTypeflag,
+            "garDyeDesc":  GarDyeType,
             "tentativeFOB": 2,
             "remarks": "Remarks",
-            "active": "A",
+            "active": "Y",
             "createdBy": "A",
             "createdDt": "2021-10-29T08:01:11.048Z",
             "modifyBy": "A",
@@ -711,6 +802,31 @@ console.log(data,'datadatadata')
 
       }
 
+      getBuyerDivision1(val,field,e){
+        let fields = this.state.fields;
+        this.setState({ buyerdivlists: [],buyerdiv:[] });
+        if(val.buyer.length!=0){
+            fields['buyer'] = val.buyer[0].value;        
+            this.setState({fields});
+
+            this.setState({ buyer: val.buyer });
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.buyer[0].value)
+            .then((response) => {                
+                this.setState({ buyerdivlists: response.data.result.data });
+            })        
+            .catch(error => {}) 
+            
+        } else{
+            fields['buyer'] = '';        
+            this.setState({fields});
+        }
+
+        // fields['buyer'] = val.buyer[0].value;        
+        // this.setState({fields});
+
+                  
+    }
+
      render() {
          const { employeePayroll,projectiondata } = this.state;
          const { match } = this.props;
@@ -797,6 +913,11 @@ console.log(data,'datadatadata')
            for (const item of this.state.locationlists) {           
                locationoptions.push({value:item.locCode,label:item.locName});
            }
+          
+           const unitoptions = [];
+           for (const item of this.state.unitlists) {           
+               unitoptions.push({value:item.uCode,label:item.uName});
+           }
 
            const sizeoptions = [];
            for (const item of this.state.sizelists) {           
@@ -845,7 +966,7 @@ console.log(data,'datadatadata')
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div  className={isActive ? "s-panel active" : 's-panel'}>
                       { !isActive &&
-                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details{isActive}<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
+                          <button className="MuiButtonBase-root MuiButton-root project-dt-pop MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details{isActive}<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
                        { isActive &&
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle1} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
@@ -1224,8 +1345,17 @@ console.log(data,'datadatadata')
                             <option>Germany</option> 
                         </select> */}
                     </div>
-                    <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Unit" placeholder="Unit"/>
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Unit"
+                                                        options={unitoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('unit')}
+                                                        placeholder="Unit"
+                                                        values={this.state.unit}
+                                                        />
+                       
                     </div>
                     {/* <div className="form-group">
                         <select className="form-control select2 mt-15">
@@ -1261,7 +1391,7 @@ console.log(data,'datadatadata')
                                         <div className="col border">                       
                                             <div className="row no-f-mb">
                                                
-                                                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                            <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                 <div className="form-group select_label_name mt-15">
                                                     <Select1
                                                         dropdownPosition="auto"
@@ -1275,6 +1405,7 @@ console.log(data,'datadatadata')
                                                        
                                                     </div>
                                                 </div>
+
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                 <div className="form-group select_label_name mt-15">
                                                     <Select1
@@ -1286,8 +1417,35 @@ console.log(data,'datadatadata')
                                                         placeholder="Stage"
                                                         values={this.state.stage}
                                                         />
+                                                       
                                                     </div>
                                                 </div>
+
+                                                {/* <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Stage Details"
+                                                        options={stagedetailsoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('stage')}
+                                                        placeholder="Stage Details"
+                                                        values={this.state.stage}
+                                                        />
+                                                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Stage"
+                                                        options={stagedetailsoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('stage')}
+                                                        placeholder="Stage"
+                                                        values={this.state.stage}
+                                                        />
+                                                       
+
+                                                   
+                                                    </div>
+                                                </div> */}
                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                     <div className="form-group">
                                                         
@@ -1343,7 +1501,8 @@ console.log(data,'datadatadata')
                                                   createNewLabel="Buyer"
                                                 options={buyeroptions}
                                                 //onChange={values => this.setState({ buyer:values })}
-                                                onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
                                                 placeholder="Buyer"
                                                 values={this.state.buyer}
                                                 />
@@ -1511,12 +1670,14 @@ console.log(data,'datadatadata')
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <TextField id="ref_no" value={this.state.refstyleno}  onChange={this.setstatevaluefunction('refstyleno')} fullWidth label="Design Style Reference Number" placeholder="Design Style Reference Number"/>
+                        <span className="error">{this.state.errors["refstyleno"]}</span>
                         </div>
                     </div> 
  
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <TextField id="fabdesc" value={this.state.fabdesc}  onChange={this.setstatevaluefunction('fabdesc')} fullWidth label="Fabric" placeholder="Fabric"/>
+                        <span className="error">{this.state.errors["fabdesc"]}</span>
                         </div>
                     </div> 
  
@@ -1531,7 +1692,7 @@ console.log(data,'datadatadata')
                                                         placeholder="Product Type"
                                                         values={this.state.producttype}
                                                         />
-                         
+                         <span className="error">{this.state.errors["producttype"]}</span>
                             
                         </div>
                     </div> 
@@ -1547,6 +1708,7 @@ console.log(data,'datadatadata')
                                                         placeholder="Sub Product Type"
                                                         values={this.state.subproducttype}
                                                         />
+                                                        <span className="error">{this.state.errors["subproducttype"]}</span>
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1560,18 +1722,30 @@ console.log(data,'datadatadata')
                                                         placeholder="Fashion Group"
                                                         values={this.state.FashionGRP}
                                                         />
-                          
+                          <span className="error">{this.state.errors["FashionGRP"]}</span>
                         </div>
                     </div> 
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div className="form-group">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                          multi
+                                                        createNewLabel="Person Responsible"
+                                                        options={producttypeoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('person_resp')}
+                                                        placeholder="Person Responsible"
+                                                        values={this.state.person_resp}
+                                                        />
+                          
+                        </div>
+                        {/* <div className="form-group">
                             <select className="form-control select2 mt-15">
                                 <option>Person Responsible</option> 
                                 <option>Group 1</option> 
                                 <option>Group 2</option> 
                                 <option>Group 3</option> 
                             </select>
-                        </div>
+                        </div> */}
                     </div>        
                   
                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">

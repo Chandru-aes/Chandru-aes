@@ -45,7 +45,8 @@
  
  // rct section loader
  import RctSectionLoader from 'Components/RctSectionLoader/RctSectionLoader';
- 
+ import Select1 from "react-dropdown-select";
+
  export default class UserProfile extends Component {
  
      state = {
@@ -71,7 +72,23 @@
          editUser: null,
          allSelected: false,
          selectedUsers: 0,
-         stylelists:[]
+         stylelists:[],
+        
+         
+         buyerlists:[],
+         buyer:[],
+         fields: {},
+         errors: {},
+         BuyerDivisionList:[],
+         BuyerdivisionValue:[],
+         seasonlists:[],
+         season:[],
+         year:[],
+         yearlists:[],
+         location:[],
+         locationlists:[],
+         stagelists:[],
+         stage:[]
      }
  
      componentDidMount() {
@@ -94,6 +111,63 @@
         .catch(error => {
             // error handling
         })
+
+        api.get('Buyer/GetBuyerDropDown')
+        .then((response) => {
+            
+            this.setState({ buyerlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('BuyerDivision/GetBuyerDivisionDropDown')
+        .then((response) => {                
+            this.setState({ BuyerDivisionList: response.data.result.data });
+        })        
+        .catch(error => {})  
+
+     
+
+        api.get('SeasonMaster/GetSeasonDropDown')
+        .then((response) => {
+            
+            this.setState({ seasonlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=year')
+        .then((response) => {
+            
+            this.setState({ yearlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+    
+        api.get('Location/GetLocationList')
+        .then((response) => {
+            
+            this.setState({ locationlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=ORDSTAGE')
+        .then((response) => {
+            
+            this.setState({ stagelists: response.data.result.data});
+            // ,stage: response.data.result.data
+        })
+        .catch(error => {
+            // error handling
+        })
+
+
      }
  
      /**
@@ -229,6 +303,95 @@
          });
      }
  
+
+     
+     setstatevaluedropdownfunction = name => event => {
+        let fields = this.state.fields;
+        this.setState({ [name]: event });
+        if(event.length!=0){
+           
+            fields[name] = event[0].value;        
+            this.setState({fields});
+        } else{
+            fields[name] = '';        
+            this.setState({fields});
+        }
+        // if(name!="docnumber"){
+        //     setTimeout(() => {
+        //         this.docnumberfilter();
+        //     }, 200);
+        // }
+       
+      
+		
+	};
+    viewRequestList(e){
+        e.preventDefault();
+        if(this.handleValidation()){
+            this.getRequestGridList();
+        }    
+    }
+
+    
+    handleValidation(){
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+       
+        if(!fields["buyer"]){
+            formIsValid = false;
+            errors["buyer"] = "Cannot be empty";
+        }
+        if(!fields["BuyerdivisionValue"]){
+            formIsValid = false;
+            errors["BuyerdivisionValue"] = "Cannot be empty";
+        }
+        
+        
+         //season
+         if(!fields["season"]){
+            formIsValid = false;
+            errors["season"] = "Cannot be empty";
+        }
+
+        //year
+        if(!fields["year"]){
+            formIsValid = false;
+            errors["year"] = "Cannot be empty";
+        }
+
+          //location
+          if(!fields["location"]){
+            formIsValid = false;
+            errors["location"] = "Cannot be empty";
+        }
+          //stage
+        //   if(!fields["stage"]){
+        //     formIsValid = false;
+        //     errors["stage"] = "Cannot be empty";
+        // }
+
+      
+        this.setState({errors: errors});
+        return formIsValid;
+      }
+
+      getRequestGridList(){
+       
+        api.get('StyleHeader/GetStyleGridList?Buyer='+this.state.fields.buyer+'&BuyerDivison='+this.state.fields.BuyerdivisionValue+'&location='+this.state.fields.location+'&year='+this.state.fields.year)
+        .then((response) => response.data.data)
+        .then(overalllists => {
+            this.setState({ stylelists: overalllists });
+        });
+        // .then((response) => {  
+                    
+        //     this.setState({ overalllists: response.data.data });
+
+            
+        // })
+    }
+
+
      /**
       * Update User
       */
@@ -272,6 +435,38 @@
  
      render() {
          const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
+
+         const buyeroptions = [];
+         for (const item of this.state.buyerlists) {           
+             buyeroptions.push({value:item.buyerCode,label:item.buyerName});
+         }
+
+
+         const BuyerDivisionOptions =[];
+         for (const item of this.state.BuyerDivisionList) {           
+             BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
+         }
+
+       
+         const yearoptions = [];
+         for (const item of this.state.yearlists) {           
+             yearoptions.push({value:item.code,label:item.codeDesc});
+         }
+         const seasonoptions = [];
+         for (const item of this.state.seasonlists) {           
+             seasonoptions.push({value:item.seasonCode,label:item.seasonName});
+         }
+
+         const locationoptions = [];
+           for (const item of this.state.locationlists) {           
+               locationoptions.push({value:item.locCode,label:item.locName});
+           }
+
+           const stageoptions = [];
+           for (const item of this.state.stagelists) {           
+               stageoptions.push({value:item.code,label:item.codeDesc});
+           }
+
          return (
              <div className="user-management">
                  <Helmet>
@@ -283,6 +478,114 @@
                      match={this.props.match}
                  />
                  <RctCollapsibleCard fullBlock>
+
+                 <div className="row new-form overall-border no-padding-bottom">   
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer "
+                                        options={buyeroptions} ref="buyer"
+                                        placeholder="Buyer "
+                                        onChange={this.setstatevaluedropdownfunction('buyer')}
+                                        values={this.state.buyer}
+                                    /> 
+                                    <span className="error">{this.state.errors["buyer"]}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer Division"
+                                        options={BuyerDivisionOptions} ref="buyerdivision"
+                                        placeholder="Buyer Division"
+                                        onChange={this.setstatevaluedropdownfunction('BuyerdivisionValue')}
+                                        values={this.state.BuyerdivisionValue}
+                                    /> 
+                                    <span className="error">{this.state.errors["BuyerdivisionValue"]}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Season"
+                                                        options={seasonoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('season')}
+                                                        placeholder="Season"
+                                                        values={this.state.season}
+                                                        />
+                                         <span className="error">{this.state.errors["season"]}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                <Select1
+                                                dropdownPosition="auto"
+                                                //   multi
+                                                  createNewLabel="Year"
+                                                options={yearoptions}
+                                                onChange={this.setstatevaluedropdownfunction('year')}
+                                                placeholder="Year"
+                                                values={this.state.year}
+                                                />
+                                                 <span className="error">{this.state.errors["year"]}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Location"
+                                                        options={locationoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('location')}
+                                                        placeholder="Location"
+                                                        values={this.state.location}
+                                                        />
+                                                         <span className="error">{this.state.errors["location"]}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                <div className="form-group select_label_name mt-15"> 
+                                <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Stage"
+                                                        options={stageoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('stage')}
+                                                        placeholder="Stage"
+                                                        values={this.state.stage}
+                                                        />
+                                        {/* <span className="error">{this.state.errors["stage"]}</span> */}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                         
+                           
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group mt-15"> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                </div>   
+                            </div>                     
+                        </div> 
+
                      <div className="table-responsive">
                          <div className="d-flex justify-content-between py-20 px-10 border-bottom">
                              <div>
@@ -321,7 +624,7 @@
                                         <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                             <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
                                         </svg></span></button>
-                                        <Badge className="mb-10 mr-10" color="dark">Add New</Badge>
+                                        <Link to='/app/pre-production/style-creation'><Badge className="mb-10 mr-10" color="dark">Add New</Badge></Link>
                                     </div>
                                 </div>
                          </div>
@@ -378,7 +681,7 @@
                                          <td>
                                              <div className="media-body">
                                                 <h5 className="mb-5 fw-bold">{n.styleDesc}</h5>
-                                                <Badge color="warning">{n.buyerName}</Badge>
+                                                {/* <Badge color="warning">{n.buyerName}</Badge> */}
                                                 <Badge color="warning">{n.seasonName}</Badge>
                                             </div>
                                          </td>
@@ -421,344 +724,7 @@
                                      </tr>
                                        );
                                     })}
-                                     {/* <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img2.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                    
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
-                                                     <Badge color="warning">17H# 255101</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-21</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
-                                                <Badge color="warning">CROWN</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">50</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 3</h5>
-                                                <Badge color="warning">B>p>c</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
-                                        </td>      
-                                        <td>
-                                            <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
-                                                </div>
-                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
-                                                7
-                                                </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
-                                                </div>
-                                            </div>
-                                             <ActionMenu />
-                                        </td>                                          
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img3.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                    
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
-                                                     <Badge color="warning">17H# 253101</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-20</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
-                                                <Badge color="warning">CROWN</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">70</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
-                                                <Badge color="warning">B>p>c</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
-                                        </td>      
-                                        <td>
-                                            <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
-                                                </div>
-                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
-                                                7
-                                                </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
-                                                </div>
-                                            </div>
-                                             <ActionMenu />
-                                        </td>                                          
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img23png.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                   
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
-                                                     <Badge color="warning">17H# 253101</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-20</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
-                                                <Badge color="warning">CROWN</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">70</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
-                                                <Badge color="warning">B>p>c</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
-                                        </td>      
-                                        <td>
-                                            <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
-                                                </div>
-                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
-                                                7
-                                                </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
-                                                </div>
-                                            </div>
-                                             <ActionMenu />
-                                        </td>                                           
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img2.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                  
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
-                                                     <Badge color="warning">17H# 253101</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-20</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
-                                                <Badge color="warning">CROWN</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">70</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
-                                                <Badge color="warning">B>p>c</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
-                                        </td>      
-                                        <td>
-                                            <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
-                                                </div>
-                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
-                                                7
-                                                </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
-                                                </div>
-                                            </div>
-                                             <ActionMenu />
-                                        </td>                                          
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                    
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
-                                                     <Badge color="warning">17H# 253101</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-20</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
-                                                <Badge color="warning">CROWN</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">70</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
-                                                <Badge color="warning">B>p>c</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
-                                        </td>      
-                                        <td>
-                                            <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
-                                                </div>
-                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
-                                                7
-                                                </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
-                                                </div>
-                                            </div>
-                                             <ActionMenu />
-                                        </td>                                      
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">
-                                                
-                                                     <img src={require('Assets/avatars/style-img3.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                                     
-                                             </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                     <h5 className="mb-5 fw-bold">900</h5>
-                                                     <Badge color="warning">17H# 253101</Badge>
-                                                 </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">Style product Top</h5>
-                                                <Badge color="warning">BRWB</Badge>
-                                                <Badge color="warning">SP-20</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                             <h5 className="mb-5 fw-bold">Chennai</h5>
-                                                <Badge color="warning">CROWN</Badge>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">70</h5>
-                                            </div>
-                                         </td>
-                                         <td>
-                                             <div className="media-body">
-                                                <h5 className="mb-5 fw-bold">PCD 2</h5>
-                                                <Badge color="warning">B>p>c</Badge>
-                                            </div>
-                                         </td>                                       
-                                         <td>
-                                             <span className={`badge badge-success badge-pill ft-lft`}>Design</span>                                            
-                                        </td>      
-                                        <td>
-                                            <div className="progress">
-                                                <div className="progress-bar bg-success ft-lft w-d-25" >
-                                                5
-                                                </div>
-                                                <div className="progress-bar bg-warning ft-lft w-d-25" >
-                                                7
-                                                </div>
-                                                <div className="progress-bar bg-danger ft-lft w-d-25">
-                                                3
-                                                </div>
-                                            </div>
-                                             <ActionMenu />
-                                        </td>                                          
-                                     </tr> */}
-                                     
-                                 {/* )) */}
+                                    
                              </tbody>
                              <tfoot className="border-top">
                                  <tr>
