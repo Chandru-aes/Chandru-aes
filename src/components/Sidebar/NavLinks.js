@@ -609,6 +609,11 @@ export default {
                   "menu_title": "Productivity Request"	
                },
                {	
+                  "path": "/app/pre-production/request-response",	
+                  "new_item": false,	
+                  "menu_title": "Request Response"	
+               },
+               {	
                   "path": "/app/pre-production/productivity-grid",	
                   "new_item": false,	
                   "menu_title": "Productivity Grid"	
@@ -632,7 +637,13 @@ export default {
                   "path": "/app/pre-production/itemmaster-grid",	
                   "new_item": false,	
                   "menu_title": "Item Master Grid"	
-               }
+               },
+               {	
+                  "path": "/app/pre-production/costing-creation",	
+                  "new_item": false,	
+                  "menu_title": "Costing"	
+               },
+
               
             ]
          }

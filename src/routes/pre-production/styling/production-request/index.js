@@ -84,6 +84,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
          selectedUsers: 0,
          BuyerList:[],
          BuyerDivisionList:[],
+         workingHoursList:[],
          stylenolist:[],
          fields: {},
          errors: {},
@@ -92,8 +93,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
          yearlists:[],
          UnitCodeList:[],
          samstylelist:[],
-         RequestListData:[{'id':1}],
-         tableheaderitems:['SAM','OQ/OQR','No of Line','Operators','Number Of Days','Average productivity/day/line','Efficiency','Target/Hour','Step Up']
+         RequestListData:[],
+        //  tableheaderitems:['SAM','OQ/OQR','No of Line','Operators','Number Of Days','Average productivity/day/line','Efficiency','Target/Hour','Step Up']
+         tableheaderitems:['SAM','OQ/OQR','No of Line','Operators']
      }
  
      componentDidMount() {
@@ -161,14 +163,49 @@ import DialogTitle from '@material-ui/core/DialogTitle';
               this.createRequest();
           }    
     }
+    addGridItems(){
+        const {RequestListData} = this.state;
+        let patternItems = {
+           "SAM":1,
+           "OQ":25,
+           "NoOfLines":this.state.nooflines,
+           "Operator":this.state.noofOperator,
+          // "days":2
+        }
+        /**Check whether object is already exists */
+        let IsMatch = false;
+        RequestListData.map((item, index) => {
+           IsMatch = JSON.stringify(patternItems) === JSON.stringify(item);
+           if(IsMatch){
+               return;
+           }           
+       });         
+       if(!IsMatch){
+        RequestListData.push(patternItems);
+       }else{
+           NotificationManager.error('Added Items is already exists in List');
+       }      
+       
+        this.setState({RequestListData:RequestListData}) 
+
+        console.log
+    }
     setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
         fields[name] = event[0].value;        
         this.setState({fields});
-        
+        if(name=='units'){
+            api.get('ProductivityRequest/GetWorkingHours?UnitID='+event[0].value)
+            .then((response) => {                
+                this.setState({ workingHoursList: response.data.data });
+            })        
+            .catch(error => {})  
+        }
 		this.setState({ [name]: event });
-        
-       this.getStyleList();
+        setTimeout(() => {
+            this.getStyleList();
+        }, 100);
+       
 	};
 
     createRequest(){
@@ -189,7 +226,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
             "orderQty": 0,
             "numberOflines": this.state.nooflines,
             "noOfOperators": this.state.noofOperator,
-            "workingHrs": this.state.workinghours,//it should be dropdown value
+            "workingHrs": this.state.workinghours[0].value,//it should be dropdown value
             "difficultyLevel": "string",
             "acceptFlag": "Y",
             "keyRequest": "Y",
@@ -282,14 +319,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
             formIsValid = false;
             errors["fits"] = "Cannot be empty";
         }
-        console.log(errors);
-        console.log(formIsValid);
+       
         this.setState({errors: errors});
         return formIsValid;
       }
  
      render() {
-         const { users, loading, selectedUser, editUser, allSelected, selectedUsers,documentNumber,tableheaderitems,RequestListData } = this.state;
+         const { users, loading, selectedUser, editUser, allSelected, selectedUsers,documentNumber,tableheaderitems } = this.state;
          
          const BuyerOptions =[];
          for (const item of this.state.BuyerList) {           
@@ -325,32 +361,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
             SamStyleOptions.push({value:item.id,label:item.refStyleNo});
         }
         
-        let buyerrightlistshtml = null;
-
-        if(this.state.tableheaderitems.length>0){
-            buyerrightlistshtml= this.state.tableheaderitems.map((n,index) => {                                    
-                return (
-                    <tr>
-                    <th className="w-20">{n}</th>
-                    {
-                        this.state.RequestListData.map((nd,index) => {     
-                            return (                              
-                            <span>
-                                <td>{nd.id}</td>
-                                {/* <td>35.3</td> */}
-                            </span>
-                            )
-                        }) 
-                     } 
-                    </tr>
-                );
-            });
-        console.log(this.state.RequestListData)
-    }else{
-            buyerrightlistshtml = <tr><td colSpan="9" className="no-records-data"><span>No records found</span></td></tr> ;
+        const WorkingHourOptions = [];
+        for (const item of this.state.workingHoursList) {           
+            WorkingHourOptions.push({value:item.workingHrs,label:item.workingHrs});
         }
         
-        
+      
          return (
              <div className="user-management">
                  <Helmet>
@@ -476,7 +492,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group mt-15">
                                     <div className="form-group select_label_name"> 
-                                        <TextField id="workingHours" fullWidth label="Working Hours" placeholder="Working Hours" onChange={this.handleChangeTextField('workinghours')} value={this.state.workinghours}/>
+                                        {/* <TextField id="workingHours" fullWidth label="Working Hours" placeholder="Working Hours" onChange={this.handleChangeTextField('workinghours')} value={this.state.workinghours}/> */}
+                                        <Select1 dropdownPosition="auto" createNewLabel="Working Hours"  options={WorkingHourOptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('workinghours')}
+                                            placeholder="Working Hours"
+                                            values={this.state.workinghours} />
+                                            <span className="error">{this.state.errors["workinghours"]}</span>
                                     </div>                                   
                                 </div>
                             </div>  
@@ -546,12 +568,46 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                         </div>
                                         <div className="col-lg-1 col-md-4 col-sm-6 col-xs-12">
                                             <div className="form-group mt-15">
-                                                <Button variant="contained" className="btn-success text-white btn-block">Add +</Button>
+                                                <Button variant="contained" className="btn-success text-white btn-block" onClick={() => this.addGridItems()}>Add +</Button>
                                             </div>
                                         </div>
                                         <table className="table">
                                             <tbody>
-                                            {buyerrightlistshtml}
+                                                {
+                                                    this.state.tableheaderitems.map((n,index) => {
+                                                        return(
+                                                        <tr>                                                    
+                                                            <th className="w-20">{this.state.tableheaderitems[index]}</th>
+                                                            
+                                                         </tr>
+                                                        )
+                                                    })
+                                                }
+                                                {                        
+                                                this.state.RequestListData.map((nd,index1) => {     
+                                                    return ( 
+                                                        <span>                             
+                                                            <tr>
+                                                                <td>{nd.SAM}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{nd.OQ}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{nd.NoOfLines}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{nd.Operator}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{nd.days}</td>
+                                                            </tr>
+                                                        </span>
+                                                    )
+                                                }) 
+                                            } 
+                                                        
+                                                
                                             </tbody>
                                         </table> 
                                     </div>
@@ -595,202 +651,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                 </Button>
                             </DialogActions>
                         </Dialog>
-                        <div className="formelements-wrapper main-layout-class productivity-grid pd-bottom-10">
-                            <Accordion key={2} className="mb-30 panel">
-                                <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>} className="m-0 panel-heading">
-                                    <h4>List</h4>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                <div className="table-responsive no-padding-top overall-border">
-                         <div className="d-flex justify-content-between border-bottom">
-                             
-                                <div className="w-d-100">
-                                    <div className="float-right">
-                                        <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" aria-label="Search" data-testid="Search-iconButton" title="Search">                            
-                                            <span className="MuiIconButton-label">
-                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-                                                </svg>
-                                            </span>
-                                        </button>                            
-                                        <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
-                                            <span className="MuiIconButton-label">                            
-                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
-                                                </svg>
-                                            </span>
-                                        </button>
-                                        <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="Print-iconButton" aria-label="Print">                            
-                                            <span className="MuiIconButton-label">                            
-                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                    <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
-                                                </svg>
-                                            </span>
-                                        </button>                            
-                                        <button className="MuiButtonBase-root MuiIconButton-root" tabindex="0" type="button" data-testid="View Columns-iconButton" aria-label="View Columns">
-                                            <span className="MuiIconButton-label">
-                                                <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                                <path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path>
-                                                </svg>
-                                            </span>
-                                        </button>                            
-                                        <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Filter Table-iconButton" aria-label="Filter Table" title="Filter Table"><span className="MuiIconButton-label"><svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
-                                        </svg></span></button>
-                                    </div>
-                                </div>
-                         </div>
-                         <table className="table table-middle table-hover mb-0">
-                             <thead>
-                                 <tr>
-                                     <th>Style Image</th>
-                                     <th>Doc No</th>
-                                     <th>Date</th>
-                                     <th>Style</th>
-                                     <th>Order Qty</th>
-                                     <th>SAM</th>                                    
-                                     <th>Productivity</th>
-                                     <th>Status</th>
-                                 </tr>
-                             </thead>
-                             <tbody>
-                                 {/* {users && users.map((user, key) => ( */}
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         <td>859</td>
-                                         <td>2021-10-15 </td>
-                                         <td>Design</td>                                    
-                                         <td>10</td>  
-                                         <td>10</td>   
-                                         <td>Nil</td>
-                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                     
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         <td>859</td>
-                                         <td>2021-10-15 </td>
-                                         <td>Design</td>                                    
-                                         <td>10</td>  
-                                         <td>10</td>   
-                                         <td>Nil</td>  
-                                         <td><span className={`badge badge-warning badge-pill ft-lft`}>In process</span></td>                                     
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         <td>859</td>
-                                         <td>2021-10-15 </td>
-                                         <td>Design</td>                                    
-                                         <td>10</td>  
-                                         <td>10</td>   
-                                         <td>Nil</td>
-                                         <td><span className={`badge badge-danger badge-pill ft-lft`}>Yet to process</span></td>                                       
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         
-                                         <td>859</td>
-                                         <td>2021-10-15 </td>
-                                         <td>Design</td>                                    
-                                         <td>10</td>  
-                                         <td>10</td>   
-                                         <td>Nil</td> 
-                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                      
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>
-                                         
-                                         <td>859</td>
-                                         <td>2021-10-15 </td>
-                                         <td>Design</td>                                    
-                                         <td>10</td>  
-                                         <td>10</td>   
-                                         <td>Nil</td>
-                                         <td><span className={`badge badge-success badge-pill ft-lft`}>completed</span></td>                                       
-                                     </tr>
-                                     <tr>                                       
-                                         <td>
-                                             <div className="media">                                                
-                                                     <img src={require('Assets/avatars/style-img1.png')} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />                                                    
-                                             </div>
-                                         </td>                                         
-                                         <td>859</td>
-                                         <td>2021-10-15 </td>
-                                         <td>Design</td>                                    
-                                         <td>10</td>  
-                                         <td>10</td>   
-                                         <td>Nil</td>  
-                                         <td><span className={`badge badge-warning badge-pill ft-lft`}>completed</span></td>                                      
-                                     </tr>
-                                 {/* )) */}
-                             </tbody>
-                             <tfoot className="border-top">
-                                 <tr>
-                                     <td colSpan="100%">
-                                     <div className="row tb-pro mt-20">
-                                <div className="w-100">
-                                    <div className="w-25 float-left">
-                                        <div className="form-group">
-                                            <div className="w-50 float-left text-center">
-                                                <label for="exampleFormControlSelect1">Rows per page</label>
-                                            </div>
-                                            <div className="w-25 float-left">
-                                                <select className="form-control" id="exampleFormControlSelect1">
-                                                    <option>50</option>
-                                                    <option>100</option>
-                                                    <option>150</option>
-                                                    <option>200</option>
-                                                    <option>250</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="w-25 float-right">
-                                        <nav aria-label="Page navigation example">
-                                            <ul className="pagination justify-content-end">
-                                                <li className="page-item ">
-                                                {/* disabled */}
-                                                    <a className="page-link" href="#" tabindex="-1">Previous</a>
-                                                </li>
-                                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">.&nbsp;&nbsp;.&nbsp;&nbsp;.</a></li>
-                                                <li className="page-item"><a className="page-link" href="#">100</a></li>
-                                                <li className="page-item">
-                                                    <a className="page-link" href="#">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                                     </td>
-                                 </tr>
-                             </tfoot>
-                         </table>
-                     </div>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div>
                      
                      {loading &&
                          <RctSectionLoader />

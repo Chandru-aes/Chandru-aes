@@ -17,13 +17,15 @@
 	AsyncRequestGridStyleComponent,
     AsyncRequeststatusComponent,
     AsyncProductionRequestComponent,
+    AsyncRequestResponseComponent,
     AsyncProductivityGridComponent,
     AsyncItemmasterGridComponent,
     AsyncItemCreatinComponent,
     AsyncSinglewindowEditComponent,
     AsyncPdtamasterComponent,
 	AsyncPdbuyertaComponent,
-	AsyncPdinternaltaComponent
+	AsyncPdinternaltaComponent,
+    AsyncCostingCreationComponent
 
  } from 'Components/AsyncComponent/AsyncComponent';
   
@@ -49,6 +51,7 @@
              <Route path={`${match.url}/request-style-list`} component={AsyncRequestGridStyleComponent} />
              <Route path={`${match.url}/request-status`} component={AsyncRequeststatusComponent} />
              <Route path={`${match.url}/production-request`} component={AsyncProductionRequestComponent} />
+             <Route path={`${match.url}/request-response`} component={AsyncRequestResponseComponent} />             
              <Route path={`${match.url}/productivity-grid`} component={AsyncProductivityGridComponent} />	
              <Route path={`${match.url}/itemmaster-grid`} component={AsyncItemmasterGridComponent} />	
              <Route path={`${match.url}/item-creation`} component={AsyncItemCreatinComponent} />
@@ -56,6 +59,7 @@
              <Route path={`${match.url}/pd-ta-master`} component={AsyncPdtamasterComponent} />
              <Route path={`${match.url}/pd-buyer-ta`} component={AsyncPdbuyertaComponent} />
              <Route path={`${match.url}/pd-internal-ta`} component={AsyncPdinternaltaComponent} />
+             <Route path={`${match.url}/costing-creation`} component={AsyncCostingCreationComponent} />
          </Switch>
      </div>
  );

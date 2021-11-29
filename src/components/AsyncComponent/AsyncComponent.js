@@ -662,6 +662,11 @@ const AsyncProductionRequestComponent = Loadable({
 	loader: () => import("Routes/pre-production/styling/production-request"),
 	loading: () => <RctPageLoader />,
 });
+const AsyncRequestResponseComponent = Loadable({
+	loader: () => import("Routes/pre-production/styling/production-request/requestresponse"),
+	loading: () => <RctPageLoader />,
+});
+
 
 const AsyncProductivityGridComponent = Loadable({	
 	loader: () => import("Routes/pre-production/productivity-grid"),	
@@ -693,6 +698,11 @@ const AsyncPdbuyertaComponent = Loadable({
 });
 const AsyncPdinternaltaComponent = Loadable({
 	loader: () => import("Routes/pre-production/T&A/pd-internal-ta"),
+	loading: () => <RctPageLoader />,
+});
+
+const AsyncCostingCreationComponent = Loadable({
+	loader: () => import("Routes/pre-production/costing/"),
 	loading: () => <RctPageLoader />,
 });
 
@@ -809,12 +819,14 @@ export {
 	AsyncSinglewindowComponent,
 	AsyncRequeststatusComponent,
 	AsyncProductionRequestComponent,
+	AsyncRequestResponseComponent,
 	AsyncProductivityGridComponent,
 	AsyncItemmasterGridComponent,
 	AsyncItemCreatinComponent,
 	AsyncSinglewindowEditComponent,
 	AsyncPdtamasterComponent,
 	AsyncPdbuyertaComponent,
-	AsyncPdinternaltaComponent
+	AsyncPdinternaltaComponent,
+	AsyncCostingCreationComponent
 
 }; 
