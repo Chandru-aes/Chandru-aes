@@ -598,11 +598,11 @@ import Select1 from "react-dropdown-select";
 
                });
 
-               setTimeout(() => {
-                this.getrefversionno();
-            }, 100);
+              
                 
             }
+           
+            
             
         } else{
             if(name=="reqtype"){
@@ -617,6 +617,12 @@ import Select1 from "react-dropdown-select";
         }
         
 		this.setState({ [name]: event });
+
+        if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" || name=="styleno" || name=="reqtype"){
+            setTimeout(() => {
+                this.getrefversionno();
+            }, 100);
+        }
 
         if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" ){
             
