@@ -325,7 +325,7 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=35')
+        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo='+id)
         .then((response) => {
            
             let data = response.data.data[0];       
@@ -336,7 +336,7 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=43')
+        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo='+id)
         .then((response) => {
            
             let data = response.data.data[0];       
@@ -373,14 +373,14 @@ import Select1 from "react-dropdown-select";
         //     // error handling
         // })
 
-        api.get('StyleHeader/GetStyleGridList')
-        .then((response) => {
+        // api.get('StyleHeader/GetStyleGridList')
+        // .then((response) => {
             
-            this.setState({ stylenolists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        //     this.setState({ stylenolists: response.data.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
         
 
@@ -618,14 +618,39 @@ import Select1 from "react-dropdown-select";
         
 		this.setState({ [name]: event });
 
-        if(name=="styleno"){
+        if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" ){
+            
             setTimeout(() => {
+              
+                this.getstyleno();
+            }, 100);
+        }
+
+        if(name=="styleno"){
+            
+            setTimeout(() => {
+                // console.log(this.state.styleno[0].label.split('-'),'6666666') 
                 this.stylenochange();
             }, 100);
         }
 
 	};
     
+
+    getstyleno(){
+        this.setState({styleno:[],stylenolists:[]});
+        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+           
+            api.get('SingleWindowRequestheader/GetStyleNoDropDown?Buyer='+this.state.buyer[0].value+'&BuyDivCode='+this.state.buyerdiv[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+            .then((response) => {
+                let datas = response.data.data;
+                this.setState({stylenolists:datas});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+     }
 
     stylenochange(){
         
@@ -935,8 +960,8 @@ import Select1 from "react-dropdown-select";
             //       ]
             // } 
             });
-        
-
+           
+            let stylenosplit = this.state.styleno[0].label.split('-');
             let data ={
                 "id": this.state.swid,
                 "entityId": "st",
@@ -944,14 +969,14 @@ import Select1 from "react-dropdown-select";
                 "buyDivcode": this.state.buyerdiv[0].value,
                 "seasonCode": this.state.season[0].value,
                 "seasonYear": this.state.year[0].value,
-                "styleNo": this.state.styleno[0].value,//"1233213",//
-                "masterStyle": 0,
+                "styleNo": stylenosplit[0],//this.state.styleno[0].value,
+                "masterStyle": stylenosplit[1],
                 "baseStyleno": this.state.baseStyleno,
                 "unitCode": "string",
                 "reqNo": "string",
                 "reqDate": "2021-11-16T05:00:55.509Z",
                 "fit":  this.state.fit[0].value,
-                "purpose": this.state.purpose[0].value,
+                "purpose": this.state.purpose[0].label,
                 "fabricDesc": this.state.fabricDesc,
                 "fabricType": this.state.fabricType,
                 "cancel": "s",
@@ -1591,7 +1616,7 @@ console.log(data,'datadatadata')
 
            const stylenooptions = [];
            for (const item of this.state.stylenolists) {           
-               stylenooptions.push({value:item.styleid,label:item.styleNo});
+               stylenooptions.push({value:item.id,label:item.refStyleNo+'-'+item.masterStyle});
            }
 
            const materialtypeoptions = [];
@@ -2166,7 +2191,7 @@ console.log(data,'datadatadata')
                         </div>
  
                     </div>  */}
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group mt-15">
                         <TextField id="Buyer" fullWidth label="" placeholder=""/>
                         </div>
@@ -2180,7 +2205,7 @@ console.log(data,'datadatadata')
                         <div className="form-group mt-15">
                         <TextField id="Buyer" fullWidth label="" placeholder=""/>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
                     <Accordion className="border mb-15 mt-15 patternclass">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>

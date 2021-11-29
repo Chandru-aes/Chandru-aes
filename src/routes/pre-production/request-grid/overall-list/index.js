@@ -391,7 +391,7 @@
                         </div>
                     </td>
                     <td>{n.fit}</td> 
-                    <td>{n.requestNumber}</td>
+                    <td><Link to={'/app/pre-production/single-window/'+n.hid}>{n.requestNumber}</Link></td>
                     <td>{n.requestType}</td>
                     <td>{n.requestDate}</td>
                     <td><Link to={'/app/pre-production/request-style-list/'+n.styleNumber}>{n.styleNumber}</Link></td>                    
