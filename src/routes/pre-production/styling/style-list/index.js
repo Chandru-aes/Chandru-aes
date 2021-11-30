@@ -121,11 +121,11 @@
             // error handling
         })
 
-        api.get('BuyerDivision/GetBuyerDivisionDropDown')
-        .then((response) => {                
-            this.setState({ BuyerDivisionList: response.data.result.data });
-        })        
-        .catch(error => {})  
+        // api.get('BuyerDivision/GetBuyerDivisionDropDown')
+        // .then((response) => {                
+        //     this.setState({ BuyerDivisionList: response.data.result.data });
+        // })        
+        // .catch(error => {})  
 
      
 
@@ -332,6 +332,31 @@
         }    
     }
 
+
+    getBuyerDivision1(val,field,e){
+        let fields = this.state.fields;
+        this.setState({ BuyerDivisionList: [],BuyerdivisionValue:[] });
+        if(val.buyer.length!=0){
+            fields['buyer'] = val.buyer[0].value;        
+            this.setState({fields});
+
+            this.setState({ buyer: val.buyer });
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.buyer[0].value)
+            .then((response) => {                
+                this.setState({ BuyerDivisionList: response.data.result.data });
+            })        
+            .catch(error => {}) 
+            
+        } else{
+            fields['buyer'] = '';        
+            this.setState({fields});
+        }
+
+        // fields['buyer'] = val.buyer[0].value;        
+        // this.setState({fields});
+
+                  
+    }
     
     handleValidation(){
         let fields = this.state.fields;
@@ -486,7 +511,8 @@
                                     <Select1  dropdownPosition="auto"  createNewLabel="Buyer "
                                         options={buyeroptions} ref="buyer"
                                         placeholder="Buyer "
-                                        onChange={this.setstatevaluedropdownfunction('buyer')}
+                                        // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                        onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
                                         values={this.state.buyer}
                                     /> 
                                     <span className="error">{this.state.errors["buyer"]}</span>
@@ -675,7 +701,7 @@
                                              </div>
                                          </td>
                                          <td>
-                                         <Link to={'/app/pre-production/style/'+n.styleid}><h5 className="mb-5 fw-bold">{n.styleid}</h5>
+                                         <Link to={'/app/pre-production/style/'+n.styleid}><h5 className="mb-5 fw-bold">{n.refStyleNo}</h5>
                                                      <Badge color="warning">{n.styleNo}</Badge></Link>
                                          </td>
                                          <td>

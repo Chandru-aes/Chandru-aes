@@ -57,7 +57,7 @@ import { DateTimePicker} from '@material-ui/pickers';
 
  import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers';
  import Select1 from "react-dropdown-select";
-
+ import { Link } from 'react-router-dom';
  const $ = require('jquery');
  function TabContainer({ children }) {
     return (
@@ -180,38 +180,7 @@ import { DateTimePicker} from '@material-ui/pickers';
         // this.setState({styleid:this.props.params.styleid});
         this.editdata(this.state.styleid);
         this.editdataprojectiondt(this.state.styleid);
-        // $(document).on('click', '.edit', function() {
-        //     $(this).parent().siblings('td.data').each(function() {
-        //       var content = $(this).html();
-        //       $(this).html('<input value="' + content + '" class="form-control"/>');
-        //     });
-            
-        //     $(this).siblings('.save').show();
-        //     $(this).siblings('.delete').hide();
-        //     $(this).hide();
-        //   });
-          
-        //   $(document).on('click', '.save', function() {
-            
-        //     $('input').each(function() {
-        //       var content = $(this).val();
-        //       $(this).html(content);
-        //       $(this).contents().unwrap();
-        //     });
-        //     $(this).siblings('.edit').show();
-        //     $(this).siblings('.delete').show();
-        //     $(this).hide();
-            
-        //   });
-          
-          
-        //   $(document).on('click', '.delete', function() {
-        //     $(this).parents('tr').remove();
-        //   });
-          
-        //   $('.add').click(function() {
-        //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
-        //   });
+      
     }
      handleChange(event, value) {
         this.setState({ activeIndex: value });
@@ -473,14 +442,14 @@ import { DateTimePicker} from '@material-ui/pickers';
         })
 
 
-        api.get('StyleDivision/GetStyleDivisionList')
-        .then((response) => {
+        // api.get('StyleDivision/GetStyleDivisionList')
+        // .then((response) => {
             
-            this.setState({ subproducttypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        //     this.setState({ subproducttypelists: response.data.result.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
         
         api.get('Size/GetSizeList')
@@ -900,6 +869,38 @@ console.log(data,'datadatadata')
         }
 
         // fields['buyer'] = val.buyer[0].value;        
+        // this.setState({fields});
+
+                  
+    }
+
+
+    getSubproduct(val,field,e){
+        let fields = this.state.fields;
+        this.setState({ subproducttypelists: [],subproducttype:[] });
+        if(val.producttype.length!=0){
+            fields['producttype'] = val.producttype[0].value;        
+            this.setState({fields});
+
+            this.setState({ producttype: val.producttype });
+
+            api.get('StyleDivision/GetStyleDivisionList?ProductType='+val.producttype[0].value)
+            .then((response) => {
+                
+                this.setState({ subproducttypelists: response.data.result.data });
+            })
+            .catch(error => {
+                // error handling
+            })
+
+          
+            
+        } else{
+            fields['producttype'] = '';        
+            this.setState({fields});
+        }
+
+        // fields['producttype'] = val.producttype[0].value;        
         // this.setState({fields});
 
                   
@@ -1549,18 +1550,21 @@ console.log(data,'datadatadata')
                         </div>
                         <div className="form-group">
                             <div className="w-75 float-left m-btop-10">
-                                <FormControl>
-                                    <div class="item"><span class="material-icons mr-10">attach_file</span><span>Buyer Block</span></div>
-                                </FormControl>
+                            <div className="w-100 p-0 mt-5">
+                                                    <label for="formFile" class="form-label float-left w-20 p-10">Buyer Block</label>
+                                                    <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                                </div>
                             </div>
                         </div>
                         <div className="form-group">
                             <div className="w-75 float-left m-btop-10">
-                                <FormControl>
-                                    <div class="item"><span class="material-icons mr-10">attach_file</span><span>FIS</span></div>
-                                </FormControl>
+                            <div className="w-100 p-0 mt-5">
+                                                    <label for="formFile" class="form-label float-left w-20 p-10">FIS</label>
+                                                    <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                                </div>
+                            
                             </div>
-                        </div>  
+                        </div> 
                         
                      </div>
  
@@ -1762,7 +1766,8 @@ console.log(data,'datadatadata')
                                                         //   multi
                                                         createNewLabel="Product Type"
                                                         options={producttypeoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('producttype')}
+                                                        // onChange={this.setstatevaluedropdownfunction('producttype')}
+                                                        onChange={values => this.getSubproduct({ producttype:values },this,"producttype")}
                                                         placeholder="Product Type"
                                                         values={this.state.producttype}
                                                         />
@@ -1910,8 +1915,8 @@ console.log(data,'datadatadata')
                     <div className="col-lg-12 mt-10 w-25 border p-10 mr-5 no-f-mb">
                         <ul class="list-group list-group-horizontal-md">
                             <li class="list-group-item">ITH# 2136005</li>
-                            <a href="javascript:void(0)"><li class="list-group-item">Single window</li></a>
-                            <a href="javascript:void(0)"><li class="list-group-item">Costing</li></a>
+                            <Link to={'/app/pre-production/single-window'}> <a href="javascript:void(0)"><li class="list-group-item">Single window</li></a></Link>
+                            <Link to={'/app/pre-production/costing-creation'}> <a href="javascript:void(0)"><li class="list-group-item">Costing</li></a></Link>
                             <a href="javascript:void(0)"><li class="list-group-item">Rm order</li></a>
                             <a href="javascript:void(0)"><li class="list-group-item">Delivery SM</li></a>
                             <a href="javascript:void(0)"><li class="list-group-item">History</li></a>

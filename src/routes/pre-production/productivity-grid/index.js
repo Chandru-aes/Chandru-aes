@@ -104,11 +104,11 @@
             // error handling
         })
 
-        api.get('BuyerDivision/GetBuyerDivisionDropDown')
-        .then((response) => {                
-            this.setState({ BuyerDivisionList: response.data.result.data });
-        })        
-        .catch(error => {})  
+        // api.get('BuyerDivision/GetBuyerDivisionDropDown')
+        // .then((response) => {                
+        //     this.setState({ BuyerDivisionList: response.data.result.data });
+        // })        
+        // .catch(error => {})  
 
         api.get('StyleHeader/GetStyleHeaderList')
         .then((response) => {
@@ -138,6 +138,32 @@
             })
         }
      }
+
+     getBuyerDivision1(val,field,e){
+        let fields = this.state.fields;
+        this.setState({ BuyerDivisionList: [],BuyerdivisionValue:[] });
+        if(val.buyer.length!=0){
+            fields['buyer'] = val.buyer[0].value;        
+            this.setState({fields});
+
+            this.setState({ buyer: val.buyer });
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.buyer[0].value)
+            .then((response) => {                
+                this.setState({ BuyerDivisionList: response.data.result.data });
+            })        
+            .catch(error => {}) 
+            
+        } else{
+            fields['buyer'] = '';        
+            this.setState({fields});
+        }
+
+        // fields['buyer'] = val.buyer[0].value;        
+        // this.setState({fields});
+
+                  
+    }
+    
          /**
       * On Delete
       */
@@ -461,7 +487,8 @@
                                     <Select1  dropdownPosition="auto"  createNewLabel="Buyer "
                                         options={buyeroptions} ref="buyer"
                                         placeholder="Buyer "
-                                        onChange={this.setstatevaluedropdownfunction('buyer')}
+                                        // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                        onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
                                         //onChange={this.handleChangeValidate.bind(this, "buyer",this.state.buyer)} 
                                         //onChange={values => this.setState({ buyer:values })}
                                         values={this.state.buyer}
