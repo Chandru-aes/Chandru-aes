@@ -54,6 +54,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
  
  // rct section loader
  import RctSectionLoader from 'Components/RctSectionLoader/RctSectionLoader';
+
+ import RadioGroup from '@material-ui/core/RadioGroup';
+ import Radio from '@material-ui/core/Radio';
  
  export default class ProductionRequest extends Component {
  
@@ -83,8 +86,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
          allSelected: false,
          selectedUsers: 0,
          BuyerList:[],
-         BuyerDivisionList:[],
+         difficultyLevelDropdwonItems:[],
          workingHoursList:[],
+         BuyerDivisionList:[],
          stylenolist:[],
          fields: {},
          errors: {},
@@ -94,8 +98,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
          UnitCodeList:[],
          samstylelist:[],
          RequestListData:[],
-        //  tableheaderitems:['SAM','OQ/OQR','No of Line','Operators','Number Of Days','Average productivity/day/line','Efficiency','Target/Hour','Step Up']
-         tableheaderitems:['SAM','OQ/OQR','No of Line','Operators']
+         tableheaderitems:['SAM','OQ/OQR','No of Line','Operators','Number Of Days','Average productivity/day/line','Efficiency','Target/Hour','Step Up']
      }
  
      componentDidMount() {
@@ -123,6 +126,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
             
             this.setState({ yearlists: response.data.result.data });
         })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=dlevel')
+        .then((response) => {
+            
+            this.setState({ difficultyLevelDropdwonItems: response.data.result.data });
+        })
+
+        
 
         api.get('Unit/GetUnitDropDown')
         .then((response) => {            
@@ -170,7 +181,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
            "OQ":25,
            "NoOfLines":this.state.nooflines,
            "Operator":this.state.noofOperator,
-          // "days":2
+           "days":2
         }
         /**Check whether object is already exists */
         let IsMatch = false;
@@ -194,6 +205,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
         let fields = this.state.fields;
         fields[name] = event[0].value;        
         this.setState({fields});
+        
         if(name=='units'){
             api.get('ProductivityRequest/GetWorkingHours?UnitID='+event[0].value)
             .then((response) => {                
@@ -209,36 +221,28 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 	};
 
     createRequest(){
+        
+    }
+    createProductivityCertificate(){
         const saveObject = {
-            "pdmValueAddStatusModel":{
-            "id": 0,
-            "prReqNo": this.state.documentNumber,
-            "entityId": "st",
-            "buyCode": this.state.BuyerValue[0].value,
-            "buyDivcode": this.state.BuyerdivisionValue[0].value,
-            "seasonCode": this.state.season[0].value,
-            "seasonYear": this.state.year[0].value,
-            "unitcode": this.state.units[0].value,
-            "noOfFits": this.state.fits,
-            "noofColors": this.state.Colors,
-            "sam": 0,
-            "fabricDesc": "string",
-            "orderQty": 0,
-            "numberOflines": this.state.nooflines,
-            "noOfOperators": this.state.noofOperator,
-            "workingHrs": this.state.workinghours[0].value,//it should be dropdown value
-            "difficultyLevel": "string",
-            "acceptFlag": "Y",
-            "keyRequest": "Y",
-            "cancel": "N",
-            "createdBy": "Admin",
-            "hostName": "Localhost"
+            "productivityRequestCTCModel":{
+                "id": 0,
+                "prReq_Id": this.state.documentNumber,
+                "masterStyle": this.state.styleno[0].value,
+                "sam": 0,
+                "orderQty": 0,
+                "noOfLines": this.state.nooflines,
+                "operators": this.state.noofOperator,
+                "avgProductivity": 0,
+                "targetPerHr": 0,
+                "efficiency": 0,             
+                "hostName": "LocalHost"
         }
     }
-        api.post('ProductivityRequest/SaveProdRequest',saveObject) .then((response) => {            
+        api.post('ProductivityRequest/SaveProdCTC',saveObject) .then((response) => {            
             
            if(response.data.status==true){
-                 NotificationManager.success('Request Created Sucessfully');
+                 NotificationManager.success('Target Certificate Created Sucessfully');
                 // api.get('ForecastEntity/GetForecastHeaderList')
                 // .then((response) => {         
                 //     this.setState({ forecastinglists: response.data.data });
@@ -251,8 +255,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
         })
     }
     getStyleList(){
-        if(this.state.BuyerValue && this.state.BuyerdivisionValue && this.state.year && this.state.season){
-            api.get('ProductivityRequest/GetStyleNoDropDown?Buyer='+this.state.BuyerValue[0].value+'&BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+        if(this.state.BuyerValue && this.state.BuyerdivisionValue && this.state.year){
+            api.get('ProductivityRequest/GetStyleNoDropDown?BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
             .then((response) => {                
                 this.setState({ stylenolist: response.data.data });
             })        
@@ -332,6 +336,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
              BuyerOptions.push({value:item.buyerCode,label:item.buyerName});
          }
 
+         const difficultyLevelDropdwonOptions =[];
+         for (const item of this.state.difficultyLevelDropdwonItems) {           
+            difficultyLevelDropdwonOptions.push({value:item.code,label:item.codeDesc});
+         }
+
+         
          const BuyerDivisionOptions =[];
          for (const item of this.state.BuyerDivisionList) {           
              BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
@@ -365,8 +375,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
         for (const item of this.state.workingHoursList) {           
             WorkingHourOptions.push({value:item.workingHrs,label:item.workingHrs});
         }
+
         
-      
          return (
              <div className="user-management">
                  <Helmet>
@@ -377,10 +387,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                      title={<IntlMessages id="sidebar.userManagement" />}
                      match={this.props.match}
                  />
-                 <RctCollapsibleCard fullBlock heading="Productivity Request">
+                 <RctCollapsibleCard fullBlock heading="Request Response">
                   
                     <div className="row new-form overall-border no-padding-bottom">  
-                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name"> 
                                         <TextField id="Docno" fullWidth label="Doc No" placeholder="Doc No" value={this.state.documentNumber} disabled/>
@@ -508,76 +518,87 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                         <TextField id="Fabric" fullWidth label="Fabric" placeholder="Fabric" disabled/>
                                     </div>                                   
                                 </div>
-                            </div>    
-                            <div className="col-lg-5 col-md-3 col-sm-6 col-xs-12 mt-15">
+                            </div>
+                            <div className="col-lg-1 col-md-4 col-sm-6 col-xs-12">
+                                <div className="form-group mt-15">
+                                    <Button variant="contained" className="btn-secondary text-white btn-block" onClick={this.handleClickOpen}>SAM</Button>
+                                    
+                                    
+                                </div>
+                            </div> 
+                            <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
                                 <div className="form-group">
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">View OB</span><span className="MuiTouchRipple-root"></span></button> 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.checkRequestValidation(e)}><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                    <div className="form-group select_label_name"> 
+                                        <TextField id="Orderqty" fullWidth label="Order qty" placeholder="Order qty" disabled/>
+                                    </div>                                   
+                                </div>
+                            </div>
+                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                             <RadioGroup row aria-label="anchorReference" name="anchorReference">
+                                <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 rb-mb pt-10">
+                                        <FormControlLabel color="primary" value="Accept" control={<Radio onChange={this.handleChangeradio} />} label="Accept" />   
+                                </div>
+                                <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12 rb-mb pt-10">
+                                        <FormControlLabel color="primary" value="Reject" control={<Radio  onChange={this.handleChangeradio} />} label="Reject" />
+                                </div>                                           
+                            </RadioGroup>
+                            </div>  
+                         
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name mt-15"> 
+                                        <Select1  dropdownPosition="auto"  createNewLabel="Difficulty Level"
+                                            options={difficultyLevelDropdwonOptions} ref="DifficultyLevel"
+                                            onChange={this.setstatevaluedropdownfunction('DifficultyLevel')}
+                                           // onChange={values => this.getBuyerDivision1({ BuyerValue:values },this,"buyername")}
+                                            placeholder="Difficulty Level"                                              
+                                            values={this.state.DifficultyLevel}
+                                        />  
+                                         <span className="error">{this.state.errors["DifficultyLevel"]}</span>                                 
+                                    </div>
+                                </div>
+                            </div> 
+                            <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name"> 
+                                        <TextField id="Nooflines" fullWidth label="No of Lines" placeholder="No of Lines" onChange={this.handleChangeTextField('nooflines')} value={this.state.nooflines}/>
+                                        <span className="error">{this.state.errors["nooflines"]}</span>
+                                    </div>                                   
+                                </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group">
+                                    <div className="form-group select_label_name"> 
+                                        <TextField id="OperatorLine" fullWidth label="Operator/Line" placeholder="Operator/Line" onChange={this.handleChangeTextField('noofOperator')} value={this.state.noofOperator}/>
+                                        <span className="error">{this.state.errors["noofOperator"]}</span>
+                                    </div>                                   
+                                </div>
+                            </div>
+                              
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 mt-15">
+                                <div className="form-group">
+                                  
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.checkRequestValidation(e)}><span className="MuiButton-label">Generate <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button> 
                                 </div>   
                             </div>           
                         </div> 
                         <div className="formelements-wrapper main-layout-class productivity-grid">
                             <Accordion key={1} className="mb-30 panel" defaultExpanded>
                                 <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>} className="m-0 panel-heading">
-                                    <h4>Productivity</h4>
+                                    <h4>Productivity Grid</h4>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <div className="row new-form p-20 container-br">
-                                        <div className="col-lg-1 col-md-4 col-sm-6 col-xs-12">
-                                            <div className="form-group mt-15">
-                                                <Button variant="contained" className="btn-secondary text-white btn-block" onClick={this.handleClickOpen}>SAM</Button>
-                                                
-                                             
-                                            </div>
-                                        </div> 
-                                        <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <div className="form-group select_label_name"> 
-                                                    <TextField id="Orderqty" fullWidth label="Order qty" placeholder="Order qty" disabled/>
-                                                </div>                                   
-                                            </div>
-                                        </div>
-                                        {/* <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <div className="form-group select_label_name mt-15"> 
-                                                    <select className="form-control select2">
-                                                        <option>Qty Range</option> 
-                                                        <option>Annual Buyer</option> 
-                                                        <option>Monthly Buyer</option> 
-                                                        <option>Weely</option> 
-                                                    </select> 
-                                                </div>
-                                            </div>
-                                        </div>   */}
-                                        <div className="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <div className="form-group select_label_name"> 
-                                                    <TextField id="Nooflines" fullWidth label="No of Lines" placeholder="No of Lines" onChange={this.handleChangeTextField('nooflines')} value={this.state.nooflines}/>
-                                                    <span className="error">{this.state.errors["nooflines"]}</span>
-                                                </div>                                   
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <div className="form-group select_label_name"> 
-                                                    <TextField id="OperatorLine" fullWidth label="Operator/Line" placeholder="Operator/Line" onChange={this.handleChangeTextField('noofOperator')} value={this.state.noofOperator}/>
-                                                    <span className="error">{this.state.errors["noofOperator"]}</span>
-                                                </div>                                   
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-1 col-md-4 col-sm-6 col-xs-12">
-                                            <div className="form-group mt-15">
-                                                <Button variant="contained" className="btn-success text-white btn-block" onClick={() => this.addGridItems()}>Add +</Button>
-                                            </div>
-                                        </div>
+                                        
                                         <table className="table">
                                             <tbody>
                                                 {
                                                     this.state.tableheaderitems.map((n,index) => {
                                                         return(
                                                         <tr>                                                    
-                                                            <th className="w-20">{this.state.tableheaderitems[index]}</th>                                                            
+                                                            <th className="w-20">{this.state.tableheaderitems[index]}</th>
+                                                            
                                                          </tr>
                                                         )
                                                     })
@@ -655,60 +676,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                          <RctSectionLoader />
                      }
                  </RctCollapsibleCard>
-                 <DeleteConfirmationDialog
-                     ref="deleteConfirmationDialog"
-                     title="Are You Sure Want To Delete?"
-                     message="This will delete user permanently."
-                     onConfirm={() => this.deleteUserPermanently()}
-                 />
-                 <Modal isOpen={this.state.addNewUserModal} toggle={() => this.onAddUpdateUserModalClose()}>
-                     <ModalHeader toggle={() => this.onAddUpdateUserModalClose()}>
-                         {editUser === null ?
-                             'Add New User' : 'Update User'
-                         }
-                     </ModalHeader>
-                     <ModalBody>
-                         {/* {editUser === null ?
-                             <AddNewUserForm
-                                 addNewUserDetails={this.state.addNewUserDetail}
-                                 onChangeAddNewUserDetails={this.onChangeAddNewUserDetails.bind(this)}
-                             />
-                             : <UpdateUserForm user={editUser} onUpdateUserDetail={this.onUpdateUserDetails.bind(this)} />
-                         } */}
-                     </ModalBody>
-                     <ModalFooter>
-                         {editUser === null ?
-                             <Button variant="contained" className="text-white btn-success" onClick={() => this.addNewUser()}>Add</Button>
-                             : <Button variant="contained" color="primary" className="text-white" onClick={() => this.updateUser()}>Update</Button>
-                         }
-                         {' '}
-                         <Button variant="contained" className="text-white btn-danger" onClick={() => this.onAddUpdateUserModalClose()}>Cancel</Button>
-                     </ModalFooter>
-                 </Modal>
-                 <Dialog
-                     onClose={() => this.setState({ openViewUserDialog: false })}
-                     open={this.state.openViewUserDialog}
-                 >
-                     <DialogContent>
-                         {selectedUser !== null &&
-                             <div>
-                                 <div className="clearfix d-flex">
-                                     <div className="media pull-left">
-                                         <img src={selectedUser.avatar} alt="user prof" className="rounded-circle mr-15" width="50" height="50" />
-                                         <div className="media-body">
-                                             <p>Name: <span className="fw-bold">{selectedUser.name}</span></p>
-                                             <p>Email: <span className="fw-bold">{selectedUser.emailAddress}</span></p>
-                                             <p>Type: <span className="badge badge-warning">{selectedUser.type}</span></p>
-                                             <p>Account Type: <span className={`badge ${selectedUser.badgeClass} badge-pill`}>{selectedUser.accountType}</span></p>
-                                             <p>Status: {selectedUser.status}</p>
-                                             <p>Last Seen: {selectedUser.lastSeen}</p>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                         }
-                     </DialogContent>
-                 </Dialog>
+              
              </div>
          );
      }

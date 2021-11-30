@@ -25,7 +25,9 @@
     AsyncPdtamasterComponent,
 	AsyncPdbuyertaComponent,
 	AsyncPdinternaltaComponent,
-    AsyncCostingCreationComponent
+    AsyncCostingCreationComponent,
+    AsyncCostingOverallComponent,
+	AsyncCostingStylelistComponent
 
  } from 'Components/AsyncComponent/AsyncComponent';
   
@@ -60,6 +62,10 @@
              <Route path={`${match.url}/pd-buyer-ta`} component={AsyncPdbuyertaComponent} />
              <Route path={`${match.url}/pd-internal-ta`} component={AsyncPdinternaltaComponent} />
              <Route path={`${match.url}/costing-creation`} component={AsyncCostingCreationComponent} />
+             <Route path={`${match.url}/costing-overall-list`} component={AsyncCostingOverallComponent} />
+             <Route path={`${match.url}/costing-style-list`} component={AsyncCostingStylelistComponent} />
+             
+            
          </Switch>
      </div>
  );

@@ -643,6 +643,16 @@ export default {
                   "new_item": false,	
                   "menu_title": "Costing"	
                },
+               {	
+                  "path": "/app/pre-production/costing-overall-list",	
+                  "new_item": false,	
+                  "menu_title": "Costing Overall List"	
+               },
+               {	
+                  "path": "/app/pre-production/costing-style-list",	
+                  "new_item": false,	
+                  "menu_title": "Costing Style List"	
+               },
 
               
             ]
@@ -655,4 +665,22 @@ export default {
             "path": "/app/pre-production/item-creation/",	
          }	
       ],
+      category17: [ {
+         "menu_title": "Masters",
+         "menu_icon": "zmdi zmdi-view-dashboard",
+         "path": "/app/masters",
+         "child_routes": [
+            {
+               "path": "/app/masters/ud-master-type",
+               "new_item": false,
+               "menu_title": "UD Master Type"
+            },
+            {
+               "path": "/app/masters/ud-master",
+               "new_item": false,
+               "menu_title": "UD Master"
+            },
+            
+         ]
+      }],
 }
