@@ -1357,11 +1357,68 @@ const ItemMasterCreation = ({ match }) => {
                                                 </AccordionSummary>
 
                                                 <AccordionDetails>
-                                                    <MUIDataTable
-                                                        data={approvalData}
-                                                        columns={columns}
-                                                        options={tableOptions}
-                                                    />
+                                                    <table className="table mt-10 data w-100 float-left">
+                                                        <thead>
+                                                        <tr>
+                                                            <th className="w-25 text-center">Actions</th>
+                                                            <th className="w-25">System generated material code</th>
+                                                            <th className="w-25">Type</th>
+                                                            <th className="w-25">Group</th>
+                                                            <th className="w-25">Sub Group</th>
+                                                            <th className="w-25">Supplier Name</th>
+                                                            <th className="w-25">Supplier Reference</th>
+                                                            <th className="w-25">CreatedBy</th>
+                                                            <th className="w-25">Approved</th>
+                                                            <th className="w-25">Approved Date</th>
+
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {approvalData.length> 0 && approvalData.map((n, index) => {
+
+                                                            return (
+
+                                                                <tr key={`list${index}`}>
+                                                                    <td className="">
+                                                                        <button
+                                                                            className="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary"
+                                                                            tabIndex="0" type="button"
+                                                                            aria-label="Delete"
+                                                                            onClick={(e) => getCurrentData(n.hid)}>
+                                                                                <span className="MuiIconButton-label">
+                                                                                    <i className="zmdi zmdi-edit"/></span>
+                                                                            <span className="MuiTouchRipple-root"/>
+                                                                        </button>
+                                                                        <button
+                                                                            className="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary"
+                                                                            tabIndex="0" type="button"
+                                                                            aria-label="Delete"
+                                                                            onClick={(e) => getDeleteData(n.hid)}>
+                                                                                <span className="MuiIconButton-label">
+                                                                                    <i className="zmdi zmdi-delete"/>
+                                                                                </span>
+                                                                            <span className="MuiTouchRipple-root"/>
+                                                                        </button>
+
+                                                                    </td>
+                                                                    <td className="data">{n.materialCode}</td>
+                                                                    <td className="data">{n.materialType}</td>
+                                                                    <td className="data">{n.group}</td>
+                                                                    <td className="data">{n.subGroup}</td>
+                                                                    <td className="data">{n.materialCode}</td>
+                                                                    <td className="data">{n.description}</td>
+                                                                    <td className="data">{n.commonArticleNumber}</td>
+                                                                    <td className="data">{n.approved}</td>
+                                                                    <td className="data">{n.active}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                        {
+                                                            approvalData.length === 0 && <tr>No records found</tr>
+                                                        }
+                                                        </tbody>
+
+                                                    </table>
                                                 </AccordionDetails>
                                             </Accordion>
                                         </div>
