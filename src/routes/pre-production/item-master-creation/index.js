@@ -1,24 +1,18 @@
 /**
  * Basic Table
  */
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 // import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Helmet } from "react-helmet";
-import { Formik, Form } from 'formik'
+import {Helmet} from "react-helmet";
+import {Form, Formik} from 'formik'
 import * as Yup from 'yup'
-import { Badge } from 'reactstrap';
 
 import Checkbox from '@material-ui/core/Checkbox';
 // api
-import api from 'Api';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 // page title bar
 import PageTitleBar from 'Components/PageTitleBar/PageTitleBar';
-import DropzoneComponent from 'react-dropzone-component';
 // intl messages
 import IntlMessages from 'Util/IntlMessages';
 //import AddNewUserForm from './AddNewUserForm';
@@ -30,7 +24,21 @@ import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { Paper, makeStyles } from '@material-ui/core';
+import {makeStyles, Paper} from '@material-ui/core';
+import {
+    AccordionInput,
+    AccordionMain,
+    constructEditData,
+    constructFormValues,
+    GetAccordionSummary
+} from "../../../helpers/helpers";
+import {API_URLS} from "../../../constants/api_url_constants";
+import {getApiCall, postApiCall} from "../../../services/commonApi";
+import MUIDataTable from "mui-datatables";
+import PurchaseInfo from "./Forms/purchaseInfo";
+import {NotificationManager} from "react-notifications";
+import Select1 from "react-dropdown-select";
+import DeleteConfirmationDialog from "../../../components/DeleteConfirmationDialog/DeleteConfirmationDialog";
 
 // import Controls from "../../controls/Controls"
 
@@ -50,36 +58,24 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-import {
-    AccordionInput,
-    AccordionMain, constructEditData, constructFormValues,
-    GetAccordionSummary
-} from "../../../helpers/helpers";
-import { API_URLS } from "../../../constants/api_url_constants";
-import {API_SERVICE, getApiCall, postApiCall} from "../../../services/commonApi";
 const $ = require('jquery');
-import MUIDataTable from "mui-datatables";
-import ReactSelect from "../../controls/ReactSelect";
-import moment from "moment";
-import PurchaseInfo from "./Forms/purchaseInfo";
-import {NotificationManager} from "react-notifications";
 
 const ItemMasterCreation = ({ match }) => {
-    const classes = useStyles();
+    const popupRef = useRef(null);
     const [initialValues, setInitialValues] = useState({
-        parentGroup: '',
-        materialType: '',
-        materialGroupSub: '',
+        parentGroup: [],
+        materialType: [],
+        materialGroupSub: [],
         materialCode: '',
         materialDescription: '',
-        buyerDivision: '',
+        buyerDivision: [],
         active: '',
-        fiber: '',
-        content: '',
+        fiber: [],
+        content: [],
         fabricContent: '',
-        fabricType: '',
-        fabricWave: '',
-        dyeProcess: '',
+        fabricType: [],
+        fabricWave: [],
+        dyeProcess: [],
         yarnWrap: '',
         wrapYarnBlend: '',
         yarnWeft: '',
@@ -88,15 +84,15 @@ const ItemMasterCreation = ({ match }) => {
         picksInches: '',
         shrinkWrap: '',
         shrinkWeft: '',
-        washMethod: 's',
+        washMethod: [],
         FabWt_BW: '',
         FabWt_AW: '',
-        weightUOM: '',
+        weightUOM: [],
         actualWidth: '',
         cuttableWidth: '',
-        widthUOM: '',
-        physicalFinish: '',
-        chemicalFinish: '',
+        widthUOM: [],
+        physicalFinish: [],
+        chemicalFinish: [],
         quality: '',
         tkt: '',
         tex: '',
@@ -109,6 +105,18 @@ const ItemMasterCreation = ({ match }) => {
     const [materialType, setMaterialType] = useState([])
     const [materialGroupType, setMaterialGroupType] = useState([])
     const [buyerDivision, setBuyerDivision] = useState([])
+    const [parentGroupOption, setParentGroupOption] = useState([])
+    const [buyerDivisionOption, setBuyerDivisionOptions] = useState([])
+    const [materialTypeOption, setMaterialTypeOption] = useState([])
+    const [materialGrpTypeOption, setMaterialGrpTypeOption] = useState([])
+    const [fabricOption, setFabricOption] = useState([])
+    const [fabricTypeOption, setFabricTypeOption] = useState([])
+    const [fabricWaveOption, setFabricWaveOption] = useState([])
+    const [dyeProcessOption, SetDyeProcessOption] = useState([])
+    const [washMethodOption, setWashMethodOption] = useState([])
+    const [weightUOMOption, setWeightUOMOption] = useState([])
+    const [physicalFinishOption, setPhysicalFinishOption] = useState([])
+    const [chemicalFinishOption, setChemicalFinishOption] = useState([])
     const [fiber, setFiber] = useState([])
     const [fabricType, setFabricType] = useState([])
     const [fabricWave, setFabricWave] = useState([])
@@ -127,36 +135,49 @@ const ItemMasterCreation = ({ match }) => {
     const [threadTab, setThreadTab] = useState(false);
     const [checked, setChecked] = useState(true);
     const [page, setPage] = useState(1);
-    const [fromDate, setFromDate] = useState(moment());
-    const [toDate, setToDate] = useState(moment());
     const [editData, setEditData] = useState({});
+    const [deleteId, setDeleteId] = useState(0);
     const [isUpdate, setIsUpdate] = useState(false);
-
-    const handleDateChange = (dateValue, setFieldValue, dateType) => {
-        if(dateType === 'start') {
-            setFromDate(dateValue);
-            setFieldValue('fromDate', dateValue)
-        }
-        else if(dateType === 'end') {
-            setToDate(dateValue);
-            setFieldValue('toDate', dateValue)
-        }
-    }
+    const [isDelete, setIsDelete] = useState(false);
 
 
     const validationShape = {
-        parentGroup: Yup.string().required("Please choose parentGroup"),
-        materialType: Yup.string().required('Please choose the MaterialType'),
-        materialGroupSub: Yup.string().required('Please choose Material GroupSub'),
+        // parentGroup: Yup.string().required("Please choose parentGroup"),
+        // materialType: Yup.string().required('Please choose the MaterialType'),
+        // materialGroupSub: Yup.string().required('Please choose Material GroupSub'),
         materialCode: Yup.string().required('Please enter the materialCode'),
     };
-    const options = [
-        { id: 10, title: 'Autumn' },
-        { id: 20, title: 'Summer' },
-        { id: 30, title: 'Winter' }
-    ]
 
     const columns = [
+        {
+            name: "hid",
+            label: "Action",
+            options: {
+                filter: true,
+                sort: false,
+                print: false,
+                customBodyRender: (value => {
+                    return(
+                        <div>
+                            <button className="MuiButtonBase-root  mr-10 text-danger btn-icon b-ic delete"
+                                    onClick={() => getCurrentData(value)}
+                                    tabIndex="0"
+                                    type="button"
+                            >
+                                <i className="zmdi zmdi-edit"/><span className="MuiTouchRipple-root"/>
+                            </button>
+                            <button className="MuiButtonBase-root  mr-10 text-danger btn-icon b-ic delete"
+                                    onClick={() => getCurrentData(value)}
+                                    tabIndex="0"
+                                    type="button"
+                            >
+                                <i className="zmdi zmdi-delete"/><span className="MuiTouchRipple-root"/>
+                            </button>
+                        </div>
+                    )
+                })
+            }
+        },
         {
             name: "materialCode",
             label: "Material",
@@ -228,48 +249,93 @@ const ItemMasterCreation = ({ match }) => {
                 filter: true,
                 sort: false,
             }
-        },
-        {
-            name: "hid",
-            label: "Action",
-            options: {
-                filter: true,
-                sort: false,
-                print: false,
-                customBodyRender: (value => {
-                    return(
-                        <div>
-                            <button className="MuiButtonBase-root  mr-10 text-danger btn-icon b-ic delete"
-                                    onClick={() => getCurrentData(value)}
-                                    tabIndex="0"
-                                    type="button"
-                            >
-                                <i className="zmdi zmdi-edit"/><span className="MuiTouchRipple-root"/>
-                            </button>
-                            <button className="MuiButtonBase-root  mr-10 text-danger btn-icon b-ic delete"
-                                    onClick={() => getCurrentData(value)}
-                                    tabIndex="0"
-                                    type="button"
-                            >
-                                <i className="zmdi zmdi-delete"/><span className="MuiTouchRipple-root"/>
-                            </button>
-                        </div>
-                    )
-                })
-            }
         }
     ];
 
-    const getCurrentData = (tableId) => {
-        let editData = [];
+    const deleteItemList = async () => {
+        await getCurrentData(deleteId, true);
+        await onFormSubmit(editData, {})
+        popupRef.current.close();
+    }
+
+    const getDeleteData = (id) => {
+        popupRef.current.open();
+        setDeleteId(id)
+    }
+    const constructLocalEditData = (values) => {
+        const parentData = parentGroupOption.find((r) => r.value === values.parentGroup)
+        const matTypeData = materialTypeOption.find((r) => r.value === values.materialType)
+        const matGroupData = materialGrpTypeOption.find((r) => r.value === values.materialGroupSub)
+        const buyerDivData = buyerDivisionOption.find((r) => r.value === values.buyerDivision)
+        //fabric
+        const fabricContentData = fabricOption.find((r) => r.value === values.fabricContent)
+        const fabricTypeData = fabricTypeOption.find((r) => r.value === values.fabricType)
+        const fabricWaveData = fabricWaveOption.find((r) => r.value === values.fabricWave)
+        const dyeProcessData = dyeProcessOption.find((r) => r.value === values.dyeProcess)
+        const washMethodData = washMethodOption.find((r) => r.value === values.washMethod)
+        const wightData = weightUOMOption.find((r) => r.value === values.weightUOM)
+        const widthData = weightUOMOption.find((r) => r.value === values.widthUOM)
+        const physicalData = physicalFinishOption.find((r) => r.value === values.physicalFinish)
+        const chemicalData = chemicalFinishOption.find((r) => r.value === values.chemicalFinish)
+
+        return {
+            parentGroup: parentData ? [parentData] : [],
+            materialType: matTypeData ? [matTypeData] : '',
+            materialGroupSub: matGroupData ? [matGroupData] : '',
+            materialCode: values.materialCode,
+            materialDescription: values.materialDescription,
+            buyerDivision: buyerDivData ? [buyerDivData] : [],
+            active: values.active,
+            id: values.id,
+            quality: values.quality,
+            tkt: values.tkt,
+            tex: values.tex,
+            noOfMeter: values.noOfMtr,
+            threadId: values.threadId,
+            grpArticleNo: values.grpArticleNo,
+            product: values.product,
+            Finish: values.Finish,
+            detailsId: values.detailsId,
+            fabricId: values.fabricId,
+            fabricContent: fabricContentData ? [fabricContentData] : [],
+            fabricType: fabricTypeData ? [fabricTypeData] : [],
+            fabricWave: fabricWaveData ? [fabricWaveData] : [],
+            dyeProcess: dyeProcessData ? [dyeProcessData] : [],
+            yarnWrap: values.yarnWrap,
+            yarnWeft: values.yarnWeft,
+            wrapYarnBlend: values.wrapYarnBlend,
+            weftYarnBlend: values.weftYarnBlend,
+            endsInches: values.endsInches,
+            picksInches: values.picksInches,
+            shrinkWrap: values.shrinkWrap ? values.shrinkWrap : 0,
+            shrinkWeft: values.shrinkWeft ? values.shrinkWeft : 0,
+            washMethod: washMethodData ? [washMethodData] : [],
+            FabWt_BW: values.FabWt_BW ? values.FabWt_BW : 0,
+            FabWt_AW: values.FabWt_AW ? values.FabWt_AW : 0,
+            weightUOM: wightData ? [wightData] : [],
+            actualWidth: values.actualWidth,
+            cuttableWidth: values.cuttableWidth,
+            widthUOM: widthData ? [widthData] : [],
+            physicalFinish: physicalData ? [physicalData] : [],
+            chemicalFinish: chemicalData ? [chemicalData] : [],
+            purchaseData: values.purchaseData
+        }
+    }
+
+    const getCurrentData = (tableId, isDelete = false) => {
         getApiCall(
             API_URLS.GET_MATERIAL_MASTER_ITEMS+ `?MatID=${tableId}`
         ).then((r) => {
             if (r) {
-                const values = constructEditData(...r.data.data)
-                setEditData(values)
-                setInitialValues(values)
-                setIsUpdate(true)
+                const values = constructEditData(...r.data.data, isDelete)
+                const data = constructLocalEditData(values)
+                setEditData(data)
+                if (!isDelete){
+                    setInitialValues(data)
+                    setIsUpdate(true)
+                } else
+                    setIsDelete(true)
+
                 checkMaterialTypeOnEdit(values.materialType)
                 if(values.purchaseData && values.purchaseData.length > 0)
                     setPurchaseRecord(values.purchaseData)
@@ -299,8 +365,7 @@ const ItemMasterCreation = ({ match }) => {
         onTableChange: (action, tableState) => {
             // console.log(action, tableState);
             if (action === "changePage") {
-                console.log("Go to page", tableState.page);
-                this.changePage(tableState.page);
+                // this.changePage(tableState.page);
             }
         }
     };
@@ -401,38 +466,25 @@ const ItemMasterCreation = ({ match }) => {
                 type === 'group' ? setMaterialGroupType(r.data.result.data) : setMaterialType(r.data.result.data)
         }).catch(e => console.log('material error ' + e))
     }
-    const onMaterialTypeChange = (values, setFieldValue) => {
-        const checkMaterialType = ['LBL', 'TMS', 'TPM', 'ILN', 'FTD', 'FBR', 'FLN', 'PKT'];
-        if (values === 'FBR' || values === 'FLN' || values === 'PKT') {
-            setFabricTab(true)
-            setFieldValue('materialType', values)
-        } else if (values === 'FTD') {
-            setThreadTab(true)
-            setFieldValue('materialType', values)
-        } else if (values === 'LBL' || values === 'TMS' || values === 'TPM' || values === 'ILN') {
-            setDetailsTab(true)
-            setFieldValue('materialType', values)
-        } else if (!checkMaterialType.includes(values)) {
-            alert('Please choose other material Type')
-            setFieldValue('materialType', '')
-        }
-    }
 
     const onFormSubmit = (values, resetForm) => {
-        const payload = constructFormValues(values, purchaseRecord, isUpdate);
+        const payload = constructFormValues(values, purchaseRecord, isDelete);
         postApiCall(
             API_URLS.ITEM_CREATION,
             payload
         ).then((r) => {
             if (r){
                 if(r.data.messageCode === '200'){
-                    NotificationManager.success('Saved Successfully');
-                    resetForm();
+                    NotificationManager.success(`${isDelete ? 'Deleted' : 'Saved'} Successfully`);
+                    if(!isDelete)
+                        resetForm();
                     GetItemList();
                     setIsUpdate(false)
+                    setIsDelete(false)
+                    setDeleteId(0)
                 }
                 else {
-                    NotificationManager.error(r.data.messageCode);
+                    // NotificationManager.error(r.data.messageCode);
                 }
             }
         }).catch(e => console.log('buyer error ' + e))
@@ -442,7 +494,92 @@ const ItemMasterCreation = ({ match }) => {
         setPurchaseRecord(purchaseData)
     }
 
-    const buyerDivisionOption = buyerDivision && buyerDivision.length > 0 && buyerDivision.map((v) => ({ value: v.divisionCode, label: v.divisionName}))
+    const onSelectOnChange = (e, name='', setFieldValue, secondName = '') => {
+        const filedName = `${name}Opt`;
+        // const sampleObj = {}
+        // sampleObj[secondName] = e
+        // const values = (e && e.length > 0) ? e[0].value : []
+        // sampleObj[name] = values
+        // const randomTxt = (+new Date).toString(36).slice(-5)
+        // setInitialValues({
+        //     ...initialValues,
+        //     ...sampleObj
+        // });
+        const values = (e && e.length > 0) ? e[0].value : []
+        const randomTxt = (+new Date).toString(36).slice(-5)
+        if (name === 'materialGroupSub') {
+            setFieldValue('materialCode', randomTxt)
+        }
+        if(name === 'materialType') {
+            const checkMaterialType = ['LBL', 'TMS', 'TPM', 'ILN', 'FTD', 'FBR', 'FLN', 'PKT'];
+            if (values === 'FBR' || values === 'FLN' || values === 'PKT') {
+                setFabricTab(true)
+                setFieldValue('materialType', e)
+            } else if (values === 'FTD') {
+                setThreadTab(true)
+                setFieldValue('materialType', e)
+            } else if (values === 'LBL' || values === 'TMS' || values === 'TPM' || values === 'ILN') {
+                setDetailsTab(true)
+                setFieldValue('materialType', e)
+            } else if (!checkMaterialType.includes(values)) {
+                NotificationManager.error('Please choose other material Type');
+                setFieldValue('materialType', [])
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (buyerDivision && buyerDivision.length > 0){
+            const buyerDivisionOption = buyerDivision.map((v) => ({ value: v.divisionCode, label: v.divisionName}))
+            setBuyerDivisionOptions(buyerDivisionOption)
+        }
+        if (parentGroup && parentGroup.length > 0) {
+            const parentOptions = parentGroup.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setParentGroupOption(parentOptions)
+        }
+        if (materialType && materialType.length > 0) {
+            const materialTypeOption = materialType.map((v) => ({ value: v.mattype, label: v.matDesc}))
+            setMaterialTypeOption(materialTypeOption)
+        }
+        if (materialGroupType && materialGroupType.length > 0) {
+            const mgtoptions = materialGroupType.map((v) => ({ value: v.mattype, label: v.matDesc}))
+            setMaterialGrpTypeOption(mgtoptions)
+        }
+        if (fiber && fiber.length > 0) {
+            const mgtoptions = fiber.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setFabricOption(mgtoptions)
+        }
+        if (fabricType && fabricType.length > 0) {
+            const mgtoptions = fabricType.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setFabricTypeOption(mgtoptions)
+        }
+        if (fabricWave && fabricWave.length > 0) {
+            const mgtoptions = fabricWave.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setFabricWaveOption(mgtoptions)
+        }
+        if (dyeProcess && dyeProcess.length > 0) {
+            const mgtoptions = dyeProcess.map((v) => ({ value: v.code, label: v.codeDesc}))
+            SetDyeProcessOption(mgtoptions)
+        }
+        if (washMethod && washMethod.length > 0) {
+            const mgtoptions = washMethod.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setWashMethodOption(mgtoptions)
+        }
+        if (weightUOM && weightUOM.length > 0) {
+            const mgtoptions = weightUOM.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setWeightUOMOption(mgtoptions)
+        }
+        if (physicalFinish && physicalFinish.length > 0) {
+            const mgtoptions = physicalFinish.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setPhysicalFinishOption(mgtoptions)
+        }
+        if (chemicalFinish && chemicalFinish.length > 0) {
+            const mgtoptions = chemicalFinish.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setChemicalFinishOption(mgtoptions)
+        }
+    }, [buyerDivision, parentGroup, materialType, materialGroupType, fiber, fabricType, fabricWave, dyeProcess, washMethod, weightUOM, physicalFinish, chemicalFinish])
+
+
     return (
         <div className="user-management">
             <Helmet>
@@ -459,7 +596,6 @@ const ItemMasterCreation = ({ match }) => {
                     initialValues={initialValues}
                     validationSchema={Yup.object().shape(validationShape)}
                     onSubmit={(values, action) => {
-                        console.log("Onsubmit ==== "+values)
                         onFormSubmit(values, action.resetForm)
                     }}
                 >
@@ -475,7 +611,6 @@ const ItemMasterCreation = ({ match }) => {
                             handleSubmit,
                             setFieldValue
                         } = props;
-                        console.log(values, errors, touched)
                         return (
                             <Form autoComplete="off">
                                 <RctCollapsibleCard fullBlock heading="Item Creation">
@@ -496,75 +631,48 @@ const ItemMasterCreation = ({ match }) => {
                                             </div>
                                             <div className="row">
                                                 <AccordionInput>
-                                                    <TextField
-                                                        id="parentGroup"
-                                                        varient={'outlined'}
-                                                        fullWidth
-                                                        select={true}
-                                                        label="Parent Group"
-                                                        placeholder="Parent Group"
-                                                        name={'parentGroup'}
-                                                        // type={'text'}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.parentGroup}
-                                                        error={touched.parentGroup && Boolean(errors.parentGroup)}
-                                                        helperText={touched.parentGroup && errors.parentGroup}
-                                                    >
-                                                        <MenuItem value="">None</MenuItem>
-                                                        {
-                                                            parentGroup && parentGroup.length > 0 && parentGroup.map(
-                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                            )
-                                                        }
-                                                    </TextField>
+                                                    <div className="select_label_name mt-15">
+                                                        <Select1
+                                                            dropdownPosition="auto"
+                                                            createNewLabel="Parent Group"
+                                                            options={parentGroupOption}
+                                                            onChange={(e) => {
+                                                                setFieldValue('parentGroup', e)
+                                                                // onSelectOnChange(e, 'parentGroup', setFieldValue, 'parentGroupOpt')
+                                                            }}
+                                                            placeholder="Parent Group"
+                                                            values={values.parentGroupOpt}
+                                                        />
+                                                    </div>
                                                 </AccordionInput>
                                                 <AccordionInput>
-                                                    <TextField
-                                                        id="materialType"
-                                                        varient={'outlined'}
-                                                        fullWidth
-                                                        select={true}
-                                                        label="Material Type"
-                                                        placeholder="Material Type"
-                                                        name={'materialType'}
-                                                        // type={'text'}
-                                                        onChange={(e) => {onMaterialTypeChange(e.target.value, setFieldValue)}}
-                                                        onBlur={handleBlur}
-                                                        value={values.materialType}
-                                                        error={touched.materialType && Boolean(errors.materialType)}
-                                                        helperText={touched.materialType && errors.materialType}
-                                                    >
-                                                        <MenuItem value="">None</MenuItem>
-                                                        {
-                                                            materialType && materialType.length > 0 && materialType.map(
-                                                                item => (<MenuItem key={item.mattype} value={item.mattype}>{item.matDesc}</MenuItem>)
-                                                            )
-                                                        }
-                                                    </TextField>
+                                                    <div className="select_label_name mt-15">
+                                                        <Select1
+                                                            dropdownPosition="auto"
+                                                            createNewLabel="Material Type"
+                                                            options={materialTypeOption}
+                                                            onChange={(e) => {
+                                                                onSelectOnChange(e, 'materialType', setFieldValue)
+                                                            }}
+                                                            placeholder="Material Type"
+                                                            values={values.materialType}
+                                                        />
+                                                    </div>
                                                 </AccordionInput>
                                                 <AccordionInput>
-                                                    <TextField
-                                                        id="materialGroupSub"
-                                                        varient={'outlined'}
-                                                        fullWidth
-                                                        select={true}
-                                                        label="Material Group & Material Sub"
-                                                        placeholder="Material Group & Material Sub"
-                                                        name={'materialGroupSub'}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.materialGroupSub}
-                                                        error={touched.materialGroupSub && Boolean(errors.materialGroupSub)}
-                                                        helperText={touched.materialGroupSub && errors.materialGroupSub}
-                                                    >
-                                                        <MenuItem value="">None</MenuItem>
-                                                        {
-                                                            materialGroupType && materialGroupType.length > 0 && materialGroupType.map(
-                                                                item => (<MenuItem key={item.mattype} value={item.mattype}>{item.matDesc}</MenuItem>)
-                                                            )
-                                                        }
-                                                    </TextField>
+                                                    <div className="select_label_name mt-15">
+                                                        <Select1
+                                                            dropdownPosition="auto"
+                                                            createNewLabel="Material Group & Sub"
+                                                            options={materialGrpTypeOption}
+                                                            onChange={(e) => {
+                                                                setFieldValue('materialGroupSub', e)
+                                                                onSelectOnChange(e, 'materialGroupSub', setFieldValue)
+                                                            }}
+                                                            placeholder="Material Group & Sub"
+                                                            values={values.materialGroupSub}
+                                                        />
+                                                    </div>
                                                 </AccordionInput>
                                                 <AccordionInput>
                                                     <TextField
@@ -575,6 +683,9 @@ const ItemMasterCreation = ({ match }) => {
                                                         placeholder="Material Code"
                                                         name={'materialCode'}
                                                         type={'text'}
+                                                        inputProps={
+                                                            { readOnly: true, }
+                                                        }
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.materialCode}
@@ -600,17 +711,20 @@ const ItemMasterCreation = ({ match }) => {
                                                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <div className="form-group">
                                                         <FormControl fullWidth>
-                                                            <ReactSelect
-                                                                options={buyerDivisionOption}
-                                                                name={'buyerDivision'}
-                                                                onChange={(e) => {
-                                                                    setFieldValue('buyerDivision', e.id)
-                                                                }}
-                                                                multiple={true}
-                                                                label={'Buyer Division'}
-                                                                // defaultValue={isUpdate ? defaultValues : ''}
-                                                                // value={values.buyerDivision}
-                                                            />
+                                                            <div className="select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    multi
+                                                                    createNewLabel="Buyer Division"
+                                                                    options={buyerDivisionOption}
+                                                                    onChange={(e) => {
+                                                                        setFieldValue('buyerDivision', e)
+                                                                        onSelectOnChange(e, 'buyerDivision', setFieldValue)
+                                                                    }}
+                                                                    placeholder="Buyer Division"
+                                                                    values={values.buyerDivision}
+                                                                />
+                                                            </div>
                                                         </FormControl>
                                                     </div>
                                                 </div>
@@ -640,42 +754,36 @@ const ItemMasterCreation = ({ match }) => {
                                                         <div className="row">
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple">Fiber</InputLabel>
-                                                                    <Select
-                                                                        name={'fiber'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.fiber}
-                                                                        error={touched.fiber && Boolean(errors.fiber)}
-                                                                        helperText={touched.fiber && errors.fiber}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            fiber && fiber.length > 0 && fiber.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Fiber"
+                                                                            options={fabricOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('fiber', e)
+                                                                                onSelectOnChange(e, 'fiber', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Fiber"
+                                                                            values={values.fiber}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple"> Content</InputLabel>
-                                                                    <Select
-                                                                        name={'content'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.content}
-                                                                        error={touched.content && Boolean(errors.content)}
-                                                                        helperText={touched.content && errors.content}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            options.map(
-                                                                                item => (<MenuItem key={item.id} value={item.id}>{item.title}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Content"
+                                                                            options={fabricOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('content', e)
+                                                                                onSelectOnChange(e, 'content', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Content"
+                                                                            values={values.content}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
@@ -694,62 +802,53 @@ const ItemMasterCreation = ({ match }) => {
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple"> Fabric Type </InputLabel>
-                                                                    <Select
-                                                                        name={'fabricType'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.fabricType}
-                                                                        error={touched.fabricType && Boolean(errors.fabricType)}
-                                                                        helperText={touched.fabricType && errors.fabricType}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            fabricType && fabricType.length > 0 && fabricType.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Fabric Type"
+                                                                            options={fabricTypeOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('fabricType', e)
+                                                                                onSelectOnChange(e, 'fabricType', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Fabric Type"
+                                                                            values={values.fabricType}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple"> Fabric Weave </InputLabel>
-                                                                    <Select
-                                                                        name={'fabricWave'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.fabricWave}
-                                                                        error={touched.fabricWave && Boolean(errors.fabricWave)}
-                                                                        helperText={touched.fabricWave && errors.fabricWave}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            fabricWave && fabricWave.length > 0 && fabricWave.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Fabric Weave"
+                                                                            options={fabricWaveOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('fabricWave', e)
+                                                                                onSelectOnChange(e, 'fabricWave', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Fabric Weave"
+                                                                            values={values.fabricWave}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="dyeProcess">Dye Process </InputLabel>
-                                                                    <Select
-                                                                        name={'dyeProcess'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.dyeProcess}
-                                                                        error={touched.dyeProcess && Boolean(errors.dyeProcess)}
-                                                                        helperText={touched.dyeProcess && errors.dyeProcess}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            dyeProcess && dyeProcess.length > 0 && dyeProcess.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Dye Process"
+                                                                            options={dyeProcessOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('dyeProcess', e)
+                                                                                onSelectOnChange(e, 'dyeProcess', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Dye Process"
+                                                                            values={values.dyeProcess}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -895,22 +994,19 @@ const ItemMasterCreation = ({ match }) => {
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple">Wash Method</InputLabel>
-                                                                    <Select
-                                                                        name={'washMethod'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.washMethod}
-                                                                        error={touched.washMethod && Boolean(errors.washMethod)}
-                                                                        helperText={touched.washMethod && errors.washMethod}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            washMethod && washMethod.length > 0 && washMethod.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Wash Method"
+                                                                            options={washMethodOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('washMethod', e)
+                                                                                onSelectOnChange(e, 'washMethod', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Wash Method"
+                                                                            values={values.washMethod}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
@@ -943,22 +1039,19 @@ const ItemMasterCreation = ({ match }) => {
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple"> Weight UOM </InputLabel>
-                                                                    <Select
-                                                                        name={'weightUOM'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.weightUOM}
-                                                                        error={touched.weightUOM && Boolean(errors.weightUOM)}
-                                                                        helperText={touched.weightUOM && errors.weightUOM}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            weightUOM && weightUOM.length > 0 && weightUOM.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Weight UOM"
+                                                                            options={weightUOMOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('weightUOM', e)
+                                                                                onSelectOnChange(e, 'weightUOM', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Weight UOM"
+                                                                            values={values.weightUOM}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
@@ -991,62 +1084,53 @@ const ItemMasterCreation = ({ match }) => {
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple">Width UOM </InputLabel>
-                                                                    <Select
-                                                                        name={'widthUOM'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.widthUOM}
-                                                                        error={touched.widthUOM && Boolean(errors.widthUOM)}
-                                                                        helperText={touched.widthUOM && errors.widthUOM}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            weightUOM && weightUOM.length > 0 && weightUOM.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Width UOM"
+                                                                            options={weightUOMOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('widthUOM', e)
+                                                                                onSelectOnChange(e, 'widthUOM', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Width UOM"
+                                                                            values={values.widthUOM}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple"> Physical Finish </InputLabel>
-                                                                    <Select
-                                                                        name={'physicalFinish'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.physicalFinish}
-                                                                        error={touched.physicalFinish && Boolean(errors.physicalFinish)}
-                                                                        helperText={touched.physicalFinish && errors.physicalFinish}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            physicalFinish && physicalFinish.length > 0 && physicalFinish.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Physical Finish"
+                                                                            options={physicalFinishOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('physicalFinish', e)
+                                                                                onSelectOnChange(e, 'physicalFinish', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Physical Finish"
+                                                                            values={values.physicalFinish}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                             <AccordionInput>
                                                                 <FormControl fullWidth>
-                                                                    <InputLabel htmlFor="age-simple"> Chemical Finish</InputLabel>
-                                                                    <Select
-                                                                        name={'chemicalFinish'}
-                                                                        onChange={handleChange}
-                                                                        onBlur={handleBlur}
-                                                                        value={values.chemicalFinish}
-                                                                        error={touched.chemicalFinish && Boolean(errors.chemicalFinish)}
-                                                                        helperText={touched.chemicalFinish && errors.chemicalFinish}
-                                                                    >
-                                                                        <MenuItem value="">None</MenuItem>
-                                                                        {
-                                                                            chemicalFinish && chemicalFinish.length > 0 && chemicalFinish.map(
-                                                                                item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                                            )
-                                                                        }
-                                                                    </Select>
+                                                                    <div className="select_label_name mt-15">
+                                                                        <Select1
+                                                                            dropdownPosition="auto"
+                                                                            createNewLabel="Chemical Finish"
+                                                                            options={chemicalFinishOption}
+                                                                            onChange={(e) => {
+                                                                                setFieldValue('chemicalFinish', e)
+                                                                                onSelectOnChange(e, 'chemicalFinish', setFieldValue)
+                                                                            }}
+                                                                            placeholder="Chemical Finish"
+                                                                            values={values.chemicalFinish}
+                                                                        />
+                                                                    </div>
                                                                 </FormControl>
                                                             </AccordionInput>
                                                         </div>
@@ -1239,327 +1323,6 @@ const ItemMasterCreation = ({ match }) => {
                                             tableOptions={tableOptions}
                                         />
 
-                                        {/*<div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">*/}
-                                        {/*    <Accordion className="border mb-15">*/}
-                                        {/*        <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down" />}>*/}
-                                        {/*            <div className="acc_title_font">*/}
-                                        {/*                <Typography>Purchase Info Record</Typography>*/}
-                                        {/*            </div>*/}
-                                        {/*        </AccordionSummary>*/}
-
-                                        {/*        <AccordionDetails>*/}
-
-                                        {/*            <div className="float-right pr-0 but-tp">*/}
-                                        {/*                <button*/}
-                                        {/*                    className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-0 text-white btn-icon b-sm"*/}
-                                        {/*                    tabIndex="0" type="button"><span className="MuiButton-label">Add <i*/}
-                                        {/*                    className="zmdi zmdi-plus-circle" /></span><span*/}
-                                        {/*                    className="MuiTouchRipple-root" /></button>*/}
-                                        {/*            </div>*/}
-
-                                        {/*            <div className="clearfix" />*/}
-                                        {/*            <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">*/}
-                                        {/*                <div className="row">*/}
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Material Code"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Material Code"*/}
-                                        {/*                            placeholder="Material Code"*/}
-                                        {/*                            name={'materialCode1'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.materialCode}*/}
-                                        {/*                            error={touched.materialCode1 && Boolean(errors.materialCode1)}*/}
-                                        {/*                            helpertext={touched.materialCode1 && errors.materialCode1}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <FormControl fullWidth>*/}
-                                        {/*                            <InputLabel htmlFor="age-simple">Supplier</InputLabel>*/}
-                                        {/*                            <Select*/}
-                                        {/*                                name={'supplier'}*/}
-                                        {/*                                onChange={handleChange}*/}
-                                        {/*                                onBlur={handleBlur}*/}
-                                        {/*                                value={values.supplier}*/}
-                                        {/*                                error={touched.supplier && Boolean(errors.supplier)}*/}
-                                        {/*                                helpertext={touched.supplier && errors.supplier}*/}
-                                        {/*                            >*/}
-                                        {/*                                <MenuItem value="">None</MenuItem>*/}
-                                        {/*                                {*/}
-                                        {/*                                    supplierData && supplierData.length > 0 && supplierData.map(*/}
-                                        {/*                                        item => (<MenuItem key={item.supCode} value={item.supCode}>{item.supName}</MenuItem>)*/}
-                                        {/*                                    )*/}
-                                        {/*                                }*/}
-                                        {/*                            </Select>*/}
-                                        {/*                        </FormControl>*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Brand"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Brand"*/}
-                                        {/*                            placeholder="Brand"*/}
-                                        {/*                            name={'brand'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.brand}*/}
-                                        {/*                            error={touched.brand && Boolean(errors.brand)}*/}
-                                        {/*                            helpertext={touched.brand && errors.brand}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="SupplierReference"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Supplier Reference"*/}
-                                        {/*                            placeholder="Supplier Reference"*/}
-                                        {/*                            name={'supplierRef'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.supplierRef}*/}
-                                        {/*                            error={touched.supplierRef && Boolean(errors.supplierRef)}*/}
-                                        {/*                            helpertext={touched.supplierRef && errors.supplierRef}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Multiples"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Multiples"*/}
-                                        {/*                            placeholder="Multiples"*/}
-                                        {/*                            name={'mutiples'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.mutiples}*/}
-                                        {/*                            error={touched.mutiples && Boolean(errors.mutiples)}*/}
-                                        {/*                            helpertext={touched.mutiples && errors.mutiples}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="MOQ"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="MOQ"*/}
-                                        {/*                            placeholder="MOQ"*/}
-                                        {/*                            name={'moq'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.moq}*/}
-                                        {/*                            error={touched.moq && Boolean(errors.moq)}*/}
-                                        {/*                            helpertext={touched.moq && errors.moq}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <FormControl fullWidth>*/}
-                                        {/*                            <InputLabel htmlFor="age-simple"> MOQUOM </InputLabel>*/}
-                                        {/*                            <Select*/}
-                                        {/*                                name={'moquom'}*/}
-                                        {/*                                onChange={handleChange}*/}
-                                        {/*                                onBlur={handleBlur}*/}
-                                        {/*                                value={values.moquom}*/}
-                                        {/*                                error={touched.moquom && Boolean(errors.moquom)}*/}
-                                        {/*                                helpertext={touched.moquom && errors.moquom}*/}
-                                        {/*                            >*/}
-                                        {/*                                <MenuItem value="">None</MenuItem>*/}
-                                        {/*                                {*/}
-                                        {/*                                    weightUOM && weightUOM.length > 0 && weightUOM.map(*/}
-                                        {/*                                        item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)*/}
-                                        {/*                                    )*/}
-                                        {/*                                }*/}
-                                        {/*                            </Select>*/}
-                                        {/*                        </FormControl>*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Lead Time"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Lead Time"*/}
-                                        {/*                            placeholder="Lead Time"*/}
-                                        {/*                            name={'leadTime'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.leadTime}*/}
-                                        {/*                            error={touched.leadTime && Boolean(errors.leadTime)}*/}
-                                        {/*                            helpertext={touched.leadTime && errors.leadTime}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Color"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Color"*/}
-                                        {/*                            placeholder="Color"*/}
-                                        {/*                            name={'color'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.color}*/}
-                                        {/*                            error={touched.color && Boolean(errors.color)}*/}
-                                        {/*                            helpertext={touched.color && errors.color}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Size"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Size"*/}
-                                        {/*                            placeholder="Size"*/}
-                                        {/*                            name={'size'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.size}*/}
-                                        {/*                            error={touched.size && Boolean(errors.size)}*/}
-                                        {/*                            helpertext={touched.size && errors.size}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <Fragment>*/}
-                                        {/*                            <div className="rct-picker">*/}
-                                        {/*                                <MuiPickersUtilsProvider utils={DateFnsUtils}>*/}
-                                        {/*                                    <KeyboardDatePicker*/}
-                                        {/*                                        disableToolbar*/}
-                                        {/*                                        variant="inline"*/}
-                                        {/*                                        format="MM/dd/yyyy"*/}
-                                        {/*                                        margin="normal"*/}
-                                        {/*                                        id="date-picker-inline"*/}
-                                        {/*                                        KeyboardButtonProps={{*/}
-                                        {/*                                            'aria-label': 'From date',*/}
-                                        {/*                                        }}*/}
-                                        {/*                                        label="From Date"*/}
-                                        {/*                                        value={fromDate}*/}
-                                        {/*                                        onChange={(e) => handleDateChange(e, setFieldValue, 'start')}*/}
-                                        {/*                                        animateYearScrolling={false}*/}
-                                        {/*                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}*/}
-                                        {/*                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}*/}
-                                        {/*                                        fullWidth*/}
-                                        {/*                                    />*/}
-                                        {/*                                </MuiPickersUtilsProvider>*/}
-                                        {/*                            </div>*/}
-                                        {/*                        </Fragment>*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <Fragment>*/}
-                                        {/*                            <div className="rct-picker">*/}
-                                        {/*                                <MuiPickersUtilsProvider utils={DateFnsUtils}>*/}
-                                        {/*                                    <KeyboardDatePicker*/}
-                                        {/*                                        disableToolbar*/}
-                                        {/*                                        variant="inline"*/}
-                                        {/*                                        format="MM/dd/yyyy"*/}
-                                        {/*                                        margin="normal"*/}
-                                        {/*                                        id="date-picker-inline"*/}
-                                        {/*                                        KeyboardButtonProps={{*/}
-                                        {/*                                            'aria-label': 'To date',*/}
-                                        {/*                                        }}*/}
-                                        {/*                                        label="To Date"*/}
-                                        {/*                                        value={toDate}*/}
-                                        {/*                                        onChange={(e) => handleDateChange(e, setFieldValue, 'end')}*/}
-                                        {/*                                        animateYearScrolling={false}*/}
-                                        {/*                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}*/}
-                                        {/*                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}*/}
-                                        {/*                                        fullWidth*/}
-                                        {/*                                    />*/}
-                                        {/*                                </MuiPickersUtilsProvider>*/}
-                                        {/*                            </div>*/}
-                                        {/*                        </Fragment>*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Price"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Price"*/}
-                                        {/*                            placeholder="Price"*/}
-                                        {/*                            name={'price'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.price}*/}
-                                        {/*                            error={touched.price && Boolean(errors.price)}*/}
-                                        {/*                            helpertext={touched.price && errors.price}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <FormControl fullWidth>*/}
-                                        {/*                            <InputLabel htmlFor="age-simple"> Currency </InputLabel>*/}
-                                        {/*                            <Select*/}
-                                        {/*                                name={'currency'}*/}
-                                        {/*                                onChange={handleChange}*/}
-                                        {/*                                onBlur={handleBlur}*/}
-                                        {/*                                value={values.currency}*/}
-                                        {/*                                error={touched.currency && Boolean(errors.currency)}*/}
-                                        {/*                                helpertext={touched.currency && errors.currency}*/}
-                                        {/*                            >*/}
-                                        {/*                                <MenuItem value="">None</MenuItem>*/}
-                                        {/*                                {*/}
-                                        {/*                                    currency && currency.length > 0 && currency.map(*/}
-                                        {/*                                        item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)*/}
-                                        {/*                                    )*/}
-                                        {/*                                }*/}
-                                        {/*                            </Select>*/}
-                                        {/*                        </FormControl>*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="BinCode"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Bin Code"*/}
-                                        {/*                            placeholder="Bin Code"*/}
-                                        {/*                            name={'binCode'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.binCode}*/}
-                                        {/*                            error={touched.binCode && Boolean(errors.binCode)}*/}
-                                        {/*                            helpertext={touched.binCode && errors.binCode}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Descriptions"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Descriptions"*/}
-                                        {/*                            placeholder="Descriptions"*/}
-                                        {/*                            name={'description'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.description}*/}
-                                        {/*                            error={touched.description && Boolean(errors.description)}*/}
-                                        {/*                            helpertext={touched.description && errors.description}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-
-                                        {/*                    <AccordionInput>*/}
-                                        {/*                        <TextField*/}
-                                        {/*                            id="Remarks"*/}
-                                        {/*                            fullWidth*/}
-                                        {/*                            label="Remarks"*/}
-                                        {/*                            placeholder="Remarks"*/}
-                                        {/*                            name={'remarks'}*/}
-                                        {/*                            onChange={handleChange}*/}
-                                        {/*                            onBlur={handleBlur}*/}
-                                        {/*                            value={values.remarks}*/}
-                                        {/*                            error={touched.remarks && Boolean(errors.remarks)}*/}
-                                        {/*                            helpertext={touched.remarks && errors.remarks}*/}
-                                        {/*                        />*/}
-                                        {/*                    </AccordionInput>*/}
-                                        {/*                </div>*/}
-                                        {/*            </div>*/}
-                                        {/*        </AccordionDetails>*/}
-                                        {/*    </Accordion>*/}
-                                        {/*</div>*/}
-
                                         <AccordionMain>
                                             <GetAccordionSummary
                                                 title={'Sales'}
@@ -1611,20 +1374,72 @@ const ItemMasterCreation = ({ match }) => {
                                                 </AccordionSummary>
 
                                                 <AccordionDetails>
-                                                    {
-                                                        itemData.length > 0 &&
-                                                        <MUIDataTable
-                                                            data={itemData}
-                                                            columns={columns}
-                                                            options={tableOptions}
-                                                        />
-                                                    }
+                                                    {/*<div className="table-responsive mt-0">*/}
+                                                    <table className="table mt-10 data w-100 float-left">
+                                                        <thead>
+                                                        <tr>
+                                                            <th className="w-25 text-center">Actions</th>
+                                                            <th className="w-25">Material</th>
+                                                            <th className="w-25">Type</th>
+                                                            <th className="w-25">Group</th>
+                                                            <th className="w-25">Sub Group</th>
+                                                            <th className="w-25">Material Code</th>
+                                                            <th className="w-25">Description</th>
+                                                            <th className="w-25">Common Article Number</th>
+                                                            <th className="w-25">Approved</th>
+                                                            <th className="w-25">Active</th>
+
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {itemData.length> 0 && itemData.map((n, index) => {
+
+                                                            return (
+
+                                                                <tr key={`list${index}`}>
+                                                                    <td className="">
+                                                                        <button
+                                                                            className="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary"
+                                                                            tabIndex="0" type="button"
+                                                                            aria-label="Delete"
+                                                                            onClick={(e) => getCurrentData(n.hid)}>
+                                                                                <span className="MuiIconButton-label">
+                                                                                    <i className="zmdi zmdi-edit"/></span>
+                                                                            <span className="MuiTouchRipple-root"/>
+                                                                        </button>
+                                                                        <button
+                                                                            className="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary"
+                                                                            tabIndex="0" type="button"
+                                                                            aria-label="Delete"
+                                                                            onClick={(e) => getDeleteData(n.hid)}>
+                                                                                <span className="MuiIconButton-label">
+                                                                                    <i className="zmdi zmdi-delete"/>
+                                                                                </span>
+                                                                            <span className="MuiTouchRipple-root"/>
+                                                                        </button>
+
+                                                                    </td>
+                                                                    <td className="data">{n.materialCode}</td>
+                                                                    <td className="data">{n.materialType}</td>
+                                                                    <td className="data">{n.group}</td>
+                                                                    <td className="data">{n.subGroup}</td>
+                                                                    <td className="data">{n.materialCode}</td>
+                                                                    <td className="data">{n.description}</td>
+                                                                    <td className="data">{n.commonArticleNumber}</td>
+                                                                    <td className="data">{n.approved}</td>
+                                                                    <td className="data">{n.active}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                        </tbody>
+
+                                                    </table>
+                                                    {/*</div>*/}
 
                                                 </AccordionDetails>
                                             </Accordion>
                                         </div>
                                     </div>
-
 
                                 </RctCollapsibleCard>
                             </Form>
@@ -1632,6 +1447,12 @@ const ItemMasterCreation = ({ match }) => {
                     }}
                 </Formik>
             </Paper>
+            <DeleteConfirmationDialog
+                ref={popupRef}
+                title="Are You Sure Want To Delete?"
+                message="Are You Sure Want To Delete Permanently."
+                onConfirm={deleteItemList }
+            />
         </div>
     );
 }

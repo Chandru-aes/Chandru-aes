@@ -160,19 +160,19 @@ export const getPurchaseAllData = (purchaseData, id) => {
     return allPurchaseData;
 }
 
-export const constructFormValues = (values, purchaseRecord) => {
+export const constructFormValues = (values, purchaseRecord, isDelete= false) => {
     console.log("helpers ", values, purchaseRecord)
     const purchaseData = getPurchaseAllData(purchaseRecord, values.id)
     return {
         "id": values.id ? values.id : 0,
-        "parentGroup": values.parentGroup,
-        "matType": values.materialType,
-        "matGroup": values.materialGroupSub,
-        "matSubGroup": values.materialGroupSub,
+        "parentGroup": values.parentGroup[0] ? values.parentGroup[0].value : '',
+        "matType": values.materialType[0] ? values.materialType[0].value : '',
+        "matGroup": values.materialGroupSub[0] ? values.materialGroupSub[0].value : '',
+        "matSubGroup": values.materialGroupSub[0] ? values.materialGroupSub[0].value : '',
         "matCode": values.materialCode,
         "matDesc": values.materialDescription,
         "buyDivcode": 'ALL', // values.buyerDivision   --- it should be in array format, needs to be done by antonyPrabhu
-        "active": 'N',
+        "active": isDelete ? 'N' : 'Y',
         "approved": 's',
         "approvedBy": '',
         "approvedDt": formatDate(new Date()),
@@ -184,10 +184,10 @@ export const constructFormValues = (values, purchaseRecord) => {
             {
                 "id": values.fabricId ?  values.fabricId : 0,
                 "matMast_ID": values.fabricId ? values.id ?  values.id : 0 : 0,
-                "fibreContent": values.fabricContent,
-                "fabricType": values.fabricType,
-                "fabWeave": values.fabricWave,
-                "dyeProcess": values.dyeProcess,
+                "fibreContent": values.fabricContent[0] ? values.fabricContent[0] : '',
+                "fabricType": values.fabricType[0] ? values.fabricType[0].value : '',
+                "fabWeave": values.fabricWave[0] ? values.fabricWave[0].value : '',
+                "dyeProcess": values.dyeProcess[0] ? values.dyeProcess[0].value : '',
                 "yarnWarp": values.yarnWrap,
                 "yarnWeft": values.yarnWeft,
                 "warpYarnBlend": values.wrapYarnBlend,
@@ -196,15 +196,15 @@ export const constructFormValues = (values, purchaseRecord) => {
                 "pickPerInch": values.picksInches,
                 "shrinkWarp": values.shrinkWrap ? values.shrinkWrap : 0,
                 "shrinkWeft": values.shrinkWeft ? values.shrinkWeft : 0 ,
-                "washMethod": values.washMethod,
+                "washMethod": values.washMethod[0] ? values.washMethod[0].value : '',
                 "fabWt_BW": values.FabWt_BW ? values.FabWt_BW : 0,
                 "fabWt_AW": values.FabWt_AW ? values.FabWt_AW : 0,
-                "weightUom": values.weightUOM,
+                "weightUom": values.weightUOM[0] ? values.weightUOM[0].value : '',
                 "actualWidth": values.actualWidth,
                 "cutWidth": values.cuttableWidth,
-                "widthUom": values.widthUOM,
-                "physicalFinish": values.physicalFinish,
-                "chemicalFinish": values.chemicalFinish,
+                "widthUom": values.widthUOM[0] ? values.widthUOM[0].value : '',
+                "physicalFinish": values.physicalFinish[0] ? values.physicalFinish[0].value : '',
+                "chemicalFinish": values.chemicalFinish[0] ? values.chemicalFinish[0].value : '',
                 "createdBy": '',
                 "modifyBy": '',
                 "hostName": ''

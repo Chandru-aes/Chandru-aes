@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import { Formik, Form } from 'formik';
+import { Form } from 'formik';
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
@@ -7,14 +7,11 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {AccordionInput} from "../../../../helpers/helpers";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import moment from "moment";
 import {makeStyles} from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+import Select1 from "react-dropdown-select";
 const useStyles = makeStyles(theme => ({
     error: {
         color: '#ff0000',
@@ -69,13 +66,20 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
     const classes = useStyles();
     const [fromDate, setFromDate] = useState(new Date());
     const [toDate, setToDate] = useState(new Date());
+    const [supplierOption, setSupplierDataOption] = useState([]);
+    const [currencyOption, setCurrencyOption] = useState([]);
+    const [weightUomOption, setWeightUomOption] = useState([]);
     const [values, setValues] = useState({
         fromDate: new Date(),
         toDate: new Date(),
         supplier: '',
+        supplierOpt: [],
+        currency: '',
+        currencyOpt: [],
+        moquom: '',
+        moquomOpt: [],
         supplierRef: undefined,
         multiples: undefined,
-        moquom: undefined,
         leadTime: undefined
 
     })
@@ -87,9 +91,32 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
             ...values,
             [name]: value
         });
-        if (name === 'supplier' && value !== '') {
+    }
+
+    const handleSelectChange = (e, name='') => {
+        if (name === 'supplier' && (e && e.length > 0 && e[0].value === '')) {
             setError('please choose the supplier')
         } else setError('')
+        if (e && e.length > 0 && e[0].value !== '') {
+            if (name === 'supplier') {
+                setValues({...values,
+                    supplier: e[0].value,
+                    supplierOpt: e
+                })
+            }
+            if (name === 'moquom') {
+                setValues({...values,
+                    moquom: e[0].value,
+                    moquomOpt: e
+                })
+            }
+            if (name === 'currency') {
+                setValues({...values,
+                    currency: e[0].value,
+                    currencyOpt: e
+                })
+            }
+        }
     }
 
     useEffect(() => {
@@ -109,16 +136,20 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
     }
 
     const onPurchaseDataSubmit = () => {
-        console.log(values, "inside the purchase")
+        console.log(values , "===================")
         if (Object.keys(values).length > 0 && values.supplier !== '') {
             onSavePurchaseData(values);
             setValues({
                 fromDate: new Date(),
                 toDate: new Date(),
                 supplier: '',
+                supplierOpt: [],
+                currency: '',
+                currencyOpt: [],
+                moquom: '',
+                moquomOpt: [],
                 supplierRef: undefined,
                 multiples: undefined,
-                moquom: undefined,
                 leadTime: undefined
             })
             setError('')
@@ -126,36 +157,24 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
         } else {
             setError('please choose the supplier')
         }
-
     }
 
+    useEffect(() => {
+        if (supplierData && supplierData.length > 0) {
+            const supData = supplierData.map((v) => ({ value: v.supCode, label: v.supName}))
+            setSupplierDataOption(supData)
+        }
+        if (currency && currency.length > 0) {
+            const supData = currency.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setCurrencyOption(supData)
+        }
+        if (weightUOM && weightUOM.length > 0) {
+            const supData = weightUOM.map((v) => ({ value: v.code, label: v.codeDesc}))
+            setWeightUomOption(supData)
+        }
+    }, [supplierData, currency, weightUOM])
+
     return (
-        // <Formik
-        //     initialValues={initialValues}
-        //     validationSchema={Yup.object().shape(validationShape)}
-        //     onSubmit={(values) => {
-        //         console.log(values)
-        //         onFormSubmit(values)
-        //     }}
-        // >
-        //     {(props) => {
-        //         const {
-        //             values,
-        //             touched,
-        //             errors,
-        //             handleBlur,
-        //             handleChange,
-        //             isValid,
-        //             dirty,
-        //             handleSubmit,
-        //             setFieldValue
-        //         } = props;
-        //         console.log(values, errors, touched)
-        //         return (
-        //
-        //         );
-        //     }}
-        // </Formik>
         <Form autoComplete="off" id={'purchaseInfoForm'}>
             <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
                 <Accordion className="border mb-15">
@@ -197,22 +216,16 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
 
                                 <AccordionInput>
                                     <FormControl fullWidth>
-                                        <InputLabel htmlFor="age-simple">Supplier</InputLabel>
-                                        <Select
-                                            name={'supplier'}
-                                            onChange={(e) => handleInputChange(e)}
-                                            // onBlur={handleBlur}
-                                            value={values.supplier ? values.supplier : ''}
-                                            // error={touched.supplier && Boolean(errors.supplier)}
-                                            // helpertext={touched.supplier && errors.supplier}
-                                        >
-                                            <MenuItem value="">None</MenuItem>
-                                            {
-                                                supplierData && supplierData.length > 0 && supplierData.map(
-                                                    item => (<MenuItem key={item.supCode} value={item.supCode}>{item.supName}</MenuItem>)
-                                                )
-                                            }
-                                        </Select>
+                                        <div className="select_label_name mt-15">
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                createNewLabel="Supplier"
+                                                options={supplierOption}
+                                                onChange={(e) => handleSelectChange(e, 'supplier')}
+                                                placeholder="Supplier"
+                                                values={values.supplierOpt}
+                                            />
+                                        </div>
                                         {
                                             error && <span className={classes.error}>{error}</span>
                                         }
@@ -281,22 +294,16 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
 
                                 <AccordionInput>
                                     <FormControl fullWidth>
-                                        <InputLabel htmlFor="age-simple"> MOQUOM </InputLabel>
-                                        <Select
-                                            name={'moquom'}
-                                            onChange={(e) => handleInputChange(e)}
-                                            // onBlur={handleBlur}
-                                            value={values.moquom ? values.moquom : ''}
-                                            // error={touched.moquom && Boolean(errors.moquom)}
-                                            // helpertext={touched.moquom && errors.moquom}
-                                        >
-                                            <MenuItem value="">None</MenuItem>
-                                            {
-                                                weightUOM && weightUOM.length > 0 && weightUOM.map(
-                                                    item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                )
-                                            }
-                                        </Select>
+                                        <div className="select_label_name mt-15">
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                createNewLabel="MOQUOM"
+                                                options={weightUomOption}
+                                                onChange={(e) => handleSelectChange(e, 'moquom')}
+                                                placeholder="MOQUOM"
+                                                values={values.moquomOpt}
+                                            />
+                                        </div>
                                     </FormControl>
                                 </AccordionInput>
 
@@ -414,22 +421,16 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
 
                                 <AccordionInput>
                                     <FormControl fullWidth>
-                                        <InputLabel htmlFor="age-simple"> Currency </InputLabel>
-                                        <Select
-                                            name={'currency'}
-                                            onChange={(e) => handleInputChange(e)}
-                                            // onBlur={handleBlur}
-                                            value={values.currency ? values.currency : ''}
-                                            // error={touched.currency && Boolean(errors.currency)}
-                                            // helpertext={touched.currency && errors.currency}
-                                        >
-                                            <MenuItem value="">None</MenuItem>
-                                            {
-                                                currency && currency.length > 0 && currency.map(
-                                                    item => (<MenuItem key={item.code} value={item.code}>{item.codeDesc}</MenuItem>)
-                                                )
-                                            }
-                                        </Select>
+                                        <div className="select_label_name mt-15">
+                                            <Select1
+                                                dropdownPosition="auto"
+                                                createNewLabel="Currency"
+                                                options={currencyOption}
+                                                onChange={(e) => handleSelectChange(e, 'currency')}
+                                                placeholder="Currency"
+                                                values={values.currencyOpt}
+                                            />
+                                        </div>
                                     </FormControl>
                                 </AccordionInput>
 
