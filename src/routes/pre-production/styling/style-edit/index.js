@@ -566,8 +566,9 @@ import { DateTimePicker} from '@material-ui/pickers';
             console.log(response.data.data[0],'------------')
             let data = response.data.data[0];            
 
-            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivname}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],designStyleNo:data.designStyleNo,refstyleno:data.refStyleNo,
-                styleno:data.baseStyleno,producttype: [{value:data.producttype,label:data.producttype}],subproducttype: [{value:data.subProductType,label:data.subProductType}],
+            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivname}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],
+                designStyleNo:data.baseStyleno,refstyleno:data.designStyleNo,
+                styleno:data.refStyleNo,producttype: [{value:data.producttype,label:data.producttype}],subproducttype: [{value:data.subProductType,label:data.subProductType}],
                 Washtype: [{value:data.washDesc,label:data.washTypeCodeDesc}],
                 printtype: [{value:data.printDesc,label:data.printTypeCodeDesc}],
                 embtype: [{value:data.embDesc,label:data.embroideryTypeDesc}],
@@ -578,6 +579,7 @@ import { DateTimePicker} from '@material-ui/pickers';
                 fabtype: [{value:data.fabricType,label:data.fabricTypeDesc}],
                 FashionGRP: [{value:data.fashionGroup,label:data.fashionGroupCodeDesc}],
                 masterStyle:data.masterStyle,
+                unit: [{value:data.unitCode,label:data.unitName}],
              });
         })
         .catch(error => {
@@ -736,6 +738,11 @@ editdataprojectiondt(id){
         }
         
 
+        let unit="";
+        if(this.state.unit.length>0){
+            unit=this.state.unit[0].value;
+        }
+
         if(this.state.buyer.length>0){
  
             let data =
@@ -747,11 +754,11 @@ editdataprojectiondt(id){
             "seasoncode": this.state.season[0].value,
             "seasonYear": this.state.year[0].value,
             "loccode": this.state.location[0].value,
-            "baseStyleno": this.state.styleno,
-            "refStyleNo": this.state.refstyleno,
+            "baseStyleno": this.state.designStyleNo,
+            "refStyleNo": this.state.styleno,
             "masterStyle": this.state.masterStyle,
             "styleDesc": this.state.desc,
-            "designStyleNo": this.state.designStyleNo,
+            "designStyleNo": this.state.refstyleno,
             "fabricDesc": this.state.fabdesc,
             "fabricType": fabtype,
             "fashionGroup": this.state.FashionGRP[0].value,
@@ -775,6 +782,7 @@ editdataprojectiondt(id){
             "modifyBy": "A",
             "modifyDt": "2021-10-29T08:01:11.048Z",
             "hostName": "A",
+            "unitcode": unit,
             "styleDetailEntityModel": []
                 // this.state.projectiondata
                 // [

@@ -131,6 +131,9 @@
 				
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Design & Development')}><img src={require('Assets/img/design-icon-cl.png')} alt="Design and Development" className="img-fluid" /> <span class="menu"><span>Design & Development</span></span></a>
             </li> */}
+			<li>
+				<a href="javascript:void(0);" onClick={() => this.checkMenu('Masters')}><img src={require('Assets/img/sourcing-icon-cl.png')} alt="Masters" className="img-fluid" /> <span class="menu"><span>Masters</span></span></a>
+            </li>
             <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Pre-Production')}><img src={require('Assets/img/pre-production-icon-cl.png')} alt="Product Development" className="img-fluid" /> <span class="menu"><span>Product Development</span></span></a>
             </li>
@@ -143,7 +146,7 @@
             <li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Admin')}><img src={require('Assets/img/admin-icon-cl.png')} alt="Admin" className="img-fluid" /> <span class="menu"><span>Administrator</span></span></a>
             </li>
-         <li>
+         	<li>
               <a href="javascript:void(0);" onClick={() => this.checkMenu('Bootstrap')}><img src={require('Assets/img/bootstrap-icon-cl.png')} alt="Bootstrap" className="img-fluid" /> <span class="menu"><span>Bootstrap</span></span></a>
             </li> 
           </ul>

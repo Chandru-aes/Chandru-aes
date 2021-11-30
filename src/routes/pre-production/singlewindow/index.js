@@ -325,7 +325,7 @@ class SinglewindowElement extends Component {
                 // error handling
             })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=35')
+        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo='+id)
             .then((response) => {
 
                 let data = response.data.data[0];
@@ -336,7 +336,7 @@ class SinglewindowElement extends Component {
                 // error handling
             })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=43')
+        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo='+id)
             .then((response) => {
 
                 let data = response.data.data[0];
@@ -373,14 +373,14 @@ class SinglewindowElement extends Component {
         //     // error handling
         // })
 
-        api.get('StyleHeader/GetStyleGridList')
-            .then((response) => {
+        // api.get('StyleHeader/GetStyleGridList')
+        // .then((response) => {
 
-                this.setState({ stylenolists: response.data.data });
-            })
-            .catch(error => {
-                // error handling
-            })
+        //     this.setState({ stylenolists: response.data.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
 
 
@@ -598,11 +598,11 @@ class SinglewindowElement extends Component {
 
                 });
 
-                setTimeout(() => {
-                    this.getrefversionno();
-                }, 100);
+
 
             }
+
+
 
         } else{
             if(name=="reqtype"){
@@ -618,14 +618,45 @@ class SinglewindowElement extends Component {
 
         this.setState({ [name]: event });
 
-        if(name=="styleno"){
+        if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" || name=="styleno" || name=="reqtype"){
             setTimeout(() => {
+                this.getrefversionno();
+            }, 100);
+        }
+
+        if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" ){
+
+            setTimeout(() => {
+
+                this.getstyleno();
+            }, 100);
+        }
+
+        if(name=="styleno"){
+
+            setTimeout(() => {
+                // console.log(this.state.styleno[0].label.split('-'),'6666666')
                 this.stylenochange();
             }, 100);
         }
 
     };
 
+
+    getstyleno(){
+        this.setState({styleno:[],stylenolists:[]});
+        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+
+            api.get('SingleWindowRequestheader/GetStyleNoDropDown?Buyer='+this.state.buyer[0].value+'&BuyDivCode='+this.state.buyerdiv[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+                .then((response) => {
+                    let datas = response.data.data;
+                    this.setState({stylenolists:datas});
+                })
+                .catch(error => {
+                    // error handling
+                })
+        }
+    }
 
     stylenochange(){
 
@@ -936,7 +967,7 @@ class SinglewindowElement extends Component {
                 // }
             });
 
-
+            let stylenosplit = this.state.styleno[0].label.split('-');
             let data ={
                 "id": this.state.swid,
                 "entityId": "st",
@@ -944,14 +975,14 @@ class SinglewindowElement extends Component {
                 "buyDivcode": this.state.buyerdiv[0].value,
                 "seasonCode": this.state.season[0].value,
                 "seasonYear": this.state.year[0].value,
-                "styleNo": this.state.styleno[0].value,//"1233213",//
-                "masterStyle": 0,
+                "styleNo": stylenosplit[0],//this.state.styleno[0].value,
+                "masterStyle": stylenosplit[1],
                 "baseStyleno": this.state.baseStyleno,
                 "unitCode": "string",
                 "reqNo": "string",
                 "reqDate": "2021-11-16T05:00:55.509Z",
                 "fit":  this.state.fit[0].value,
-                "purpose": this.state.purpose[0].value,
+                "purpose": this.state.purpose[0].label,
                 "fabricDesc": this.state.fabricDesc,
                 "fabricType": this.state.fabricType,
                 "cancel": "s",
@@ -964,7 +995,7 @@ class SinglewindowElement extends Component {
                 // "swPatternHeadEntityModel": patterndata,
                 // "swSampleHeadEntityModel": sampledata,
                 // "swMarkerHeadEntityModel":markerdata,
-                // "swValueAddEntityModel": 
+                // "swValueAddEntityModel":
                 // valueadddata
                 // ,
                 "swsamReqEntityModel":
@@ -1022,7 +1053,7 @@ class SinglewindowElement extends Component {
             this.setState({fields});
         }
 
-        // fields['buyer'] = val.buyer[0].value;        
+        // fields['buyer'] = val.buyer[0].value;
         // this.setState({fields});
 
 
@@ -1053,7 +1084,7 @@ class SinglewindowElement extends Component {
             this.setState({fields});
         }
 
-        // fields['buyer'] = val.buyer[0].value;        
+        // fields['buyer'] = val.buyer[0].value;
         // this.setState({fields});
 
 
@@ -1131,11 +1162,14 @@ class SinglewindowElement extends Component {
 
 
 
+
+
+
         // if(typeof fields["name"] !== "undefined"){
         //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
         //     formIsValid = false;
         //     errors["name"] = "Only letters";
-        //   }      	
+        //   }
         // }
 
         // //Email
@@ -1588,7 +1622,7 @@ class SinglewindowElement extends Component {
 
         const stylenooptions = [];
         for (const item of this.state.stylenolists) {
-            stylenooptions.push({value:item.styleid,label:item.styleNo});
+            stylenooptions.push({value:item.id,label:item.refStyleNo+'-'+item.masterStyle});
         }
 
         const materialtypeoptions = [];
@@ -1649,9 +1683,9 @@ class SinglewindowElement extends Component {
                                     <td className="data">666-666-666</td>
                                     <td className="text-center">
                                         {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
                                         <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
@@ -1669,9 +1703,9 @@ class SinglewindowElement extends Component {
                                     <td className="data">666-666-666</td>
                                     <td className="text-center">
                                         {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
                                         <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
@@ -1738,9 +1772,9 @@ class SinglewindowElement extends Component {
                                     <td className="data">666-666-666</td>
                                     <td className="text-center">
                                         {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
                                         <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
@@ -1758,9 +1792,9 @@ class SinglewindowElement extends Component {
                                     <td className="data">666-666-666</td>
                                     <td className="text-center">
                                         {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
- 
+
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
                                         <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
@@ -2161,23 +2195,23 @@ class SinglewindowElement extends Component {
                             </Select>
                         </FormControl>
                         </div>
- 
+
                     </div>  */}
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group mt-15">
-                                                <TextField id="Buyer" fullWidth label="" placeholder=""/>
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group mt-15">
-                                                <TextField id="Buyer" fullWidth label="" placeholder=""/>
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group mt-15">
-                                                <TextField id="Buyer" fullWidth label="" placeholder=""/>
-                                            </div>
-                                        </div>
+                                        {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <TextField id="Buyer" fullWidth label="" placeholder=""/>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <TextField id="Buyer" fullWidth label="" placeholder=""/>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group mt-15">
+                        <TextField id="Buyer" fullWidth label="" placeholder=""/>
+                        </div>
+                    </div> */}
                                         <div className="col-lg-12 col-md-12 col-sm-6 col-xs-12">
                                             <Accordion className="border mb-15 mt-15 patternclass">
                                                 <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
@@ -2468,11 +2502,11 @@ class SinglewindowElement extends Component {
             </div>
         </div> */}
                                                         {/* <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-        
+
     <div className="form-group">
     <TextField id="Buyer" fullWidth label="Storage Area" placeholder="Storage Area"/>
     </div>
-    
+
         </div> */}
                                                         {/* <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
      <div className="form-group">
@@ -2753,10 +2787,10 @@ class SinglewindowElement extends Component {
                     </div>
                     <div className="w-15 float-left">
                     <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
+                                                            <option>10</option>
+                                                            <option>20</option>
+                                                            <option>30</option>
+                                                            <option>40</option>
                                                         </select>
         </div>
         <div className="w-30 float-left pl-30">

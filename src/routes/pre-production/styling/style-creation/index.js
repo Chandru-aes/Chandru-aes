@@ -637,6 +637,11 @@ import { DateTimePicker} from '@material-ui/pickers';
             fabtype=this.state.fabtype[0].value;
         }
 
+        let unit="";
+        if(this.state.unit.length>0){
+            unit=this.state.unit[0].value;
+        }
+
 
         let Washtype="";
         let Washtypeflag="N";
@@ -677,11 +682,11 @@ import { DateTimePicker} from '@material-ui/pickers';
             "seasoncode": this.state.season[0].value,
             "seasonYear": this.state.year[0].value,
             "loccode": this.state.location[0].value,
-            "baseStyleno": this.state.styleno,
-            "refStyleNo": this.state.refstyleno,
+            "baseStyleno": this.state.designStyleNo,
+            "refStyleNo": this.state.styleno,
             "masterStyle": 0,
             "styleDesc": this.state.desc,
-            "designStyleNo": this.state.designStyleNo,
+            "designStyleNo": this.state.refstyleno,
             "fabricDesc": this.state.fabdesc,
             "fabricType": fabtype,
             "fashionGroup": this.state.FashionGRP[0].value,
@@ -705,6 +710,7 @@ import { DateTimePicker} from '@material-ui/pickers';
             "modifyBy": "A",
             "modifyDt": "2021-10-29T08:01:11.048Z",
             "hostName": "A",
+            "unitcode": unit,
             "styleDetailEntityModel": 
                 this.state.projectiondata
                 // [

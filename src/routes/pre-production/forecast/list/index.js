@@ -808,7 +808,7 @@ function TabContainer({ children }) {
         const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
         const BuyerOptions =[];
         for (const item of this.state.BuyerList) {           
-            BuyerOptions.push({value:item.buyerCode,label:item.buyerName});
+            BuyerOptions.push({value:item.buyerCode,label:item.buyerCode+'-'+item.buyerName});
         }
 
         const locationItemOptions = [];         
@@ -827,7 +827,7 @@ function TabContainer({ children }) {
         
         const BuyerDivisionOptions =[];
         for (const item of this.state.BuyerDivisionList) {           
-            BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
+            BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionCode+'-'+item.divisionName});
         }
         
         const yearoptions = [];
@@ -1006,19 +1006,19 @@ function TabContainer({ children }) {
                                             <Lookup dataSource={this.getSubproductType} valueExpr="subProductType" displayExpr="subProductType" />
                                             <RequiredRule />
                                         </Column>
-                                        <Column dataField="avgSAM" width={110} caption="Average SAM">
+                                        <Column dataField="avgSAM" width={110} caption="AVG SAM">
                                         <RequiredRule />
                                         </Column>
                                         <Column dataField="pcd" dataType="date" >
                                         <RequiredRule />
                                         </Column>
-                                        <Column dataField="exfacDt" caption="Tent.deli.date" dataType="date" >
+                                        <Column dataField="exfacDt" caption="Tent Del" dataType="date" >
                                         <RequiredRule />
                                         </Column>
-                                        <Column dataField="confirmDt" caption="Conf.due.date" dataType="date" >
+                                        <Column dataField="confirmDt" caption="Conf Due" dataType="date" >
                                         <RequiredRule />
                                         </Column>
-                                        <Column dataField="capacity" caption="Available capacity">
+                                        <Column dataField="capacity" caption="Available capacity" allowEditing={false}>
 
                                         </Column>
                                       

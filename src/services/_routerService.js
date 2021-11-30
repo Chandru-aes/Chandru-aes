@@ -28,6 +28,7 @@ import TimelineElement from 'Routes/timeline';
 import AdvanceFormElement from 'Routes/advanced-forms';
 import CustomizedFormElement from 'Routes/customized-form';
 import  AsyncForecastComponent from 'Routes/pre-production';
+import AsyncMastersComponent from 'Routes/masters';
 
 
 // async component
@@ -169,6 +170,10 @@ export default [
    {
       path: 'pre-production',
       component: AsyncForecastComponent
+   },
+   {
+      path: 'Masters',
+      component: AsyncMastersComponent
    },
    
 ]

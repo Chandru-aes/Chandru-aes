@@ -609,6 +609,11 @@ export default {
                   "menu_title": "Productivity Request"	
                },
                {	
+                  "path": "/app/pre-production/request-response",	
+                  "new_item": false,	
+                  "menu_title": "Request Response"	
+               },
+               {	
                   "path": "/app/pre-production/productivity-grid",	
                   "new_item": false,	
                   "menu_title": "Productivity Grid"	
@@ -632,7 +637,23 @@ export default {
                   "path": "/app/pre-production/itemmaster-grid",	
                   "new_item": false,	
                   "menu_title": "Item Master Grid"	
-               }
+               },
+               {	
+                  "path": "/app/pre-production/costing-creation",	
+                  "new_item": false,	
+                  "menu_title": "Costing"	
+               },
+               {	
+                  "path": "/app/pre-production/costing-overall-list",	
+                  "new_item": false,	
+                  "menu_title": "Costing Overall List"	
+               },
+               {	
+                  "path": "/app/pre-production/costing-style-list",	
+                  "new_item": false,	
+                  "menu_title": "Costing Style List"	
+               },
+
               
             ]
          }
@@ -644,4 +665,22 @@ export default {
             "path": "/app/pre-production/item-creation/",	
          }	
       ],
+      category17: [ {
+         "menu_title": "Masters",
+         "menu_icon": "zmdi zmdi-view-dashboard",
+         "path": "/app/masters",
+         "child_routes": [
+            {
+               "path": "/app/masters/ud-master-type",
+               "new_item": false,
+               "menu_title": "UD Master Type"
+            },
+            {
+               "path": "/app/masters/ud-master",
+               "new_item": false,
+               "menu_title": "UD Master"
+            },
+            
+         ]
+      }],
 }

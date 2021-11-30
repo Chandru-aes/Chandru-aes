@@ -98,8 +98,15 @@ import Select1 from "react-dropdown-select";
         selectedDate: moment(),
         addNewUserModal: false,
         checkedA: true,
+       
         buyerlists:[],
         buyerdivlists:[],
+        ordercategorylists:[],
+        ordercategory:[],
+        buyer:[],
+        buyerdiv:[],
+        stylenolists:[],
+        styleno:[],
         yearlists:[],
         reqtypelists:[],
         reqtype:[],
@@ -115,8 +122,7 @@ import Select1 from "react-dropdown-select";
         prepseqlists:[],
         prepseq:[],
 
-        stylenolists:[],
-        styleno:[],
+       
 
         materialtypelists:[],
         materialtype:[],
@@ -626,338 +632,6 @@ import Select1 from "react-dropdown-select";
         }
      }
 
-    save () {
-        console.log(this.state,'-----------------------')
-        
-
-        if(this.state.buyer.length>0){
-
-            let patterndata ={};
-            let markerdata ={};
-            let sampledata ={};
-            let samdata ={};
-            let valueadddata ={};
-            let reqtypedata = [];
-            this.state.reqtype.forEach(element => {
-                
-                  let newdata =   {
-                      "id": 0,
-                      "swH_Id": this.state.swid,
-                      "reqType": element.value,
-                      "createdBy": "string",
-                      "createdDt": "2021-11-16T05:00:55.509Z",
-                      "modifyBy": "string",
-                      "modifyDt": "2021-11-16T05:00:55.509Z",
-                      "hostName": "string"
-                    };
-
-                    reqtypedata.push(newdata);
-                  
-                
-            if(element.value=="PATTERN"){
-                patterndata ={
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "verRef": "string",
-                    "bodyGrain": this.state.bodygrain[0].value,
-                    "addOnInfo": this.state.addoninfo[0].value,
-                    "samShr": "s",
-                    "samShrWarp": this.state.samplewarp,
-                    "samShrWeft":  this.state.sampleweft,
-                //   "samNilShr":  "string",
-                    "costShr": "s",
-                    "costShrWarp":  this.state.costingwarp,
-                    "costShrWeft": this.state.costingweft,
-                //   "costNilShr": "string",
-                "SamSize":this.state.sample_size[0].value,
-                "CostSize":this.state.sample_size[0].value,
-                    // "size": "string",
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string",
-                    "swPatternDetEntityModel": [
-                    {
-                        "id": 0,
-                        "swH_Id": this.state.swid,
-                        "natureOfJob": this.state.job[0].value,
-                        "cancel": "s",
-                        "createdBy": "string",
-                        "createdDt": "2021-11-16T05:00:55.509Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-16T05:00:55.509Z",
-                        "hostName": "string"
-                    }
-                    ]
-                }
-            }
-            //  else{
-            //     patterndata ={
-            //         "id": 0,
-            //         "swH_Id": this.state.swid,
-            //         "verRef": "string",
-            //         "bodyGrain": "string",
-            //         "addOnInfo": "string",
-            //         "samShr": "s",
-            //         "samShrWarp": 0,
-            //         "samShrWeft": 0,
-            //         "costShr": "s",
-            //         "costShrWarp": 0,
-            //         "costShrWeft": 0,
-            //         "samSize": "string",
-            //         "costSize": "string",
-            //         "createdBy": "string",
-            //         "createdDt": "2021-11-18T12:07:22.603Z",
-            //         "modifyBy": "string",
-            //         "modifyDt": "2021-11-18T12:07:22.603Z",
-            //         "hostName": "string",
-            //         "swPatternDetEntityModel": [
-            //           {
-            //             "id": 0,
-            //             "swH_Id": this.state.swid,
-            //             "natureOfJob": "string",
-            //             "cancel": "s",
-            //             "createdBy": "string",
-            //             "createdDt": "2021-11-18T12:07:22.603Z",
-            //             "modifyBy": "string",
-            //             "modifyDt": "2021-11-18T12:07:22.603Z",
-            //             "hostName": "string"
-            //           }
-            //         ]
-            //       }
-            // }
-
-            
-            if(element.value=="MARKER"){
-                markerdata = {
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "verRef": "string",
-                    "changesIn": this.state.marker_changesin,
-                    "bodyGrain": this.state.marker_bodygrain,
-                    "shrinkage": this.state.marker_shrinkage,
-                    "markerFor": this.state.markerfor[0].value,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string",
-                    "swMarkerDetEntityModel": 
-                     this.state.markeraddmoredata
-                    
-                  }
-            } 
-            
-            // else{
-            //     markerdata ={
-            //         "id": 0,
-            //         "swH_Id": this.state.swid,
-            //         "verRef": "string",
-            //         "changesIn": "string",
-            //         "bodyGrain": "string",
-            //         "shrinkage": "string",
-            //         "markerFor": "string",
-            //         "createdBy": "string",
-            //         "createdDt": "2021-11-18T12:07:22.603Z",
-            //         "modifyBy": "string",
-            //         "modifyDt": "2021-11-18T12:07:22.603Z",
-            //         "hostName": "string",
-            //         "swMarkerDetEntityModel": [
-            //           {
-            //             "id": 0,
-            //             "swH_Id": this.state.swid,
-            //             "matType": "string",
-            //             "description": "string",
-            //             "placement": "string",
-            //             "color": "string",
-            //             "size": "string",
-            //             "pcs": 0,
-            //             "width": "string",
-            //             "repeat": "string",
-            //             "baseMarker": "s",
-            //             "cancel": "s",
-            //             "createdBy": "string",
-            //             "createdDt": "2021-11-18T12:07:22.603Z",
-            //             "modifyBy": "string",
-            //             "modifyDt": "2021-11-18T12:07:22.603Z",
-            //             "hostName": "string"
-            //           }
-            //         ]
-            //       }
-            // }
-
-            
-            if(element.value=="SAMPLE"){
-                sampledata = {
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "verRef": "string",
-                    "expDeliDate": this.state.selectedDate,
-                    "prepSeq": this.state.prepseq[0].value,
-                    "sampleType": this.state.sampletype[0].value,
-                    "totPcs": 0,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string",
-                    "swSampleDetEntityModel": 
-                        this.state.sampleaddmoredata
-                      
-                    
-                  }
-            } 
-            
-            // else {
-            //     sampledata ={
-            //         "id": 0,
-            //         "swH_Id": this.state.swid,
-            //         "verRef": "string",
-            //         "expDeliDate": "2021-11-18T12:07:22.603Z",
-            //         "prepSeq": "string",
-            //         "sampleType": "string",
-            //         "totPcs": 0,
-            //         "createdBy": "string",
-            //         "createdDt": "2021-11-18T12:07:22.603Z",
-            //         "modifyBy": "string",
-            //         "modifyDt": "2021-11-18T12:07:22.603Z",
-            //         "hostName": "string",
-            //         "swSampleDetEntityModel": [
-            //           {
-            //             "id": 0,
-            //             "swH_Id": this.state.swid,
-            //             "matType": "string",
-            //             "matDesc": "string",
-            //             "placement": "string",
-            //             "color": "string",
-            //             "size": "string",
-            //             "pcs": 0,
-            //             "cancel": "s",
-            //             "createdBy": "string",
-            //             "createdDt": "2021-11-18T12:07:22.603Z",
-            //             "modifyBy": "string",
-            //             "modifyDt": "2021-11-18T12:07:22.603Z",
-            //             "hostName": "string"
-            //           }
-            //         ]
-            //       }
-            // }
-
-            
-            if(element.value=="SAM"){
-                samdata =this.state.samaddmoredata;
-            } 
-            // else{
-            //     samdata =[
-            //         {
-            //           "id": 0,
-            //           "swH_Id": this.state.swid,
-            //           "optionType": "string",
-            //           "baseSAM": "s",
-            //           "cancel": "s",
-            //           "createdBy": "string",
-            //           "createdDt": "2021-11-18T12:07:22.603Z",
-            //           "modifyBy": "string",
-            //           "modifyDt": "2021-11-18T12:07:22.603Z",
-            //           "hostName": "string"
-            //         }
-            //       ]
-            // }
-
-
-            
-            if(element.value!="VALUEADD"){
-                valueadddata =this.state.valueaddaddmoredata;
-            }
-            // else{
-            //     valueadddata =[
-            //         {
-            //           "id": 0,
-            //           "swH_Id": this.state.swid,
-            //           "valueAdd": "string",
-            //           "valueAddType": "string",
-            //           "valueAddDesc": "string",
-            //           "color": "string",
-            //           "pcs": 0,
-            //           "typeOfGarment": "string",
-            //           "cancel": "s",
-            //           "createdBy": "string",
-            //           "createdDt": "2021-11-18T12:07:22.603Z",
-            //           "modifyBy": "string",
-            //           "modifyDt": "2021-11-18T12:07:22.603Z",
-            //           "hostName": "string"
-            //         }
-            //       ]
-            // } 
-            });
-        
-
-            let data ={
-                "id": this.state.swid,
-                "entityId": "st",
-                "buyCode": this.state.buyer[0].value,
-                "buyDivcode": this.state.buyerdiv[0].value,
-                "seasonCode": this.state.season[0].value,
-                "seasonYear": this.state.year[0].value,
-                "styleNo": this.state.styleno[0].value,
-                "masterStyle": 0,
-                "baseStyleno": this.state.baseStyleno,
-                "unitCode": "string",
-                "reqNo": "string",
-                "reqDate": "2021-11-16T05:00:55.509Z",
-                "fit":  this.state.fit[0].value,
-                "purpose": this.state.purpose[0].value,
-                "fabricDesc": this.state.fabricDesc,
-                "fabricType": this.state.fabricType,
-                "cancel": "s",
-                "createdBy": "string",
-                "createdDt": "2021-11-16T05:00:55.509Z",
-                "modifyBy": "string",
-                "modifyDt": "2021-11-16T05:00:55.509Z",
-                "hostName": "string",
-                "singleWindowDetEntityModel": reqtypedata,
-                // "swPatternHeadEntityModel": patterndata,
-                // "swSampleHeadEntityModel": sampledata,
-                // "swMarkerHeadEntityModel":markerdata,
-                // "swValueAddEntityModel": 
-                // valueadddata
-                // ,
-                "swsamReqEntityModel": 
-                samdata
-                
-              };
-console.log(data,'datadatadata')
-
-            api.post('SingleWindowRequestheader/SaveSingleWindowRequestDetails',data) .then((response) => {
-                // this.getMenulists();
-                NotificationManager.success('Saved Sucessfully');
-                window.location.href = "/#/app/pre-production/request-grid";
-                this.setState( {
-                    // edit_add:false,
-                    // menuId:0,
-                    // parent_menu_id:[],
-                    // module:[],
-                    // menu_type:[],
-                    // menuname:'',
-                    // menuurl:'',
-                    // menudesc:'',
-                    // active_status:'',
-                    // isparent:'',
-                    // displayindex:''
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-        } else{
-            NotificationManager.error('Please Select Buyer');
-
-        }
-                
-
-      }
 
       getBuyerDivision1(val,field,e){
         let fields = this.state.fields;
@@ -1400,6 +1074,40 @@ console.log(data,'datadatadata')
         
        
       }
+
+      
+    save () {
+        console.log(this.state,'-----------------------')
+        
+
+        if(this.state.buyer.length>0){
+           
+            
+            let data ={"tnaMasterRecord":
+            sampleaddmoredata
+                
+              };
+console.log(data,'datadatadata')
+
+            api.post('SingleWindowRequestheader/SaveSingleWindowRequestDetails',data) .then((response) => {
+                // this.getMenulists();
+                NotificationManager.success('Saved Sucessfully');
+                window.location.href = "/#/app/pre-production/request-grid";
+                this.setState( {
+                 
+                });
+            })
+            .catch(error => {
+                // error handling
+            })
+
+        } else{
+            NotificationManager.error('Please Select Buyer');
+
+        }
+                
+
+      }
   
 
 
@@ -1443,6 +1151,12 @@ console.log(data,'datadatadata')
            for (const item of this.state.buyerdivlists) {           
                buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
            }
+
+           const ordercategoryoptions = [];
+           for (const item of this.state.ordercategorylists) {           
+               ordercategoryoptions.push({value:item.code,label:item.codeDesc});
+           }
+
 
            const yearoptions = [];
            for (const item of this.state.yearlists) {           
@@ -1570,48 +1284,50 @@ console.log(data,'datadatadata')
                         </div> 
                         <div className="clearfix"></div>
                         <div className="row">
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">Buyer</InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">Buyer division</InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">    Order category </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
-                                            </div>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Buyer"
+                                                                    options={buyeroptions}
+                                                                    // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                                    onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
+                                                                    placeholder="Buyer"
+                                                                    values={this.state.buyer}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["buyer"]}</span>
+                                                                </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Buyer Division"
+                                                                    options={buyerdivoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('buyerdiv')}
+                                                                    placeholder="Buyer Division"
+                                                                    values={this.state.buyerdiv}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["buyerdiv"]}</span>
+                                                                </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Order category"
+                                                                    options={ordercategoryoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('ordercategory')}
+                                                                    placeholder="Order category"
+                                                                    values={this.state.ordercategory}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["ordercategory"]}</span>
+                                                                </div>
+                        
+                                </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <FormControl fullWidth>
@@ -1718,46 +1434,36 @@ console.log(data,'datadatadata')
                                 <tr>
                                     <th className="p-0">
 
-                                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                                    <div className="w-100">
-                                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                                    </div>
-                                                    
-                                                </RadioGroup></div>
+                                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                            </div>
+                            </div>
                                         <div className="w-50 float-left p-5">Base</div>
 
                                     </th>
                                     <th className="p-0">
 
-                                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                                    <div className="w-100">
-                                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                                    </div>
-                                                    
-                                                </RadioGroup></div>
+                                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                            </div>
+                            </div>
                                         <div className="w-50 float-left p-5">Confirmed</div>
 
                                     </th>
                                     <th></th>
                                     <th className="p-0">
 
-                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                    <div className="w-100">
-                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                    </div>
-                                    
-                                </RadioGroup></div>
+                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                            </div></div>
                         <div className="w-50 float-left p-5">Base</div>
 
                         </th>
                         <th className="p-0">
 
-                        <div className="w-50 float-left border-right p-5"> <RadioGroup row aria-label="anchorReference" name="anchorReference">
-                                    <div className="w-100">
-                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="" />
-                                    </div>
-                                    
-                                </RadioGroup></div>
+                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                            </div></div>
                         <div className="w-50 float-left p-5">Confirmed</div>
 
                         </th>

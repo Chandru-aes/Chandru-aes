@@ -200,7 +200,7 @@
 											}
 											
 
-									{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' && 
+									{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Masters' && 
 								
 										<List className="rct-mainMenu p-0 m-0 list-unstyled"  
 										subheader={
@@ -235,7 +235,7 @@
 									))}
 								</List>
 								}
-								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' &&
+								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Masters' && 
 								<List
 										className="rct-mainMenu p-0 m-0 list-unstyled"
 										subheader={<ListSubheader className="side-title" component="li">
@@ -251,7 +251,7 @@
 										))}
 									</List>
 								}
-								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Admin'  &&
+								{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Admin'  && this.state.submenuName!='Masters' && 
 									<List
 										className="rct-mainMenu p-0 m-0 list-unstyled"
 										subheader={<ListSubheader className="side-title" component="li">
@@ -268,7 +268,7 @@
 									</List>
 									}
 							</div>
-					{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&  this.state.submenuName!='Pre-Production'  &&
+					{this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  &&  this.state.submenuName!='Pre-Production'  && this.state.submenuName!='Masters' && 
 					<div id="submenu" className={this.getClassName('MenuTitle2')}>
 						
 						<List
@@ -303,7 +303,7 @@
 					</div>
 					 }
 
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production'  &&
+					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production'  && this.state.submenuName!='Masters' && 
 					<div id="submenu" className={this.getClassName('MenuTitle3')}>
 						
 						<List
@@ -434,7 +434,7 @@
 						</List>
 					</div>
 	 				}
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' &&
+					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Masters' && 
 					<div id="submenu" className={this.getClassName('MenuTitle4')}>
 						
 						<List
@@ -468,7 +468,7 @@
 						</List>
 					</div>
 	 				}
-					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production'  &&
+					 {this.state.submenuName!='Bootstrap'  && this.state.submenuName!='Admin'  && this.state.submenuName!='Pre-Production'  && 
 					<div id="submenu" className={this.getClassName('MenuTitle5')}>
 						<List
 							className="rct-mainMenu p-0 m-0 list-unstyled"
@@ -603,7 +603,7 @@
 					 </List>
 					 
 	 			}
-				{this.state.submenuName=='Pre-Production' && this.state.submenuName!='Bootstrap' &&
+				{this.state.submenuName=='Pre-Production' && this.state.submenuName!='Bootstrap' && this.state.submenuName!='Masters' && 
 								<List
 									className="rct-mainMenu p-0 m-0 list-unstyled"
 									subheader={<ListSubheader className="side-title" component="li">
@@ -620,7 +620,7 @@
 								</List>
 								}
 
-					{this.state.submenuName=='Pre-Production' && this.state.submenuName!='Bootstrap' &&
+					{this.state.submenuName=='Pre-Production' && this.state.submenuName!='Bootstrap' && this.state.submenuName!='Masters' && 
 						<List
 							className="rct-mainMenu p-0 m-0 list-unstyled"
 							subheader={<ListSubheader className="side-title" component="li">
@@ -654,6 +654,26 @@
 						</List>
 						
 						}
+						
+					{this.state.submenuName=='Masters' && this.state.submenuName!='Bootstrap' && this.state.submenuName!='Pre-Production' && this.state.submenuName!='Admin' &&
+						
+						<List
+							className="rct-mainMenu p-0 m-0 list-unstyled"
+							subheader={<ListSubheader className="side-title" component="li">
+								{/* <IntlMessages id="sidebar.modules" /> */}
+								</ListSubheader>}
+						>
+							{sidebarMenus.category17.map((menu, key) => (
+								<NavMenuItem
+									menu={menu}
+									key={key}
+									onToggleMenu={() => this.toggleMenu(menu, 'category17')}
+								/>
+							))}
+						</List>
+						
+						}	
+
 						
 				
 				 </nav>

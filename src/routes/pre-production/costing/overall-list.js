@@ -361,6 +361,7 @@
        
          const { users, loading, selectedUser, editUser, allSelected, selectedUsers } = this.state;
          const BuyerDivisionOptions =[];
+         const BuyerOptions  = [];
          for (const item of this.state.BuyerDivisionList) {           
              BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionName});
          }
@@ -414,9 +415,20 @@
                      title={<IntlMessages id="sidebar.userManagement" />}
                      match={this.props.match}
                  />
-                 <RctCollapsibleCard fullBlock heading="Overall List">
+                 <RctCollapsibleCard fullBlock heading="Costing Overall List">
                   
-                    <div className="row new-form overall-border no-padding-bottom">   
+                    <div className="row new-form overall-border no-padding-bottom">
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">   
+                                <div className="form-group select_label_name mt-15"> 
+                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer"
+                                        options={BuyerOptions} ref="buyername"
+                                       // onChange={values => this.getBuyerDivision1({ BuyerValue:values },this,"buyername")}
+                                        placeholder="Buyer"                                              
+                                        values={this.state.BuyerValue}
+                                    />  
+                                        <span className="error">{this.state.errors["buyername"]}</span>                                 
+                                </div>
+                            </div>
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                 <div className="form-group select_label_name mt-15"> 
@@ -467,7 +479,7 @@
                                     </div>                                   
                                 </div>
                             </div>
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group">
                                     <div className="form-group select_label_name mt-15"> 
                                     <Select1 dropdownPosition="auto" createNewLabel="Request Type"  options={requesttypeoptions}
@@ -478,10 +490,10 @@
                                         <span className="error">{this.state.errors["requesttype"]}</span>
                                     </div>
                                 </div>
-                            </div>  
+                            </div>   */}
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div className="form-group mt-15"> 
-                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
+                                    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">Search <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button> 
                                 </div>   
                             </div>                     
                         </div> 
@@ -542,15 +554,13 @@
                                              label="All"
                                          />
                                      </th> */}
-                                     <th>Style Image</th>
-                                     <th>FIT</th>
-                                     <th>Req No</th>
-                                     <th>Type</th>
-                                     <th>Date</th>
-                                     <th>Style No</th>                                    
-                                     <th>Purpose</th>
-                                     <th>No of Activity</th>
-                                     <th>Color status</th>
+                                     <th>Image</th>                                     
+                                     <th>Style No</th>  
+                                     <th>Buyer Division</th>
+                                     <th>Fabric</th>
+                                     <th>Order Quantity</th>
+                                     <th>Cost</th> 
+                                     <th>No of options</th>
                                  </tr>
                              </thead>
                              <tbody>
