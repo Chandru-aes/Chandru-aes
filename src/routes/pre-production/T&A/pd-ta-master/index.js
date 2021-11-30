@@ -646,7 +646,7 @@ import Select1 from "react-dropdown-select";
                 "subActivity": this.state.subactivity,
                 "tnaSeqNo": DpndCode,
                 "duration": this.state.days,
-                "dependActCode": "str",
+                "dependActCode": DpndOnAct,
                 "dependDeptCode": DpndDept,
                 "dependDeptCodeName": DpndDeptlabel,
                 "dependActvity1": DpndOnAct,
@@ -661,7 +661,8 @@ import Select1 from "react-dropdown-select";
                 "active": "Y",
                 "createdBy": "string",
                 "modifyBy": "string",
-                "hostname": "string"
+                "hostname": "string",
+                "mActive": "Y"
               }
                 tamasteraddmoredata.push(data);
                 this.setState({tamasteraddmoredata:tamasteraddmoredata});

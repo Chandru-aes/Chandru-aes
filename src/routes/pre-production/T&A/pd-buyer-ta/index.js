@@ -98,6 +98,9 @@ import Select1 from "react-dropdown-select";
         selectedDate: moment(),
         addNewUserModal: false,
         checkedA: true,
+
+        unit:[],
+        unitlists:[],
        
         buyerlists:[],
         buyerdivlists:[],
@@ -357,16 +360,6 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
-
-        // api.get('BuyerDivision/GetBuyerDivisionList')
-        // .then((response) => {
-            
-        //     this.setState({ buyerdivlists: response.data.result.data });
-        // })
-        // .catch(error => {
-        //     // error handling
-        // })
-
         api.get('StyleHeader/GetStyleGridList')
         .then((response) => {
             
@@ -376,121 +369,24 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
+        api.get('Unit/GetUnitDropDown')
+        .then((response) => {
+            
+            this.setState({ unitlists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
+
+        api.get('Miscellaneous/GetMiscellaneousList?MType=ORDCATE')
+        .then((response) => {
+             
+            this.setState({ ordercategorylists: response.data.result.data });
+        })
+        .catch(error => {
+            // error handling
+        })
         
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=ORDSTAGE')
-        .then((response) => {
-            
-            this.setState({ stagedetailslists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-       
-        api.get('Miscellaneous/GetMiscellaneousList?MType=REQTYPE')
-        .then((response) => {
-            
-            this.setState({ reqtypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=GRAIN')
-        .then((response) => {
-            
-            this.setState({ bodygrainlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        
-        api.get('Miscellaneous/GetMiscellaneousList?MType=JOB')
-        .then((response) => {
-            
-            this.setState({ joblists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=ADDONINFO')
-        .then((response) => {
-            
-            this.setState({ addoninfolists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=PREPSEQ')
-        .then((response) => {
-            
-            this.setState({ prepseqlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=VALUEADD')
-        .then((response) => {
-            
-            this.setState({ valueaddlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=SAMPLETYPE')
-        .then((response) => {
-            
-            this.setState({ sampletypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Materialtype/GetItemTypeDropDown')
-        .then((response) => {
-            
-            this.setState({ materialtypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        
-        api.get('Miscellaneous/GetMiscellaneousList?MType=MARKPUR')
-        .then((response) => {
-            
-            this.setState({ markerforlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=fit')
-        .then((response) => {
-            
-            this.setState({ fitlists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=fabtype')
-        .then((response) => {
-            
-            this.setState({ fabtypelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
         
 
         api.get('Location/GetLocationList')
@@ -522,10 +418,6 @@ import Select1 from "react-dropdown-select";
         })
 
         
-
-
-        
-        
         api.get('Miscellaneous/GetMiscellaneousList?MType=year')
         .then((response) => {
             
@@ -534,16 +426,7 @@ import Select1 from "react-dropdown-select";
         .catch(error => {
             // error handling
         })
-
-        api.get('Purpose/GetPurposeDropDown')
-        .then((response) => {
-            
-            this.setState({ purposelists: response.data.result.data });
-        })
-        .catch(error => {
-            // error handling
-        })
-
+        
 
         
 
@@ -614,6 +497,12 @@ import Select1 from "react-dropdown-select";
             }, 200);
         }
 
+        if(name=="buyerdiv"){
+            setTimeout(() => {
+                this.getActivitylist();
+            }, 200);
+        }
+
 	};
 
 
@@ -631,6 +520,23 @@ import Select1 from "react-dropdown-select";
             })
         }
      }
+
+     
+     getActivitylist(){
+        
+        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 ){
+            this.setState({baseStyleno:'',fabricDesc:'',fabricType:''});
+            api.get('TNAMaster/GetExistChkForTNABuyerDiv?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value)
+            .then((response) => {
+                let datas = response.data.data;
+                this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+     }
+
 
 
       getBuyerDivision1(val,field,e){
@@ -1163,103 +1069,30 @@ console.log(data,'datadatadata')
                yearoptions.push({value:item.code,label:item.codeDesc});
            }
 
-           const purposeoptions = [];
-           for (const item of this.state.purposelists) {           
-               purposeoptions.push({value:item.parntslno,label:item.purpose});
-           }
 
-           
-           const reqtypeoptions = [];
-           for (const item of this.state.reqtypelists) {           
-               reqtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const bodygrainoptions = [];
-           for (const item of this.state.bodygrainlists) {           
-               bodygrainoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-
-           const joboptions = [];
-           for (const item of this.state.joblists) {           
-               joboptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const addoninfooptions = [];
-           for (const item of this.state.addoninfolists) {           
-               addoninfooptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const prepseqoptions = [];
-           for (const item of this.state.prepseqlists) {           
-               prepseqoptions.push({value:item.code,label:item.codeDesc});
-           }
-         
-
+          
            const locationoptions = [];
            for (const item of this.state.locationlists) {           
                locationoptions.push({value:item.locCode,label:item.locName});
            }
-
-           const sizeoptions = [];
-           for (const item of this.state.sizelists) {           
-               sizeoptions.push({value:item.sizecode,label:item.sizeIndex});
-           }
-
-
-           const fitoptions = [];
-           for (const item of this.state.fitlists) {           
-               fitoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const fabtypeoptions = [];
-           for (const item of this.state.fabtypelists) {           
-               fabtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const stagedetailsoptions = [];
-           for (const item of this.state.stagedetailslists) {           
-               stagedetailsoptions.push({value:item.code,label:item.codeDesc});
-           }
-
+           
+           
+           
            const seasonoptions = [];
            for (const item of this.state.seasonlists) {           
                seasonoptions.push({value:item.seasonCode,label:item.seasonName});
            }
 
 
-           const markerforoptions = [];
-           for (const item of this.state.markerforlists) {           
-               markerforoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const valueaddoptions = [];
-           for (const item of this.state.valueaddlists) {           
-               valueaddoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           const valueaddtypeoptions = [];
-           for (const item of this.state.valueaddtypelists) {           
-               valueaddtypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
-           
-           const sampletypeoptions = [];
-           for (const item of this.state.sampletypelists) {           
-               sampletypeoptions.push({value:item.code,label:item.codeDesc});
-           }
-
            const stylenooptions = [];
            for (const item of this.state.stylenolists) {           
                stylenooptions.push({value:item.styleid,label:item.styleNo});
            }
-
-           const materialtypeoptions = [];
-           for (const item of this.state.materialtypelists) {           
-               materialtypeoptions.push({value:item.mattype,label:item.matDesc});
+           
+           const unitoptions = [];
+           for (const item of this.state.unitlists) {           
+               unitoptions.push({value:item.uCode,label:item.uName});
            }
-
-
            
           return (
               
@@ -1329,60 +1162,61 @@ console.log(data,'datadatadata')
                         
                                 </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">    Season </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Season"
+                                                                    options={seasonoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('season')}
+                                                                    placeholder="Season"
+                                                                    values={this.state.season}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["season"]}</span>
+                                                                </div>
+                                           
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">    Year</InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Year"
+                                                                    options={yearoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('year')}
+                                                                    placeholder="Year"
+                                                                    values={this.state.year}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["year"]}</span>
+                                                                </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">        Style number  </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Style Number"
+                                                                    options={stylenooptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('styleno')}
+                                                                    placeholder="Style Number"
+                                                                    values={this.state.styleno}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["styleno"]}</span>
+                                                                </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                                                <FormControl fullWidth>
-                                                    <InputLabel htmlFor="age-simple">        Unit  </InputLabel>
-                                                    <Select value={this.state.age} onChange={this.handleChange}
-                                                    inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                    <MenuItem value=""><em>None</em></MenuItem>
-                                                    <MenuItem value={10}>Autumn</MenuItem>
-                                                    <MenuItem value={20}>Summer</MenuItem>
-                                                    <MenuItem value={30}>Winter</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                                </div>
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Unit"
+                                                                    options={unitoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('unit')}
+                                                                    placeholder="Unit"
+                                                                    values={this.state.unit}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["unit"]}</span>
+                                                                </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
