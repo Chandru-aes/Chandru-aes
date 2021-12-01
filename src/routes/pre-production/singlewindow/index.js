@@ -413,8 +413,8 @@ class SinglewindowElement extends Component {
                 // error handling
             })
 
-
-        api.get('Miscellaneous/GetMiscellaneousList?MType=JOB')
+            // Miscellaneous/GetMiscellaneousList?MType
+        api.get('Purpose/GetPurposeList?PType=JOB')
             .then((response) => {
 
                 this.setState({ joblists: response.data.result.data });
