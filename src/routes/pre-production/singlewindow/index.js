@@ -1588,7 +1588,7 @@ class SinglewindowElement extends Component {
 
         const joboptions = [];
         for (const item of this.state.joblists) {
-            joboptions.push({value:item.code,label:item.codeDesc});
+            joboptions.push({value:item.purpose,label:item.purpose});
         }
 
         const addoninfooptions = [];
