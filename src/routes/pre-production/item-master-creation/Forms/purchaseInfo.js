@@ -136,7 +136,6 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
     }
 
     const onPurchaseDataSubmit = () => {
-        console.log(values , "===================")
         if (Object.keys(values).length > 0 && values.supplier !== '') {
             onSavePurchaseData(values);
             setValues({

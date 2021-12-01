@@ -650,7 +650,6 @@ const ItemMasterCreation = ({ match }) => {
                             handleSubmit,
                             setFieldValue
                         } = props;
-                        console.log(error)
                         return (
                             <Form autoComplete="off">
                                 <RctCollapsibleCard fullBlock heading="Item Creation">
