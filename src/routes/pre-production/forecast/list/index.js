@@ -178,6 +178,10 @@ function TabContainer({ children }) {
       
       handleChangesingledropdown = name => event => {
             this.setState({ [name]: event.target.value });
+
+            let fields = this.state.fields;
+            fields['activityName'] = event.target.value;        
+            this.setState({fields});
         };
         
         getForecastdetail(ForecastId){
@@ -246,94 +250,104 @@ function TabContainer({ children }) {
                 // error handling
             })
         }
-      // get employee payrols
+       commonSaveQtyDetails(){
+            api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response1) => {
+                        
+                NotificationManager.success('Added Sucessfully');
+                let fcActivityId = response1.data.data.data.forecastActivityEntityModel[0].fcHead_ID;
+               
+                api.get('ForecastQtyDetailEntity/GetForecastQtyDetails?FCID='+fcActivityId)
+                .then((response) => {            
+                    this.setState({ QtyBreakUpList: response.data });
+                })
+                
+                api.get('ForecastEntity/GetForecastHeaderList')
+                .then((responseHT) => {          
+                    this.setState({ forecastinglists: responseHT.data.data });
+                })
+            })
+            .catch(error => {
+                // error handling
+            })
+       }
+
+       commonSaveActivityDetails(){
+            if(this.state.activityName !='' && this.state.selectedDate!=''){
+                this.state.saveActivityItems =  
+                { 
+                    "hid":0,
+                    "entityID": "st",
+                    "buyCode": this.state.BuyerDivisionList[0].buyerCode,
+                    "buyDivcode": this.state.BuyerdivisionValue[0].value,
+                    "loccode": this.state.location[0].value,
+                    "seasonCode": this.state.season[0].value,
+                    "seasonYear": this.state.year[0].value,
+                    "fCtype": this.state.forecastItem[0].value,
+                    "createdBy": "1",
+                    "modifyBy": "1",
+                    "cancel": "N",
+                    "hostName": "admin",
+                    "fcQtyDetailInsertEntityModel": [
+                    {
+                    "id": 0,
+                    "fcHead_ID": 0,
+                    "productType": "string",
+                    "subProductType": "string",
+                    "qty": 0,
+                    "avgSAM": 0,
+                    "pcd": "2021-11-02T17:05:04.667Z",
+                    "exfacDt": "2021-11-02T17:05:04.667Z",
+                    "confirmDt": "2021-11-02T17:05:04.667Z",
+                    "cancel": "N",
+                    "createdBy": "string",
+                    "modifyBy": "string",
+                    "hostName": "string"
+                    }
+                ],
+                "forecastActivityEntityModel":[{
+                    "id": 0,
+                    "fcHead_ID": 0,
+                    "activity": this.state.activityName,
+                    "dueDt": this.state.selectedDate,
+                    "cancel": "N",
+                    "createdBy": "1",
+                    "modifyBy": "1",
+                    "hostName": "LOCALHOST"
+                }]
+            }
+        
+            }
+
+            api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveActivityItems) .then((response) => {                    
+                NotificationManager.success('Added Sucessfully');
+                let fcQtyId = response.data.data.data.forecastActivityEntityModel[0].fcHead_ID;
+                api.get('ForecastActivityEntity/GetForecastActivityList?FID='+fcQtyId)
+                .then((response) => {            
+                    this.setState({ activityList: response.data });
+                })
+                api.get('ForecastEntity/GetForecastHeaderList')
+                .then((response) => {        
+                    this.setState({ forecastinglists: response.data.data });
+                })
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+
         SaveForecast(type){
-            console.log(this.state.IsEdit);
+            
             if((this.state.QtyBreakUpList.data.length==0 && this.state.activityList.data.length==0 && (!this.state.IsEdit))){
                 NotificationManager.error('Please Select any Quantity or Activity Items');
             }else{
                 if(type=='qty'){
-                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveQtyDetailItems) .then((response1) => {
-                    
-                        NotificationManager.success('Added Sucessfully');
-                        let fcActivityId = response.data.data.data.forecastActivityEntityModel[0].fcHead_ID;
-                        
-                         api.get('ForecastQtyDetailEntity/GetForecastQtyDetails?FCID='+fcActivityId)
-                        .then((response) => {            
-                            this.setState({ QtyBreakUpList: response.data });
-                        })
-                        
-                        api.get('ForecastEntity/GetForecastHeaderList')
-                        .then((response) => {          
-                            this.setState({ forecastinglists: response.data.data });
-                        })
-                    })
-                    .catch(error => {
-                        // error handling
-                    })
+                  this.commonSaveQtyDetails();
                 }else{
-                    
-                    if(this.state.activityName !='' && this.state.selectedDate!=''){
-                        this.state.saveActivityItems =  
-                        { 
-                            "hid":0,
-                            "entityID": "st",
-                            "buyCode": this.state.BuyerDivisionList[0].buyerCode,
-                            "buyDivcode": this.state.BuyerdivisionValue[0].value,
-                            "loccode": this.state.location[0].value,
-                            "seasonCode": this.state.season[0].value,
-                            "seasonYear": this.state.year[0].value,
-                            "fCtype": this.state.forecastItem[0].value,
-                            "createdBy": "1",
-                            "modifyBy": "1",
-                            "cancel": "N",
-                            "hostName": "admin",
-                            "fcQtyDetailInsertEntityModel": [
-                            {
-                              "id": 0,
-                              "fcHead_ID": 0,
-                              "productType": "string",
-                              "subProductType": "string",
-                              "qty": 0,
-                              "avgSAM": 0,
-                              "pcd": "2021-11-02T17:05:04.667Z",
-                              "exfacDt": "2021-11-02T17:05:04.667Z",
-                              "confirmDt": "2021-11-02T17:05:04.667Z",
-                              "cancel": "N",
-                              "createdBy": "string",
-                              "modifyBy": "string",
-                              "hostName": "string"
-                            }
-                          ],
-                        "forecastActivityEntityModel":[{
-                            "id": 0,
-                            "fcHead_ID": 0,
-                            "activity": this.state.activityName,
-                            "dueDt": this.state.selectedDate,
-                            "cancel": "N",
-                            "createdBy": "1",
-                            "modifyBy": "1",
-                            "hostName": "LOCALHOST"
-                        }]
-                    }
                    
+                    if(Object.keys(this.state.saveQtyDetailItems).length>0){
+                        this.commonSaveQtyDetails();
                     }
-
-                    api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',this.state.saveActivityItems) .then((response) => {                    
-                        NotificationManager.success('Added Sucessfully');
-                        let fcQtyId = response.data.data.data.fcQtyDetailInsertEntityModel[0].fcHead_ID;
-                        api.get('ForecastActivityEntity/GetForecastActivityList?FID='+fcQtyId)
-                        .then((response) => {            
-                            this.setState({ activityList: response.data });
-                        })
-                        api.get('ForecastEntity/GetForecastHeaderList')
-                        .then((response) => {        
-                            this.setState({ forecastinglists: response.data.data });
-                        })
-                    })
-                    .catch(error => {
-                        // error handling
-                    })
+                    this.commonSaveActivityDetails();                   
                 }
             }
         }
@@ -386,7 +400,7 @@ function TabContainer({ children }) {
            
             api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
                                     NotificationManager.success('Deleted Sucessfully');
-               if(response.data.data.status==true){
+               
                    /*
                     api.get('ForecastActivityEntity/GetForecastActivityList')
                     .then((response) => {            
@@ -402,7 +416,7 @@ function TabContainer({ children }) {
                     .then((response) => {            
                         this.setState({ forecastinglists: response.data.data });
                     })
-               }               
+              // }               
                 e.cancel=false;
             })
             .catch(error => {
@@ -560,8 +574,7 @@ function TabContainer({ children }) {
         }
         onRowUpdated(e) {
             const UpdatedData = e.data;   
-            this.setState({ IsEdit: true });      
-            console.log(this.state.IsEdit)  
+            this.setState({ IsEdit: true });  
             const {fcQtyDetailInsertEntityModel} = this.state;
             UpdatedData.subProductType = e.data.subProductType;
             UpdatedData.qty = 0;
@@ -682,10 +695,12 @@ function TabContainer({ children }) {
         }
         getBuyerDivision1(val,field,e){
             let fields = this.state.fields;
+            
             fields['buyername'] = val.BuyerValue[0].value;        
             this.setState({fields});
 
             this.setState({ BuyerValue: val.BuyerValue });
+            
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
             .then((response) => {                
                 this.setState({ BuyerDivisionList: response.data.result.data });
@@ -753,17 +768,29 @@ function TabContainer({ children }) {
             e.preventDefault();
             if(this.handleValidation()){
                 this.SaveForecast(type);
-            }        
-        //   }
-        //   else{
-        //     this.SaveForecast(type);
-        //   }
-       
+            }  
       }
+
+      setstatevaluefunction = name => event => {
+         
+        let fields = this.state.fields;
+        fields[name] = event.target.value;        
+        this.setState({fields});
+        this.setState({ [name]: event.target.value });
+        
+        if(name=="activityName" || name=="fabdesc" || name=="refstyleno"){
+            if(!event.target.value.match(/^[a-zA-Z0-9]+$/)){
+                NotificationManager.error('Input is not alphanumeric');              
+            }      	
+          }
+        
+		
+	};
       handleValidation(){
         let fields = this.state.fields;
         let errors = {};
         let formIsValid = true;
+        
        
         if(!fields["buyername"]){
           formIsValid = false;
@@ -790,8 +817,17 @@ function TabContainer({ children }) {
             formIsValid = false;
             errors["year"] = "Cannot be empty";
         }
-        
-       
+        if(typeof fields["activityName"] !== "undefined"){
+            if(!fields["activityName"].match(/^[a-zA-Z0-9]+$/)){
+              formIsValid = false;
+              errors["activityName"] = "Input is not alphanumeric";
+            }      	
+          }
+        // if(!fields['activityName']){
+        //     formIsValid = false;
+        //     errors["year"] = "Cannot be empty";
+        // }
+        console.log(errors)
         this.setState({errors: errors});
         return formIsValid;
       }
@@ -1006,8 +1042,8 @@ function TabContainer({ children }) {
                                             <Lookup dataSource={this.getSubproductType} valueExpr="subProductType" displayExpr="subProductType" />
                                             <RequiredRule />
                                         </Column>
-                                        <Column dataField="avgSAM" width={110} caption="AVG SAM">
-                                        <RequiredRule />
+                                        <Column dataField="avgSAM" width={110} caption="AVG SAM"  allowEditing={false}>
+                                        {/* <RequiredRule /> */}
                                         </Column>
                                         <Column dataField="pcd" dataType="date" >
                                         <RequiredRule />
@@ -1062,7 +1098,8 @@ function TabContainer({ children }) {
                                 <div className="row mt-15 new-form">
                                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <div className="form-group">
-                                            <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.handleChangesingledropdown('activityName')}/>
+                                            <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.setstatevaluefunction('activityName')}/>
+                                            <span className="error">{this.state.errors["activityName"]}</span>
                                         </div>
                                     </div>
                                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1086,6 +1123,7 @@ function TabContainer({ children }) {
                                                             leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
                                                             rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
                                                             fullWidth
+                                                            disablePast={true}
                                                         />
                                                     </MuiPickersUtilsProvider>
                                                 </div>
@@ -1245,6 +1283,7 @@ function TabContainer({ children }) {
                             <th className="">Projection Qty</th>
                             <th className="">Confirmed Qty</th>
                             <th className="">Activity</th>
+                            <th className="">Forecast Type</th>
                         </thead>
                         <tbody>
                         {this.state.forecastinglists.map((n,index) => {                                   
@@ -1266,10 +1305,18 @@ function TabContainer({ children }) {
                                 <td>{n.seasonCode}</td>
                                 <td>{n.seasonYear}</td>
                                 <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
-                                <td>{n.loccode}</td>
+                                <td>{n.forecastQty}</td>
+                                <td>{n.projectionQty}</td>
+                                <td>{n.confirmedQty}</td>
+                                <td>{n.activity}</td>
+                                {
+                                    n.fCtype=='ANNUAL' &&
+                                    <td className="greencolor">{n.fCtype}</td>
+                                }
+                                {
+                                    n.fCtype=='SEASONAL' &&
+                                    <td className="yellowcolor">{n.fCtype}</td>
+                                }
                             </tr>
 										 );
 									 })}
