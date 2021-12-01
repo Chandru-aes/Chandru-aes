@@ -215,6 +215,7 @@ class SinglewindowElement extends Component {
         pattern_styleno:[],
         pattern_stylenolists:[],
         swid:0,
+        reqNo:''
 
     }
     onAddUpdateUserModalClose() {
@@ -283,7 +284,8 @@ class SinglewindowElement extends Component {
                     purpose: [{value:data.purpose,label:data.purpose}],
                     reqtype: [{value:data.reqType,label:data.reqType}],
                     styleno: [{value:data.styleNo,label:data.styleNo}],
-                    fit:[{value:data.fit,label:data.fit}]
+                    fit:[{value:data.fit,label:data.fit}],
+                    reqNo:data.reqNo,
                 });
             })
             .catch(error => {
@@ -1024,7 +1026,7 @@ class SinglewindowElement extends Component {
                 "masterStyle": stylenosplit[1],
                 "baseStyleno": this.state.baseStyleno,
                 "unitCode": "string",
-                "reqNo": "string",
+                "reqNo": this.state.reqNo,
                 "reqDate": "2021-11-16T05:00:55.509Z",
                 "fit":  this.state.fit[0].value,
                 "purpose": this.state.purpose[0].label,
@@ -2033,6 +2035,15 @@ class SinglewindowElement extends Component {
                                                     <span className="error">{this.state.errors["styleno"]}</span>
                                                 </div>
                                             </div>
+
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        
+                                            <div className="form-group">
+                                            <TextField id="reqNo" disabled value={this.state.reqNo}  onChange={this.setstatevaluefunction('reqNo')} fullWidth label="Request Number" placeholder="Request Number"/>
+                                                
+                                            </div>
+
+                                            </div>
                                             {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <FormControl fullWidth>
@@ -2169,7 +2180,8 @@ class SinglewindowElement extends Component {
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 
                                             <div className="form-group">
-                                                <TextField id="baseStyleno" value={this.state.baseStyleno}  onChange={this.setstatevaluefunction('baseStyleno')} fullWidth label="Base Style" placeholder="Base Style"/>
+                                            <TextField id="baseStyleno" disabled value={this.state.baseStyleno}  onChange={this.setstatevaluefunction('baseStyleno')} fullWidth label="Base Style" placeholder="Base Style"/>
+                                                
                                             </div>
 
 
@@ -2190,7 +2202,7 @@ class SinglewindowElement extends Component {
 
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                                                <TextField id="fabricDesc" value={this.state.fabricDesc}  onChange={this.setstatevaluefunction('fabricDesc')} fullWidth label="Fabric composition" placeholder="Fabric composition"/>
+                                                <TextField id="fabricDesc" value={this.state.fabricDesc} disabled  onChange={this.setstatevaluefunction('fabricDesc')} fullWidth label="Fabric composition" placeholder="Fabric composition"/>
                                             </div>
 
                                             {/* <div className="form-group">
@@ -2209,7 +2221,7 @@ class SinglewindowElement extends Component {
 
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                                                <TextField id="fabricType" value={this.state.fabricType}  onChange={this.setstatevaluefunction('fabricType')} fullWidth label="Fabric Type(Pluid)" placeholder="Fabric Type(Pluid)"/>
+                                                <TextField id="fabricType" value={this.state.fabricType} disabled onChange={this.setstatevaluefunction('fabricType')} fullWidth label="Fabric Type(Pluid)" placeholder="Fabric Type(Pluid)"/>
                                             </div>
 
                                             {/* <div className="form-group">
@@ -2629,14 +2641,15 @@ class SinglewindowElement extends Component {
                                                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                                         <KeyboardDatePicker
                                                                             disableToolbar
+                                                                            disablePast={true}
                                                                             variant="inline"
                                                                             format="MM/dd/yyyy"
                                                                             margin="normal"
                                                                             id="date-picker-inline"
                                                                             KeyboardButtonProps={{
-                                                                                'aria-label': 'change date',
+                                                                                'aria-label': 'Expected delivery date',
                                                                             }}
-                                                                            label="Choose a date"
+                                                                            label="Expected delivery date"
                                                                             value={selectedDate}
                                                                             onChange={this.handleDateChange}
                                                                             animateYearScrolling={false}

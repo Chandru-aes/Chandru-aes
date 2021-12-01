@@ -28,7 +28,7 @@
  import IntlMessages from 'Util/IntlMessages';
  
  //import AddNewUserForm from './AddNewUserForm';
- 
+ import {AccordionInput} from "../../../../helpers/helpers";
  // rct card box
  import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
  import Typography from '@material-ui/core/Typography';
@@ -188,7 +188,7 @@ import { DateTimePicker} from '@material-ui/pickers';
      }
      handleDateChange = (date) => {
         // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
-        this.setState({ pcd: moment(date).format('YYYY-MM-DD') });
+        this.setState({ pcd: moment(date).format('YYYY-MM-DD'),tendeliverydate: moment(date).format('YYYY-MM-DD') });
     };
 
     handleDateChange1 = (date) => {
@@ -196,8 +196,9 @@ import { DateTimePicker} from '@material-ui/pickers';
     };
 
     handleDateChange2 = (date) => {
-        this.setState({ confduedate: moment(date).format('YYYY-MM-DD') });
+        this.setState({ confduedate: moment(date).format('YYYY-MM-DD'),pcd: moment(date).format('YYYY-MM-DD'),tendeliverydate: moment(date).format('YYYY-MM-DD') });
     };
+
 
     handleChangeCheckbox = name => (event, checked) => {
         console.log("name:: ", name);
@@ -216,6 +217,16 @@ import { DateTimePicker} from '@material-ui/pickers';
         this.setState({ tpopen: false });
      };
 
+
+     CloseTechPackok() {
+        if(this.state.fit.length>0 && this.state.stage.length>0){
+           this.setState({ tpopen: false });
+        } else{
+           NotificationManager.error('Fit & stage should be selected');
+           this.setState({ tpopen: true });
+        }
+       
+    };
 
      setstatevaluefunction = name => event => {
          
@@ -594,6 +605,9 @@ editdataprojectiondt(id){
                 this.setState({styleDetailID:0});
                 this.editdataprojectiondt(this.state.styleid);
                 // window.location.href = "/#/app/pre-production/style-list";
+                this.setState({expcqty:0,pcd:moment(new Date()).format('YYYY-MM-DD'),
+          tendeliverydate:moment(new Date()).format('YYYY-MM-DD'),
+          confduedate:moment(new Date()).format('YYYY-MM-DD')})
                
             })
             .catch(error => {
@@ -1048,11 +1062,79 @@ console.log(data,'datadatadata')
                          <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-icon b-ic edit close-side" onClick={handleToggle1} tabindex="0" type="button" ><i className="zmdi zmdi-close"></i><span className="MuiTouchRipple-root"></span></button>
                          }
                       <div className="row new-form">
-                  <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date">
+                            <div className="row">
+                      <AccordionInput>
+                                    <Fragment>
+                                        <div className="rct-picker">
+                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                <KeyboardDatePicker
+                                                    disablePast={true}
+                                                    minDate={confduedate}
+                                                    disableToolbar
+                                                    variant="inline"
+                                                    format="MM/dd/yyyy"
+                                                    margin="normal"
+                                                    id="date-picker-inline"
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'PCD',
+                                                    }}
+                                                    label="PCD"
+                                                    value={pcd}
+                                                    onChange={this.handleDateChange}
+                                                    animateYearScrolling={false}
+                                                    leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                    rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                    fullWidth
+                                                />
+                                            </MuiPickersUtilsProvider>
+                                        </div>
+                                    </Fragment>
+                                </AccordionInput>
+                    </div></div>
+
+                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date">
+                            <div className="row">
+                      <AccordionInput>
+                                    <Fragment>
+                                        <div className="rct-picker">
+                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                <KeyboardDatePicker
+                                                    disablePast={true}
+                                                    minDate={pcd}
+                                                    disableToolbar
+                                                    variant="inline"
+                                                    format="MM/dd/yyyy"
+                                                    margin="normal"
+                                                    id="date-picker-inline"
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'Tentative Delivery Date',
+                                                    }}
+                                                    label="Tentative Delivery Date"
+                                                    value={tendeliverydate}
+                                                    onChange={this.handleDateChange1}
+                                                    animateYearScrolling={false}
+                                                    leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                    rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                    fullWidth
+                                                />
+                                            </MuiPickersUtilsProvider>
+                                        </div>
+                                    </Fragment>
+                                </AccordionInput>
+                    </div></div>
+
+                  
+
+                  {/* <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
+                      
+                  
+                                
                          <div className="form-group">
                             <div className="rct-picker">
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                     <DateTimePicker
+                                        disablePast={true}
                                         value={pcd}
                                         clearable
                                         label="PCD"
@@ -1062,15 +1144,18 @@ console.log(data,'datadatadata')
                                         fullWidth
                                         />
                                 </MuiPickersUtilsProvider>
+
+
                             </div>
                          </div>
-                     </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
+                     </div> */}
+                     {/* <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                          <div className="form-group">
                             <div className="form-group">
                                 <div className="rct-picker">
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                         <DateTimePicker
+                                            disablePast={true}
                                             value={tendeliverydate}
                                             clearable
                                             label="Tentative Delivery Date"
@@ -1083,29 +1168,41 @@ console.log(data,'datadatadata')
                                 </div>
                             </div>
                          </div>
-                     </div>
+                     </div> */}
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                          <div className="form-group">
-                         <TextField id="expcqty" value={this.state.expcqty}  onChange={this.setstatevaluefunction('expcqty')} fullWidth label="Expected Quantity" placeholder="Expected Quantity"/>
+                         <TextField  id="expcqty" value={this.state.expcqty}  onChange={this.setstatevaluefunction('expcqty')} fullWidth label="Expected Quantity" placeholder="Expected Quantity"/>
                          </div>
                      </div>
-                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
-                         <div className="form-group">
-                            <div className="rct-picker">
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <DateTimePicker
-                                            value={confduedate}
-                                            clearable
-                                            label="Confirmation Due Date"
-                                            onChange={this.handleDateChange2}
-                                            leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-                                            rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-                                            fullWidth
-                                            />
-                                    </MuiPickersUtilsProvider>
-                                </div>
-                         </div>
-                     </div>
+                     <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date">
+                            <div className="row">
+                      <AccordionInput>
+                                    <Fragment>
+                                        <div className="rct-picker">
+                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                <KeyboardDatePicker
+                                                    disablePast={true}
+                                                    disableToolbar
+                                                    variant="inline"
+                                                    format="MM/dd/yyyy"
+                                                    margin="normal"
+                                                    id="date-picker-inline"
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'Confirmation Due Date',
+                                                    }}
+                                                    label="Confirmation Due Date"
+                                                    value={confduedate}
+                                                    onChange={this.handleDateChange2}
+                                                    animateYearScrolling={false}
+                                                    leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                    rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                    fullWidth
+                                                />
+                                            </MuiPickersUtilsProvider>
+                                        </div>
+                                    </Fragment>
+                                </AccordionInput>
+                    </div></div>
                      <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                          <div className="form-group">
                          <TextField id="availableqty" value={this.state.availableqty}  onChange={this.setstatevaluefunction('availableqty')} fullWidth label="Available Quantity" placeholder="Available Quantity"/>
@@ -1364,7 +1461,7 @@ console.log(data,'datadatadata')
                 <div className="col-lg-12 col-md-3 col-sm-6 col-xs-12">
                 <div className="w-100">
                 <div className="float-right n-bt-top">
-                        
+                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button"  ><span className="MuiButton-label">Clone <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
                         
                        
@@ -1540,7 +1637,7 @@ console.log(data,'datadatadata')
                                         <Button variant="contained" onClick={this.CloseTechPack} color="primary" className="text-white">
                                             Cancel
                                         </Button>
-                                        <Button variant="contained" onClick={this.CloseTechPack} className="btn-info text-white">
+                                        <Button variant="contained" onClick={(e) =>this.CloseTechPackok()}  className="btn-info text-white">
                                             Ok
                                         </Button>
                                     </DialogActions>
