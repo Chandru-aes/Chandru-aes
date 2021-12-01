@@ -139,6 +139,7 @@ const ItemMasterCreation = ({ match }) => {
     const [deleteId, setDeleteId] = useState(0);
     const [isUpdate, setIsUpdate] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
+    const [error, setError] = useState({});
 
 
     const validationShape = {
@@ -467,27 +468,51 @@ const ItemMasterCreation = ({ match }) => {
         }).catch(e => console.log('material error ' + e))
     }
 
+    const checkFormRequiredFields = (values) => {
+        let isValid = true;
+        if ((values.parentGroup.length > 0 && values.parentGroup[0].value === '') || values.parentGroup.length === 0){
+            let newError = {...error, parentGroup: 'ParentGroup is required'}
+            setError(newError);
+            isValid = false
+        }
+        if ((values.materialGroupSub.length > 0 && values.materialGroupSub[0].value === '') || values.materialGroupSub.length === 0){
+            let newError = {...error, materialGroupSub: 'Material Group & Sub is required'}
+            setError(newError);
+            isValid = false
+        }
+        if ((values.materialType.length > 0 && values.materialType[0].value === '') || values.materialType.length === 0){
+            let newError = {...error, materialType: 'MaterialType is required'}
+            setError(newError);
+            isValid = false
+        }
+        return isValid;
+    }
+
     const onFormSubmit = (values, resetForm) => {
-        const payload = constructFormValues(values, purchaseRecord, isDelete);
-        postApiCall(
-            API_URLS.ITEM_CREATION,
-            payload
-        ).then((r) => {
-            if (r){
-                if(r.data.messageCode === '200'){
-                    NotificationManager.success(`${isDelete ? 'Deleted' : 'Saved'} Successfully`);
-                    if(!isDelete)
-                        resetForm();
-                    GetItemList();
-                    setIsUpdate(false)
-                    setIsDelete(false)
-                    setDeleteId(0)
+        const isFormCheck = checkFormRequiredFields(values)
+        if (isFormCheck) {
+            const payload = constructFormValues(values, purchaseRecord, isDelete);
+            postApiCall(
+                API_URLS.ITEM_CREATION,
+                payload
+            ).then((r) => {
+                if (r){
+                    if(r.data.messageCode === '200'){
+                        NotificationManager.success(`${isDelete ? 'Deleted' : 'Saved'} Successfully`);
+                        if(!isDelete)
+                            resetForm();
+                        GetItemList();
+                        setIsUpdate(false)
+                        setIsDelete(false)
+                        setDeleteId(0)
+                    }
+                    else {
+                        // NotificationManager.error(r.data.messageCode);
+                    }
                 }
-                else {
-                    // NotificationManager.error(r.data.messageCode);
-                }
-            }
-        }).catch(e => console.log('buyer error ' + e))
+            }).catch(e => console.log('buyer error ' + e))
+        }
+
     }
     const onSavePurchaseData = (values) => {
         const purchaseData = [...purchaseRecord, values]
@@ -495,7 +520,7 @@ const ItemMasterCreation = ({ match }) => {
     }
 
     const onSelectOnChange = (e, name='', setFieldValue, secondName = '') => {
-        const filedName = `${name}Opt`;
+        // const filedName = `${name}Opt`;
         // const sampleObj = {}
         // sampleObj[secondName] = e
         // const values = (e && e.length > 0) ? e[0].value : []
@@ -505,6 +530,7 @@ const ItemMasterCreation = ({ match }) => {
         //     ...initialValues,
         //     ...sampleObj
         // });
+        const val = e;
         const values = (e && e.length > 0) ? e[0].value : []
         const randomTxt = (+new Date).toString(36).slice(-5)
         if (name === 'materialGroupSub') {
@@ -524,7 +550,20 @@ const ItemMasterCreation = ({ match }) => {
             } else if (!checkMaterialType.includes(values)) {
                 NotificationManager.error('Please choose other material Type');
                 setFieldValue('materialType', [])
+                error['materialType'] = 'MaterialType is required';
+                setError(error);
             }
+        }
+        if (name === 'parentGroup' && val.length === 0){
+            setFieldValue('parentGroup', [])
+            error['parentGroup'] = 'ParentGroup is required';
+            setError(error);
+        }
+
+        if (name === 'materialGroupSub' && val.length === 0){
+            setFieldValue('materialGroupSub', [])
+            error['materialGroupSub'] = 'Material Group & Sub is required';
+            setError(error);
         }
     }
 
@@ -611,6 +650,7 @@ const ItemMasterCreation = ({ match }) => {
                             handleSubmit,
                             setFieldValue
                         } = props;
+                        console.log(error)
                         return (
                             <Form autoComplete="off">
                                 <RctCollapsibleCard fullBlock heading="Item Creation">
@@ -643,6 +683,7 @@ const ItemMasterCreation = ({ match }) => {
                                                             placeholder="Parent Group"
                                                             values={values.parentGroupOpt}
                                                         />
+                                                        <span className="error">{error && error.parentGroup}</span>
                                                     </div>
                                                 </AccordionInput>
                                                 <AccordionInput>
@@ -657,6 +698,7 @@ const ItemMasterCreation = ({ match }) => {
                                                             placeholder="Material Type"
                                                             values={values.materialType}
                                                         />
+                                                        <span className="error">{error && error.materialType}</span>
                                                     </div>
                                                 </AccordionInput>
                                                 <AccordionInput>
@@ -672,6 +714,7 @@ const ItemMasterCreation = ({ match }) => {
                                                             placeholder="Material Group & Sub"
                                                             values={values.materialGroupSub}
                                                         />
+                                                        <span className="error">{error && error.materialGroupSub}</span>
                                                     </div>
                                                 </AccordionInput>
                                                 <AccordionInput>

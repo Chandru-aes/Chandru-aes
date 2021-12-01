@@ -7,7 +7,7 @@ import api from "Api";
 import RctCollapsibleCard from 'Components/RctCollapsibleCard/RctCollapsibleCard';
 import Checkbox from '@material-ui/core/Checkbox';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import UDMasterTypeList from './UDMasterTypeList';
+import UDMasterTypeList from './udmastertypelist';
 const $ = require('jquery');
 
 class UDMasterType extends Component {
