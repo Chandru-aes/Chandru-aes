@@ -34,13 +34,10 @@ import {
 } from "../../../helpers/helpers";
 import {API_URLS} from "../../../constants/api_url_constants";
 import {getApiCall, postApiCall} from "../../../services/commonApi";
-import MUIDataTable from "mui-datatables";
 import PurchaseInfo from "./Forms/purchaseInfo";
 import {NotificationManager} from "react-notifications";
 import Select1 from "react-dropdown-select";
 import DeleteConfirmationDialog from "../../../components/DeleteConfirmationDialog/DeleteConfirmationDialog";
-
-// import Controls from "../../controls/Controls"
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -148,110 +145,6 @@ const ItemMasterCreation = ({ match }) => {
         // materialGroupSub: Yup.string().required('Please choose Material GroupSub'),
         materialCode: Yup.string().required('Please enter the materialCode'),
     };
-
-    const columns = [
-        {
-            name: "hid",
-            label: "Action",
-            options: {
-                filter: true,
-                sort: false,
-                print: false,
-                customBodyRender: (value => {
-                    return(
-                        <div>
-                            <button className="MuiButtonBase-root  mr-10 text-danger btn-icon b-ic delete"
-                                    onClick={() => getCurrentData(value)}
-                                    tabIndex="0"
-                                    type="button"
-                            >
-                                <i className="zmdi zmdi-edit"/><span className="MuiTouchRipple-root"/>
-                            </button>
-                            <button className="MuiButtonBase-root  mr-10 text-danger btn-icon b-ic delete"
-                                    onClick={() => getCurrentData(value)}
-                                    tabIndex="0"
-                                    type="button"
-                            >
-                                <i className="zmdi zmdi-delete"/><span className="MuiTouchRipple-root"/>
-                            </button>
-                        </div>
-                    )
-                })
-            }
-        },
-        {
-            name: "materialCode",
-            label: "Material",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "materialType",
-            label: "Type",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "group",
-            label: "Group",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "subGroup",
-            label: "Sub Group",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "materialCode",
-            label: "Material Code",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "description",
-            label: "Description",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "commonArticleNumber",
-            label: "Common Article Number",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "approved",
-            label: "Approved",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "active",
-            label: "Active",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        }
-    ];
 
     const deleteItemList = async () => {
         await getCurrentData(deleteId, true);
@@ -520,16 +413,6 @@ const ItemMasterCreation = ({ match }) => {
     }
 
     const onSelectOnChange = (e, name='', setFieldValue, secondName = '') => {
-        // const filedName = `${name}Opt`;
-        // const sampleObj = {}
-        // sampleObj[secondName] = e
-        // const values = (e && e.length > 0) ? e[0].value : []
-        // sampleObj[name] = values
-        // const randomTxt = (+new Date).toString(36).slice(-5)
-        // setInitialValues({
-        //     ...initialValues,
-        //     ...sampleObj
-        // });
         const val = e;
         const values = (e && e.length > 0) ? e[0].value : []
         const randomTxt = (+new Date).toString(36).slice(-5)

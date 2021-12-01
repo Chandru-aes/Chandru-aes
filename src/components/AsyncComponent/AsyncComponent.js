@@ -681,6 +681,10 @@ const AsyncItemCreatinComponent= Loadable({
 	loading: () => <RctPageLoader />,		
 });
 
+const AsyncHandOverComponent= Loadable({
+	loader: () => import("Routes/pre-production/handover"),
+	loading: () => <RctPageLoader />,
+});
 
 const AsyncSinglewindowEditComponent = Loadable({
 	loader: () => import("Routes/pre-production/singlewindow/singlewindow-edit"),
@@ -854,5 +858,6 @@ export {
 	AsyncUDMasterTypeComponent,
 	AsyncMastersComponent,
 	AsyncCostingOverallComponent,
-	AsyncCostingStylelistComponent
+	AsyncCostingStylelistComponent,
+	AsyncHandOverComponent
 }; 

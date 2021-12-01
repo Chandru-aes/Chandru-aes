@@ -27,10 +27,11 @@
 	AsyncPdinternaltaComponent,
     AsyncCostingCreationComponent,
     AsyncCostingOverallComponent,
-	AsyncCostingStylelistComponent
+	AsyncCostingStylelistComponent,
+     AsyncHandOverComponent
 
  } from 'Components/AsyncComponent/AsyncComponent';
-  
+
  //console.log(match.url); 
  const Productions = ({ match }) => (
      
@@ -64,8 +65,9 @@
              <Route path={`${match.url}/costing-creation`} component={AsyncCostingCreationComponent} />
              <Route path={`${match.url}/costing-overall-list`} component={AsyncCostingOverallComponent} />
              <Route path={`${match.url}/costing-style-list`} component={AsyncCostingStylelistComponent} />
-             
-            
+             <Route path={`${match.url}/handover`} component={AsyncHandOverComponent} />
+
+
          </Switch>
      </div>
  );

@@ -1018,6 +1018,7 @@ console.log(data,'datadatadata')
                             <div className="rct-picker">
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                     <DateTimePicker
+                                        disablePast={true}
                                         value={pcd}
                                         clearable
                                         label="PCD"
@@ -1036,6 +1037,7 @@ console.log(data,'datadatadata')
                                 <div className="rct-picker">
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                         <DateTimePicker
+                                            disablePast={true}
                                             value={tendeliverydate}
                                             clearable
                                             label="Tentative Delivery Date"
@@ -1059,6 +1061,7 @@ console.log(data,'datadatadata')
                             <div className="rct-picker">
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                         <DateTimePicker
+                                            disablePast={true}
                                             value={confduedate}
                                             clearable
                                             label="Confirmation Due Date"

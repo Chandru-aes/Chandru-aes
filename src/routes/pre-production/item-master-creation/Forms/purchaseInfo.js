@@ -65,6 +65,7 @@ const columns = [
 const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, purchaseRecord, tableOptions}) => {
     const classes = useStyles();
     const [fromDate, setFromDate] = useState(new Date());
+    const [startMinDate, setStartDate] = useState(new Date())
     const [toDate, setToDate] = useState(new Date());
     const [supplierOption, setSupplierDataOption] = useState([]);
     const [currencyOption, setCurrencyOption] = useState([]);
@@ -356,6 +357,7 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
                                         <div className="rct-picker">
                                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                 <KeyboardDatePicker
+                                                    disablePast={true}
                                                     disableToolbar
                                                     variant="inline"
                                                     format="MM/dd/yyyy"
@@ -382,6 +384,8 @@ const PurchaseInfo = ({supplierData, weightUOM, currency, onSavePurchaseData, pu
                                         <div className="rct-picker">
                                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                 <KeyboardDatePicker
+                                                    disablePast={true}
+                                                    minDate = {startMinDate}
                                                     disableToolbar
                                                     variant="inline"
                                                     format="MM/dd/yyyy"

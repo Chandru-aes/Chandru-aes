@@ -683,4 +683,11 @@ export default {
             
          ]
       }],
+      category18: [
+         {
+            "menu_title": "HandOver",
+            "menu_icon": "zmdi zmdi-brush",
+            "path": "/app/pre-production/handover/",
+         }
+      ],
 }
