@@ -707,6 +707,51 @@ class SinglewindowElement extends Component {
 
         if(this.state.buyer.length>0){
 
+            let job="";
+            
+            if(this.state.job.length>0){
+                job=this.state.job[0].value;
+            }
+
+            let bodygrain="";
+            
+            if(this.state.bodygrain.length>0){
+                bodygrain=this.state.bodygrain[0].value;
+            }
+
+            let addoninfo="";
+            
+            if(this.state.addoninfo.length>0){
+                addoninfo=this.state.addoninfo[0].value;
+            }
+
+            let sample_size="";
+            
+            if(this.state.sample_size.length>0){
+                sample_size=this.state.sample_size[0].value;
+            }
+
+            let markerfor="";
+            
+            if(this.state.markerfor.length>0){
+                markerfor=this.state.markerfor[0].value;
+            }
+
+            let prepseq="";
+            
+            if(this.state.prepseq.length>0){
+                prepseq=this.state.prepseq[0].value;
+            }
+
+            let sampletype="";
+            
+            if(this.state.sampletype.length>0){
+                sampletype=this.state.sampletype[0].value;
+            }
+            
+            
+            
+
             let patterndata ={};
             let markerdata ={};
             let sampledata ={};
@@ -734,8 +779,8 @@ class SinglewindowElement extends Component {
                         "id": 0,
                         "swH_Id": this.state.swid,
                         "verRef": "string",
-                        "bodyGrain": this.state.bodygrain[0].value,
-                        "addOnInfo": this.state.addoninfo[0].value,
+                        "bodyGrain": bodygrain,
+                        "addOnInfo": addoninfo,
                         "samShr": "s",
                         "samShrWarp": this.state.samplewarp,
                         "samShrWeft":  this.state.sampleweft,
@@ -744,8 +789,8 @@ class SinglewindowElement extends Component {
                         "costShrWarp":  this.state.costingwarp,
                         "costShrWeft": this.state.costingweft,
                         //   "costNilShr": "string",
-                        "SamSize":this.state.sample_size[0].value,
-                        "CostSize":this.state.sample_size[0].value,
+                        "SamSize":sample_size,
+                        "CostSize":sample_size,
                         // "size": "string",
                         "createdBy": "string",
                         "createdDt": "2021-11-16T05:00:55.509Z",
@@ -756,7 +801,7 @@ class SinglewindowElement extends Component {
                             {
                                 "id": 0,
                                 "swH_Id": this.state.swid,
-                                "natureOfJob": this.state.job[0].value,
+                                "natureOfJob": job,
                                 "cancel": "s",
                                 "createdBy": "string",
                                 "createdDt": "2021-11-16T05:00:55.509Z",
@@ -812,7 +857,7 @@ class SinglewindowElement extends Component {
                         "changesIn": this.state.marker_changesin,
                         "bodyGrain": this.state.marker_bodygrain,
                         "shrinkage": this.state.marker_shrinkage,
-                        "markerFor": this.state.markerfor[0].value,
+                        "markerFor": markerfor,
                         "createdBy": "string",
                         "createdDt": "2021-11-16T05:00:55.509Z",
                         "modifyBy": "string",
@@ -869,8 +914,8 @@ class SinglewindowElement extends Component {
                         "swH_Id": this.state.swid,
                         "verRef": "string",
                         "expDeliDate": this.state.selectedDate,
-                        "prepSeq": this.state.prepseq[0].value,
-                        "sampleType": this.state.sampletype[0].value,
+                        "prepSeq": prepseq,
+                        "sampleType": sampletype,
                         "totPcs": 0,
                         "createdBy": "string",
                         "createdDt": "2021-11-16T05:00:55.509Z",
