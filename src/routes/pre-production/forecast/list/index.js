@@ -77,6 +77,8 @@ class PreprodcutionTable extends Component {
     constructor(props) {
         super(props);
         this.getSubproductType = this.getSubproductType.bind(this);
+        // this.state = { employees: service.getEmployees() };
+        // this.states = service.getStates();
         this.state = {
             selectTextOnEditStart: true,
             startEditAction: 'click',
@@ -991,7 +993,7 @@ class PreprodcutionTable extends Component {
                                                     </div>
                                                 </div>
                                                 {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        <div className="form-group mt-15">                                       
+                                        <div className="form-group mt-15">
                                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"  onClick={(e) => this.opnAddNewUserModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button>
                                         </div>
                                     </div> */}
@@ -1094,7 +1096,7 @@ class PreprodcutionTable extends Component {
                                         </button>
                                         <button className="MuiButtonBase-root MuiIconButton-root jss26" tabindex="0" type="button" data-testid="Download CSV-iconButton" aria-label="Download CSV" title="Download CSV">
                             <span className="MuiIconButton-label">
-                            
+
                             <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path>
                                 </svg></span>

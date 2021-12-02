@@ -48,7 +48,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {AccordionInput} from "../../../../helpers/helpers";
+
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Select1 from "react-dropdown-select";
@@ -95,7 +95,7 @@ import Select1 from "react-dropdown-select";
         cloneopen: false,
         ropen: false,
         tpopen: false,
-        selectedDate: moment().format('YYYY-MM-DD'),
+        selectedDate: moment(),
         addNewUserModal: false,
         checkedA: true,
 
@@ -212,14 +212,6 @@ import Select1 from "react-dropdown-select";
         baseStyleno:'',fabricDesc:'',fabricType:'',
         reference_version:'',
         swid:0,
-        filterordercategory:[],
-        filterbuyer:[],
-        filterbuyerdiv:[],
-        overalllists:[],
-        edit_add:false,
-        filterbuyerdivlists:[],
-        filterstylenolists:[],
-        filterstyleno:[]
 
      }
      onAddUpdateUserModalClose() {
@@ -368,14 +360,14 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
-        // api.get('StyleHeader/GetStyleGridList')
-        // .then((response) => {
+        api.get('StyleHeader/GetStyleGridList')
+        .then((response) => {
             
-        //     this.setState({ stylenolists: response.data.data });
-        // })
-        // .catch(error => {
-        //     // error handling
-        // })
+            this.setState({ stylenolists: response.data.data });
+        })
+        .catch(error => {
+            // error handling
+        })
 
         api.get('Unit/GetUnitDropDown')
         .then((response) => {
@@ -446,6 +438,7 @@ import Select1 from "react-dropdown-select";
 	};
 
 
+
       setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
         if(event.length!=0){
@@ -453,9 +446,45 @@ import Select1 from "react-dropdown-select";
             this.setState({fields});
 
           
+
+            if(name=="reqtype"){
+
+                $('.patternclass').hide();
+                $('.samclass').hide();
+                $('.sampleclass').hide();
+                $('.markerclass').hide();
+                $('.valueaddclass').hide();
+               
+               event.forEach(element => {
+                   
+                if(element.value=="PATTERN"){
+                    $('.patternclass').show();
+                }
+                if(element.value=="SAM"){
+                    $('.samclass').show();
+                }
+                if(element.value=="SAMPLE"){
+                    $('.sampleclass').show();
+                }
+                if(element.value=="VALUEADD"){
+                    $('.valueaddclass').show();
+                }
+                if(element.value=="MARKER"){
+                    $('.markerclass').show();
+                }
+
+               });
+                
+            }
             
         } else{
-           
+            if(name=="reqtype"){
+                $('.patternclass').hide();
+                $('.samclass').hide();
+                $('.sampleclass').hide();
+                $('.markerclass').hide();
+                $('.valueaddclass').hide();
+            }
             fields[name] = '';        
             this.setState({fields});
         }
@@ -467,58 +496,15 @@ import Select1 from "react-dropdown-select";
                 this.stylenochange();
             }, 200);
         }
-        
+
         if(name=="buyerdiv"){
             setTimeout(() => {
                 this.getActivitylist();
             }, 200);
         }
-        
-
-        if(name=="buyer" || name=="buyerdiv" || name=="year" || name=="season"){
-            setTimeout(() => {
-                this.getstyleno();
-            }, 200);
-        }
-
-
-        if(name=="filterbuyer" || name=="filterbuyerdiv" || name=="filterordercategory"){
-            setTimeout(() => {
-                this.getfilterstyleno();
-            }, 200);
-        }
 
 	};
 
-    getfilterstyleno(){
-        
-        if(this.state.filterbuyer.length>0 && this.state.filterbuyerdiv.length>0 && this.state.filterordercategory.length>0){
-            this.setState({filterstyleno:[],filterstylenolists:[],});
-            api.get('TNAMaster/GetStyleForBuyTNASearch?Buyer='+this.state.filterbuyer[0].value+'&BuyerDivsion='+this.state.filterbuyerdiv[0].value)
-            .then((response) => {
-                let datas = response.data.data;
-                this.setState({filterstylenolists:datas});
-            })
-            .catch(error => {
-                // error handling
-            })
-        }
-     }
-
-     getstyleno(){
-        
-        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
-            this.setState({stylenolists:[],styleno:[],});
-            api.get('TNAMaster/GetStyleForTNABuyer?BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&year='+this.state.year[0].value)
-            .then((response) => {
-                let datas = response.data.data;
-                this.setState({stylenolists:datas});
-            })
-            .catch(error => {
-                // error handling
-            })
-        }
-     }
 
     stylenochange(){
         
@@ -540,7 +526,7 @@ import Select1 from "react-dropdown-select";
         
         if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 ){
             this.setState({baseStyleno:'',fabricDesc:'',fabricType:''});
-            api.get('TNAMaster/GetExistChkForTNABuyer?Buyer='+this.state.buyer[0].value)
+            api.get('TNAMaster/GetExistChkForTNABuyerDiv?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value)
             .then((response) => {
                 let datas = response.data.data;
                 this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType});
@@ -574,28 +560,6 @@ import Select1 from "react-dropdown-select";
 
         // fields['buyer'] = val.buyer[0].value;        
         // this.setState({fields});
-
-                  
-    }
-
-    getBuyerDivision2(val,field,e){
-        let fields = this.state.fields;
-        this.setState({ filterbuyerdivlists: [],filterbuyerdiv:[]  });
-        if(val.filterbuyer.length!=0){
-            fields['filterbuyer'] = val.filterbuyer[0].value;        
-            this.setState({fields});
-
-            this.setState({ filterbuyer: val.filterbuyer });
-            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.filterbuyer[0].value)
-            .then((response) => {                
-                this.setState({ filterbuyerdivlists: response.data.result.data });
-            })        
-            .catch(error => {}) 
-            
-        } else{
-            fields['filterbuyer'] = '';        
-            this.setState({fields});
-        }
 
                   
     }
@@ -1094,13 +1058,6 @@ console.log(data,'datadatadata')
                buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
            }
 
-           const filterbuyerdivoptions = [];
-           for (const item of this.state.filterbuyerdivlists) {           
-               filterbuyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
-           }
-
-           
-
            const ordercategoryoptions = [];
            for (const item of this.state.ordercategorylists) {           
                ordercategoryoptions.push({value:item.code,label:item.codeDesc});
@@ -1129,14 +1086,9 @@ console.log(data,'datadatadata')
 
            const stylenooptions = [];
            for (const item of this.state.stylenolists) {           
-               stylenooptions.push({value:item.masterStyle,label:item.masterStyle+'-'+item.refStyleNo});
+               stylenooptions.push({value:item.styleid,label:item.styleNo});
            }
            
-
-           const filterstylenooptions = [];
-           for (const item of this.state.filterstylenolists) {           
-               filterstylenooptions.push({value:item.masterStyle,label:item.masterStyle+'-'+item.refStyleNo});
-           }
            const unitoptions = [];
            for (const item of this.state.unitlists) {           
                unitoptions.push({value:item.uCode,label:item.uName});
@@ -1144,34 +1096,25 @@ console.log(data,'datadatadata')
            
           return (
               
-             <RctCollapsibleCard heading="">
+             <RctCollapsibleCard heading="Product Development Buyer T&A">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div >
                       
                   {/* className={isActive ? "s-panel active" : 's-panel'} */}
-                  <Accordion className="border mb-15 mt-15">
-                     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                         <div className="acc_title_font">
-                             <Typography>Product Development Buyer T&A </Typography>
-                         </div>
-                     </AccordionSummary>
-                     <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
-
-<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">    Generate  <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
-    <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">Add <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
-        
-
-        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
-        
-    
-        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-</div> <div className="clearfix"></div>
-
                       <div className="row new-form">
 
                       <div className="w-100">
-                         
+                        <div className="float-right n-bt-top">
+
+                        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">    Generate  <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">Add <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                
+
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                
+                            
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                        </div> 
                         <div className="clearfix"></div>
                         <div className="row">
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1285,38 +1228,10 @@ console.log(data,'datadatadata')
                         <TextField id="Buyer" fullWidth label="Option" placeholder="Option"/>
                         </div>
                                             </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 pl-0 f-w-date">
-                                            {/* <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date"> */}
-                                                <div className="row">
-                                               <AccordionInput>
-                                                        <Fragment>
-                                                            <div className="rct-picker">
-                                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                                                    <KeyboardDatePicker
-                                                                        disablePast={true}
-                                                                        // minDate={pcd}
-                                                                        disableToolbar
-                                                                        variant="inline"
-                                                                        format="MM/dd/yyyy"
-                                                                        margin="normal"
-                                                                        id="date-picker-inline"
-                                                                        KeyboardButtonProps={{
-                                                                            'aria-label': 'Date',
-                                                                        }}
-                                                                        label="Date"
-                                                                        value={selectedDate}
-                                                                        onChange={this.handleDateChange}
-                                                                        animateYearScrolling={false}
-                                                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
-                                                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
-                                                                        fullWidth
-                                                                    />
-                                                                </MuiPickersUtilsProvider>
-                                                            </div>
-                                                        </Fragment>
-                                                    </AccordionInput>
-                                              </div>
-                                              {/* </div> */}
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div className="form-group">
+                        <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
+                        </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
@@ -1435,208 +1350,6 @@ console.log(data,'datadatadata')
                         </div>
 
                 </div>
-                </AccordionDetails>
-                </Accordion>
-
-                <Accordion className="border mb-15 mt-15">
-                     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                         <div className="acc_title_font">
-                             <Typography>Buyer T&A List </Typography>
-                         </div>
-                     </AccordionSummary>
-                     <AccordionDetails>
-                     <div className="float-right pr-0 but-tp">
-  
-
-  <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
-  
- 
-</div>  
-                     <div className="w-100  p-10 no-f-mb mt-5">
-               
-   <div className="clearfix"></div>
-   <div className="w-100 float-left">
-                <div className="row">
-                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Buyer"
-                                                        options={buyeroptions}
-                                                        // onChange={this.setstatevaluedropdownfunction('buyer')}
-                                                        onChange={values => this.getBuyerDivision2({ filterbuyer:values },this,"filterbuyer")}
-                                                        placeholder="Buyer"
-                                                        values={this.state.filterbuyer}
-                                                        />
-                                                        <span className="error">{this.state.errors["filterbuyer"]}</span>
-                                                    </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Buyer Division"
-                                                        options={filterbuyerdivoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('filterbuyerdiv')}
-                                                        placeholder="Buyer Division"
-                                                        values={this.state.filterbuyerdiv}
-                                                        />
-                                                        <span className="error">{this.state.errors["filterbuyerdiv"]}</span>
-                                                    </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Order Type"
-                                                        options={ordercategoryoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('filterordercategory')}
-                                                        placeholder="Order Type"
-                                                        values={this.state.filterordercategory}
-                                                        />
-                                                        <span className="error">{this.state.errors["filterordercategory"]}</span>
-                                                    </div>
-
-                        </div>    
-
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
-                                                    <Select1
-                                                        dropdownPosition="auto"
-                                                        //   multi
-                                                        createNewLabel="Style"
-                                                        options={filterstylenooptions}
-                                                        onChange={this.setstatevaluedropdownfunction('filterstyleno')}
-                                                        placeholder="Style"
-                                                        values={this.state.filterstyleno}
-                                                        />
-                                                        <span className="error">{this.state.errors["filterstyleno"]}</span>
-                                                    </div>
-
-                        </div>         
-
-                    </div>
-                    </div>
-                    <div className="table-responsive mt-0">
-                   
- 
-                             <table className="table mt-10 data w-100 float-left la-fix" >
-                                 <thead>
-                                     <tr>
-                                     <th className="text-center">Actions</th>
-                                     <th className="">Buyer</th>
-                                     <th className="">Buyer Div</th>
-                                     <th className="">Ord type</th>
-                                     <th className="">style</th>
-                                     <th className="">status</th>
-                             
-                                     
-
-
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                 </tbody>
-                                 
-                                 </table>
-                                 <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
-                                 <div className="w-25 float-left">
-                                 <label className="mt-5">Rows per page: </label>
-                    </div>
-                    <div className="w-15 float-left">
-                    <select class="form-control">
-                                                            <option>10</option> 
-                                                            <option>20</option> 
-                                                            <option>30</option> 
-                                                            <option>40</option> 
-                                                        </select>
-        </div>
-        <div className="w-30 float-left pl-30">
-                        <label className="mt-5">1-10 of 50</label>
-                        </div>
-                        <div className="w-30 float-left">
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                        <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
-                             </div> 
-
-</div>
-                         </AccordionDetails>
-                         </Accordion>
                 </div>
                
  

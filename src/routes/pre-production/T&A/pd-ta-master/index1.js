@@ -100,7 +100,6 @@ import Select1 from "react-dropdown-select";
         checkedA: true,
         buyerlists:[],
         buyerdivlists:[],
-        filterbuyerdivlists:[],
         ordercategorylists:[],
         ordercategory:[],
         buyer:[],
@@ -131,18 +130,6 @@ import Select1 from "react-dropdown-select";
         days:'',
         swid:0,
         DpndCode:[],
-        filterordercategory:[],
-        filterbuyer:[],
-        filterbuyerdiv:[],
-        overalllists:[],
-        edit_add:false,
-        hid:0,
-        actflag:false,
-        dcodeflag:false,
-        dactcodeflag:false,
-        mactiveflag :"Y",
-        alowskipflag:"N",
-        activeflag:"Y"
 
      }
      onAddUpdateUserModalClose() {
@@ -338,22 +325,6 @@ import Select1 from "react-dropdown-select";
       setstatevaluefunction = name => event => {
          
 		this.setState({ [name]: event.target.value });
-
-        if(name=="days"){
-            if(!/^[0-9]+$/.test(event.target.value)){
-                if(event.target.value=="" || event.target.value==0){
-
-                } else{
-                    NotificationManager.error('Please only enter numeric characters (Allowed input:0-9)');
-                }
-                
-                this.setState({ [name]: 0 });                
-            } else{
-                this.setState({ [name]: event.target.value });
-            }
-            
-        }
-
 	};
 
 
@@ -371,23 +342,6 @@ import Select1 from "react-dropdown-select";
         }
         
 		this.setState({ [name]: event });
-        this.setState({ actflag: false,dcodeflag:false });
-        if(name=="activitytype"){            
-            if(event.length!=0){
-                if(event[0].value=="BUYER" || event[0].value=="BUYINT"){
-                    this.setState({ actflag: true });
-                } 
-                
-            } 
-        }
-
-        if(name=="DpndCode"){            
-            if(event.length!=0){
-                this.setState({ dcodeflag: true });                
-            } 
-        }
-
-        
 
         
 
@@ -431,28 +385,6 @@ import Select1 from "react-dropdown-select";
 
                   
     }
-    
-    getBuyerDivision2(val,field,e){
-        let fields = this.state.fields;
-        this.setState({ filterbuyerdivlists: [],filterbuyerdiv:[]  });
-        if(val.filterbuyer.length!=0){
-            fields['filterbuyer'] = val.filterbuyer[0].value;        
-            this.setState({fields});
-
-            this.setState({ filterbuyer: val.filterbuyer });
-            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.filterbuyer[0].value)
-            .then((response) => {                
-                this.setState({ filterbuyerdivlists: response.data.result.data });
-            })        
-            .catch(error => {}) 
-            
-        } else{
-            fields['filterbuyer'] = '';        
-            this.setState({fields});
-        }
-
-                  
-    }
 
     getDpndOnAct(val,field,e){
         let fields = this.state.fields;
@@ -475,29 +407,10 @@ import Select1 from "react-dropdown-select";
     }
     
 
-    getalldata(){
-        this.setState({overalllists:[]});
-        if(this.state.filterbuyer.length>0 && this.state.filterbuyerdiv.length>0 && this.state.filterordercategory.length>0){
-
-            api.get('TNAMaster/GetTNAMasterList?Buyer='+this.state.filterbuyer[0].value+'&BuyerDiv='+this.state.filterbuyerdiv[0].value+'&Ordercategory='+this.state.filterordercategory[0].value)
-                .then((response) => {
-                    let datas = response.data.data;
-                    this.setState({overalllists:datas});
-                })
-                .catch(error => {
-                    // error handling
-                })
-        } else{
-            NotificationManager.error('All fields are required');
-        }
-    }
-
     getDpndOnSubAct(val,field,e){
-        this.setState({ dactcodeflag: false });
         let fields = this.state.fields;
         this.setState({ DpndOnSubActlists: [],DpndOnSubAct:[]  });
         if(val.DpndOnAct.length!=0){
-            this.setState({ dactcodeflag: true });
             fields['DpndOnAct'] = val.DpndOnAct[0].value;        
             this.setState({fields});
 
@@ -637,30 +550,6 @@ import Select1 from "react-dropdown-select";
         this.setState({ [name]: checked });
     };
    
-    mactiveChangecheckbox(event) {
-        if(this.state.mactiveflag=="Y"){
-            this.setState({ mactiveflag:"N" });
-        }else{
-            this.setState({ mactiveflag:"Y" });
-        }
-    }
-
-    alowskipChangecheckbox(event) {
-        if(this.state.alowskipflag=="Y"){
-            this.setState({ alowskipflag:"N" });
-        }else{
-            this.setState({ alowskipflag:"Y" });
-        }
-    }
-
-    activeChangecheckbox(event) {
-        if(this.state.activeflag=="Y"){
-            this.setState({ activeflag:"N" });
-        }else{
-            this.setState({ activeflag:"Y" });
-        }
-    }
-    
     handleClickOpen = () => {
         this.setState({ open: true });
      };
@@ -739,49 +628,19 @@ import Select1 from "react-dropdown-select";
           }
 
 
-          let activitytype="";
-          
-          if(this.state.activitytype.length>0){
-              activitytype=this.state.activitytype[0].value;
-          }
-
-          let department="";
-          
-          if(this.state.department.length>0){
-              department=this.state.department[0].value;
-          }
-
-          let stage="";
-          
-          if(this.state.stage.length>0){
-              stage=this.state.stage[0].value;
-          }
-
-          let fit="";
-          let fitlabel="";
-          if(this.state.fit.length>0){
-              fit=this.state.fit[0].value;
-              fitlabel=this.state.fit[0].label;
-          }
-
-
-          let id=0;
-          if(this.state.edit_add!=false){
-            id=this.state.hid;
-          } 
-          if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.ordercategory.length>0){
+          if(this.state.buyer.length>0 && this.state.stage.length>0 && this.state.fit.length>0){
             let data =  {
-                "id": id,
+                "id": 0,
                 "buyCode": this.state.buyer[0].value,
                 "buyName": this.state.buyer[0].label,
                 "buydivCode": this.state.buyerdiv[0].value,
                 "buydivName": this.state.buyerdiv[0].label,
                 "orderCategory": this.state.ordercategory[0].value,
-                "deptcode": department,
-                "stage": stage,
-                "activityType": activitytype,
-                "fit": fit,
-                "fitName": fitlabel,
+                "deptcode": this.state.department[0].value,
+                "stage": this.state.stage[0].value,
+                "activityType": this.state.activitytype[0].value,
+                "fit": this.state.fit[0].value,
+                "fitName": this.state.fit[0].label,
                 "actCode": 0,
                 "activity": this.state.activity,
                 "subActivity": this.state.subactivity,
@@ -798,12 +657,12 @@ import Select1 from "react-dropdown-select";
                 "dependSubActvityName": DpndOnSubActlabel,
                 "category": category,
                 "valueAddtype": valueadd,
-                "skipped": this.state.alowskipflag,
-                "active": this.state.activeflag,
+                "skipped": "N",
+                "active": "Y",
                 "createdBy": "string",
                 "modifyBy": "string",
                 "hostname": "string",
-                "mActive": this.state.mactiveflag
+                "mActive": "Y"
               }
                 tamasteraddmoredata.push(data);
                 this.setState({tamasteraddmoredata:tamasteraddmoredata});
@@ -862,10 +721,9 @@ console.log(data,'datadatadata')
             api.post('TNAMaster/SaveTNAMaster',data) .then((response) => {
                 // this.getMenulists();
                 NotificationManager.success('Saved Sucessfully');
-                // window.location.href = "/#/app/pre-production/request-grid";
-                this.setState({edit_add:false});
+                window.location.href = "/#/app/pre-production/request-grid";
                 this.setState( {
-                 buyerdiv:[],buyer:[],ordercategory:[],department:[],stage:[],activitytype:[],fit:[],activity:'',subactivity:'',days:'',DpndDept:[],DpndOnAct:[],DpndOnSubAct:[],category:[],valueadd:[],tamasteraddmoredata:[]
+                 
                 });
             })
             .catch(error => {
@@ -880,26 +738,10 @@ console.log(data,'datadatadata')
 
       }
   
-      edittnamaster(id){
-       
 
-        this.setState({edit_add:true});
-          api.get('TNAMaster/GetTNAMasterListID?ID='+id)
-          .then((response) => {
-              
-              let dataval = response.data.data;
-              let data = response.data.data[0];
-              this.setState({tamasteraddmoredata:dataval,buyer:[{value:data.buyCode,label:data.buyerCode}],buyerdiv:[{value:data.buydivCode,label:data.buyerDivName}],ordercategory:[{value:data.orderCategory,label:data.orderCategory}],department:[{value:data.deptcode,label:data.deptcode}] });
-
-              this.setState({ hid: id });
-          })
-          .catch(error => {
-              // error handling
-          })
-    }
 
      render() {
-         const { employeePayroll,tamasteraddmoredata,actflag,dactcodeflag,dcodeflag ,mactiveflag,alowskipflag,activeflag} = this.state;
+         const { employeePayroll,tamasteraddmoredata } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -933,16 +775,10 @@ console.log(data,'datadatadata')
            for (const item of this.state.buyerlists) {           
                buyeroptions.push({value:item.buyerCode,label:item.buyerName});
            }
-           
+
            const buyerdivoptions = [];
            for (const item of this.state.buyerdivlists) {           
                buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
-           }
-
-
-           const filterbuyerdivoptions = [];
-           for (const item of this.state.filterbuyerdivlists) {           
-            filterbuyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
            }
 
            const DpndOnActoptions = [];
@@ -1030,494 +866,273 @@ console.log(data,'datadatadata')
         }) }else{
             buyerrightlistshtml = <tr><td colSpan="16" className="no-records-data"><span>No records found</span></td></tr> ;
         }
-
-        let overalllistshtml = null;
-        if(this.state.overalllists.length>0){
-            overalllistshtml= this.state.overalllists.map((n,index) => {                                    
-            return (
-                <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.edittnamaster(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>{n.buyerCode} </td>
-                                         <td>{n.buyerDivName} </td>
-                                         <td>{n.orderCategory} </td>
-                                         <td> </td>
-                                         
-                                         
-                                        
-                                     </tr>
-            );
-        }) }else{
-            overalllistshtml = <tr><td colSpan="5" className="no-records-data"><span>No records found</span></td></tr> ;
-        }
            
           return (
               
-             <RctCollapsibleCard heading="">
+             <RctCollapsibleCard heading="Product Development T&A Master">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div >
                       
                   {/* className={isActive ? "s-panel active" : 's-panel'} */}
-                  <Accordion className="border mb-15 mt-15">
-                     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                         <div className="acc_title_font">
-                             <Typography>Product Development T&A Master </Typography>
-                         </div>
-                     </AccordionSummary>
-                     <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
+                      <div className="row new-form">
 
-
-<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
-
-{(() => {
-                           
-                           if (this.state.edit_add == false) {
-                          return ( 
-                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                          )
-                        }
-                        if (this.state.edit_add != false) {
-                            return ( <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) =>this.contactSubmit(e)} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-                            )
-                          }
-                    })()}
-{/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)}  ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> */}
-</div> <div className="clearfix"></div>
-                     <div className="row new-form">
-
-<div className="w-100  p-10 no-f-mb mt-5">
-
-<div className="clearfix"></div>
-
-<div className="w-100 float-left">
-<div className="row">
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Buyer"
-                                  options={buyeroptions}
-                                  // onChange={this.setstatevaluedropdownfunction('buyer')}
-                                  onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
-                                  placeholder="Buyer"
-                                  values={this.state.buyer}
-                                  />
-                                   <span className="error">{this.state.errors["buyer"]}</span>
-                              </div>
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Buyer Division"
-                                  options={buyerdivoptions}
-                                  onChange={this.setstatevaluedropdownfunction('buyerdiv')}
-                                  placeholder="Buyer Division"
-                                  values={this.state.buyerdiv}
-                                  />
-                                   <span className="error">{this.state.errors["buyerdiv"]}</span>
-                              </div>
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Order category"
-                                  options={ordercategoryoptions}
-                                  onChange={this.setstatevaluedropdownfunction('ordercategory')}
-                                  placeholder="Order category"
-                                  values={this.state.ordercategory}
-                                  />
-                                   <span className="error">{this.state.errors["ordercategory"]}</span>
-                              </div>
-
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Department"
-                                  options={departmentoptions}
-                                  onChange={this.setstatevaluedropdownfunction('department')}
-                                  placeholder="Department"
-                                  values={this.state.department}
-                                  />
-                                   <span className="error">{this.state.errors["department"]}</span>
-                              </div>
-
-
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
-
-      <div className="w-100 pt-10">
-      {(() => {
-
-if (mactiveflag == 'Y') {
-return (   <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.mactiveChangecheckbox(e)} checked />} label="M.Active" />
-
-)
-}
-if (mactiveflag != 'Y') {
-    return (
-      <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.mactiveChangecheckbox(e)} />} label="M.Active" />
-    )
-    }
-})()}
-      {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} checked />} label="M.Active" /> */}
-      </div>
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Stage"
-                                  options={stageoptions}
-                                  onChange={this.setstatevaluedropdownfunction('stage')}
-                                  placeholder="Stage"
-                                  values={this.state.stage}
-                                  />
-                                   <span className="error">{this.state.errors["stage"]}</span>
-                              </div>
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Activity Type"
-                                  options={activitytypeoptions}
-                                  onChange={this.setstatevaluedropdownfunction('activitytype')}
-                                  placeholder="Activity Type"
-                                  values={this.state.activitytype}
-                                  />
-                                   <span className="error">{this.state.errors["activitytype"]}</span>
-                              </div>
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Fit"
-                                  disabled={actflag}
-                                  options={fitoptions}
-                                  onChange={this.setstatevaluedropdownfunction('fit')}
-                                  placeholder="Fit"
-                                  values={this.state.fit}
-                                  />
-                                   <span className="error">{this.state.errors["fit"]}</span>
-                              </div>
-</div>
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group">
-<TextField id="activity" value={this.state.activity}  onChange={this.setstatevaluefunction('activity')} fullWidth label="Activity" placeholder="Activity"/>
-   {/* <TextField id="Buyer" fullWidth label="Activity" placeholder="Activity"/> */}
-                              </div>
-  </div>
-
-  <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group">
-<TextField id="subactivity" value={this.state.subactivity} disabled={actflag} onChange={this.setstatevaluefunction('subactivity')} fullWidth label="Sub Activity" placeholder="Sub Activity"/>
-   {/* <TextField id="Buyer" fullWidth label="Sub activity" placeholder="Sub activity"/> */}
-                              </div>
-  </div>
-
-  <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group">
-<TextField id="days" value={this.state.days} onChange={this.setstatevaluefunction('days')} fullWidth label="Days" placeholder="Days"/>
-   {/* <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/> */}
-                              </div>
-  </div>
-
-  <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-  <div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  
-                                  createNewLabel="DpndCode"
-                                  options={DpndCodeoptions}
-                                  onChange={this.setstatevaluedropdownfunction('DpndCode')}
-                                  // onChange={values => this.getDpndOnAct({ DpndCode:values },this,"DpndCode")}
-                                  placeholder="DpndCode"
-                                  values={this.state.DpndCode}
-                                  />
-                                   <span className="error">{this.state.errors["DpndCode"]}</span>
-                              </div>
-
-
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  disabled={dcodeflag}
-                                  createNewLabel="DpndDept"
-                                  options={departmentoptions}
-                                  // onChange={this.setstatevaluedropdownfunction('DpndDept')}
-                                  onChange={values => this.getDpndOnAct({ DpndDept:values },this,"DpndDept")}
-                                  placeholder="DpndDept"
-                                  values={this.state.DpndDept}
-                                  />
-                                   <span className="error">{this.state.errors["DpndDept"]}</span>
-                              </div>
-
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="DpndOnAct"
-                                  options={DpndOnActoptions}
-                                  // onChange={this.setstatevaluedropdownfunction('DpndOnAct')}
-                                  onChange={values => this.getDpndOnSubAct({ DpndOnAct:values },this,"DpndOnAct")}
-                                  placeholder="DpndOnAct"
-                                  values={this.state.DpndOnAct}
-                                  />
-                                   <span className="error">{this.state.errors["DpndOnAct"]}</span>
-                              </div>
-
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  disabled={dactcodeflag}
-                                  createNewLabel="DpndOnS.Act"
-                                  options={DpndOnSubActoptions}
-                                  onChange={this.setstatevaluedropdownfunction('DpndOnSubAct')}
-                                  // onChange={values => this.getDpndOnSubAct({ DpndOnSubAct:values },this,"DpndOnSubAct")}
-                                  placeholder="DpndOnS.Act"
-                                  values={this.state.DpndOnSubAct}
-                                  />
-                                   <span className="error">{this.state.errors["DpndOnSubAct"]}</span>
-                              </div>
-
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="Category"
-                                  options={categoryoptions}
-                                  onChange={this.setstatevaluedropdownfunction('category')}
-                                  placeholder="Category"
-                                  values={this.state.category}
-                                  />
-                                   <span className="error">{this.state.errors["category"]}</span>
-                              </div>
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="form-group select_label_name mt-15">
-                              <Select1
-                                  dropdownPosition="auto"
-                                  //   multi
-                                  createNewLabel="VA Aprv"
-                                  options={valueaddoptions}
-                                  onChange={this.setstatevaluedropdownfunction('valueadd')}
-                                  placeholder="VA Aprv"
-                                  values={this.state.valueadd}
-                                  />
-                                   <span className="error">{this.state.errors["valueadd"]}</span>
-                              </div>
-
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="w-100 pt-10">
-{(() => {
-
-if (alowskipflag == 'Y') {
-return (<FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.alowskipChangecheckbox(e)} checked />} label="AlowSkip" />)
-}
-if (alowskipflag != 'Y') {
-    return (
-      <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.alowskipChangecheckbox(e)} />} label="AlowSkip" />
-    )
-    }
-})()}
-      {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)}  />} label="AlowSkip" /> */}
-      </div>
-
-</div>
-
-<div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-<div className="w-100 pt-10">
-{(() => {
-
-if (mactiveflag == 'Y') {
-return (   <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.activeChangecheckbox(e)} checked />} label="Active" />
-
-)
-}
-if (mactiveflag != 'Y') {
-    return (
-      <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.activeChangecheckbox(e)} />} label="Active" />
-    )
-    }
-})()}
-
-      </div>
-
-
-</div>
-
-
-
-
-
-
-</div>
-</div>
-<div className="table-responsive mt-0">
-<div className="w-20 float-right">
-   <div className="form-group">
-   <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"  onClick={(e) =>this.sampleaddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
-       {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
-       <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
-   </div>
-</div>
-
-       <table className="table mt-10 data w-100 float-left la-fix" >
-           <thead>
-               <tr>
-               <th className="w-10">#</th>
-               <th className="w-10">Remove</th>
-               <th className="w-10">Stage</th>
-               <th className="w-15">Act Type</th>
-               <th className="w-10">Fit  </th>
-               <th className="w-10">Activity  </th>
-               <th className="w-25">Sub Activity  </th>
-               <th className="w-10">Days </th>
-               <th className="w-10">DpndCode </th>
-               <th className="w-15">DpndDept </th>
-               <th className="w-15">DpndOnAct </th>
-               <th className="w-15">DpndOnS.Act </th>
-               <th className="w-15">Category </th>
-               <th className="w-10">Va Aprv </th>
-               <th className="w-10">AlowSkip </th>
-               <th className="w-10">Active </th>
-
-
-               </tr>
-           </thead>
-           <tbody>
-           { buyerrightlistshtml &&
-       buyerrightlistshtml}
-           </tbody>
-           
-           </table>
-           <div className="clearfix"></div>
-           {/* <div className="w-50 float-right">
-           <div className="w-25 float-left">
-           <label className="mt-5">Rows per page: </label>
-</div>
-<div className="w-15 float-left">
-<select class="form-control">
-                                      <option>10</option> 
-                                      <option>20</option> 
-                                      <option>30</option> 
-                                      <option>40</option> 
-                                  </select>
-</div>
-<div className="w-30 float-left pl-30">
-  <label className="mt-5">1-10 of 50</label>
-  </div>
-  <div className="w-30 float-left">
-  <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-  <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-  </div></div> */}
-       </div> 
-
-</div>
-
-</div>
-                         </AccordionDetails>
-                         </Accordion>
-
-                         <Accordion className="border mb-15 mt-15">
-                     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                         <div className="acc_title_font">
-                             <Typography>Master List </Typography>
-                         </div>
-                     </AccordionSummary>
-                     <AccordionDetails>
-                     <div className="float-right pr-0 but-tp">
+                      <div className="w-100  p-10 no-f-mb mt-5">
+                <div className="float-right n-bt-top">
   
 
-  <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" onClick={(e) => this.getalldata()} tabindex="0" type="button" ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
-  
- 
-</div>  
-                     <div className="w-100  p-10 no-f-mb mt-5">
-               
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
+        
+       
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)}  ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+   </div> 
    <div className="clearfix"></div>
    <div className="w-100 float-left">
                 <div className="row">
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
+                <div className="form-group select_label_name mt-15">
                                                     <Select1
                                                         dropdownPosition="auto"
                                                         //   multi
                                                         createNewLabel="Buyer"
                                                         options={buyeroptions}
                                                         // onChange={this.setstatevaluedropdownfunction('buyer')}
-                                                        onChange={values => this.getBuyerDivision2({ filterbuyer:values },this,"filterbuyer")}
+                                                        onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
                                                         placeholder="Buyer"
-                                                        values={this.state.filterbuyer}
+                                                        values={this.state.buyer}
                                                         />
-                                                        <span className="error">{this.state.errors["filterbuyer"]}</span>
+                                                         <span className="error">{this.state.errors["buyer"]}</span>
                                                     </div>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div className="form-group select_label_name mt-15">
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
                                                     <Select1
                                                         dropdownPosition="auto"
                                                         //   multi
                                                         createNewLabel="Buyer Division"
-                                                        options={filterbuyerdivoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('filterbuyerdiv')}
+                                                        options={buyerdivoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('buyerdiv')}
                                                         placeholder="Buyer Division"
-                                                        values={this.state.filterbuyerdiv}
+                                                        values={this.state.buyerdiv}
                                                         />
-                                                        <span className="error">{this.state.errors["filterbuyerdiv"]}</span>
+                                                         <span className="error">{this.state.errors["buyerdiv"]}</span>
+                                                    </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Order category"
+                                                        options={ordercategoryoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('ordercategory')}
+                                                        placeholder="Order category"
+                                                        values={this.state.ordercategory}
+                                                        />
+                                                         <span className="error">{this.state.errors["ordercategory"]}</span>
+                                                    </div>
+               
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Department"
+                                                        options={departmentoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('department')}
+                                                        placeholder="Department"
+                                                        values={this.state.department}
+                                                        />
+                                                         <span className="error">{this.state.errors["department"]}</span>
+                                                    </div>
+               
+              
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
+                   
+                            <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} checked />} label="M.Active" />
+                            </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Stage"
+                                                        options={stageoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('stage')}
+                                                        placeholder="Stage"
+                                                        values={this.state.stage}
+                                                        />
+                                                         <span className="error">{this.state.errors["stage"]}</span>
+                                                    </div>
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Activity Type"
+                                                        options={activitytypeoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('activitytype')}
+                                                        placeholder="Activity Type"
+                                                        values={this.state.activitytype}
+                                                        />
+                                                         <span className="error">{this.state.errors["activitytype"]}</span>
+                                                    </div>
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Fit"
+                                                        options={fitoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('fit')}
+                                                        placeholder="Fit"
+                                                        values={this.state.fit}
+                                                        />
+                                                         <span className="error">{this.state.errors["fit"]}</span>
+                                                    </div>
+                    </div>
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group">
+                    <TextField id="activity" value={this.state.activity}  onChange={this.setstatevaluefunction('activity')} fullWidth label="Activity" placeholder="Activity"/>
+                         {/* <TextField id="Buyer" fullWidth label="Activity" placeholder="Activity"/> */}
                                                     </div>
                         </div>
+
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group">
+                    <TextField id="subactivity" value={this.state.subactivity}  onChange={this.setstatevaluefunction('subactivity')} fullWidth label="Sub Activity" placeholder="Sub Activity"/>
+                         {/* <TextField id="Buyer" fullWidth label="Sub activity" placeholder="Sub activity"/> */}
+                                                    </div>
+                        </div>
+
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group">
+                    <TextField id="days" value={this.state.days}  onChange={this.setstatevaluefunction('days')} fullWidth label="Days" placeholder="Days"/>
+                         {/* <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/> */}
+                                                    </div>
+                        </div>
+
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group select_label_name mt-15">
                                                     <Select1
                                                         dropdownPosition="auto"
                                                         //   multi
-                                                        createNewLabel="Order Type"
-                                                        options={ordercategoryoptions}
-                                                        onChange={this.setstatevaluedropdownfunction('filterordercategory')}
-                                                        placeholder="Order Type"
-                                                        values={this.state.filterordercategory}
+                                                        createNewLabel="DpndCode"
+                                                        options={DpndCodeoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('DpndCode')}
+                                                        // onChange={values => this.getDpndOnAct({ DpndCode:values },this,"DpndCode")}
+                                                        placeholder="DpndCode"
+                                                        values={this.state.DpndCode}
                                                         />
-                                                        <span className="error">{this.state.errors["filterordercategory"]}</span>
+                                                         <span className="error">{this.state.errors["DpndCode"]}</span>
                                                     </div>
 
-                        </div>
-                    
+               
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="DpndDept"
+                                                        options={departmentoptions}
+                                                        // onChange={this.setstatevaluedropdownfunction('DpndDept')}
+                                                        onChange={values => this.getDpndOnAct({ DpndDept:values },this,"DpndDept")}
+                                                        placeholder="DpndDept"
+                                                        values={this.state.DpndDept}
+                                                        />
+                                                         <span className="error">{this.state.errors["DpndDept"]}</span>
+                                                    </div>
+               
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="DpndOnAct"
+                                                        options={DpndOnActoptions}
+                                                        // onChange={this.setstatevaluedropdownfunction('DpndOnAct')}
+                                                        onChange={values => this.getDpndOnSubAct({ DpndOnAct:values },this,"DpndOnAct")}
+                                                        placeholder="DpndOnAct"
+                                                        values={this.state.DpndOnAct}
+                                                        />
+                                                         <span className="error">{this.state.errors["DpndOnAct"]}</span>
+                                                    </div>
+               
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="DpndOnS.Act"
+                                                        options={DpndOnSubActoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('DpndOnSubAct')}
+                                                        // onChange={values => this.getDpndOnSubAct({ DpndOnSubAct:values },this,"DpndOnSubAct")}
+                                                        placeholder="DpndOnS.Act"
+                                                        values={this.state.DpndOnSubAct}
+                                                        />
+                                                         <span className="error">{this.state.errors["DpndOnSubAct"]}</span>
+                                                    </div>
+                
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Category"
+                                                        options={categoryoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('category')}
+                                                        placeholder="Category"
+                                                        values={this.state.category}
+                                                        />
+                                                         <span className="error">{this.state.errors["category"]}</span>
+                                                    </div>
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="VA Aprv"
+                                                        options={valueaddoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('valueadd')}
+                                                        placeholder="VA Aprv"
+                                                        values={this.state.valueadd}
+                                                        />
+                                                         <span className="error">{this.state.errors["valueadd"]}</span>
+                                                    </div>
+               
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)}  />} label="AlowSkip" />
+                            </div>
+                   
+                    </div>
+
+                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div className="w-100 pt-10">
+                            <FormControlLabel control={<Checkbox color="primary" value="Sample"  onClick={(e) =>this.handleChangecheckbox(n,index)} checked />} label="Active" />
+                            </div>
+                   
+                 
+                    </div>
 
 
 
@@ -1527,26 +1142,40 @@ if (mactiveflag != 'Y') {
                     </div>
                     </div>
                     <div className="table-responsive mt-0">
-                      
+                      <div className="w-20 float-right">
+                         <div className="form-group">
+                         <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button"  onClick={(e) =>this.sampleaddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                             {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                             <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
+                         </div>
+                     </div>
  
                              <table className="table mt-10 data w-100 float-left la-fix" >
                                  <thead>
                                      <tr>
-                                     <th className="text-center">Actions</th>
-                                     <th className="">Buyer</th>
-                                     <th className="">Buyer Div</th>
-                                     <th className="">Ord type</th>
-                                     <th className="">status</th>
-                             
-                                     
-
+                                     <th className="w-10">#</th>
+                                     <th className="w-10">Remove</th>
+                                     <th className="w-10">Stage</th>
+                                     <th className="w-15">Act Type</th>
+                                     <th className="w-10">Fit  </th>
+                                     <th className="w-10">Activity  </th>
+                                     <th className="w-25">Sub Activity  </th>
+                                     <th className="w-10">Days </th>
+                                     <th className="w-10">DpndCode </th>
+                                     <th className="w-15">DpndDept </th>
+                                     <th className="w-15">DpndOnAct </th>
+                                     <th className="w-15">DpndOnS.Act </th>
+                                     <th className="w-15">Category </th>
+                                     <th className="w-10">Va Aprv </th>
+                                     <th className="w-10">AlowSkip </th>
+                                     <th className="w-10">Active </th>
+               
 
                                      </tr>
                                  </thead>
                                  <tbody>
-                                 { overalllistshtml &&
-                             overalllistshtml}
-                            
+                                 { buyerrightlistshtml &&
+                             buyerrightlistshtml}
                                  </tbody>
                                  
                                  </table>
@@ -1573,9 +1202,8 @@ if (mactiveflag != 'Y') {
                              </div> 
 
 </div>
-                         </AccordionDetails>
-                         </Accordion>
-                     
+
+                </div>
                 </div>
                
  

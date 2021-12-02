@@ -1549,31 +1549,23 @@ console.log(data,'datadatadata')
            
           return (
               
-             <RctCollapsibleCard heading="">
+             <RctCollapsibleCard heading="Product Development Internal T&A">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div >
                       
                   {/* className={isActive ? "s-panel active" : 's-panel'} */}
-                  <Accordion className="border mb-15 mt-15">
-                     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                         <div className="acc_title_font">
-                             <Typography>Product Development Internal T&A </Typography>
-                         </div>
-                     </AccordionSummary>
-                     <AccordionDetails> 
-                     <div className="float-right pr-0 but-tp">
-  
-
-  <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label"> Generate <i className="zmdi zmdi-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
-<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
-
-
-<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
-</div> <div className="clearfix"></div>
                       <div className="row new-form">
 
                       <div className="w-100  p-10 no-f-mb mt-5">
-               
+                <div className="float-right n-bt-top">
+  
+
+                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label"> Generate <i className="zmdi zmdi-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
+        
+       
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+   </div> 
    <div className="clearfix"></div>
    <div className="w-100 float-left">
                 <div className="row">
@@ -1854,7 +1846,7 @@ console.log(data,'datadatadata')
                                  
                                  </table>
                                  <div className="clearfix"></div>
-                                 {/* <div className="w-50 float-right">
+                                 <div className="w-50 float-right">
                                  <div className="w-25 float-left">
                                  <label className="mt-5">Rows per page: </label>
                     </div>
@@ -1872,7 +1864,7 @@ console.log(data,'datadatadata')
                         <div className="w-30 float-left">
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div> */}
+                        </div></div>
                              </div> 
                             
 
@@ -1880,28 +1872,14 @@ console.log(data,'datadatadata')
                                          </div>
 </div>
 
-{/*  */}
-
-                </div>
-                </AccordionDetails>
-                </Accordion>
-
-                <Accordion className="border mb-15 mt-15">
-                     <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
-                         <div className="acc_title_font">
-                             <Typography>Product Development Internal T&A </Typography>
-                         </div>
-                     </AccordionSummary>
-                     <AccordionDetails>
-                     <div className="float-right pr-0 but-tp">
+{/* <div className="w-100  p-10 no-f-mb mt-5">
+                <div className="float-right n-bt-top">
   
 
-  <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
-  
- 
-</div>  
-                     <div className="w-100  p-10 no-f-mb mt-5">
-               
+        <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
+        
+       
+   </div> 
    <div className="clearfix"></div>
    <div className="w-100 float-left">
                 <div className="row">
@@ -2043,9 +2021,9 @@ console.log(data,'datadatadata')
                         </div></div>
                              </div> 
 
-</div>
-                         </AccordionDetails>
-                         </Accordion>
+</div> */}
+
+                </div>
                 </div>
                
  

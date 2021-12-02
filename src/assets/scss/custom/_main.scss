@@ -1039,7 +1039,7 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 				border-bottom: 1px solid #ebedf2!important;
 			}
 			table tr:nth-child(2n) td {
-				background: #fbfbfb!important;
+				background: #fbfbfb;
 			}
 			.dx-datagrid .dx-row > td {
 				padding: 5px!important;     	
@@ -1146,7 +1146,10 @@ table tr th.MuiTableCell-head .MuiButton-root{padding: 0!important; box-shadow: 
 						.tbl-hh-br th .border-right{border-right:  1px solid #d5cfcf!important;}
 						.tbl-hh-br th .border-right label{margin: 0;}
 					.disp-blck{display: block !important;}
-					
+					.f-w-date .col-lg-3{max-width: 100% !important;
+						flex: 0 0 100%;}
+						.greencolor{background: #58ca58 !important;}
+					.yellowcolor{background: greenyellow !important;}
 					/* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }
