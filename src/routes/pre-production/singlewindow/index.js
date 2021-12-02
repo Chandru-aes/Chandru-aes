@@ -284,6 +284,7 @@ class SinglewindowElement extends Component {
                     purpose: [{value:data.purpose,label:data.purpose}],
                     reqtype: [{value:data.reqType,label:data.reqType}],
                     styleno: [{value:data.styleNo,label:data.styleNo}],
+                    pattern_styleno:[{value:data.styleNo,label:data.styleNo}],
                     fit:[{value:data.fit,label:data.fit}],
                     reqNo:data.reqNo,
                 });
@@ -663,11 +664,11 @@ class SinglewindowElement extends Component {
     stylenochange(){
 
         if(this.state.styleno.length>0){
-            this.setState({baseStyleno:'',fabricDesc:'',fabricType:''});
+            this.setState({baseStyleno:'',fabricDesc:'',fabricType:'',pattern_styleno:[]});
             api.get('StyleHeader/GetStyleHeaderList?SID='+this.state.styleno[0].value)
                 .then((response) => {
                     let datas = response.data.data[0];
-                    this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType});
+                    this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType,pattern_styleno:[{value:this.state.styleno[0].value,label:this.state.styleno[0].label}]});
                 })
                 .catch(error => {
                     // error handling
@@ -676,7 +677,7 @@ class SinglewindowElement extends Component {
     }
 
     getrefversionno(){
-        this.setState({reference_versionlists:[],reference_version:[],pattern_stylenolists:[],pattern_styleno:[]});
+        this.setState({reference_versionlists:[],reference_version:[],pattern_stylenolists:[]});
         if(this.state.styleno.length>0 && this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
 
             api.get('SingleWindowRequestheader/GetRefVersion?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&syear='+this.state.year[0].value+'&StyleNumber='+this.state.styleno[0].value)
@@ -1526,13 +1527,17 @@ class SinglewindowElement extends Component {
 
 
     render() {
-        const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype } = this.state;
+        const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype,pattern_styleno } = this.state;
         const { match } = this.props;
         const { selectedDate } = this.state;
         const { classes } = this.props;
         const config = this.componentConfig;
         const djsConfig = this.djsConfig;
-
+        let pattern_stylenolabel="";
+        if(pattern_styleno.length>0){
+            pattern_stylenolabel=pattern_styleno[0].label;
+        }
+        
         const handleToggle = () => {
             this.setState({ isActive: !this.state.isActive });
         };
@@ -2290,10 +2295,10 @@ class SinglewindowElement extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group mt-15">
-                                                                <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>Reference version <i class="zmdi zmdi-arrow-right-top"></i></button>
+                                                                <button type="button" class="btn btn-outline-primary" onClick={this.rhandleClickOpen}>Reference version - {pattern_stylenolabel} {this.state.ref_version}<i class="zmdi zmdi-arrow-right-top"></i></button>
                                                                 {/* <Button variant="contained" className="btn-secondary text-white btn-block" >Reference version</Button> */}
                                                                 <Dialog open={this.state.ropen} onClose={this.rhandleClose} aria-labelledby="form-dialog-title">
-                                                                    <DialogTitle id="form-dialog-title">Reference version</DialogTitle>
+                                                                    <DialogTitle id="form-dialog-title">Reference version </DialogTitle>
                                                                     <DialogContent>
                                                                         <div className="col border">
                                                                             <div className="row no-f-mb">
@@ -2357,7 +2362,7 @@ class SinglewindowElement extends Component {
                                                                                             dropdownPosition="auto"
                                                                                             //   multi
                                                                                             createNewLabel="Style No"
-                                                                                            options={pattern_stylenooptions}
+                                                                                            options={stylenooptions}
                                                                                             onChange={this.setstatevaluedropdownfunction('pattern_styleno')}
                                                                                             placeholder="Style No"
                                                                                             values={this.state.pattern_styleno}
@@ -2946,7 +2951,7 @@ class SinglewindowElement extends Component {
                                                             <div className="form-group select_label_name mt-15">
                                                                 <Select1
                                                                     dropdownPosition="auto"
-                                                                    // multi
+                                                                    multi 
                                                                     createNewLabel="Size"
                                                                     options={sizeoptions}
                                                                     onChange={this.setstatevaluedropdownfunction('size')}

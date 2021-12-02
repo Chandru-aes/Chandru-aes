@@ -546,7 +546,7 @@ import { DateTimePicker} from '@material-ui/pickers';
             console.log(response.data.data[0],'------------')
             let data = response.data.data[0];            
 
-            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivname}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],
+            this.setState({ buyer: [{value:data.buyCode,label:data.buyCode+'-'+data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivname}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],OrderType: [{value:data.orderStage,label:data.orderStage}],
                 designStyleNo:data.baseStyleno,refstyleno:data.designStyleNo,
                 styleno:data.refStyleNo,producttype: [{value:data.producttype,label:data.producttype}],subproducttype: [{value:data.subProductType,label:data.subProductType}],
                 Washtype: [{value:data.washDesc,label:data.washTypeCodeDesc}],
@@ -958,7 +958,7 @@ console.log(data,'datadatadata')
 
            const buyeroptions = [];
            for (const item of this.state.buyerlists) {           
-               buyeroptions.push({value:item.buyerCode,label:item.buyerName});
+            buyeroptions.push({value:item.buyerCode,label:item.buyerCode+'-'+item.buyerName});
            }
 
            const buyerdivoptions = [];

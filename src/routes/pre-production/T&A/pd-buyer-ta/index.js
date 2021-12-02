@@ -212,6 +212,14 @@ import Select1 from "react-dropdown-select";
         baseStyleno:'',fabricDesc:'',fabricType:'',
         reference_version:'',
         swid:0,
+        filterordercategory:[],
+        filterbuyer:[],
+        filterbuyerdiv:[],
+        overalllists:[],
+        edit_add:false,
+        filterbuyerdivlists:[],
+        filterstylenolists:[],
+        filterstyleno:[]
 
      }
      onAddUpdateUserModalClose() {
@@ -360,14 +368,14 @@ import Select1 from "react-dropdown-select";
             // error handling
         })
 
-        api.get('StyleHeader/GetStyleGridList')
-        .then((response) => {
+        // api.get('StyleHeader/GetStyleGridList')
+        // .then((response) => {
             
-            this.setState({ stylenolists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        //     this.setState({ stylenolists: response.data.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
         api.get('Unit/GetUnitDropDown')
         .then((response) => {
@@ -446,45 +454,9 @@ import Select1 from "react-dropdown-select";
             this.setState({fields});
 
           
-
-            if(name=="reqtype"){
-
-                $('.patternclass').hide();
-                $('.samclass').hide();
-                $('.sampleclass').hide();
-                $('.markerclass').hide();
-                $('.valueaddclass').hide();
-               
-               event.forEach(element => {
-                   
-                if(element.value=="PATTERN"){
-                    $('.patternclass').show();
-                }
-                if(element.value=="SAM"){
-                    $('.samclass').show();
-                }
-                if(element.value=="SAMPLE"){
-                    $('.sampleclass').show();
-                }
-                if(element.value=="VALUEADD"){
-                    $('.valueaddclass').show();
-                }
-                if(element.value=="MARKER"){
-                    $('.markerclass').show();
-                }
-
-               });
-                
-            }
             
         } else{
-            if(name=="reqtype"){
-                $('.patternclass').hide();
-                $('.samclass').hide();
-                $('.sampleclass').hide();
-                $('.markerclass').hide();
-                $('.valueaddclass').hide();
-            }
+           
             fields[name] = '';        
             this.setState({fields});
         }
@@ -496,15 +468,58 @@ import Select1 from "react-dropdown-select";
                 this.stylenochange();
             }, 200);
         }
-
+        
         if(name=="buyerdiv"){
             setTimeout(() => {
                 this.getActivitylist();
             }, 200);
         }
+        
+
+        if(name=="buyer" || name=="buyerdiv" || name=="year" || name=="season"){
+            setTimeout(() => {
+                this.getstyleno();
+            }, 200);
+        }
+
+
+        if(name=="filterbuyer" || name=="filterbuyerdiv" || name=="filterordercategory"){
+            setTimeout(() => {
+                this.getfilterstyleno();
+            }, 200);
+        }
 
 	};
 
+    getfilterstyleno(){
+        
+        if(this.state.filterbuyer.length>0 && this.state.filterbuyerdiv.length>0 && this.state.filterordercategory.length>0){
+            this.setState({filterstyleno:[],filterstylenolists:[],});
+            api.get('TNAMaster/GetStyleForBuyTNASearch?Buyer='+this.state.filterbuyer[0].value+'&BuyerDivsion='+this.state.filterbuyerdiv[0].value)
+            .then((response) => {
+                let datas = response.data.data;
+                this.setState({filterstylenolists:datas});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+     }
+
+     getstyleno(){
+        
+        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+            this.setState({stylenolists:[],styleno:[],});
+            api.get('TNAMaster/GetStyleForTNABuyer?BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&year='+this.state.year[0].value)
+            .then((response) => {
+                let datas = response.data.data;
+                this.setState({stylenolists:datas});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+     }
 
     stylenochange(){
         
@@ -526,7 +541,7 @@ import Select1 from "react-dropdown-select";
         
         if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 ){
             this.setState({baseStyleno:'',fabricDesc:'',fabricType:''});
-            api.get('TNAMaster/GetExistChkForTNABuyerDiv?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value)
+            api.get('TNAMaster/GetExistChkForTNABuyer?Buyer='+this.state.buyer[0].value)
             .then((response) => {
                 let datas = response.data.data;
                 this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType});
@@ -560,6 +575,28 @@ import Select1 from "react-dropdown-select";
 
         // fields['buyer'] = val.buyer[0].value;        
         // this.setState({fields});
+
+                  
+    }
+
+    getBuyerDivision2(val,field,e){
+        let fields = this.state.fields;
+        this.setState({ filterbuyerdivlists: [],filterbuyerdiv:[]  });
+        if(val.filterbuyer.length!=0){
+            fields['filterbuyer'] = val.filterbuyer[0].value;        
+            this.setState({fields});
+
+            this.setState({ filterbuyer: val.filterbuyer });
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.filterbuyer[0].value)
+            .then((response) => {                
+                this.setState({ filterbuyerdivlists: response.data.result.data });
+            })        
+            .catch(error => {}) 
+            
+        } else{
+            fields['filterbuyer'] = '';        
+            this.setState({fields});
+        }
 
                   
     }
@@ -1058,6 +1095,13 @@ console.log(data,'datadatadata')
                buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
            }
 
+           const filterbuyerdivoptions = [];
+           for (const item of this.state.filterbuyerdivlists) {           
+               filterbuyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
+           }
+
+           
+
            const ordercategoryoptions = [];
            for (const item of this.state.ordercategorylists) {           
                ordercategoryoptions.push({value:item.code,label:item.codeDesc});
@@ -1086,9 +1130,14 @@ console.log(data,'datadatadata')
 
            const stylenooptions = [];
            for (const item of this.state.stylenolists) {           
-               stylenooptions.push({value:item.styleid,label:item.styleNo});
+               stylenooptions.push({value:item.masterStyle,label:item.masterStyle+'-'+item.refStyleNo});
            }
            
+
+           const filterstylenooptions = [];
+           for (const item of this.state.filterstylenolists) {           
+               filterstylenooptions.push({value:item.masterStyle,label:item.masterStyle+'-'+item.refStyleNo});
+           }
            const unitoptions = [];
            for (const item of this.state.unitlists) {           
                unitoptions.push({value:item.uCode,label:item.uName});
@@ -1096,7 +1145,7 @@ console.log(data,'datadatadata')
            
           return (
               
-             <RctCollapsibleCard heading="Product Development Buyer T&A">
+             <RctCollapsibleCard heading="">
                   <PageTitleBar title="Menu" match={this.props.match} />
                   <div >
                       
@@ -1365,7 +1414,7 @@ console.log(data,'datadatadata')
                 <Accordion className="border mb-15 mt-15">
                      <AccordionSummary expandIcon={<i className="zmdi zmdi-chevron-down"></i>}>
                          <div className="acc_title_font">
-                             <Typography>Master List </Typography>
+                             <Typography>Buyer T&A List </Typography>
                          </div>
                      </AccordionSummary>
                      <AccordionDetails>
@@ -1382,53 +1431,65 @@ console.log(data,'datadatadata')
    <div className="w-100 float-left">
                 <div className="row">
                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Buyer</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Buyer"
+                                                        options={buyeroptions}
+                                                        // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                        onChange={values => this.getBuyerDivision2({ filterbuyer:values },this,"filterbuyer")}
+                                                        placeholder="Buyer"
+                                                        values={this.state.filterbuyer}
+                                                        />
+                                                        <span className="error">{this.state.errors["filterbuyer"]}</span>
+                                                    </div>
                         </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Buyer div</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Buyer Division"
+                                                        options={filterbuyerdivoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('filterbuyerdiv')}
+                                                        placeholder="Buyer Division"
+                                                        values={this.state.filterbuyerdiv}
+                                                        />
+                                                        <span className="error">{this.state.errors["filterbuyerdiv"]}</span>
+                                                    </div>
                         </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Order Type</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
-                    
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Order Type"
+                                                        options={ordercategoryoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('filterordercategory')}
+                                                        placeholder="Order Type"
+                                                        values={this.state.filterordercategory}
+                                                        />
+                                                        <span className="error">{this.state.errors["filterordercategory"]}</span>
+                                                    </div>
 
+                        </div>    
 
+                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Style"
+                                                        options={filterstylenooptions}
+                                                        onChange={this.setstatevaluedropdownfunction('filterstyleno')}
+                                                        placeholder="Style"
+                                                        values={this.state.filterstyleno}
+                                                        />
+                                                        <span className="error">{this.state.errors["filterstyleno"]}</span>
+                                                    </div>
 
-
-
+                        </div>         
 
                     </div>
                     </div>

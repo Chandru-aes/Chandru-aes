@@ -100,6 +100,7 @@ import Select1 from "react-dropdown-select";
         checkedA: true,
         buyerlists:[],
         buyerdivlists:[],
+        filterbuyerdivlists:[],
         ordercategorylists:[],
         ordercategory:[],
         buyer:[],
@@ -135,7 +136,11 @@ import Select1 from "react-dropdown-select";
         filterbuyerdiv:[],
         overalllists:[],
         edit_add:false,
-        hid:0
+        hid:0,
+        actflag:false,
+        dcodeflag:false,
+        dactcodeflag:false,
+
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -330,6 +335,22 @@ import Select1 from "react-dropdown-select";
       setstatevaluefunction = name => event => {
          
 		this.setState({ [name]: event.target.value });
+
+        if(name=="days"){
+            if(!/^[0-9]+$/.test(event.target.value)){
+                if(event.target.value=="" || event.target.value==0){
+
+                } else{
+                    NotificationManager.error('Please only enter numeric characters (Allowed input:0-9)');
+                }
+                
+                this.setState({ [name]: 0 });                
+            } else{
+                this.setState({ [name]: event.target.value });
+            }
+            
+        }
+
 	};
 
 
@@ -347,6 +368,23 @@ import Select1 from "react-dropdown-select";
         }
         
 		this.setState({ [name]: event });
+        this.setState({ actflag: false,dcodeflag:false });
+        if(name=="activitytype"){            
+            if(event.length!=0){
+                if(event[0].value=="BUYER" || event[0].value=="BUYINT"){
+                    this.setState({ actflag: true });
+                } 
+                
+            } 
+        }
+
+        if(name=="DpndCode"){            
+            if(event.length!=0){
+                this.setState({ dcodeflag: true });                
+            } 
+        }
+
+        
 
         
 
@@ -393,7 +431,7 @@ import Select1 from "react-dropdown-select";
     
     getBuyerDivision2(val,field,e){
         let fields = this.state.fields;
-        this.setState({ buyerdivlists: [],filterbuyerdiv:[]  });
+        this.setState({ filterbuyerdivlists: [],filterbuyerdiv:[]  });
         if(val.filterbuyer.length!=0){
             fields['filterbuyer'] = val.filterbuyer[0].value;        
             this.setState({fields});
@@ -401,7 +439,7 @@ import Select1 from "react-dropdown-select";
             this.setState({ filterbuyer: val.filterbuyer });
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.filterbuyer[0].value)
             .then((response) => {                
-                this.setState({ buyerdivlists: response.data.result.data });
+                this.setState({ filterbuyerdivlists: response.data.result.data });
             })        
             .catch(error => {}) 
             
@@ -452,9 +490,11 @@ import Select1 from "react-dropdown-select";
     }
 
     getDpndOnSubAct(val,field,e){
+        this.setState({ dactcodeflag: false });
         let fields = this.state.fields;
         this.setState({ DpndOnSubActlists: [],DpndOnSubAct:[]  });
         if(val.DpndOnAct.length!=0){
+            this.setState({ dactcodeflag: true });
             fields['DpndOnAct'] = val.DpndOnAct[0].value;        
             this.setState({fields});
 
@@ -670,11 +710,39 @@ import Select1 from "react-dropdown-select";
               DpndCode=this.state.DpndCode[0].value;
               DpndCodelabel=this.state.DpndCode[0].label;
           }
+
+
+          let activitytype="";
+          
+          if(this.state.activitytype.length>0){
+              activitytype=this.state.activitytype[0].value;
+          }
+
+          let department="";
+          
+          if(this.state.department.length>0){
+              department=this.state.department[0].value;
+          }
+
+          let stage="";
+          
+          if(this.state.stage.length>0){
+              stage=this.state.stage[0].value;
+          }
+
+          let fit="";
+          let fitlabel="";
+          if(this.state.fit.length>0){
+              fit=this.state.fit[0].value;
+              fitlabel=this.state.fit[0].label;
+          }
+
+
           let id=0;
           if(this.state.edit_add!=false){
             id=this.state.hid;
           } 
-          if(this.state.buyer.length>0 && this.state.stage.length>0 && this.state.fit.length>0){
+          if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.ordercategory.length>0){
             let data =  {
                 "id": id,
                 "buyCode": this.state.buyer[0].value,
@@ -682,11 +750,11 @@ import Select1 from "react-dropdown-select";
                 "buydivCode": this.state.buyerdiv[0].value,
                 "buydivName": this.state.buyerdiv[0].label,
                 "orderCategory": this.state.ordercategory[0].value,
-                "deptcode": this.state.department[0].value,
-                "stage": this.state.stage[0].value,
-                "activityType": this.state.activitytype[0].value,
-                "fit": this.state.fit[0].value,
-                "fitName": this.state.fit[0].label,
+                "deptcode": department,
+                "stage": stage,
+                "activityType": activitytype,
+                "fit": fit,
+                "fitName": fitlabel,
                 "actCode": 0,
                 "activity": this.state.activity,
                 "subActivity": this.state.subactivity,
@@ -804,7 +872,7 @@ console.log(data,'datadatadata')
     }
 
      render() {
-         const { employeePayroll,tamasteraddmoredata } = this.state;
+         const { employeePayroll,tamasteraddmoredata,actflag,dactcodeflag,dcodeflag } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -838,10 +906,16 @@ console.log(data,'datadatadata')
            for (const item of this.state.buyerlists) {           
                buyeroptions.push({value:item.buyerCode,label:item.buyerName});
            }
-
+           
            const buyerdivoptions = [];
            for (const item of this.state.buyerdivlists) {           
                buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
+           }
+
+
+           const filterbuyerdivoptions = [];
+           for (const item of this.state.filterbuyerdivlists) {           
+            filterbuyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
            }
 
            const DpndOnActoptions = [];
@@ -1095,6 +1169,7 @@ console.log(data,'datadatadata')
                                   dropdownPosition="auto"
                                   //   multi
                                   createNewLabel="Fit"
+                                  disabled={actflag}
                                   options={fitoptions}
                                   onChange={this.setstatevaluedropdownfunction('fit')}
                                   placeholder="Fit"
@@ -1112,14 +1187,14 @@ console.log(data,'datadatadata')
 
   <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 <div className="form-group">
-<TextField id="subactivity" value={this.state.subactivity}  onChange={this.setstatevaluefunction('subactivity')} fullWidth label="Sub Activity" placeholder="Sub Activity"/>
+<TextField id="subactivity" value={this.state.subactivity} disabled={actflag} onChange={this.setstatevaluefunction('subactivity')} fullWidth label="Sub Activity" placeholder="Sub Activity"/>
    {/* <TextField id="Buyer" fullWidth label="Sub activity" placeholder="Sub activity"/> */}
                               </div>
   </div>
 
   <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 <div className="form-group">
-<TextField id="days" value={this.state.days}  onChange={this.setstatevaluefunction('days')} fullWidth label="Days" placeholder="Days"/>
+<TextField id="days" value={this.state.days} onChange={this.setstatevaluefunction('days')} fullWidth label="Days" placeholder="Days"/>
    {/* <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/> */}
                               </div>
   </div>
@@ -1129,6 +1204,7 @@ console.log(data,'datadatadata')
                               <Select1
                                   dropdownPosition="auto"
                                   //   multi
+                                  
                                   createNewLabel="DpndCode"
                                   options={DpndCodeoptions}
                                   onChange={this.setstatevaluedropdownfunction('DpndCode')}
@@ -1147,6 +1223,7 @@ console.log(data,'datadatadata')
                               <Select1
                                   dropdownPosition="auto"
                                   //   multi
+                                  disabled={dcodeflag}
                                   createNewLabel="DpndDept"
                                   options={departmentoptions}
                                   // onChange={this.setstatevaluedropdownfunction('DpndDept')}
@@ -1181,6 +1258,7 @@ console.log(data,'datadatadata')
                               <Select1
                                   dropdownPosition="auto"
                                   //   multi
+                                  disabled={dactcodeflag}
                                   createNewLabel="DpndOnS.Act"
                                   options={DpndOnSubActoptions}
                                   onChange={this.setstatevaluedropdownfunction('DpndOnSubAct')}
@@ -1352,7 +1430,7 @@ console.log(data,'datadatadata')
                                                         dropdownPosition="auto"
                                                         //   multi
                                                         createNewLabel="Buyer Division"
-                                                        options={buyerdivoptions}
+                                                        options={filterbuyerdivoptions}
                                                         onChange={this.setstatevaluedropdownfunction('filterbuyerdiv')}
                                                         placeholder="Buyer Division"
                                                         values={this.state.filterbuyerdiv}

@@ -920,7 +920,7 @@ console.log(data,'datadatadata')
 
            const buyeroptions = [];
            for (const item of this.state.buyerlists) {           
-               buyeroptions.push({value:item.buyerCode,label:item.buyerName});
+               buyeroptions.push({value:item.buyerCode,label:item.buyerCode+'-'+item.buyerName});
            }
 
            const buyerdivoptions = [];
