@@ -490,6 +490,23 @@ import Select1 from "react-dropdown-select";
 
 	};
 
+    getalldata(){
+        this.setState({overalllists:[]});
+        if(this.state.filterbuyer.length>0 && this.state.filterbuyerdiv.length>0 && this.state.filterordercategory.length>0 && this.state.filterstyleno.length>0){
+
+            api.get('TNAMaster/GetBuyerTNAList?Buyer='+this.state.filterbuyer[0].value+'&BuyerDiv='+this.state.filterbuyerdiv[0].value+'&Ocategory='+this.state.filterordercategory[0].value+'&Style='+this.state.filterstyleno[0].value)
+                .then((response) => {
+                    let datas = response.data.data;
+                    this.setState({overalllists:datas});
+                })
+                .catch(error => {
+                    // error handling
+                })
+        } else{
+            NotificationManager.error('All fields are required');
+        }
+    }
+
     getfilterstyleno(){
         
         if(this.state.filterbuyer.length>0 && this.state.filterbuyerdiv.length>0 && this.state.filterordercategory.length>0){
@@ -1141,6 +1158,31 @@ console.log(data,'datadatadata')
            for (const item of this.state.unitlists) {           
                unitoptions.push({value:item.uCode,label:item.uName});
            }
+
+
+           let overalllistshtml = null;
+        if(this.state.overalllists.length>0){
+            overalllistshtml= this.state.overalllists.map((n,index) => {                                    
+            return (
+                <tr>
+                                     <td className="text-center">
+                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
+                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.edittnamaster(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
+
+                                         <td>{n.buyName} </td>
+                                         <td>{n.divname} </td>
+                                         <td>{n.orderType} </td>
+                                         <td>{n.refStyleNo}</td>
+                                         <td></td>
+                                         
+                                         
+                                        
+                                     </tr>
+            );
+        }) }else{
+            overalllistshtml = <tr><td colSpan="6" className="no-records-data"><span>No records found</span></td></tr> ;
+        }
+
            
           return (
               
@@ -1448,7 +1490,7 @@ console.log(data,'datadatadata')
                      <div className="float-right pr-0 but-tp">
   
 
-  <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
+  <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.getalldata()} ><span className="MuiButton-label">Search <i className="zmdi zmdi-search"></i></span><span className="MuiTouchRipple-root"></span></button>
   
  
 </div>  
@@ -1539,76 +1581,9 @@ console.log(data,'datadatadata')
                                      </tr>
                                  </thead>
                                  <tbody>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
-                                     <tr>
-                                     <td className="text-center">
-                                          <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button> 
-                                     <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) =>this.editMenu(n.menuId)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
-
-                                         <td>Demo </td>
-                                         <td>b1 </td>
-                                         <td>bd1 </td>
-                                         <td>type1 </td>
-                                         <td> </td>
-                                         <td> </td>
-                                         
-                                        
-                                     </tr>
+                                 { overalllistshtml &&
+                             overalllistshtml}
+                            
                                  </tbody>
                                  
                                  </table>
