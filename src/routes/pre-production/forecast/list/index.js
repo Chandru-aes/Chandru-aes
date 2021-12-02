@@ -116,6 +116,10 @@ class PreprodcutionTable extends Component {
 
     handleChangesingledropdown = name => event => {
         this.setState({ [name]: event.target.value });
+        let fields = this.state.fields;
+        fields['activityName'] = event.target.value;
+        this.setState({fields});
+
     };
 
     getForecastdetail(ForecastId){
@@ -657,6 +661,24 @@ class PreprodcutionTable extends Component {
         //   }
 
     }
+
+    setstatevaluefunction = name => event => {
+
+        let fields = this.state.fields;
+        fields[name] = event.target.value;
+        this.setState({fields});
+        this.setState({ [name]: event.target.value });
+
+        if(name=="activityName" || name=="fabdesc" || name=="refstyleno"){
+            if(!event.target.value.match(/^[a-zA-Z0-9]+$/)){
+                NotificationManager.error('Input is not alphanumeric');
+            }
+        }
+
+
+    };
+
+
     handleValidation(){
         let fields = this.state.fields;
         let errors = {};
@@ -687,6 +709,13 @@ class PreprodcutionTable extends Component {
             formIsValid = false;
             errors["year"] = "Cannot be empty";
         }
+        if(typeof fields["activityName"] !== "undefined"){
+            if(!fields["activityName"].match(/^[a-zA-Z0-9]+$/)){
+                formIsValid = false;
+                errors["activityName"] = "Input is not alphanumeric";
+            }
+        }
+
 
 
         this.setState({errors: errors});
@@ -894,7 +923,7 @@ class PreprodcutionTable extends Component {
                                                             <Lookup dataSource={this.getSubproductType} valueExpr="subProductType" displayExpr="subProductType" />
                                                             <RequiredRule />
                                                         </Column>
-                                                        <Column dataField="avgSAM" width={110} caption="AVG SAM">
+                                                        <Column dataField="avgSAM" width={110} caption="AVG SAM" allowEditing={false}>
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="pcd" dataType="date" >
@@ -961,7 +990,10 @@ class PreprodcutionTable extends Component {
                                             <div className="row mt-15 new-form">
                                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                     <div className="form-group">
-                                                        <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.handleChangesingledropdown('activityName')}/>
+                                                        <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.
+                                                        ('activityName')}/>
+                                                        <span className="error">{this.state.errors["activityName"]}</span>
+
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1128,6 +1160,7 @@ class PreprodcutionTable extends Component {
                                         <th className="">Projection Qty</th>
                                         <th className="">Confirmed Qty</th>
                                         <th className="">Activity</th>
+                                        <th className="">Forecast Type</th>
                                         </thead>
                                         <tbody>
                                         {this.state.forecastinglists.map((n,index) => {
@@ -1149,10 +1182,19 @@ class PreprodcutionTable extends Component {
                                                     <td>{n.seasonCode}</td>
                                                     <td>{n.seasonYear}</td>
                                                     <td>{n.loccode}</td>
-                                                    <td>{n.loccode}</td>
-                                                    <td>{n.loccode}</td>
-                                                    <td>{n.loccode}</td>
-                                                    <td>{n.loccode}</td>
+                                                    <td>{n.forecastQty}</td>
+                                                    <td>{n.projectionQty}</td>
+                                                    <td>{n.confirmedQty}</td>
+                                                    <td>{n.activity}</td>
+                                                    {
+                                                        n.fCtype==='ANNUAL' &&
+                                                        <td className="greencolor">{n.fCtype}</td>
+                                                    }
+                                                    {
+                                                        n.fCtype==='SEASONAL' &&
+                                                        <td className="yellowcolor">{n.fCtype}</td>
+                                                    }
+
                                                 </tr>
                                             );
                                         })}
