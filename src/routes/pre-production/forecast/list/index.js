@@ -990,8 +990,7 @@ class PreprodcutionTable extends Component {
                                             <div className="row mt-15 new-form">
                                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                     <div className="form-group">
-                                                        <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.
-                                                        ('activityName')}/>
+                                                        <TextField id="ActivityName" fullWidth label="Activity Name" placeholder="Activity Name"  value={this.state.activityName}  onChange={this.setstatevaluefunction('activityName')}/>
                                                         <span className="error">{this.state.errors["activityName"]}</span>
 
                                                     </div>
