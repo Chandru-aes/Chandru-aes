@@ -48,7 +48,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import {AccordionInput} from "../../../../helpers/helpers";
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Select1 from "react-dropdown-select";
@@ -95,7 +95,7 @@ import Select1 from "react-dropdown-select";
         cloneopen: false,
         ropen: false,
         tpopen: false,
-        selectedDate: moment(),
+        selectedDate: moment().format('YYYY-MM-DD'),
         addNewUserModal: false,
         checkedA: true,
 
@@ -444,7 +444,6 @@ import Select1 from "react-dropdown-select";
          
 		this.setState({ [name]: event.target.value });
 	};
-
 
 
       setstatevaluedropdownfunction = name => event => {
@@ -1286,10 +1285,38 @@ console.log(data,'datadatadata')
                         <TextField id="Buyer" fullWidth label="Option" placeholder="Option"/>
                         </div>
                                             </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                            <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
-                        </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 pl-0 f-w-date">
+                                            {/* <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date"> */}
+                                                <div className="row">
+                                               <AccordionInput>
+                                                        <Fragment>
+                                                            <div className="rct-picker">
+                                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                                    <KeyboardDatePicker
+                                                                        disablePast={true}
+                                                                        // minDate={pcd}
+                                                                        disableToolbar
+                                                                        variant="inline"
+                                                                        format="MM/dd/yyyy"
+                                                                        margin="normal"
+                                                                        id="date-picker-inline"
+                                                                        KeyboardButtonProps={{
+                                                                            'aria-label': 'Date',
+                                                                        }}
+                                                                        label="Date"
+                                                                        value={selectedDate}
+                                                                        onChange={this.handleDateChange}
+                                                                        animateYearScrolling={false}
+                                                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                                        fullWidth
+                                                                    />
+                                                                </MuiPickersUtilsProvider>
+                                                            </div>
+                                                        </Fragment>
+                                                    </AccordionInput>
+                                              </div>
+                                              {/* </div> */}
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">

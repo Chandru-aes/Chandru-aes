@@ -140,6 +140,9 @@ import Select1 from "react-dropdown-select";
         actflag:false,
         dcodeflag:false,
         dactcodeflag:false,
+        mactiveflag :"Y",
+        alowskipflag:"N",
+        activeflag:"Y"
 
      }
      onAddUpdateUserModalClose() {
@@ -634,6 +637,30 @@ import Select1 from "react-dropdown-select";
         this.setState({ [name]: checked });
     };
    
+    mactiveChangecheckbox(event) {
+        if(this.state.mactiveflag=="Y"){
+            this.setState({ mactiveflag:"N" });
+        }else{
+            this.setState({ mactiveflag:"Y" });
+        }
+    }
+
+    alowskipChangecheckbox(event) {
+        if(this.state.alowskipflag=="Y"){
+            this.setState({ alowskipflag:"N" });
+        }else{
+            this.setState({ alowskipflag:"Y" });
+        }
+    }
+
+    activeChangecheckbox(event) {
+        if(this.state.activeflag=="Y"){
+            this.setState({ activeflag:"N" });
+        }else{
+            this.setState({ activeflag:"Y" });
+        }
+    }
+    
     handleClickOpen = () => {
         this.setState({ open: true });
      };
@@ -771,12 +798,12 @@ import Select1 from "react-dropdown-select";
                 "dependSubActvityName": DpndOnSubActlabel,
                 "category": category,
                 "valueAddtype": valueadd,
-                "skipped": "N",
-                "active": "Y",
+                "skipped": this.state.alowskipflag,
+                "active": this.state.activeflag,
                 "createdBy": "string",
                 "modifyBy": "string",
                 "hostname": "string",
-                "mActive": "Y"
+                "mActive": this.state.mactiveflag
               }
                 tamasteraddmoredata.push(data);
                 this.setState({tamasteraddmoredata:tamasteraddmoredata});
@@ -872,7 +899,7 @@ console.log(data,'datadatadata')
     }
 
      render() {
-         const { employeePayroll,tamasteraddmoredata,actflag,dactcodeflag,dcodeflag } = this.state;
+         const { employeePayroll,tamasteraddmoredata,actflag,dactcodeflag,dcodeflag ,mactiveflag,alowskipflag,activeflag} = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -1130,7 +1157,20 @@ console.log(data,'datadatadata')
 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
 
       <div className="w-100 pt-10">
-      <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} checked />} label="M.Active" />
+      {(() => {
+
+if (mactiveflag == 'Y') {
+return (   <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.mactiveChangecheckbox(e)} checked />} label="M.Active" />
+
+)
+}
+if (mactiveflag != 'Y') {
+    return (
+      <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.mactiveChangecheckbox(e)} />} label="M.Active" />
+    )
+    }
+})()}
+      {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} checked />} label="M.Active" /> */}
       </div>
 </div>
 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -1304,14 +1344,38 @@ console.log(data,'datadatadata')
 
 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 <div className="w-100 pt-10">
-      <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)}  />} label="AlowSkip" />
+{(() => {
+
+if (alowskipflag == 'Y') {
+return (<FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.alowskipChangecheckbox(e)} checked />} label="AlowSkip" />)
+}
+if (alowskipflag != 'Y') {
+    return (
+      <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.alowskipChangecheckbox(e)} />} label="AlowSkip" />
+    )
+    }
+})()}
+      {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)}  />} label="AlowSkip" /> */}
       </div>
 
 </div>
 
 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 <div className="w-100 pt-10">
-      <FormControlLabel control={<Checkbox color="primary" value="Sample"  onClick={(e) =>this.handleChangecheckbox(n,index)} checked />} label="Active" />
+{(() => {
+
+if (mactiveflag == 'Y') {
+return (   <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.activeChangecheckbox(e)} checked />} label="Active" />
+
+)
+}
+if (mactiveflag != 'Y') {
+    return (
+      <FormControlLabel control={<Checkbox color="primary" onClick={(e) =>this.activeChangecheckbox(e)} />} label="Active" />
+    )
+    }
+})()}
+
       </div>
 
 
@@ -1363,7 +1427,7 @@ console.log(data,'datadatadata')
            
            </table>
            <div className="clearfix"></div>
-           <div className="w-50 float-right">
+           {/* <div className="w-50 float-right">
            <div className="w-25 float-left">
            <label className="mt-5">Rows per page: </label>
 </div>
@@ -1381,7 +1445,7 @@ console.log(data,'datadatadata')
   <div className="w-30 float-left">
   <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
   <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-  </div></div>
+  </div></div> */}
        </div> 
 
 </div>

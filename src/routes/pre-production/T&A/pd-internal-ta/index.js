@@ -1854,7 +1854,7 @@ console.log(data,'datadatadata')
                                  
                                  </table>
                                  <div className="clearfix"></div>
-                                 <div className="w-50 float-right">
+                                 {/* <div className="w-50 float-right">
                                  <div className="w-25 float-left">
                                  <label className="mt-5">Rows per page: </label>
                     </div>
@@ -1872,7 +1872,7 @@ console.log(data,'datadatadata')
                         <div className="w-30 float-left">
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
                         <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
-                        </div></div>
+                        </div></div> */}
                              </div> 
                             
 
