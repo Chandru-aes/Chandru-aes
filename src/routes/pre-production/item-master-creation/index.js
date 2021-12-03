@@ -148,7 +148,6 @@ const ItemMasterCreation = ({ match }) => {
 
     const deleteItemList = async () => {
         await getCurrentData(deleteId, true);
-        await onFormSubmit(editData, {})
         popupRef.current.close();
     }
 
@@ -227,8 +226,10 @@ const ItemMasterCreation = ({ match }) => {
                 if (!isDelete){
                     setInitialValues(data)
                     setIsUpdate(true)
-                } else
+                } else{
                     setIsDelete(true)
+                    onFormSubmit(editData, {}, true)
+                }
 
                 checkMaterialTypeOnEdit(values.materialType)
                 if(values.purchaseData && values.purchaseData.length > 0)
@@ -386,18 +387,18 @@ const ItemMasterCreation = ({ match }) => {
         return isValid;
     }
 
-    const onFormSubmit = (values, resetForm) => {
+    const onFormSubmit = (values, resetForm, deleteFlag=false) => {
         const isFormCheck = checkFormRequiredFields(values)
         if (isFormCheck) {
-            const payload = constructFormValues(values, purchaseRecord, isDelete);
+            const payload = constructFormValues(values, purchaseRecord, deleteFlag);
             postApiCall(
                 API_URLS.ITEM_CREATION,
                 payload
             ).then((r) => {
                 if (r){
                     if(r.data.messageCode === '200'){
-                        NotificationManager.success(`${isDelete ? 'Deleted' : 'Saved'} Successfully`);
-                        if(!isDelete)
+                        NotificationManager.success(`${deleteFlag ? 'Deleted' : 'Saved'} Successfully`);
+                        if(!deleteFlag)
                             resetForm();
                         GetItemList();
                         setIsUpdate(false)

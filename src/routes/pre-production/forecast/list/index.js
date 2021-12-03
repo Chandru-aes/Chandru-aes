@@ -604,7 +604,7 @@ class PreprodcutionTable extends Component {
             this.setState({fields});
             console.log(val.BuyerValue)
             this.setState({ BuyerValue: val.BuyerValue });
-            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
+            api.get('BuyerDivision/GetBuyerDivisionDropDown?BuyerID='+val.BuyerValue[0].value)
                 .then((response) => {
                     this.setState({
                         BuyerdivisionValue: [],
