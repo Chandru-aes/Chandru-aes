@@ -951,7 +951,7 @@ class PreprodcutionTable extends Component {
                                                                 allowEditing={false}
                                                         >
                                                         </Column>
-                                                        <Column dataField="pcd" dataType="date" >
+                                                        <Column dataField="PCD" dataType="date" >
                                                             <RangeRule message="Past dates cannot be allowed" min={new Date()} />
                                                             <CustomRule
                                                                 type="custom"
