@@ -188,7 +188,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
        
         this.setState({RequestListData:RequestListData}) 
 
-        console.log
+        console.log(this.state.RequestListData)
     }
     setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
@@ -571,44 +571,39 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                                                 <Button variant="contained" className="btn-success text-white btn-block" onClick={() => this.addGridItems()}>Add +</Button>
                                             </div>
                                         </div>
-                                        <table className="table">
-                                            <tbody>
-                                                {
-                                                    this.state.tableheaderitems.map((n,index) => {
-                                                        return(
-                                                        <tr>                                                    
-                                                            <th className="w-20">{this.state.tableheaderitems[index]}</th>                                                            
-                                                         </tr>
+                                        <div className="w-100 float-left">
+                                            <div className="w-20 float-left">
+                                                <table className="table mt-10 data w-100 float-left la-fix" >
+                                                    <thead>
+                                                        {
+                                                            this.state.tableheaderitems.map((n,index) => {
+                                                                return(
+                                                            <tr> <th className="">{this.state.tableheaderitems[index]}</th></tr>
                                                         )
-                                                    })
-                                                }
-                                                {                        
-                                                this.state.RequestListData.map((nd,index1) => {     
-                                                    return ( 
-                                                        <span>                             
-                                                            <tr>
-                                                                <td>{nd.SAM}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>{nd.OQ}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>{nd.NoOfLines}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>{nd.Operator}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>{nd.days}</td>
-                                                            </tr>
-                                                        </span>
-                                                    )
-                                                }) 
-                                            } 
-                                                        
-                                                
-                                            </tbody>
-                                        </table> 
+                                                            })
+                                                        }
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <div className="w-80 float-left">
+                                                <table className="table mt-10 data w-100 float-left la-fix" >
+                                                    <tbody>
+                                                        {                        
+                                                            this.state.RequestListData.map((nd,index1) => {     
+                                                            return ( 
+                                                                <span>
+                                                                <tr> <td>{this.state.RequestListData[index1]['SAM']}</td></tr>
+                                                                <tr> <td>{this.state.RequestListData[index1]['OQ']}</td></tr>
+                                                                <tr> <td>{this.state.RequestListData[index1]['NoOfLines']}</td></tr>
+                                                                <tr> <td>{this.state.RequestListData[index1]['Operator']}</td></tr>
+                                                                </span>
+                                                                )
+                                                            }) 
+                                                        } 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </AccordionDetails>
                             </Accordion>

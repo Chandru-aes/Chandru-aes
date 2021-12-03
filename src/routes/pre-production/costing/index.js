@@ -82,10 +82,13 @@ import Select1 from "react-dropdown-select";
          fields: {},
          errors: {},  
          BuyerList:[],
+         MaterialTypeList:[],
          BuyerDivisionList:[],
          seasonlists:[],
          yearlists:[],
+         purposeList:[],
          stylenolist:[],
+         BuyerTNAlist:[],
          open: false,
          IsMarker:false,
          IsProductivityModal:false,
@@ -93,7 +96,11 @@ import Select1 from "react-dropdown-select";
          IsAttachmentModal:false,
          IsMaterialUnitPrice:false,
          MaterialTempRowData:[],
-         activeIndex: 0
+         markerReferenceLists:[],
+         activeIndex: 0,
+         markerversionSelected:false,
+         selectedMarker:'',
+         styleDescription:''
 
      }
      constructor(props) {
@@ -110,7 +117,10 @@ import Select1 from "react-dropdown-select";
          };
        // this.state = { employees: service.getEmployees() };
        // this.states = service.getStates();
-      
+       this.getReferenceVersion = this.getReferenceVersion.bind(this);
+       this.GetMarkerRefernceversion= this.GetMarkerRefernceversion.bind(this);
+       this.getProductivityitem = this.getProductivityitem.bind(this);
+       this.showMarkerversion = this.showMarkerversion.bind(this);
      }
      handleChangeIndex(index) {
         this.setState({ activeIndex: index });
@@ -126,6 +136,11 @@ import Select1 from "react-dropdown-select";
             this.setState({ BuyerList: response.data.result.data });
         }) 
 
+        api.get('Buyer/GetBuyerDropDown')
+        .then((response) => {                
+            this.setState({ MaterialTypeList: response.data.result.data });
+        })
+        
         api.get('SeasonMaster/GetSeasonList')
         .then((response) => {
             
@@ -137,6 +152,11 @@ import Select1 from "react-dropdown-select";
             
             this.setState({ yearlists: response.data.result.data });
         })
+
+        api.get('Purpose/GetPurposeDropDown').then((response) => {
+            
+            this.setState({ purposeList: response.data.result.data });
+        })
      }
     
      rhandleClickOpen = () => {
@@ -147,11 +167,25 @@ import Select1 from "react-dropdown-select";
      };
      getBuyerDivision1(val,field,e){
         let fields = this.state.fields;
+        
         fields['buyername'] = val.BuyerValue[0].value;        
         this.setState({fields});
-
-        this.setState({ BuyerValue: val.BuyerValue });
+        this.setState({ BuyerValue: val.BuyerValue,RVbuyer : val.BuyerValue,MVbuyer: val.BuyerValue,PVbuyer: val.BuyerValue });
+        // this.setState({RVbuyer : val.BuyerValue });
         api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
+        .then((response) => {                
+            this.setState({ BuyerDivisionList: response.data.result.data });
+        })        
+        .catch(error => {})           
+    }
+    getMVBuyerDivisionList(val,field,e){
+        let fields = this.state.fields;
+        
+        fields['buyername'] = val.MVbuyer[0].value;        
+        // this.setState({fields});
+        // this.setState({ BuyerValue: val.BuyerValue,RVbuyer : val.BuyerValue,MVbuyer: val.BuyerValue });
+        // this.setState({RVbuyer : val.BuyerValue });
+        api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.MVbuyer[0].value)
         .then((response) => {                
             this.setState({ BuyerDivisionList: response.data.result.data });
         })        
@@ -161,7 +195,28 @@ import Select1 from "react-dropdown-select";
         let fields = this.state.fields;
         fields[name] = event[0].value;        
         this.setState({fields});
+        if(name=='BuyerdivisionValue'){
+            this.setState({ RVbuyerdiv : event,RVbuyerdiv:event });
+            this.setState({ MVbuyerdiv : event,RVbuyerdiv:event });
+            this.setState({PVbuyerdiv:event });
+        }
+        if(name=='season'){
+            this.setState({ RVseason : event,MVseason:event });
+            this.setState({ PVseason : event});
+        }
+        if(name=='year'){
+            this.setState({ RVyear : event,MVyear : event,PVyear : event });
+        }
+        if(name=='styleno'){
+            this.setState({ RVstyleno : event,MVstyleno : event,PVstyleno : event });
+            console.log(event[0].value)
+            api.get('Costing/GetReadStyleNo?Masterstyleid='+event[0].value)
+            .then((response) => {                
+                this.setState({ styleNodetails: response.data.data,styleDescription: response.data.data[0].styleDesc});
+            }) 
+        }
         
+       
         setTimeout(() => {
             this.getStyleList();
         }, 100);
@@ -172,12 +227,21 @@ import Select1 from "react-dropdown-select";
 
     getStyleList(){
         if(this.state.BuyerValue && this.state.BuyerdivisionValue && this.state.year){
-            api.get('ProductivityRequest/GetStyleNoDropDown?BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+            api.get('ProductivityRequest/GetStyleNoDropDown?Buyer='+this.state.BuyerValue[0].value+'&BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
             .then((response) => {                
                 this.setState({ stylenolist: response.data.data });
             })        
             .catch(error => {})  
+            if(this.state.styleno){
+                api.get('TNAMaster/GetBuyerTNADropDown?Buyer='+this.state.BuyerValue[0].value+'&BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value+'&Style='+this.state.styleno[0].value)
+                .then((response) => {                
+                    this.setState({ BuyerTNAlist: response.data.data });
+                })        
+                .catch(error => {})  
+            }
         }
+
+        
     }
     handleChangeTextField = name => event => {
         
@@ -235,6 +299,41 @@ import Select1 from "react-dropdown-select";
         this.setState({fields});
         this.setState({ [name]: event.target.value });     
 	};
+
+    getReferenceVersion(){
+        if(this.state.RVbuyer && this.state.RVbuyerdiv && this.state.RVseason && this.state.RVyear){
+            api.get('Costing/GetReferenceversion?Buyer='+this.state.RVbuyerdiv[0].value+'&BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.RVseason[0].value+'&SeasonYear='+this.state.RVyear[0].value)
+            .then((response) => {                
+                //this.setState({ stylenolist: response.data.data });
+            })        
+            .catch(error => {})  
+        }
+    }
+    GetMarkerRefernceversion(){
+        if(this.state.RVbuyer && this.state.RVbuyerdiv && this.state.RVseason && this.state.RVyear){
+            api.get('Costing/GetMarkerversion?Buyer='+this.state.RVbuyerdiv[0].value+'&BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.RVseason[0].value+'&SeasonYear='+this.state.RVyear[0].value)
+            .then((response) => {  
+                this.setState({ markerReferenceLists: response.data.data });              
+                //this.setState({ stylenolist: response.data.data });
+            })        
+            .catch(error => {})  
+        }
+    }
+    getProductivityitem(){
+        if(this.state.PVbuyer && this.state.PVbuyerdiv && this.state.PVseason && this.state.PVyear){
+            api.get('Costing/GetProductivityDocumentNo?Buyer='+this.state.PVbuyer[0].value+'&BuyDivCode='+this.state.PVbuyerdiv[0].value+'&Seasoncode='+this.state.PVseason[0].value+'&SeasonYear='+this.state.PVyear[0].value+'&Styleno='+this.state.PVstyleno[0].value)
+            .then((response) => {  
+               // this.setState({ markerReferenceLists: response.data.data });              
+                //this.setState({ stylenolist: response.data.data });
+            })        
+            .catch(error => {})  
+        }
+    }
+    showMarkerversion(value){
+        this.markerversionSelected = true;
+        this.setState({selectedMarker:value});
+        this.CloseMarkerRefernceversion();
+    }
      render() {
         const { theme, listData, transferreport, expenseCategory } = this.props;
         const config = this.componentConfig;
@@ -249,6 +348,11 @@ import Select1 from "react-dropdown-select";
         const BuyerOptions =[];
          for (const item of this.state.BuyerList) {           
              BuyerOptions.push({value:item.buyerCode,label:item.buyerName});
+         }
+
+         const MaterialTypeOptions =[];
+         for (const item of this.state.MaterialTypeList) {           
+            MaterialTypeOptions.push({value:item.buyerCode,label:item.buyerName});
          }
 
          const BuyerDivisionOptions =[];
@@ -266,12 +370,36 @@ import Select1 from "react-dropdown-select";
              yearoptions.push({value:item.code,label:item.codeDesc});
          }
          
+         const Purposeoptions = [];
+         for (const item of this.state.purposeList) {           
+            Purposeoptions.push({value:item.parntslno,label:item.purpose});
+         }
          const styleNooptions = [];
          for (const item of this.state.stylenolist) {           
-             styleNooptions.push({value:item.id,label:item.refStyleNo});
+             styleNooptions.push({value:item.masterStyle,label:item.refStyleNo+'-'+item.masterStyle});
          }
 
+         const BuyerTNAoptions = [];
+         for (const item of this.state.BuyerTNAlist) {           
+            BuyerTNAoptions.push({value:item.id,label:item.refStyleNo});
+         }
+         
          const FreightModeoptions = [{value:'air',label:'Air'},{value:'sea',label:'Sea'},{value:'rail',label:'Rail'},{value:'road',label:'Road'}];
+
+          //console.log(this.state.overalllists)
+        let buyerrightlistshtml = null;
+        if(this.state.markerReferenceLists.length>0){
+            buyerrightlistshtml= this.state.markerReferenceLists.map((n,index) => {                                    
+            return (
+                <tr className="cursor-pointer">                                         
+                    <td onClick={(e) => this.showMarkerversion(n.masterStyle)}>{n.refStyleNo}</td>
+                    <td>{n.masterStyle}</td>                                           
+                </tr>
+            );
+        }) }else{
+            buyerrightlistshtml = <tr><td colSpan="2" className="no-records-data"><span>No records found</span></td></tr> ;
+        }
+        
          return (
            
             <div className="user-management">
@@ -359,10 +487,15 @@ import Select1 from "react-dropdown-select";
                                         <span className="error">{this.state.errors["styleno"]}</span>
                                 </div>
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <TextField id="Buyer" fullWidth label="Style Description" placeholder="Style Description"/>
+                                    <TextField id="Buyer" fullWidth label="Style Description" placeholder="Style Description" value={this.state.styleDescription} disabled/>
                                 </div>
-                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <TextField id="Buyer" fullWidth label="Purpose" placeholder="Purpose"/>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 mt-15">
+                                    <Select1 dropdownPosition="auto" createNewLabel="Purpose"  options={Purposeoptions}
+                                        // onChange={values => this.setState({ year:values })} 
+                                        onChange={this.setstatevaluedropdownfunction('purpose')}
+                                        placeholder="Purpose"
+                                        values={this.state.purpose} />
+                                        <span className="error">{this.state.errors["purpose"]}</span>
                                 </div>
                               <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                  <div className="w-100 float-left">
@@ -385,7 +518,7 @@ import Select1 from "react-dropdown-select";
 
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="form-group">
-                                        <TextField id="Buyer" fullWidth label="Date" placeholder="Date"/>
+                                        <TextField id="Buyer" fullWidth label="Date" placeholder="Date" disabled/>
                                     </div>
                                 </div>
 
@@ -393,7 +526,7 @@ import Select1 from "react-dropdown-select";
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="w-100 float-left">
                                         <div className="w-80 float-left">
-                                            <TextField id="markerVersion" fullWidth label="Marker Version & UOM" placeholder="Marker Version & UOM" disabled/>                                       
+                                            <TextField id="markerVersion" fullWidth label="Marker Version & UOM" placeholder="Marker Version & UOM" value={this.state.selectedMarker} disabled/>                                       
                                         </div> 
                                         <div className="w-20 float-left">
                                             <button className="float-right MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary  text-white btn-icon b-ic add mt-15" tabindex="0" type="button" onClick={this.openMarkerReferenceversion}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
@@ -404,7 +537,7 @@ import Select1 from "react-dropdown-select";
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                     <div className="w-100 float-left">
                                         <div className="w-80 float-left">
-                                            <TextField id="productivity" fullWidth label="Productivity" placeholder="Productivity" disabled/>                                       
+                                            <TextField id="productivity" fullWidth label="Productivity" placeholder="Productivity" />                                       
                                         </div> 
                                         <div className="w-20 float-left">
                                             <button className="float-right MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary  text-white btn-icon b-ic add mt-15" tabindex="0" type="button" onClick={this.openProductivityversion}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
@@ -445,11 +578,11 @@ import Select1 from "react-dropdown-select";
                                 </div>
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 mt-10">
                                     <div className="form-group ">
-                                        <Select1 dropdownPosition="auto" createNewLabel="Buyer T&A"  options={styleNooptions}
-                                        onChange={this.setstatevaluedropdownfunction('Currency')}
-                                        placeholder="Buyer T&A"
-                                        values={this.state.buyerta} />
-                                        <span className="error">{this.state.errors["buyerta"]}</span>
+                                        <Select1 dropdownPosition="auto" createNewLabel="Buyer TnA"  options={BuyerTNAoptions}
+                                        onChange={this.setstatevaluedropdownfunction('buyertna')}
+                                        placeholder="Buyer TNA"
+                                        values={this.state.buyertna} />
+                                        <span className="error">{this.state.errors["buyertna"]}</span>
                                     </div>
                                 </div>
                                
@@ -1103,7 +1236,7 @@ import Select1 from "react-dropdown-select";
         
                 {/* Reference Model version */}
                 <Dialog open={this.state.open} onClose={this.CloseRefernceversion} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Base Style</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Reference Version</DialogTitle>
                         <DialogContent>                                   
                             <div className="col border pb-15">                       
                                 <div className="row no-f-mb">
@@ -1114,9 +1247,9 @@ import Select1 from "react-dropdown-select";
                                                 //   multi
                                                 createNewLabel="Buyer"
                                                 options={BuyerOptions}
-                                                onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                onChange={this.setstatevaluedropdownfunction('RVbuyer')}
                                                 placeholder="Buyer"
-                                                values={this.state.buyer}
+                                                values={this.state.RVbuyer}
                                                 />
                                         </div>
                                     </div>
@@ -1129,7 +1262,7 @@ import Select1 from "react-dropdown-select";
                                             options={BuyerDivisionOptions}
                                             onChange={this.setstatevaluedropdownfunction('buyerdiv')}
                                             placeholder="Buyer Division"
-                                            values={this.state.buyerdiv}
+                                            values={this.state.RVbuyerdiv}
                                             />
                                         </div>
                                     </div>
@@ -1142,7 +1275,7 @@ import Select1 from "react-dropdown-select";
                                                 options={seasonoptions}
                                                 onChange={this.setstatevaluedropdownfunction('season')}
                                                 placeholder="Season"
-                                                values={this.state.season}
+                                                values={this.state.RVseason}
                                                 />                        
                                         </div>
                                     </div>
@@ -1154,33 +1287,48 @@ import Select1 from "react-dropdown-select";
                                             options={yearoptions}
                                             onChange={this.setstatevaluedropdownfunction('year')}
                                             placeholder="Year"
-                                            values={this.state.year}
+                                            values={this.state.RVyear}
                                             />
                                         </div>
                                     </div> 
                                     <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                        <div className="form-group">
-                                        <TextField id="designStyleNo" value={this.state.designStyleNo}   fullWidth label="Style No" placeholder="Style No"/>
+                                        <div className="form-group mt-15">
+                                            <Select1 dropdownPosition="auto" createNewLabel="Style No"  options={styleNooptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('styleno')}
+                                            placeholder="Style No"
+                                            values={this.state.RVstyleno} />
+                                            <span className="error">{this.state.errors["RVstyleno"]}</span>
                                         {/* <TextField id="Buyer" fullWidth label="Style No" placeholder="Style No"/> */}
                                         </div>
-                                    </div>                                             
+                                    </div> 
+                                    <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <div className="form-group mt-15">
+                                            <Button variant="contained" onClick={this.CloseRefernceversion} color="primary" className="text-white margin-rt">
+                                                Cancel
+                                            </Button>
+                                            <Button variant="contained" onClick={this.getReferenceVersion} className="btn-info text-white">
+                                                Ok
+                                            </Button>
+                                        </div>                                    
+                                    </div>                                            
                                 </div>
                             </div>
                         </DialogContent>
                         <DialogActions>
-                            <Button variant="contained" onClick={this.CloseRefernceversion} color="primary" className="text-white">
+                            {/* <Button variant="contained" onClick={this.CloseRefernceversion} color="primary" className="text-white">
                                 Cancel
                             </Button>
-                            <Button variant="contained" onClick={this.CloseRefernceversion} className="btn-info text-white">
+                            <Button variant="contained" onClick={this.getReferenceVersion} className="btn-info text-white">
                                 Ok
-                            </Button>
+                            </Button> */}
                         </DialogActions>
                 </Dialog>
                 {/* End Reference Model version */}
 
                 {/* Marker Model version */}
                 <Dialog open={this.state.IsMarker} onClose={this.CloseMarkerRefernceversion} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Base Style</DialogTitle>
+                <DialogTitle id="form-dialog-title">Marker version & UOM</DialogTitle>
                     <DialogContent>                                   
                         <div className="col border pb-15">                       
                             <div className="row no-f-mb">
@@ -1191,9 +1339,10 @@ import Select1 from "react-dropdown-select";
                                             //   multi
                                             createNewLabel="Buyer"
                                             options={BuyerOptions}
-                                            onChange={this.setstatevaluedropdownfunction('buyer')}
+                                           // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                            onChange={values => this.getMVBuyerDivisionList({ MVbuyer:values },this,"buyer")}
                                             placeholder="Buyer"
-                                            values={this.state.buyer}
+                                            values={this.state.MVbuyer}
                                             />
                                     </div>
                                 </div>
@@ -1204,9 +1353,10 @@ import Select1 from "react-dropdown-select";
                                         //   multi
                                         createNewLabel="Buyer Division"
                                         options={BuyerDivisionOptions}
+                                        // onChange={values => this.getBuyerDivision1({ MVbuyerdiv:values },this,"buyername")}
                                         onChange={this.setstatevaluedropdownfunction('buyerdiv')}
                                         placeholder="Buyer Division"
-                                        values={this.state.buyerdiv}
+                                        values={this.state.MVbuyerdiv}
                                         />
                                     </div>
                                 </div>
@@ -1219,7 +1369,7 @@ import Select1 from "react-dropdown-select";
                                             options={seasonoptions}
                                             onChange={this.setstatevaluedropdownfunction('season')}
                                             placeholder="Season"
-                                            values={this.state.season}
+                                            values={this.state.MVseason}
                                             />                        
                                     </div>
                                 </div>
@@ -1231,42 +1381,73 @@ import Select1 from "react-dropdown-select";
                                         options={yearoptions}
                                         onChange={this.setstatevaluedropdownfunction('year')}
                                         placeholder="Year"
-                                        values={this.state.year}
+                                        values={this.state.MVyear}
                                         />
                                     </div>
                                 </div> 
                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                    <TextField id="designStyleNo" value={this.state.designStyleNo}   fullWidth label="Style No" placeholder="Style No"/>
+                                    <div className="form-group mt-15">
+                                        <Select1 dropdownPosition="auto" createNewLabel="Style No"  options={styleNooptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('styleno')}
+                                            placeholder="Style No"
+                                            values={this.state.MVstyleno} />
+                                            <span className="error">{this.state.errors["MVstyleno"]}</span>
                                     </div>
                                 </div>    
                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                     <div className="form-group">
-                                    <TextField id="designStyleNo" value={this.state.fit}   fullWidth label="Fit" placeholder="Fit"/>
+                                    <TextField id="designStyleNo" value={this.state.MVfit}   fullWidth label="Fit" placeholder="Fit"/>
                                     </div>
                                 </div>  
                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                     <div className="form-group">
-                                    <TextField id="designStyleNo" value={this.state.purpose}   fullWidth label="Purpose" placeholder="Purpose"/>                                       
+                                    <TextField id="designStyleNo" value={this.state.MVpurpose}   fullWidth label="Purpose" placeholder="Purpose"/>                                       
                                     </div>
-                                </div>                                           
+                                </div> 
+                                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-15">
+                                    	<Button variant="contained" onClick={this.CloseMarkerRefernceversion} color="primary" className="text-white margin-rt">
+                                            Cancel
+                                        </Button>
+                                        <Button variant="contained" onClick={this.GetMarkerRefernceversion} className="btn-info text-white">
+                                            Ok
+                                        </Button>
+                                    </div>                                    
+                                </div>
+                                                   
                             </div>
-                        </div>
+                            <div className="table-responsive mt-20">  
+                                <table className="table mt-10 data w-100 float-left la-fix" >
+                                    <thead>
+                                        <tr>
+                                            
+                                            <th className="">Ref Style No</th>
+                                            <th className="">Master style</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    { buyerrightlistshtml &&
+                                    buyerrightlistshtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
                     </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" onClick={this.CloseMarkerRefernceversion} color="primary" className="text-white">
+                        {/* <Button variant="contained" onClick={this.CloseMarkerRefernceversion} color="primary" className="text-white">
                             Cancel
                         </Button>
-                        <Button variant="contained" onClick={this.CloseMarkerRefernceversion} className="btn-info text-white">
+                        <Button variant="contained" onClick={this.GetMarkerRefernceversion} className="btn-info text-white">
                             Ok
-                        </Button>
+                        </Button> */}
                     </DialogActions>
                 </Dialog>
                 {/* End Marker Model version */}
 
                 {/* Productivity Model version */}
                 <Dialog open={this.state.IsProductivityModal} onClose={this.CloseProductivityModal} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Base Style</DialogTitle>
+                <DialogTitle id="form-dialog-title">Productivity</DialogTitle>
                     <DialogContent>                                   
                         <div className="col border pb-15">                       
                             <div className="row no-f-mb">
@@ -1279,7 +1460,7 @@ import Select1 from "react-dropdown-select";
                                             options={BuyerOptions}
                                             onChange={this.setstatevaluedropdownfunction('buyer')}
                                             placeholder="Buyer"
-                                            values={this.state.buyer}
+                                            values={this.state.PVbuyer}
                                             />
                                     </div>
                                 </div>
@@ -1292,7 +1473,7 @@ import Select1 from "react-dropdown-select";
                                         options={BuyerDivisionOptions}
                                         onChange={this.setstatevaluedropdownfunction('buyerdiv')}
                                         placeholder="Buyer Division"
-                                        values={this.state.buyerdiv}
+                                        values={this.state.PVbuyerdiv}
                                         />
                                     </div>
                                 </div>
@@ -1305,7 +1486,7 @@ import Select1 from "react-dropdown-select";
                                             options={seasonoptions}
                                             onChange={this.setstatevaluedropdownfunction('season')}
                                             placeholder="Season"
-                                            values={this.state.season}
+                                            values={this.state.PVseason}
                                             />                        
                                     </div>
                                 </div>
@@ -1317,13 +1498,18 @@ import Select1 from "react-dropdown-select";
                                         options={yearoptions}
                                         onChange={this.setstatevaluedropdownfunction('year')}
                                         placeholder="Year"
-                                        values={this.state.year}
+                                        values={this.state.PVyear}
                                         />
                                     </div>
                                 </div> 
                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                    <div className="form-group">
-                                    <TextField id="designStyleNo" value={this.state.designStyleNo}   fullWidth label="Style No" placeholder="Style No"/>
+                                    <div className="form-group mt-15">
+                                        <Select1 dropdownPosition="auto" createNewLabel="Style No"  options={styleNooptions}
+                                            // onChange={values => this.setState({ year:values })} 
+                                            onChange={this.setstatevaluedropdownfunction('styleno')}
+                                            placeholder="Style No"
+                                            values={this.state.PVstyleno} />
+                                            <span className="error">{this.state.errors["PVstyleno"]}</span>
                                     </div>
                                 </div>    
                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -1335,17 +1521,22 @@ import Select1 from "react-dropdown-select";
                                     <div className="form-group">
                                     <TextField id="designStyleNo" value={this.state.purpose}   fullWidth label="Purpose" placeholder="Purpose"/>                                       
                                     </div>
-                                </div>                                           
+                                </div> 
+                                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                    <div className="form-group mt-15">
+                                        <Button variant="contained" onClick={this.CloseProductivityModal} color="primary" className="text-white margin-rt">
+                                            Cancel
+                                        </Button>
+                                        <Button variant="contained" onClick={this.getProductivityitem} className="btn-info text-white">
+                                            Ok
+                                        </Button>
+                                    </div>                                    
+                                </div>                                          
                             </div>
                         </div>
                     </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" onClick={this.CloseProductivityModal} color="primary" className="text-white">
-                            Cancel
-                        </Button>
-                        <Button variant="contained" onClick={this.CloseProductivityModal} className="btn-info text-white">
-                            Ok
-                        </Button>
+                    
                     </DialogActions>
                 </Dialog>
                 {/* END Productivity Model version */}
