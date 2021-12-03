@@ -549,10 +549,8 @@ class PreprodcutionTable extends Component {
             .then((response) => {
                 this.setState({ forecastType: response.data.result.data });
             })
-        this.setState({
-            activityList: activityList.length > 0 ? activityList.data : [],
-            QtyBreakUpList: QtyBreakUpList.length > 0 ? QtyBreakUpList.data : []
-        })
+        this.state.QtyBreakUpList.data =[];
+        this.state.activityList.data =[];
 
         /*
         api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
@@ -598,11 +596,13 @@ class PreprodcutionTable extends Component {
         if (val && val.BuyerValue.length > 0) {
             fields['buyername'] = val.BuyerValue[0].value;
             this.setState({fields});
-
+            console.log(val.BuyerValue)
             this.setState({ BuyerValue: val.BuyerValue });
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
                 .then((response) => {
-                    this.setState({ BuyerDivisionList: response.data.result.data });
+                    this.setState({
+                        BuyerDivisionList: response.data.result.data,
+                    });
                 })
                 .catch(error => {})
         }
@@ -936,9 +936,8 @@ class PreprodcutionTable extends Component {
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="avgSAM" width={110} caption="AVG SAM"
-                                                                // allowEditing={false}
+                                                                allowEditing={false}
                                                         >
-                                                            <RequiredRule />
                                                         </Column>
                                                         <Column dataField="pcd" dataType="date" >
                                                             <RangeRule message="Past dates cannot be allowed" min={new Date()} />
@@ -957,7 +956,7 @@ class PreprodcutionTable extends Component {
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="confirmDt" caption="Conf Due" dataType="date" >
-                                                            <RangeRule message="Past dates cannot be allowed" min={new Date()} />
+                                                            <RangeRule message="Past dates cannot be allowed" min={ this.state.tentativeDate} />
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="capacity" caption="Available capacity" allowEditing={false}>
