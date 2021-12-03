@@ -1150,7 +1150,14 @@ table tr td button{width: 25px;
 	flex: 0 0 100%;}
 .greencolor{background: #58ca58 !important;}
 .yellowcolor{background: greenyellow !important;}
-
+.tab-head {
+	.MuiTab-fullWidth {
+		max-width: 235px;
+	}
+	.MuiTab-textColorPrimary.Mui-selected {
+		background: #e3e3e3;
+	}
+}
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }

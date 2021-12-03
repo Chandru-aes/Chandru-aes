@@ -912,6 +912,7 @@ class PreprodcutionTable extends Component {
                                             indicatorColor="primary"
                                             textColor="primary"
                                             variant="fullWidth"
+                                            className={'tab-head'}
                                         >
                                             <Tab label="Qty Breakup" />
                                             <Tab label="Activity" />
@@ -1183,6 +1184,7 @@ class PreprodcutionTable extends Component {
                                         <th className="">Projection Qty</th>
                                         <th className="">Confirmed Qty</th>
                                         <th className="">Activity</th>
+                                        <th className="">Freeze</th>
                                         <th className="">Forecast Type</th>
                                         </thead>
                                         <tbody>
@@ -1192,9 +1194,16 @@ class PreprodcutionTable extends Component {
                                                     <td className="text-center">
                                                         {/* <button className="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span className="MuiIconButton-label"><i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> */}
 
-
                                                         <button className="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.getForecastdetail(n.id)}><span className="MuiIconButton-label"><i className="zmdi zmdi-edit"/></span><span className="MuiTouchRipple-root"/></button>
                                                         <button className="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.deleteForecast(n,n.id)}><span className="MuiIconButton-label"><i className="zmdi zmdi-delete"/></span><span className="MuiTouchRipple-root"/></button>
+                                                        <button
+                                                            className="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary"
+                                                            tabIndex="0" type="button" aria-label="Clone"
+                                                            onClick={(e) => this.getForecastdetail(n, n.id)}><span
+                                                            className="MuiIconButton-label"><i
+                                                            className="zmdi zmdi-copy"/></span><span
+                                                            className="MuiTouchRipple-root"/>
+                                                        </button>
 
                                                         {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
@@ -1209,6 +1218,7 @@ class PreprodcutionTable extends Component {
                                                     <td>{n.projectionQty}</td>
                                                     <td>{n.confirmedQty}</td>
                                                     <td>{n.activity}</td>
+                                                    <td><input type={'checkbox'} disabled={true}/></td>
                                                     {
                                                         n.fCtype==='ANNUAL' &&
                                                         <td className="greencolor">{n.fCtype}</td>
