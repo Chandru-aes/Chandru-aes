@@ -267,7 +267,7 @@ const ItemMasterCreation = ({ match }) => {
     useEffect(() => {
         GetMiscellaneousList('PARENTGRP');
         getMaterialType();
-        getMaterialType('group');
+        // getMaterialType('group');
         getBuyerDivision();
         GetMiscellaneousList('FBRCONTENT');
         GetMiscellaneousList('FABTYPE');
@@ -351,8 +351,8 @@ const ItemMasterCreation = ({ match }) => {
             }
         }).catch(e => console.log('parentGroup error ' + e))
     }
-    const getMaterialType = (type = '') => {
-        const url = type === 'group' ? API_URLS.GET_MATERIAL_TYPE + `?Itemtype=ELE` : API_URLS.GET_MATERIAL_TYPE
+    const getMaterialType = (type = '', itemType='') => {
+        const url = type === 'group' ? API_URLS.GET_MATERIAL_TYPE + `?Itemtype=${itemType}` : API_URLS.GET_MATERIAL_TYPE
         getApiCall(
             url
         ).then((r) => {
@@ -422,19 +422,25 @@ const ItemMasterCreation = ({ match }) => {
         const values = (e && e.length > 0) ? e[0].value : []
         const randomTxt = (+new Date).toString(36).slice(-5)
         if (name === 'materialGroupSub') {
-            setFieldValue('materialCode', randomTxt)
+            setFieldValue('materialCode', randomTxt.toUpperCase())
         }
         if(name === 'materialType') {
             const checkMaterialType = ['LBL', 'TMS', 'TPM', 'ILN', 'FTD', 'FBR', 'FLN', 'PKT'];
             if (values === 'FBR' || values === 'FLN' || values === 'PKT') {
-                setFabricTab(true)
+                setFabricTab(true);
+                getMaterialType('group', values)
                 setFieldValue('materialType', e)
+                setError({})
             } else if (values === 'FTD') {
                 setThreadTab(true)
+                getMaterialType('group', values)
                 setFieldValue('materialType', e)
+                setError({})
             } else if (values === 'LBL' || values === 'TMS' || values === 'TPM' || values === 'ILN') {
                 setDetailsTab(true)
+                getMaterialType('group', values)
                 setFieldValue('materialType', e)
+                setError({})
             } else if (!checkMaterialType.includes(values)) {
                 NotificationManager.error('Please choose other material Type');
                 setFieldValue('materialType', [])
@@ -538,7 +544,6 @@ const ItemMasterCreation = ({ match }) => {
                             handleSubmit,
                             setFieldValue
                         } = props;
-                        console.log(error)
                         return (
                             <Form autoComplete="off">
                                 <RctCollapsibleCard fullBlock heading="Item Creation">
