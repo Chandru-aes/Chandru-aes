@@ -143,7 +143,7 @@ const ItemMasterCreation = ({ match }) => {
         // parentGroup: Yup.string().required("Please choose parentGroup"),
         // materialType: Yup.string().required('Please choose the MaterialType'),
         // materialGroupSub: Yup.string().required('Please choose Material GroupSub'),
-        materialCode: Yup.string().required('Please enter the materialCode'),
+        // materialCode: Yup.string().required('Please enter the materialCode'),
     };
 
     const deleteItemList = async () => {
@@ -363,18 +363,23 @@ const ItemMasterCreation = ({ match }) => {
 
     const checkFormRequiredFields = (values) => {
         let isValid = true;
-        if ((values.parentGroup.length > 0 && values.parentGroup[0].value === '') || values.parentGroup.length === 0){
-            let newError = {...error, parentGroup: 'ParentGroup is required'}
+        if (values.parentGroup.length === 0 || Object.keys(values).length === 0){
+            let newError = Object.assign(error, {parentGroup: 'ParentGroup is required'})
             setError(newError);
             isValid = false
         }
-        if ((values.materialGroupSub.length > 0 && values.materialGroupSub[0].value === '') || values.materialGroupSub.length === 0){
-            let newError = {...error, materialGroupSub: 'Material Group & Sub is required'}
+        if (values.materialGroupSub.length === 0 || Object.keys(values).length === 0){
+            let newError = Object.assign(error, {materialGroupSub: 'Material Group & Sub is required'})
             setError(newError);
             isValid = false
         }
-        if ((values.materialType.length > 0 && values.materialType[0].value === '') || values.materialType.length === 0){
-            let newError = {...error, materialType: 'MaterialType is required'}
+        if (values.materialType.length === 0 ||  Object.keys(values).length === 0){
+            let newError = Object.assign(error, {materialType: 'MaterialType is required'})
+            setError(newError);
+            isValid = false
+        }
+        if (values.materialCode === '' ||  Object.keys(values).length === 0){
+            let newError = Object.assign(error, {materialCode: 'MaterialCode is required'})
             setError(newError);
             isValid = false
         }
@@ -516,7 +521,7 @@ const ItemMasterCreation = ({ match }) => {
                 <Formik
                     enableReinitialize
                     initialValues={initialValues}
-                    validationSchema={Yup.object().shape(validationShape)}
+                    // validationSchema={Yup.object().shape(validationShape)}
                     onSubmit={(values, action) => {
                         onFormSubmit(values, action.resetForm)
                     }}
@@ -533,6 +538,7 @@ const ItemMasterCreation = ({ match }) => {
                             handleSubmit,
                             setFieldValue
                         } = props;
+                        console.log(error)
                         return (
                             <Form autoComplete="off">
                                 <RctCollapsibleCard fullBlock heading="Item Creation">

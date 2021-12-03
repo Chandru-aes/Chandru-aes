@@ -96,7 +96,8 @@ class PreprodcutionTable extends Component {
             userlevel: '',
             BuyerValue:[],
             BuyerdivisionValue:[],
-            locationItemValue: []
+            locationItemValue: [],
+            selectedDate: new Date()
         };
 
 
@@ -117,14 +118,14 @@ class PreprodcutionTable extends Component {
     getForecastdetail(ForecastId){
         api.get('ForecastQtyDetailEntity/GetForecastGrid?ForecastID='+ForecastId)
             .then((response) => {
-
+                const values = response.data.data[0];
                 this.setState({
-                    BuyerValue:[{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}],
-                    BuyerdivisionValue:[{value:response.data.data[0].buyDivcode,label:response.data.data[0].buyerDivName}],
-                    locationItemValue:[{value:response.data.data[0].loccode,label:response.data.data[0].locName}],
-                    season:[{value:response.data.data[0].seasonCode,label:response.data.data[0].seasonName}],
-                    year:[{value:response.data.data[0].seasonYear,label:response.data.data[0].seasonYear}],
-                    forecastItem:[{value:response.data.data[0].fcType,label:response.data.data[0].fcTypeDesc}]
+                    BuyerValue:[{value:values.buyCode,label:values.buyerName}],
+                    BuyerdivisionValue:[{value:values.buyDivcode,label:values.buyerDivName}],
+                    locationItemValue:[{value:values.loccode,label:values.locName}],
+                    season:[{value:values.seasonCode,label:values.seasonName}],
+                    year:[{value:values.seasonYear,label:values.seasonYear}],
+                    forecastItem:[{value:values.fcType,label:values.fcTypeDesc}]
                 });
 
             })
@@ -137,7 +138,11 @@ class PreprodcutionTable extends Component {
 
         api.get('ForecastActivityEntity/GetForecastActivityList?FID='+ForecastId)
             .then((response) => {
-                this.setState({ activityList: response.data });
+                this.setState({
+                    activityList: response.data,
+                    activityName: response.data.data.length > 0 ? response.data.data[0].activity: '',
+                    selectedDate: response.data.data.length > 0 ? new Date(response.data.data[0].dueDt) : ''
+                });
             })
     }
     deleteForecast(ForecastItem,ForecastId){
@@ -189,8 +194,8 @@ class PreprodcutionTable extends Component {
             const activityPayload = [{
                 "id": 0,
                 "fcHead_ID": 0,
-                "activity": activityName ? activityName : '',
-                "dueDt": selectedDate ? selectedDate : '',
+                "activity": activityName ? activityName : 'string',
+                "dueDt": selectedDate ? moment(selectedDate).format('YYYY-MM-DD') : '',
                 "cancel": "N",
                 "createdBy": "1",
                 "modifyBy": "1",
@@ -313,9 +318,10 @@ class PreprodcutionTable extends Component {
     }
 
     deleteForCastDetails = (payload) => {
-        api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',tdeleteQtyDetailItems) .then((response) => {
-            NotificationManager.success('Deleted Sucessfully');
-            if(response.data.data.status==true){
+        api.post('ForecastQtyDetailEntity/SaveForecastQtyDetails',payload) .then((response) => {
+            NotificationManager.success('Deleted Successfully');
+            console.log(response.data)
+            if(response.data.status===true){
                 /*
                  api.get('ForecastActivityEntity/GetForecastActivityList')
                  .then((response) => {
@@ -601,6 +607,7 @@ class PreprodcutionTable extends Component {
             api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
                 .then((response) => {
                     this.setState({
+                        BuyerdivisionValue: [],
                         BuyerDivisionList: response.data.result.data,
                     });
                 })
@@ -641,11 +648,11 @@ class PreprodcutionTable extends Component {
 
     setstatevaluedropdownfunction = name => event => {
         const {fields} = this.state;
-       if (event && event.length > 0) {
-           fields[name] = event[0].value;
-           this.setState({fields});
-           this.setState({ [name]: event });
-       }
+        if (event && event.length > 0) {
+            fields[name] = event[0].value;
+            this.setState({fields});
+            this.setState({ [name]: event });
+        }
     };
     contactSubmit(e,type){
 
@@ -668,7 +675,7 @@ class PreprodcutionTable extends Component {
         this.setState({fields});
         this.setState({ [name]: event.target.value });
 
-        if(name=="activityName" || name=="fabdesc" || name=="refstyleno"){
+        if(name==="activityName" || name==="fabdesc" || name==="refstyleno"){
             if(!event.target.value.match(/^[a-zA-Z0-9]+$/)){
                 NotificationManager.error('Input is not alphanumeric');
             }
@@ -754,10 +761,12 @@ class PreprodcutionTable extends Component {
 
     render() {
 
+        console.log(this.state.activityList.data)
+
         const { selectedDate } = this.state;
         const BuyerOptions =[];
         for (const item of this.state.BuyerList) {
-            BuyerOptions.push({value:item.buyerCode,label:item.buyerCode+'-'+item.buyerName});
+            BuyerOptions.push({value:item.buyerCode,label:item.buyerCode+' - '+item.buyerName});
         }
 
         const locationItemOptions = [];
@@ -808,11 +817,13 @@ class PreprodcutionTable extends Component {
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <div className="form-group select_label_name mt-15">
-                                                    <Select1  dropdownPosition="auto"  createNewLabel="Buyer"
-                                                              options={BuyerOptions} ref="buyername"
-                                                              onChange={values => this.getBuyerDivision1({ BuyerValue:values },this,"buyername")}
-                                                              placeholder="Buyer"
-                                                              values={this.state.BuyerValue}
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        createNewLabel="Buyer"
+                                                        options={BuyerOptions} ref="buyername"
+                                                        onChange={values => this.getBuyerDivision1({ BuyerValue:values },this,"buyername")}
+                                                        placeholder="Buyer"
+                                                        values={this.state.BuyerValue}
                                                     />
                                                     <span className="error">{this.state.errors["buyername"]}</span>
                                                 </div>
@@ -948,7 +959,7 @@ class PreprodcutionTable extends Component {
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="exfacDt" caption="Tent Del" dataType="date" >
-                                                            <RangeRule message="Past dates cannot be allowed" min={ this.state.pcdDate} />
+                                                            <RangeRule message="Should be greater than or equal to PCD date." min={ this.state.pcdDate} />
                                                             <CustomRule
                                                                 type="custom"
                                                                 validationCallback={(e) => this.dateValidation(e, 'tentative')}
@@ -956,7 +967,7 @@ class PreprodcutionTable extends Component {
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="confirmDt" caption="Conf Due" dataType="date" >
-                                                            <RangeRule message="Past dates cannot be allowed" min={ this.state.tentativeDate} />
+                                                            <RangeRule message="confirmation due dates should be before or equal to tentative delivery date" min={ this.state.tentativeDate} />
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="capacity" caption="Available capacity" allowEditing={false}>
@@ -1182,8 +1193,8 @@ class PreprodcutionTable extends Component {
                                                         {/* <button className="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span className="MuiIconButton-label"><i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> */}
 
 
-                                                        <button className="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.getForecastdetail(n.id)}><span className="MuiIconButton-label"><i className="zmdi zmdi-edit"></i></span><span className="MuiTouchRipple-root"></span></button>
-                                                        <button className="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.deleteForecast(n,n.id)}><span className="MuiIconButton-label"><i className="zmdi zmdi-delete"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                                        <button className="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.getForecastdetail(n.id)}><span className="MuiIconButton-label"><i className="zmdi zmdi-edit"/></span><span className="MuiTouchRipple-root"/></button>
+                                                        <button className="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary" tabindex="0" type="button" aria-label="Delete" onClick={(e) => this.deleteForecast(n,n.id)}><span className="MuiIconButton-label"><i className="zmdi zmdi-delete"/></span><span className="MuiTouchRipple-root"/></button>
 
                                                         {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                                     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button> */}
