@@ -59,21 +59,6 @@ function TabContainer({ children }) {
 
 
 class PreprodcutionTable extends Component {
-    state = {
-        employeePayroll: null,
-        activeIndex: 0,
-        name: '',
-        userlevel: '',
-        BuyerValue:[],
-        BuyerdivisionValue:[],
-        forecastinglists:[],
-        yearlists:[],
-        seasonlists:[],
-        fields: {},
-        errors: {},
-
-        // QtyBreakUpList:[]
-    }
     constructor(props) {
         super(props);
         this.getSubproductType = this.getSubproductType.bind(this);
@@ -104,7 +89,14 @@ class PreprodcutionTable extends Component {
             errors: {},
             IsEdit:false,
             tentativeDate: new Date(),
-            pcdDate: new Date()
+            pcdDate: new Date(),
+            activeIndex: 0,
+            employeePayroll: null,
+            name: '',
+            userlevel: '',
+            BuyerValue:[],
+            BuyerdivisionValue:[],
+            locationItemValue: []
         };
 
 
@@ -129,7 +121,7 @@ class PreprodcutionTable extends Component {
                 this.setState({
                     BuyerValue:[{value:response.data.data[0].buyCode,label:response.data.data[0].buyerName}],
                     BuyerdivisionValue:[{value:response.data.data[0].buyDivcode,label:response.data.data[0].buyerDivName}],
-                    lpcationItemValue:[{value:response.data.data[0].loccode,label:response.data.data[0].locName}],
+                    locationItemValue:[{value:response.data.data[0].loccode,label:response.data.data[0].locName}],
                     season:[{value:response.data.data[0].seasonCode,label:response.data.data[0].seasonName}],
                     year:[{value:response.data.data[0].seasonYear,label:response.data.data[0].seasonYear}],
                     forecastItem:[{value:response.data.data[0].fcType,label:response.data.data[0].fcTypeDesc}]
@@ -176,7 +168,7 @@ class PreprodcutionTable extends Component {
         api.post('ForecastEntity/SaveForecastQtyDetails',deleteForecastHeaderitem) .then((response) => {
             this.refs.deleteConfirmationDialog.close();
             NotificationManager.success('Deleted Sucessfully');
-            if(response.data.status==true){
+            if(response.data.status===true){
                 api.get('ForecastEntity/GetForecastHeaderList')
                     .then((response) => {
                         this.setState({ forecastinglists: response.data.data });
@@ -190,7 +182,6 @@ class PreprodcutionTable extends Component {
     }
     // get employee payrols
     SaveForecast(type){
-        console.log(this.state.IsEdit);
         if((this.state.QtyBreakUpList.data.length===0 && this.state.activityList.data.length===0 && (!this.state.IsEdit))){
             NotificationManager.error('Please Select any Quantity or Activity Items');
         }else{
@@ -266,6 +257,7 @@ class PreprodcutionTable extends Component {
                 .then((response) => {
                     this.setState({ forecastinglists: response.data.data });
                 })
+            this.cancelForm();
         })
             .catch(error => {
                 // error handling
@@ -540,6 +532,7 @@ class PreprodcutionTable extends Component {
         this.setState({saveQtyDetailItems})
     }
     getCommonData() {
+        const {QtyBreakUpList, activityList} = this.state;
 
         api.get('Buyer/GetBuyerDropDown')
             .then((response) => {
@@ -556,8 +549,11 @@ class PreprodcutionTable extends Component {
             .then((response) => {
                 this.setState({ forecastType: response.data.result.data });
             })
-        this.state.QtyBreakUpList.data =[];
-        this.state.activityList.data =[];
+        this.setState({
+            activityList: activityList.length > 0 ? activityList.data : [],
+            QtyBreakUpList: QtyBreakUpList.length > 0 ? QtyBreakUpList.data : []
+        })
+
         /*
         api.get('ForecastQtyDetailEntity/GetForecastQtyDetails')
         .then((response) => {
@@ -599,15 +595,17 @@ class PreprodcutionTable extends Component {
     }
     getBuyerDivision1(val,field,e){
         let fields = this.state.fields;
-        fields['buyername'] = val.BuyerValue[0].value;
-        this.setState({fields});
+        if (val && val.BuyerValue.length > 0) {
+            fields['buyername'] = val.BuyerValue[0].value;
+            this.setState({fields});
 
-        this.setState({ BuyerValue: val.BuyerValue });
-        api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
-            .then((response) => {
-                this.setState({ BuyerDivisionList: response.data.result.data });
-            })
-            .catch(error => {})
+            this.setState({ BuyerValue: val.BuyerValue });
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.BuyerValue[0].value)
+                .then((response) => {
+                    this.setState({ BuyerDivisionList: response.data.result.data });
+                })
+                .catch(error => {})
+        }
     }
     getSubproductType(options){
         return {
@@ -642,11 +640,12 @@ class PreprodcutionTable extends Component {
     }
 
     setstatevaluedropdownfunction = name => event => {
-        let fields = this.state.fields;
-        fields[name] = event[0].value;
-        this.setState({fields});
-
-        this.setState({ [name]: event });
+        const {fields} = this.state;
+       if (event && event.length > 0) {
+           fields[name] = event[0].value;
+           this.setState({fields});
+           this.setState({ [name]: event });
+       }
     };
     contactSubmit(e,type){
 
@@ -716,8 +715,6 @@ class PreprodcutionTable extends Component {
             }
         }
 
-
-
         this.setState({errors: errors});
         return formIsValid;
     }
@@ -738,6 +735,21 @@ class PreprodcutionTable extends Component {
             })
         }
         return true
+    }
+
+    cancelForm () {
+        this.setState({
+            BuyerValue:[],
+            BuyerdivisionValue:[],
+            locationItemValue:[],
+            forecastItem:[],
+            season:[],
+            year:[],
+            fields: {},
+            errors: {},
+            activeIndex: 0,
+            activityName: ''
+        })
     }
 
     render() {
@@ -791,7 +803,7 @@ class PreprodcutionTable extends Component {
                         <div className="col-sm-12 col-md-12 col-xl-12 p-0">
 
                             <RctCollapsibleCard heading="">
-                                <form name="contactform" className="contactform">
+                                <form name="contactform" className="contactform" id="contactForm">
                                     <div className="row new-form mb-10">
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
@@ -832,7 +844,7 @@ class PreprodcutionTable extends Component {
                                                               onChange={this.setstatevaluedropdownfunction('location')}
                                                         //onChange={values => this.setState({ location:values })}
                                                               placeholder="Location"
-                                                              values={this.state.lpcationItemValue}
+                                                              values={this.state.locationItemValue}
                                                     />
                                                     <span className="error">{this.state.errors["location"]}</span>
                                                 </div>
@@ -923,7 +935,9 @@ class PreprodcutionTable extends Component {
                                                             <Lookup dataSource={this.getSubproductType} valueExpr="subProductType" displayExpr="subProductType" />
                                                             <RequiredRule />
                                                         </Column>
-                                                        <Column dataField="avgSAM" width={110} caption="AVG SAM" allowEditing={false}>
+                                                        <Column dataField="avgSAM" width={110} caption="AVG SAM"
+                                                                // allowEditing={false}
+                                                        >
                                                             <RequiredRule />
                                                         </Column>
                                                         <Column dataField="pcd" dataType="date" >
@@ -971,8 +985,8 @@ class PreprodcutionTable extends Component {
                                                             <label className="mt-5">1-10 of 50</label>
                                                         </div>
                                                         <div className="w-30 float-left">
-                                                            <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-left"></i><span className="MuiTouchRipple-root"></span></button>
-                                                            <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-right"></i><span className="MuiTouchRipple-root"></span></button>
+                                                            <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-left"/><span className="MuiTouchRipple-root"/></button>
+                                                            <button className="float-left MuiButtonBase-root MuiButton-root MuiButton-contained  mr-10  btn-icon b-ic" tabindex="0" type="button" ><i className="zmdi zmdi-chevron-right"/><span className="MuiTouchRipple-root"/></button>
                                                         </div>
                                                     </div>
                                                 </div>
