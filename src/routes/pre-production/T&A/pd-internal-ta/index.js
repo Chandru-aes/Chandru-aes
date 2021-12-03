@@ -370,14 +370,14 @@ import Select1 from "react-dropdown-select";
         //     // error handling
         // })
 
-        api.get('StyleHeader/GetStyleGridList')
-        .then((response) => {
+        // api.get('StyleHeader/GetStyleGridList')
+        // .then((response) => {
             
-            this.setState({ stylenolists: response.data.data });
-        })
-        .catch(error => {
-            // error handling
-        })
+        //     this.setState({ stylenolists: response.data.data });
+        // })
+        // .catch(error => {
+        //     // error handling
+        // })
 
         
 
@@ -571,10 +571,7 @@ import Select1 from "react-dropdown-select";
         let fields = this.state.fields;
         if(event.length!=0){
             fields[name] = event[0].value;        
-            this.setState({fields});
-
-          
-            
+            this.setState({fields});            
         } else{
            
             fields[name] = '';        
@@ -602,6 +599,11 @@ import Select1 from "react-dropdown-select";
         //     }, 200);
         // }
 
+        if(name=="buyer" || name=="buyerdiv" || name=="year" || name=="season"){
+            setTimeout(() => {
+                this.getstyleno();
+            }, 200);
+        }
 
         if(name=="filterbuyer" || name=="filterbuyerdiv" || name=="filterordercategory"){
             setTimeout(() => {
@@ -610,6 +612,21 @@ import Select1 from "react-dropdown-select";
         }
 
 	};
+
+    getstyleno(){
+        
+        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+            this.setState({stylenolists:[],styleno:[],});
+            api.get('TNAMaster/GetStyleForTNABuyer?BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&year='+this.state.year[0].value)
+            .then((response) => {
+                let datas = response.data.data;
+                this.setState({stylenolists:datas});
+            })
+            .catch(error => {
+                // error handling
+            })
+        }
+     }
 
     getalldata(){
         this.setState({overalllists:[]});
@@ -1592,7 +1609,7 @@ console.log(data,'datadatadata')
 
            const stylenooptions = [];
            for (const item of this.state.stylenolists) {           
-               stylenooptions.push({value:item.styleid,label:item.styleNo});
+            stylenooptions.push({value:item.masterStyle,label:item.masterStyle+'-'+item.refStyleNo});
            }
 
            const materialtypeoptions = [];
@@ -1634,13 +1651,10 @@ console.log(data,'datadatadata')
                                             <td>{n.divname} </td>
                                             <td>{n.orderType} </td>
                                             <td>{n.refStyleNo}</td>
+                                            <td className={n.colorstatus}>{n.activity}</td>
+                                            {/* <td></td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            
-                                            
-                                           
+                                            <td></td> */}                                           
                                         </tr>
                );
            }) }else{
@@ -1678,91 +1692,96 @@ console.log(data,'datadatadata')
    <div className="clearfix"></div>
    <div className="w-100 float-left">
                 <div className="row">
-                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Buyer</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Buyer division</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Order Category</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
 
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Season</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Year</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
-                    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div className="form-group">
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="age-simple">Style number</InputLabel>
-                            <Select value={this.state.age} onChange={this.handleChange}
-                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            <MenuItem value={10}>Autumn</MenuItem>
-                            <MenuItem value={20}>Summer</MenuItem>
-                            <MenuItem value={30}>Winter</MenuItem>
-                            </Select>
-                        </FormControl>
-                        </div>
-                    </div>
+                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Buyer"
+                                                                    options={buyeroptions}
+                                                                    // onChange={this.setstatevaluedropdownfunction('buyer')}
+                                                                    onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
+                                                                    placeholder="Buyer"
+                                                                    values={this.state.buyer}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["buyer"]}</span>
+                                                                </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Buyer Division"
+                                                                    options={buyerdivoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('buyerdiv')}
+                                                                    placeholder="Buyer Division"
+                                                                    values={this.state.buyerdiv}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["buyerdiv"]}</span>
+                                                                </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Order Category"
+                                                                    options={ordercategoryoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('ordercategory')}
+                                                                    placeholder="Order Category"
+                                                                    values={this.state.ordercategory}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["ordercategory"]}</span>
+                                                                </div>
+                        
+                                </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Season"
+                                                                    options={seasonoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('season')}
+                                                                    placeholder="Season"
+                                                                    values={this.state.season}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["season"]}</span>
+                                                                </div>
+                                           
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Year"
+                                                                    options={yearoptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('year')}
+                                                                    placeholder="Year"
+                                                                    values={this.state.year}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["year"]}</span>
+                                                                </div>
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div className="form-group select_label_name mt-15">
+                                                                <Select1
+                                                                    dropdownPosition="auto"
+                                                                    //   multi
+                                                                    createNewLabel="Style Number"
+                                                                    options={stylenooptions}
+                                                                    onChange={this.setstatevaluedropdownfunction('styleno')}
+                                                                    placeholder="Style Number"
+                                                                    values={this.state.styleno}
+                                                                    />
+                                                                    <span className="error">{this.state.errors["styleno"]}</span>
+                                                                </div>
+                                            </div>
+
+                
                     <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div className="form-group">
                         <FormControl fullWidth>
@@ -2085,15 +2104,10 @@ console.log(data,'datadatadata')
                                      <th className="">Buyer Div</th>
                                      <th className="">Ord type</th>
                                      <th className="">Style</th>
-                                     <th className="">Act1</th>
-                                     <th className="">Act2</th>
+                                     <th className="">Activity</th>
+                                     {/* <th className="">Act2</th>
                                      <th className="">Act3</th>
-
-                                     <th className="">Act4</th>
-
-                                     
-
-
+                                     <th className="">Act4</th> */}
                                      </tr>
                                  </thead>
                                  <tbody>

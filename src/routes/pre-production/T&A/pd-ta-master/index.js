@@ -159,91 +159,8 @@ import Select1 from "react-dropdown-select";
        
         this.getfilldropdownlists();
         
-        if(this.props.match.params.swid!=undefined){
-            this.setState({swid:this.props.match.params.swid})
-            this.editdata(this.props.match.params.swid);
-        }
-        
     }
-
-    editdata(id){
-        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo='+id)
-        .then((response) => {
-           
-            let data = response.data.data[0];            
-
-            this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],baseStyleno:data.baseStyleno,fabricDesc:data.fabricDesc,fabricType:data.fabricType,
-                purpose: [{value:data.purpose,label:data.purpose}],
-                reqtype: [{value:data.reqType,label:data.reqType}],
-                styleno: [{value:data.styleNo,label:data.styleNo}],
-                fit:[{value:data.fit,label:data.fit}]
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowPatternList?IdRequestNo='+id)
-        .then((response) => {
-           
-            let data = response.data.data[0];            
-
-            this.setState({buyerdiv: [{value:data.buyDivcode,label:data.buyerDivName}],
-                samplewarp:data.samShrWarp,
-                sampleweft:data.samShrWeft,
-                costingwarp:data.costShrWarp,
-                costingweft:data.costShrWeft,
-                samplesize: [{value:data.samSize,label:data.samSize}],
-                costingsize: [{value:data.costSize,label:data.costSize}],
-                bodygrain: [{value:data.bodyGrain,label:data.bodyGrain}],
-                addoninfo: [{value:data.addOnInfo,label:data.addOnInfo}],
-                job: [{value:data.natureOfJob,label:data.natureOfJob}],
-                
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSampleList?IdRequestNo='+id)
-        .then((response) => {
-           
-            let data = response.data.data[0];       
-            this.setState({tamasteraddmoredata:response.data.data,samplewarp:data.expDeliDate,
-                prepseq: [{value:data.prepSeq,label:data.prepSeq}],               
-                
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=35')
-        .then((response) => {
-           
-            let data = response.data.data[0];       
-            this.setState({valueaddaddmoredata:response.data.data
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=43')
-        .then((response) => {
-           
-            let data = response.data.data[0];       
-            this.setState({samaddmoredata:response.data.data
-             });
-        })
-        .catch(error => {
-            // error handling
-        })
-
-        
-
-    }
-
+    
     
     getfilldropdownlists() {
 
@@ -889,9 +806,52 @@ console.log(data,'datadatadata')
               
               let dataval = response.data.data;
               let data = response.data.data[0];
-              this.setState({tamasteraddmoredata:dataval,buyer:[{value:data.buyCode,label:data.buyerCode}],buyerdiv:[{value:data.buydivCode,label:data.buyerDivName}],ordercategory:[{value:data.orderCategory,label:data.orderCategory}],department:[{value:data.deptcode,label:data.deptcode}] });
+              
+              let tamasteraddmoredatalists=[];
+              for (const item of dataval) { 
+                let dataall={
+                    "id": id,
+                    "buyCode": item.buyCode,
+                    "buyName": item.buyerCode,
+                    "buydivCode": item.buydivCode,
+                    "buydivName": item.buyerCode,
+                    "orderCategory": item.orderCategory,
+                    "deptcode": item.deptcode,
+                    "stage": item.stage,
+                    "activityType": item.activityType,
+                    "fit": item.fit,
+                    "fitName": item.fit,
+                    "actCode": item.actCode,
+                    "activity": item.activity,
+                    "subActivity": item.subActivity,
+                    "tnaSeqNo": item.tnaSeqNo,
+                    "duration": item.duration,
+                    "dependActCode": item.dependActCode,
+                    "dependDeptCode": item.dependDeptCode,
+                    "dependDeptCodeName": item.dependDeptCode,
+                    "dependActvity1": item.dependActvity,
+                    "dependActvity": item.dependActvity,
+                    "dependActvityName": item.dependActvity,
+                    "dependSubActvity1": item.dependSubActvity,
+                    "dependSubActvity": item.dependSubActvity,
+                    "dependSubActvityName": item.dependSubActvity,
+                    "category": item.category,
+                    "valueAddtype": item.valueAddtype,
+                    "skipped": item.skipped,
+                    "active": item.active,
+                    "createdBy": "string",
+                    "modifyBy": "string",
+                    "hostname": "string",
+                    "mActive": item.mActive
+                  }          
+                tamasteraddmoredatalists.push(dataall);
+              }
 
-              this.setState({ hid: id });
+              this.setState({tamasteraddmoredata:tamasteraddmoredatalists,buyer:[{value:data.buyCode,label:data.buyerCode}],buyerdiv:[{value:data.buydivCode,label:data.buyerDivName}],ordercategory:[{value:data.orderCategory,label:data.orderCategory}],department:[{value:data.deptcode,label:data.deptcode}] });
+
+              this.setState({ hid: id, mactiveflag:data.mActive,
+                alowskipflag:data.skipped,
+                 activeflag:data.active, });
           })
           .catch(error => {
               // error handling
@@ -1298,7 +1258,7 @@ if (mactiveflag != 'Y') {
                               <Select1
                                   dropdownPosition="auto"
                                   //   multi
-                                  disabled={dactcodeflag}
+                                //   disabled={dactcodeflag}
                                   createNewLabel="DpndOnS.Act"
                                   options={DpndOnSubActoptions}
                                   onChange={this.setstatevaluedropdownfunction('DpndOnSubAct')}
