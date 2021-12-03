@@ -256,7 +256,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
     }
     getStyleList(){
         if(this.state.BuyerValue && this.state.BuyerdivisionValue && this.state.year){
-            api.get('ProductivityRequest/GetStyleNoDropDown?BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+            api.get('ProductivityRequest/GetStyleNoDropDown?Buyer='+this.state.BuyerValue[0].value+'&BuyDivCode='+this.state.BuyerdivisionValue[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
             .then((response) => {                
                 this.setState({ stylenolist: response.data.data });
             })        
