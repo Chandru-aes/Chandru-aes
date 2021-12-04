@@ -782,7 +782,7 @@ class PreprodcutionTable extends Component {
 
         const BuyerDivisionOptions =[];
         for (const item of this.state.BuyerDivisionList) {
-            BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionCode+'-'+item.divisionName});
+            BuyerDivisionOptions.push({value:item.divisionCode,label:item.divisionCode+' - '+item.divisionName});
         }
 
         const yearoptions = [];
