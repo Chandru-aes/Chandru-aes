@@ -219,8 +219,15 @@ import Select1 from "react-dropdown-select";
         edit_add:false,
         filterbuyerdivlists:[],
         filterstylenolists:[],
-        filterstyleno:[]
-
+        filterstyleno:[],
+        actstagelists:[],
+        option1:[],
+        activity:'',
+        optionname:'',
+        optiondate:moment(new Date()).format('YYYY-MM-DD'),
+        optionremark:'',
+        optiondays:'',
+        optionid:'',
      }
      onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -554,13 +561,14 @@ import Select1 from "react-dropdown-select";
 
      
      getActivitylist(){
-        
+        this.setState({actstagelists:[],option1:[]});
         if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 ){
-            this.setState({baseStyleno:'',fabricDesc:'',fabricType:''});
-            api.get('TNAMaster/GetExistChkForTNABuyer?Buyer='+this.state.buyer[0].value)
+            
+            // api.get('TNAMaster/GetExistChkForTNABuyer?Buyer='+this.state.buyer[0].value)
+            api.get('TNAMaster/GetExistChkForTNABuyerDiv?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value)
             .then((response) => {
                 let datas = response.data.data;
-                this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType});
+                this.setState({actstagelists:datas,option1:[]});
             })
             .catch(error => {
                 // error handling
@@ -1033,7 +1041,13 @@ import Select1 from "react-dropdown-select";
         
        
       }
-
+      rowclickfunction(n,index,optionname){
+        $('.alltd').css('background-color','#fff');
+        $('#duration'+index).css('background-color','#da0a0a');
+        $('#date'+index).css('background-color','#da0a0a');
+        $('#remark'+index).css('background-color','#da0a0a');
+        this.setState({activity:n.activity,optiondays:n.duration,optionremark:"",optionname:optionname,optionid:n.hid})
+      }
       
     save () {
         console.log(this.state,'-----------------------')
@@ -1068,10 +1082,46 @@ console.log(data,'datadatadata')
 
       }
   
+      Generate () {
+          
+        let ordercategory="";
+        if(this.state.ordercategory.length>0){
+            ordercategory=this.state.ordercategory[0].value;
+        }
+
+        if(this.state.buyer.length>0 && this.state.buyer.length>0){
+           
+            
+            let data ={
+                "buyer": this.state.buyer[0].value,
+                "buyerDiv": this.state.buyerdiv[0].value,
+                "orderCat": ordercategory,
+                "id": this.state.optionid,
+                "activity": this.state.activity,
+                "noofDays": this.state.optiondays,
+                "schedule": this.state.optiondate
+                };
+              
+
+            api.post('TNAMaster/GetScheduleDateGeneration',data) .then((response) => {
+                
+            })
+            .catch(error => {
+                // error handling
+            })
+
+        } else{
+            NotificationManager.error('Please Select Buyer');
+
+        }
+                
+
+      }
+  
 
 
      render() {
-         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype } = this.state;
+         const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype,optiondate } = this.state;
          const { match } = this.props;
          const { selectedDate } = this.state;
          const { classes } = this.props;
@@ -1183,6 +1233,26 @@ console.log(data,'datadatadata')
             overalllistshtml = <tr><td colSpan="6" className="no-records-data"><span>No records found</span></td></tr> ;
         }
 
+        let actstagelisthtml = null;
+        if(this.state.actstagelists.length>0){
+            actstagelisthtml= this.state.actstagelists.map((n,index) => {                                    
+            return (
+                <tr>
+                    <td>{n.stage} </td>
+                    <td>{n.activity} </td>
+                    <td className="alltd" id={'duration'+`${index}`} onClick={(e) =>this.rowclickfunction(n,index,"Option1")}>{n.duration} </td>
+                    <td className="alltd" id={'date'+`${index}`} onClick={(e) =>this.rowclickfunction(n,index,"Option1")}> </td>
+                    <td className="alltd" id={'remark'+`${index}`} onClick={(e) =>this.rowclickfunction(n,index,"Option1")}> </td>
+                    {/* <td> </td>
+                    <td> </td>
+                    <td> </td> */}
+                 </tr>
+            );
+        }) }else{
+            actstagelisthtml = <tr><td colSpan="5" className="no-records-data"><span>No records found</span></td></tr> ;
+        }
+
+
            
           return (
               
@@ -1200,7 +1270,7 @@ console.log(data,'datadatadata')
                      <AccordionDetails> 
                      <div className="float-right pr-0 but-tp">
 
-<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">    Generate  <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
+<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.Generate(e)}  ><span className="MuiButton-label">    Generate  <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
     <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">Add <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
         
 
@@ -1319,12 +1389,15 @@ console.log(data,'datadatadata')
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Activity" placeholder="Activity"/>
+                                            <TextField id="activity" value={this.state.activity} onChange={this.setstatevaluefunction('activity')} fullWidth label="Activity" placeholder="Activity"/>
+
+                        
                         </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Option" placeholder="Option"/>
+                        {/* <TextField id="Buyer" fullWidth label="Option" placeholder="Option"/> */}
+                        <TextField id="optionname" value={this.state.optionname} onChange={this.setstatevaluefunction('optionname')} fullWidth label="Option" placeholder="Option"/>
                         </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 pl-0 f-w-date">
@@ -1346,7 +1419,7 @@ console.log(data,'datadatadata')
                                                                             'aria-label': 'Date',
                                                                         }}
                                                                         label="Date"
-                                                                        value={selectedDate}
+                                                                        value={optiondate}
                                                                         onChange={this.handleDateChange}
                                                                         animateYearScrolling={false}
                                                                         leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
@@ -1362,9 +1435,31 @@ console.log(data,'datadatadata')
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                        <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/>
+                                            <TextField id="optiondays" value={this.state.optiondays} onChange={this.setstatevaluefunction('optiondays')} fullWidth label="Days" placeholder="Days"/>
+                        {/* <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/> */}
                         </div>
                                             </div>
+
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div className="form-group">
+                                            <TextField id="optionremark" value={this.state.optionremark} onChange={this.setstatevaluefunction('optionremark')} fullWidth label="Remarks" placeholder="Remarks"/>
+                        {/* <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/> */}
+                        </div>
+                                            </div>
+
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="Base" />
+                                              </div>
+                                            </div>
+
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group">
+                                                    <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="Confirmed" />
+                                              </div>
+                                            </div>
+
+                                          
                                             </div>
                                             <div className="table-responsive mt-20">
                                             
@@ -1376,7 +1471,8 @@ console.log(data,'datadatadata')
                                     <th rowspan="4">Stage</th>
                                     <th rowspan="4">Activity</th>
                                     <th colspan="3">Option1</th>
-                                    <th colspan="3">Option2</th>
+                                    {/* <th colspan="3">Option2</th>
+                                    <th colspan="3">Option3</th> */}
                                 </tr>
                                 <tr>
                                     <th colspan="3" className="p-0">
@@ -1385,18 +1481,22 @@ console.log(data,'datadatadata')
                                         <div className="w-50 float-left p-5">Modified Dt</div>
 
                                     </th>
+                                    {/* <th colspan="3" className="p-0">
+
+                                        <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                        <div className="w-50 float-left p-5">Modified Dt</div>
+                                    </th>
                                     <th colspan="3" className="p-0">
 
                                         <div className="w-50 float-left border-right p-5">Created Dt</div>
                                         <div className="w-50 float-left p-5">Modified Dt</div>
-
-                                    </th>
+                                    </th> */}
                                 </tr>
                                 <tr>
                                     <th className="p-0">
 
                                         <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                            {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
                             </div>
                             </div>
                                         <div className="w-50 float-left p-5">Base</div>
@@ -1405,71 +1505,66 @@ console.log(data,'datadatadata')
                                     <th className="p-0">
 
                                         <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                            {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
                             </div>
                             </div>
                                         <div className="w-50 float-left p-5">Confirmed</div>
 
                                     </th>
                                     <th></th>
+                                    {/* <th className="p-0">
+
+                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                                        </div></div>
+                                    <div className="w-50 float-left p-5">Base</div>
+
+                                    </th>
                                     <th className="p-0">
 
-                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
-                            </div></div>
-                        <div className="w-50 float-left p-5">Base</div>
+                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                                        </div></div>
+                                    <div className="w-50 float-left p-5">Confirmed</div>
 
-                        </th>
-                        <th className="p-0">
-
-                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                            <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
-                            </div></div>
-                        <div className="w-50 float-left p-5">Confirmed</div>
-
-                        </th>
+                                    </th>
                                     <th></th>
+                                    <th className="p-0">
+
+                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                                        </div></div>
+                                    <div className="w-50 float-left p-5">Base</div>
+
+                                    </th>
+                                    <th className="p-0">
+
+                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
+                                        </div></div>
+                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                    </th>
+                                    <th></th> */}
                                 </tr>
                                 <tr>
                                     <th>Days</th>
                                     <th>Date</th>
                                     <th>Rmrk</th>
-                                    <th>Days</th>
+                                    {/* <th>Days</th>
                                     <th>Date</th>
                                     <th>Rmrk</th>
+                                    <th>Days</th>
+                                    <th>Date</th>
+                                    <th>Rmrk</th> */}
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                </tr>
-                                <tr>
-                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                </tr>
-                                <tr>
-                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                                                <td>Demo </td>
-                                </tr>
+                                    
+                                { actstagelisthtml &&
+                             actstagelisthtml}
+                               
+                                
                             </tbody>
                         </table>
 

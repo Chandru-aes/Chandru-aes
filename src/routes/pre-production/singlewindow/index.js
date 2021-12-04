@@ -728,11 +728,26 @@ class SinglewindowElement extends Component {
                 addoninfo=this.state.addoninfo[0].value;
             }
 
-            let sample_size="";
+            let sample_size="0";
             
             if(this.state.sample_size.length>0){
                 sample_size=this.state.sample_size[0].value;
             }
+
+            let costingsize="0";
+            
+            if(this.state.costingsize.length>0){
+                costingsize=this.state.costingsize[0].value;
+            }
+
+
+            let samplesize="0";
+            
+            if(this.state.samplesize.length>0){
+                samplesize=this.state.samplesize[0].value;
+            }
+
+            
 
             let markerfor="";
             
@@ -792,8 +807,8 @@ class SinglewindowElement extends Component {
                         "costShrWarp":  this.state.costingwarp,
                         "costShrWeft": this.state.costingweft,
                         //   "costNilShr": "string",
-                        "SamSize":sample_size,
-                        "CostSize":sample_size,
+                        "SamSize":samplesize,
+                        "CostSize":costingsize,
                         // "size": "string",
                         "createdBy": "string",
                         "createdDt": "2021-11-16T05:00:55.509Z",
@@ -805,7 +820,7 @@ class SinglewindowElement extends Component {
                                 "id": 0,
                                 "swH_Id": this.state.swid,
                                 "natureOfJob": job,
-                                "cancel": "s",
+                                "cancel": "N",
                                 "createdBy": "string",
                                 "createdDt": "2021-11-16T05:00:55.509Z",
                                 "modifyBy": "string",
@@ -1033,19 +1048,17 @@ class SinglewindowElement extends Component {
                 "purpose": this.state.purpose[0].label,
                 "fabricDesc": this.state.fabricDesc,
                 "fabricType": this.state.fabricType,
-                "cancel": "s",
+                "cancel": "N",
                 "createdBy": "string",
                 "createdDt": "2021-11-16T05:00:55.509Z",
                 "modifyBy": "string",
                 "modifyDt": "2021-11-16T05:00:55.509Z",
                 "hostName": "string",
                 "singleWindowDetEntityModel": reqtypedata,
-                // "swPatternHeadEntityModel": patterndata,
-                // "swSampleHeadEntityModel": sampledata,
-                // "swMarkerHeadEntityModel":markerdata,
-                // "swValueAddEntityModel":
-                // valueadddata
-                // ,
+                "swPatternHeadEntityModel": patterndata,
+                "swSampleHeadEntityModel": sampledata,
+                "swMarkerHeadEntityModel":markerdata,
+                "swValueAddEntityModel": valueadddata,
                 "swsamReqEntityModel":
                 samdata
 
@@ -1293,7 +1306,7 @@ class SinglewindowElement extends Component {
                 "swH_Id": this.state.swid,
                 "optionType": this.state.optionType,
                 "baseSAM": "s",
-                "cancel": "s",
+                "cancel": "N",
                 "createdBy": "string",
                 "createdDt": "2021-11-15T06:14:33.552Z",
                 "modifyBy": "string",
@@ -1354,7 +1367,7 @@ class SinglewindowElement extends Component {
                 "color": this.state.valueaddcolor,
                 "pcs": this.state.noofpieces,
                 "typeOfGarment": "string",
-                "cancel": "s",
+                "cancel": "N",
                 "createdBy": "string",
                 "createdDt": "2021-11-15T06:14:33.552Z",
                 "modifyBy": "string",
@@ -1421,7 +1434,7 @@ class SinglewindowElement extends Component {
                 "width": this.state.marker_width,
                 "repeat": this.state.marker_repeat,
                 "baseMarker": "s",
-                "cancel": "s",
+                "cancel": "N",
                 "createdBy": "string",
                 "createdDt": "2021-11-16T05:00:55.509Z",
                 "modifyBy": "string",
@@ -1480,7 +1493,7 @@ class SinglewindowElement extends Component {
                 "color":this.state.sample_color,
                 "size":this.state.sample_size[0].value,
                 "pcs": this.state.sample_pieces,
-                "cancel": "s",
+                "cancel": "N",
                 "createdBy": "string",
                 "createdDt": "2021-11-16T05:00:55.509Z",
                 "modifyBy": "string",
