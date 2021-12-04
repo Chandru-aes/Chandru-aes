@@ -933,16 +933,17 @@ class PreprodcutionTable extends Component {
                                                             <Button name="delete" />
                                                             <Button name="delete" hint="Clone" icon="repeat"  />
                                                         </Column>
-                                                        <Column dataField="quantity" width={110} caption="Quantity">
-                                                            <RequiredRule />
-                                                            <StringLengthRule max={7} message="Quantity should not more than 7 Digits"/>
+                                                        <Column dataField="quantity" dataType={'number'} width={110} caption="Quantity">
+                                                            {/*<RequiredRule />*/}
+                                                            {/*<StringLengthRule  max={7} message="Quantity should not more than 7 Digits"/>*/}
+                                                            <RangeRule type={'stringLength'} message="Quantity should not more than 7 Digits" max={7} />
                                                         </Column>
                                                         <Column dataField="productType" caption="Product type" >
 
                                                             <Lookup dataSource={this.state.productTypes} valueExpr="productType" displayExpr="productType"/>
                                                             <RequiredRule />
                                                         </Column>
-                                                        <Column dataField="subProductType" caption="Sub-Product type" >
+                                                        <Column dataField="subProductType" caption="Sub-Product type"   >
                                                             {/* */}
                                                             <Lookup dataSource={this.getSubproductType} valueExpr="subProductType" displayExpr="subProductType" />
                                                             <RequiredRule />
