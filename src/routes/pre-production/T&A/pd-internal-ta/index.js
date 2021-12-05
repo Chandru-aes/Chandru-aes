@@ -54,6 +54,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Select1 from "react-dropdown-select";
+
+import { AccordionInput } from "../../../../helpers/helpers";
+
 // const styles = {
 // 	checked: {
 // 		color: pink[500],
@@ -70,7 +73,7 @@ function TabContainer({ children }) {
         </Typography>
     );
 }
-class PdtamasterElement extends Component {
+class PdtinternalElement extends Component {
     constructor(props) {
         super(props);
 
@@ -92,6 +95,7 @@ class PdtamasterElement extends Component {
         this.dropzone = null;
     }
     state = {
+        hid:0,
         activeIndex: 0,
         open: false,
         cloneopen: false,
@@ -119,6 +123,10 @@ class PdtamasterElement extends Component {
 
         stylenolists: [],
         styleno: [],
+
+        orderno: [],
+        activity:"",
+        subactivity:"",
 
         materialtypelists: [],
         materialtype: [],
@@ -158,7 +166,7 @@ class PdtamasterElement extends Component {
         season: [],
         // styleno:'',
         refstyleno: '',
-        versionno: '',
+        
         designStyleNo: '',
         desc: '',
         fabdesc: '',
@@ -213,8 +221,17 @@ class PdtamasterElement extends Component {
         edit_add: false,
         filterbuyerdivlists: [],
         filterstylenolists: [],
-        filterstyleno: []
+        filterstyleno: [],
 
+        scheduled_date: moment(new Date()).format('YYYY-MM-DD'),
+        revisied_date: moment(new Date()).format('YYYY-MM-DD'),
+        confdate: moment(new Date()).format('YYYY-MM-DD'),
+        days:0,
+        versionno: '',
+        rmrk:'',
+        skipflag:"N",
+        
+        actstagelists: [],
     }
     onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -227,131 +244,7 @@ class PdtamasterElement extends Component {
     componentDidMount() {
 
         document.body.classList.add('med-pop-up-h');
-        $('.patternclass').hide();
-        $('.samclass').hide();
-        $('.sampleclass').hide();
-        $('.markerclass').hide();
-        $('.valueaddclass').hide();
         this.getfilldropdownlists();
-
-        if (this.props.match.params.swid != undefined) {
-            this.setState({ swid: this.props.match.params.swid })
-            this.editdata(this.props.match.params.swid);
-        }
-        // $(document).on('click', '.edit', function() {
-        //     $(this).parent().siblings('td.data').each(function() {
-        //       var content = $(this).html();
-        //       $(this).html('<input value="' + content + '" class="form-control"/>');
-        //     });
-
-        //     $(this).siblings('.save').show();
-        //     $(this).siblings('.delete').hide();
-        //     $(this).hide();
-        //   });
-
-        //   $(document).on('click', '.save', function() {
-
-        //     $('input').each(function() {
-        //       var content = $(this).val();
-        //       $(this).html(content);
-        //       $(this).contents().unwrap();
-        //     });
-        //     $(this).siblings('.edit').show();
-        //     $(this).siblings('.delete').show();
-        //     $(this).hide();
-
-        //   });
-
-
-        //   $(document).on('click', '.delete', function() {
-        //     $(this).parents('tr').remove();
-        //   });
-
-        //   $('.add').click(function() {
-        //     $(this).parents('table').append('<tr><td class="data"></td><td class="data"></td><td class="data"></td><td><button class="save">Save</button><button class="edit">Edit</button> <button class="delete">Delete</button></td></tr>');
-        //   });
-    }
-
-    editdata(id) {
-        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo=' + id)
-            .then((response) => {
-
-                let data = response.data.data[0];
-
-                this.setState({
-                    buyer: [{ value: data.buyCode, label: data.buyerName }], buyerdiv: [{ value: data.buyDivCode, label: data.buyDivCode }], season: [{ value: data.seasonCode, label: data.seasonName }], year: [{ value: data.seasonYear, label: data.seasonYear }], baseStyleno: data.baseStyleno, fabricDesc: data.fabricDesc, fabricType: data.fabricType,
-                    purpose: [{ value: data.purpose, label: data.purpose }],
-                    reqtype: [{ value: data.reqType, label: data.reqType }],
-                    styleno: [{ value: data.styleNo, label: data.styleNo }],
-                    fit: [{ value: data.fit, label: data.fit }]
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowPatternList?IdRequestNo=' + id)
-            .then((response) => {
-
-                let data = response.data.data[0];
-
-                this.setState({
-                    buyerdiv: [{ value: data.buyDivcode, label: data.buyerDivName }],
-                    samplewarp: data.samShrWarp,
-                    sampleweft: data.samShrWeft,
-                    costingwarp: data.costShrWarp,
-                    costingweft: data.costShrWeft,
-                    samplesize: [{ value: data.samSize, label: data.samSize }],
-                    costingsize: [{ value: data.costSize, label: data.costSize }],
-                    bodygrain: [{ value: data.bodyGrain, label: data.bodyGrain }],
-                    addoninfo: [{ value: data.addOnInfo, label: data.addOnInfo }],
-                    job: [{ value: data.natureOfJob, label: data.natureOfJob }],
-
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSampleList?IdRequestNo=' + id)
-            .then((response) => {
-
-                let data = response.data.data[0];
-                this.setState({
-                    sampleaddmoredata: response.data.data, samplewarp: data.expDeliDate,
-                    prepseq: [{ value: data.prepSeq, label: data.prepSeq }],
-
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=35')
-            .then((response) => {
-
-                let data = response.data.data[0];
-                this.setState({
-                    valueaddaddmoredata: response.data.data
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=43')
-            .then((response) => {
-
-                let data = response.data.data[0];
-                this.setState({
-                    samaddmoredata: response.data.data
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-
 
     }
 
@@ -570,6 +463,22 @@ class PdtamasterElement extends Component {
     setstatevaluefunction = name => event => {
 
         this.setState({ [name]: event.target.value });
+
+        if (name == "days") {
+            if (!/^[0-9]+$/.test(event.target.value)) {
+                if (event.target.value == "" || event.target.value == 0) {
+
+                } else {
+                    NotificationManager.error('Please only enter numeric characters (Allowed input:0-9)');
+                }
+
+                this.setState({ [name]: 0 });
+            } else {
+                this.setState({ [name]: event.target.value });
+            }
+
+        }
+
     };
 
 
@@ -593,11 +502,11 @@ class PdtamasterElement extends Component {
         //     }, 200);
         // }
 
-        // if(name=="buyerdiv"){
-        //     setTimeout(() => {
-        //         this.getActivitylist();
-        //     }, 200);
-        // }
+        if(name=="buyer" || name=="buyerdiv" || name=="ordercategory"){
+            setTimeout(() => {
+                this.getActivitylist();
+            }, 200);
+        }
 
 
         // if(name=="buyer" || name=="buyerdiv" || name=="year" || name=="season"){
@@ -628,6 +537,29 @@ class PdtamasterElement extends Component {
                 .then((response) => {
                     let datas = response.data.data;
                     this.setState({ stylenolists: datas });
+                })
+                .catch(error => {
+                    // error handling
+                })
+        }
+    }
+
+    getActivitylist() {
+        this.setState({ actstagelists: [] });
+        if (this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.ordercategory.length > 0) {
+
+            // api.get('TNAMaster/GetExistChkForTNABuyer?Buyer='+this.state.buyer[0].value)
+            api.get('TNAMaster/GetExistChkForTNAInternalOCat?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value+'&OCat=' + this.state.ordercategory[0].value)
+                .then((response) => {
+                    let datas = response.data.data;
+                    if (response.data.messageCode == "200") {
+
+                        this.setState({ actstagelists: datas });
+                    } else {
+                        this.setState({ actstagelists: datas });
+                        NotificationManager.error(response.data.message);
+                    }
+
                 })
                 .catch(error => {
                     // error handling
@@ -683,330 +615,68 @@ class PdtamasterElement extends Component {
         }
     }
 
-    save() {
-        console.log(this.state, '-----------------------')
+    skipChangecheckbox(event) {
+        if (this.state.skipflag == "Y") {
+            this.setState({ skipflag: "N" });
+        } else {
+            this.setState({ skipflag: "Y" });
+        }
+    }
 
+    
+    Generate() {
 
-        if (this.state.buyer.length > 0) {
+        let ordercategory = "";
+        if (this.state.ordercategory.length > 0) {
+            ordercategory = this.state.ordercategory[0].value;
+        }
 
-            let patterndata = {};
-            let markerdata = {};
-            let sampledata = {};
-            let samdata = {};
-            let valueadddata = {};
-            let reqtypedata = [];
-            this.state.reqtype.forEach(element => {
+        if (this.state.buyer.length > 0 && this.state.buyer.length > 0) {
+            if(this.state.hid!=0 && this.state.hid!=''){
+                if(this.state.optiondays!=0 && this.state.optiondays!=''){
 
-                let newdata = {
-                    "id": 0,
-                    "swH_Id": this.state.swid,
-                    "reqType": element.value,
-                    "createdBy": "string",
-                    "createdDt": "2021-11-16T05:00:55.509Z",
-                    "modifyBy": "string",
-                    "modifyDt": "2021-11-16T05:00:55.509Z",
-                    "hostName": "string"
-                };
+                   
 
-                reqtypedata.push(newdata);
-
-
-                if (element.value == "PATTERN") {
-                    patterndata = {
-                        "id": 0,
-                        "swH_Id": this.state.swid,
-                        "verRef": "string",
-                        "bodyGrain": this.state.bodygrain[0].value,
-                        "addOnInfo": this.state.addoninfo[0].value,
-                        "samShr": "s",
-                        "samShrWarp": this.state.samplewarp,
-                        "samShrWeft": this.state.sampleweft,
-                        //   "samNilShr":  "string",
-                        "costShr": "s",
-                        "costShrWarp": this.state.costingwarp,
-                        "costShrWeft": this.state.costingweft,
-                        //   "costNilShr": "string",
-                        "SamSize": this.state.sample_size[0].value,
-                        "CostSize": this.state.sample_size[0].value,
-                        // "size": "string",
-                        "createdBy": "string",
-                        "createdDt": "2021-11-16T05:00:55.509Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-16T05:00:55.509Z",
-                        "hostName": "string",
-                        "swPatternDetEntityModel": [
-                            {
-                                "id": 0,
-                                "swH_Id": this.state.swid,
-                                "natureOfJob": this.state.job[0].value,
-                                "cancel": "s",
-                                "createdBy": "string",
-                                "createdDt": "2021-11-16T05:00:55.509Z",
-                                "modifyBy": "string",
-                                "modifyDt": "2021-11-16T05:00:55.509Z",
-                                "hostName": "string"
+                    let data = {
+                        "buyer": this.state.buyer[0].value,
+                        "buyerDiv": this.state.buyerdiv[0].value,
+                        "orderCat": ordercategory,
+                        "id": this.state.hid,
+                        "activity": this.state.activity,
+                        "noofDays": this.state.days,
+                        "schedule": this.state.scheduled_date,
+                        };
+        
+                    
+                    api.post('TNAMaster/GetScheduleDateGenerationInternal', data).then((response) => {
+                        this.setState({hid:'',days:0,scheduled_date: moment(new Date()).format('YYYY-MM-DD'),activity:'',subactivity:'',revisied_date: moment(new Date()).format('YYYY-MM-DD'),confdate: moment(new Date()).format('YYYY-MM-DD'),});
+                        let datas = response.data.data;
+                        if(datas!=null){
+                            if (response.data.messageCode == "200") {    
+                                this.setState({ actstagelists: datas });
+                            } else {
+                                this.setState({ actstagelists: datas });
+                                NotificationManager.error(response.data.message);
                             }
-                        ]
-                    }
+                        } else{
+                            this.setState({ actstagelists: []});
+                            NotificationManager.error(response.data.message);
+                        }
+                       
+        
+                    })
+                        .catch(error => {
+                            // error handling
+                        })
+
+                }else {
+                    NotificationManager.error('Please Enter valid days');    
                 }
-                //  else{
-                //     patterndata ={
-                //         "id": 0,
-                //         "swH_Id": this.state.swid,
-                //         "verRef": "string",
-                //         "bodyGrain": "string",
-                //         "addOnInfo": "string",
-                //         "samShr": "s",
-                //         "samShrWarp": 0,
-                //         "samShrWeft": 0,
-                //         "costShr": "s",
-                //         "costShrWarp": 0,
-                //         "costShrWeft": 0,
-                //         "samSize": "string",
-                //         "costSize": "string",
-                //         "createdBy": "string",
-                //         "createdDt": "2021-11-18T12:07:22.603Z",
-                //         "modifyBy": "string",
-                //         "modifyDt": "2021-11-18T12:07:22.603Z",
-                //         "hostName": "string",
-                //         "swPatternDetEntityModel": [
-                //           {
-                //             "id": 0,
-                //             "swH_Id": this.state.swid,
-                //             "natureOfJob": "string",
-                //             "cancel": "s",
-                //             "createdBy": "string",
-                //             "createdDt": "2021-11-18T12:07:22.603Z",
-                //             "modifyBy": "string",
-                //             "modifyDt": "2021-11-18T12:07:22.603Z",
-                //             "hostName": "string"
-                //           }
-                //         ]
-                //       }
-                // }
+            } else {
+                NotificationManager.error('Please Click on days or date');    
+            }
 
-
-                if (element.value == "MARKER") {
-                    markerdata = {
-                        "id": 0,
-                        "swH_Id": this.state.swid,
-                        "verRef": "string",
-                        "changesIn": this.state.marker_changesin,
-                        "bodyGrain": this.state.marker_bodygrain,
-                        "shrinkage": this.state.marker_shrinkage,
-                        "markerFor": this.state.markerfor[0].value,
-                        "createdBy": "string",
-                        "createdDt": "2021-11-16T05:00:55.509Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-16T05:00:55.509Z",
-                        "hostName": "string",
-                        "swMarkerDetEntityModel":
-                            this.state.markeraddmoredata
-
-                    }
-                }
-
-                // else{
-                //     markerdata ={
-                //         "id": 0,
-                //         "swH_Id": this.state.swid,
-                //         "verRef": "string",
-                //         "changesIn": "string",
-                //         "bodyGrain": "string",
-                //         "shrinkage": "string",
-                //         "markerFor": "string",
-                //         "createdBy": "string",
-                //         "createdDt": "2021-11-18T12:07:22.603Z",
-                //         "modifyBy": "string",
-                //         "modifyDt": "2021-11-18T12:07:22.603Z",
-                //         "hostName": "string",
-                //         "swMarkerDetEntityModel": [
-                //           {
-                //             "id": 0,
-                //             "swH_Id": this.state.swid,
-                //             "matType": "string",
-                //             "description": "string",
-                //             "placement": "string",
-                //             "color": "string",
-                //             "size": "string",
-                //             "pcs": 0,
-                //             "width": "string",
-                //             "repeat": "string",
-                //             "baseMarker": "s",
-                //             "cancel": "s",
-                //             "createdBy": "string",
-                //             "createdDt": "2021-11-18T12:07:22.603Z",
-                //             "modifyBy": "string",
-                //             "modifyDt": "2021-11-18T12:07:22.603Z",
-                //             "hostName": "string"
-                //           }
-                //         ]
-                //       }
-                // }
-
-
-                if (element.value == "SAMPLE") {
-                    sampledata = {
-                        "id": 0,
-                        "swH_Id": this.state.swid,
-                        "verRef": "string",
-                        "expDeliDate": this.state.selectedDate,
-                        "prepSeq": this.state.prepseq[0].value,
-                        "sampleType": this.state.sampletype[0].value,
-                        "totPcs": 0,
-                        "createdBy": "string",
-                        "createdDt": "2021-11-16T05:00:55.509Z",
-                        "modifyBy": "string",
-                        "modifyDt": "2021-11-16T05:00:55.509Z",
-                        "hostName": "string",
-                        "swSampleDetEntityModel":
-                            this.state.sampleaddmoredata
-
-
-                    }
-                }
-
-                // else {
-                //     sampledata ={
-                //         "id": 0,
-                //         "swH_Id": this.state.swid,
-                //         "verRef": "string",
-                //         "expDeliDate": "2021-11-18T12:07:22.603Z",
-                //         "prepSeq": "string",
-                //         "sampleType": "string",
-                //         "totPcs": 0,
-                //         "createdBy": "string",
-                //         "createdDt": "2021-11-18T12:07:22.603Z",
-                //         "modifyBy": "string",
-                //         "modifyDt": "2021-11-18T12:07:22.603Z",
-                //         "hostName": "string",
-                //         "swSampleDetEntityModel": [
-                //           {
-                //             "id": 0,
-                //             "swH_Id": this.state.swid,
-                //             "matType": "string",
-                //             "matDesc": "string",
-                //             "placement": "string",
-                //             "color": "string",
-                //             "size": "string",
-                //             "pcs": 0,
-                //             "cancel": "s",
-                //             "createdBy": "string",
-                //             "createdDt": "2021-11-18T12:07:22.603Z",
-                //             "modifyBy": "string",
-                //             "modifyDt": "2021-11-18T12:07:22.603Z",
-                //             "hostName": "string"
-                //           }
-                //         ]
-                //       }
-                // }
-
-
-                if (element.value == "SAM") {
-                    samdata = this.state.samaddmoredata;
-                }
-                // else{
-                //     samdata =[
-                //         {
-                //           "id": 0,
-                //           "swH_Id": this.state.swid,
-                //           "optionType": "string",
-                //           "baseSAM": "s",
-                //           "cancel": "s",
-                //           "createdBy": "string",
-                //           "createdDt": "2021-11-18T12:07:22.603Z",
-                //           "modifyBy": "string",
-                //           "modifyDt": "2021-11-18T12:07:22.603Z",
-                //           "hostName": "string"
-                //         }
-                //       ]
-                // }
-
-
-
-                if (element.value != "VALUEADD") {
-                    valueadddata = this.state.valueaddaddmoredata;
-                }
-                // else{
-                //     valueadddata =[
-                //         {
-                //           "id": 0,
-                //           "swH_Id": this.state.swid,
-                //           "valueAdd": "string",
-                //           "valueAddType": "string",
-                //           "valueAddDesc": "string",
-                //           "color": "string",
-                //           "pcs": 0,
-                //           "typeOfGarment": "string",
-                //           "cancel": "s",
-                //           "createdBy": "string",
-                //           "createdDt": "2021-11-18T12:07:22.603Z",
-                //           "modifyBy": "string",
-                //           "modifyDt": "2021-11-18T12:07:22.603Z",
-                //           "hostName": "string"
-                //         }
-                //       ]
-                // } 
-            });
-
-
-            let data = {
-                "id": this.state.swid,
-                "entityId": "st",
-                "buyCode": this.state.buyer[0].value,
-                "buyDivcode": this.state.buyerdiv[0].value,
-                "seasonCode": this.state.season[0].value,
-                "seasonYear": this.state.year[0].value,
-                "styleNo": this.state.styleno[0].value,
-                "masterStyle": 0,
-                "baseStyleno": this.state.baseStyleno,
-                "unitCode": "string",
-                "reqNo": "string",
-                "reqDate": "2021-11-16T05:00:55.509Z",
-                "fit": this.state.fit[0].value,
-                "purpose": this.state.purpose[0].value,
-                "fabricDesc": this.state.fabricDesc,
-                "fabricType": this.state.fabricType,
-                "cancel": "s",
-                "createdBy": "string",
-                "createdDt": "2021-11-16T05:00:55.509Z",
-                "modifyBy": "string",
-                "modifyDt": "2021-11-16T05:00:55.509Z",
-                "hostName": "string",
-                "singleWindowDetEntityModel": reqtypedata,
-                // "swPatternHeadEntityModel": patterndata,
-                // "swSampleHeadEntityModel": sampledata,
-                // "swMarkerHeadEntityModel":markerdata,
-                // "swValueAddEntityModel": 
-                // valueadddata
-                // ,
-                "swsamReqEntityModel":
-                    samdata
-
-            };
-            console.log(data, 'datadatadata')
-
-            api.post('SingleWindowRequestheader/SaveSingleWindowRequestDetails', data).then((response) => {
-                // this.getMenulists();
-                NotificationManager.success('Saved Sucessfully');
-                window.location.href = "/#/app/pre-production/request-grid";
-                this.setState({
-                    // edit_add:false,
-                    // menuId:0,
-                    // parent_menu_id:[],
-                    // module:[],
-                    // menu_type:[],
-                    // menuname:'',
-                    // menuurl:'',
-                    // menudesc:'',
-                    // active_status:'',
-                    // isparent:'',
-                    // displayindex:''
-                });
-            })
-                .catch(error => {
-                    // error handling
-                })
+          
 
         } else {
             NotificationManager.error('Please Select Buyer');
@@ -1015,6 +685,137 @@ class PdtamasterElement extends Component {
 
 
     }
+    
+
+    //save Internal T&A
+    save() {
+        
+        if (this.state.buyer.length > 0) {
+            if(this.state.actstagelists.length>0){
+                let optionarraylists = []
+                this.state.actstagelists.forEach(element => {
+                  let optiondata =  {
+                        "id": 0,
+                        "intTna_Id":  element.id,
+                        "tnaSeqno": element.tnaSeqNo,
+                        "fit": element.fit,
+                        "actCode": 0,
+                        "activity": element.activity,
+                        "subActivity": "string",
+                        "duration": element.duration,
+                        "dependActCode": "string",
+                        "scheduleDt": element.schedule,
+                        "revisedDt": "2021-12-05T17:28:53.760Z",
+                        "completed": "s",
+                        "completedDt": "2021-12-05T17:28:53.760Z",
+                        "skipped": "s",
+                        "deviation": 0,
+                        "remarks": "string",
+                        "createdBy": "string",
+                        "modifyBy": "string",
+                        "hostname": "string"
+                        
+                      }
+                      optionarraylists.push(optiondata);
+                });
+                let data = {
+                    "id": 0,
+                    "entityId": "st",
+                    "masterStyle": this.state.styleno[0].value,
+                    "baseActivity": "string",
+                    "triggerDt": "2021-12-05T17:28:53.760Z",
+                    "remarks": "string",
+                    "cancel": "N",
+                    "createdBy": "string",
+                    "modifyBy": "string",
+                    "hostname": "string",
+                    "intTNADetlEntityModel":optionarraylists
+                  };
+    
+    
+                api.post('TNAMaster/SaveInternalTNAMaster', data).then((response) => {
+    
+                    NotificationManager.success('Saved Sucessfully');
+                    this.setState({ edit_add: false });
+                    this.setState({
+                        buyerdiv: [], buyer: [], ordercategory: [], year:[],season:[],actstagelists:[],styleno:[],orderno:[],hid:'',days:0,scheduled_date: moment(new Date()).format('YYYY-MM-DD'),activity:'',subactivity:'',revisied_date: moment(new Date()).format('YYYY-MM-DD'),confdate: moment(new Date()).format('YYYY-MM-DD')
+                    });
+                })
+                    .catch(error => {
+                        // error handling
+                    })
+
+            }  else {
+                NotificationManager.error('Schedule Date Generation Records not found');    
+            }           
+
+        } else {
+            NotificationManager.error('Please Select Buyer');
+
+        }
+
+
+    }
+
+    
+    //edit internal
+    edittnainternal(id) {
+
+        this.setState({
+            actstagelists:[],
+            hid: 0,
+            styleno:[],
+            edit_add: true
+        });
+        
+        api.get('TNAMaster/GetInternalTNAListBasedID?ID=' + id)
+            .then((response) => {
+                let data = response.data.data[0];
+
+                
+                let tamasteraddmoredatalists = [];
+                for (const item of data.intTNADetlEntityModel) {
+                    let dataall ={
+                        "id": item.id,
+                        "intTna_Id": item.intTna_Id,
+                        "tnaSeqno": item.tnaSeqno,
+                        "fit": item.fit,
+                        "actCode": 0,
+                        "activity": item.activity,
+                        "subActivity": item.subActivity,
+                        "duration": 0,
+                        "dependActCode": item.dependActCode,
+                        "schedule": item.scheduleDt,
+                        "revisedDt": item.revisedDt,
+                        "completed": item.completed,
+                        "completedDt": item.completedDt,
+                        "skipped": item.skipped,
+                        "deviation": item.deviation,
+                        "remarks": item.remarks,
+                        "modifyBy": item.modifyBy,
+                        "modifyDt": null,
+                        "createdBy": item.createdBy,
+                        "createdDt": item.createdDt,
+
+
+                    };
+                    tamasteraddmoredatalists.push(dataall);
+                }
+                
+                // this.setState({ tamasteraddmoredata: tamasteraddmoredatalists, buyer: [{ value: data.buyCode, label: data.buyerCode }], buyerdiv: [{ value: data.buydivCode, label: data.buyerDivName }], ordercategory: [{ value: data.orderCategory, label: data.orderCategory }], department: [{ value: data.deptcode, label: data.deptcode }] });
+
+                this.setState({
+                    actstagelists:tamasteraddmoredatalists,
+                    hid: id,
+                    styleno:[{value:data.masterStyle,label:data.masterStyle}],
+                });
+            })
+            .catch(error => {
+                // error handling
+            })
+    }
+
+
 
     getBuyerDivision1(val, field, e) {
         let fields = this.state.fields;
@@ -1140,59 +941,6 @@ class PdtamasterElement extends Component {
             errors["styleno"] = "Cannot be empty";
         }
 
-        //reqtype
-        if (!fields["reqtype"]) {
-            formIsValid = false;
-            errors["reqtype"] = "Cannot be empty";
-        }
-
-        //purpose
-        if (!fields["purpose"]) {
-            formIsValid = false;
-            errors["purpose"] = "Cannot be empty";
-        }
-
-        //fit
-        if (!fields["fit"]) {
-            formIsValid = false;
-            errors["fit"] = "Fit Cannot be empty";
-        }
-
-        //stage
-        if (!fields["stage"]) {
-            formIsValid = false;
-            errors["stage"] = "Stage Cannot be empty";
-        }
-
-
-
-
-
-
-        // if(typeof fields["name"] !== "undefined"){
-        //   if(!fields["name"].match(/^[a-zA-Z]+$/)){
-        //     formIsValid = false;
-        //     errors["name"] = "Only letters";
-        //   }      	
-        // }
-
-        // //Email
-        // if(!fields["email"]){
-        //   formIsValid = false;
-        //   errors["email"] = "Cannot be empty";
-        // }
-
-        // if(typeof fields["email"] !== "undefined"){
-        //   let lastAtPos = fields["email"].lastIndexOf('@');
-        //   let lastDotPos = fields["email"].lastIndexOf('.');
-
-        //   if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
-        //     formIsValid = false;
-        //     errors["email"] = "Email is not valid";
-        //   }
-        // }
-
-
 
         this.setState({ errors: errors });
         return formIsValid;
@@ -1203,43 +951,20 @@ class PdtamasterElement extends Component {
         this.setState({ activeIndex: value });
         this.setState({ [name]: checked });
     }
+
     handleDateChange = (date) => {
-
-        this.setState({ selectedDate: moment(date).format('YYYY-MM-DD') });
-
-    };
-    handleChangeCheckbox = name => (event, checked) => {
-        console.log("name:: ", name);
-        this.setState({ [name]: checked });
+        // console.log(moment(date).format('YYYY-MM-DD h:m:s a'));
+        this.setState({ scheduled_date: moment(date).format('YYYY-MM-DD')});
     };
 
-    handleClickOpen = () => {
-        this.setState({ open: true });
-    };
-    ClickTechPack = () => {
-        this.setState({ tpopen: true });
-    }
-    handleClose = () => {
-        this.setState({ open: false });
-    };
-    CloseTechPack = () => {
-        this.setState({ tpopen: false });
+    handleDateChange1 = (date) => {
+        this.setState({ revisied_date: moment(date).format('YYYY-MM-DD') });
     };
 
-    rhandleClickOpen = () => {
-        this.setState({ ropen: true });
+    handleDateChange2 = (date) => {
+        this.setState({ confdate: moment(date).format('YYYY-MM-DD') });
     };
 
-    rhandleClose = () => {
-        this.setState({ ropen: false });
-    };
-
-    Clickclone = () => {
-        this.setState({ cloneopen: true });
-    }
-    Closeclone = () => {
-        this.setState({ cloneopen: false });
-    };
 
     samaddmoresave() {
         const { samaddmoredata } = this.state;
@@ -1481,6 +1206,15 @@ class PdtamasterElement extends Component {
     }
 
 
+    rowclickfunction(n, index) {
+        $('.alltd').css('background-color', '#fff');
+        $('#duration' + index).css('background-color', '#da0a0a');
+        $('#schedule' + index).css('background-color', '#da0a0a');
+        $('#revised' + index).css('background-color', '#da0a0a');
+        $('#confirmed' + index).css('background-color', '#da0a0a');
+        this.setState({ activity: n.activity,subactivity:n.subActivity, days: n.duration, rmrk: "", hid: n.hid,scheduled_date:moment(n.schedule).format('YYYY-MM-DD'),confdate:moment(n.completedDt).format('YYYY-MM-DD'),revisied_date:moment(n.revisedDt).format('YYYY-MM-DD') })
+    }
+
 
     render() {
         const { employeePayroll, samaddmoredata, valueaddaddmoredata, markeraddmoredata, sampleaddmoredata, reqtype } = this.state;
@@ -1512,6 +1246,7 @@ class PdtamasterElement extends Component {
         };
         const isActive = this.state.isActive;
 
+        const {  scheduled_date,confdate, revisied_date,skipflag  } = this.state;
 
         const buyeroptions = [];
         for (const item of this.state.buyerlists) {
@@ -1652,7 +1387,7 @@ class PdtamasterElement extends Component {
                     <tr>
                         <td className="text-center">
                             <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                            <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) => this.edittnamaster(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
+                            <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) => this.edittnainternal(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
 
                         <td>{n.buyName} </td>
                         <td>{n.divname} </td>
@@ -1668,6 +1403,32 @@ class PdtamasterElement extends Component {
         } else {
             overalllistshtml = <tr><td colSpan="9" className="no-records-data"><span>No records found</span></td></tr>;
         }
+
+
+        let actstagelisthtml = null;
+        if (this.state.actstagelists.length > 0) {
+            actstagelisthtml = this.state.actstagelists.map((n, index) => {
+                return (
+                    <tr>
+                        <td>{n.stage} </td>
+                        <td>{n.fit} </td>
+                        <td>{n.activity} </td>
+                        <td>{n.subActivity} </td>
+                        <td className="alltd" id={'duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index)}>{n.duration} </td>
+                        <td className="alltd" id={'schedule' + `${index}`} onClick={(e) => this.rowclickfunction(n, index)}>{n.schedule} </td>
+                        <td className="alltd" id={'revised' + `${index}`} onClick={(e) => this.rowclickfunction(n, index)}> {n.revisedDt}</td>
+                        <td className="alltd" id={'confirmed' + `${index}`} onClick={(e) => this.rowclickfunction(n, index)}>{n.completedDt} </td>
+                        <td> </td>
+                        <td>{n.skipped} </td>
+                        <td> </td>
+                        
+                    </tr>
+                );
+            })
+        } else {
+            actstagelisthtml = <tr><td colSpan="11" className="no-records-data"><span>No records found</span></td></tr>;
+        }
+
 
 
         return (
@@ -1687,11 +1448,21 @@ class PdtamasterElement extends Component {
                             <div className="float-right pr-0 but-tp">
 
 
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label"> Generate <i className="zmdi zmdi-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.Generate(e)}  ><span className="MuiButton-label"> Generate <i className="zmdi zmdi-plus"></i></span><span className="MuiTouchRipple-root"></span></button>
                                 <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
 
-
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                {(() => {
+                                    if (this.state.edit_add == false) {
+                                        return (
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                        )
+                                    }
+                                    if (this.state.edit_add != false) {
+                                        return (<button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-10 text-white btn-icon pull-right b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                        )
+                                    }
+                                })()}
+                                {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button> */}
                             </div> <div className="clearfix"></div>
                             <div className="row new-form">
 
@@ -1791,100 +1562,157 @@ class PdtamasterElement extends Component {
 
 
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Order No"
+                                                        options={stylenooptions}
+                                                        onChange={this.setstatevaluedropdownfunction('orderno')}
+                                                        placeholder="Order No"
+                                                        values={this.state.orderno}
+                                                    />
+                                                    
+                                                </div>
+                                                
+                                            </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div className="form-group">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="age-simple">Order No</InputLabel>
-                                                        <Select value={this.state.age} onChange={this.handleChange}
-                                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                            <MenuItem value=""><em>None</em></MenuItem>
-                                                            <MenuItem value={10}>Autumn</MenuItem>
-                                                            <MenuItem value={20}>Summer</MenuItem>
-                                                            <MenuItem value={30}>Winter</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
+                                                     <TextField id="versionno" disabled value={this.state.versionno} onChange={this.setstatevaluefunction('versionno')} fullWidth label="Version" placeholder="Version" />
                                                 </div>
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div className="form-group">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="age-simple">Version</InputLabel>
-                                                        <Select value={this.state.age} onChange={this.handleChange}
-                                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                            <MenuItem value=""><em>None</em></MenuItem>
-                                                            <MenuItem value={10}>Autumn</MenuItem>
-                                                            <MenuItem value={20}>Summer</MenuItem>
-                                                            <MenuItem value={30}>Winter</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
+                                                     <TextField id="activity" disabled value={this.state.activity} onChange={this.setstatevaluefunction('activity')} fullWidth label="Activity" placeholder="Activity" />
                                                 </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                <div className="form-group">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="age-simple">Activity</InputLabel>
-                                                        <Select value={this.state.age} onChange={this.handleChange}
-                                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                            <MenuItem value=""><em>None</em></MenuItem>
-                                                            <MenuItem value={10}>Autumn</MenuItem>
-                                                            <MenuItem value={20}>Summer</MenuItem>
-                                                            <MenuItem value={30}>Winter</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
-                                                </div>
+                                                
                                             </div>
 
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                 <div className="form-group">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="age-simple">Sub activity</InputLabel>
-                                                        <Select value={this.state.age} onChange={this.handleChange}
-                                                            inputProps={{ name: 'age', id: 'age-simple', }}>
-                                                            <MenuItem value=""><em>None</em></MenuItem>
-                                                            <MenuItem value={10}>Autumn</MenuItem>
-                                                            <MenuItem value={20}>Summer</MenuItem>
-                                                            <MenuItem value={30}>Winter</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
+                                                     <TextField id="subactivity" disabled value={this.state.subactivity} onChange={this.setstatevaluefunction('subactivity')} fullWidth label="Sub Activity" placeholder="Sub Activity" />
                                                 </div>
                                             </div>
+
+                                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date">
+                                                <div className="row">
+                                                    <AccordionInput>
+                                                        <Fragment>
+                                                            <div className="rct-picker">
+                                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                                    <KeyboardDatePicker
+                                                                        disablePast={true}
+                                                                        // minDate={confduedate}
+                                                                        disableToolbar
+                                                                        variant="inline"
+                                                                        format="MM/dd/yyyy"
+                                                                        margin="normal"
+                                                                        id="date-picker-inline"
+                                                                        KeyboardButtonProps={{
+                                                                            'aria-label': 'Schedule',
+                                                                        }}
+                                                                        label="Schedule"
+                                                                        value={scheduled_date}
+                                                                        onChange={this.handleDateChange}
+                                                                        animateYearScrolling={false}
+                                                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                                        fullWidth
+                                                                    />
+                                                                </MuiPickersUtilsProvider>
+                                                            </div>
+                                                        </Fragment>
+                                                    </AccordionInput>
+                                                </div></div>
+
+                                            <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date">
+                                                <div className="row">
+                                                    <AccordionInput>
+                                                        <Fragment>
+                                                            <div className="rct-picker">
+                                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                                    <KeyboardDatePicker
+                                                                        disablePast={true}
+                                                                        
+                                                                        disableToolbar
+                                                                        variant="inline"
+                                                                        format="MM/dd/yyyy"
+                                                                        margin="normal"
+                                                                        id="date-picker-inline"
+                                                                        KeyboardButtonProps={{
+                                                                            'aria-label': 'Revised',
+                                                                        }}
+                                                                        label="Revised"
+                                                                        value={revisied_date}
+                                                                        onChange={this.handleDateChange1}
+                                                                        animateYearScrolling={false}
+                                                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                                        fullWidth
+                                                                    />
+                                                                </MuiPickersUtilsProvider>
+                                                            </div>
+                                                        </Fragment>
+                                                    </AccordionInput>
+                                                </div></div>
+
+                                                <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12 pl-0 f-w-date">
+                                                <div className="row">
+                                                    <AccordionInput>
+                                                        <Fragment>
+                                                            <div className="rct-picker">
+                                                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                                    <KeyboardDatePicker
+                                                                        disablePast={true}                                                                        
+                                                                        disableToolbar
+                                                                        variant="inline"
+                                                                        format="MM/dd/yyyy"
+                                                                        margin="normal"
+                                                                        id="date-picker-inline"
+                                                                        KeyboardButtonProps={{
+                                                                            'aria-label': 'Completed',
+                                                                        }}
+                                                                        label="Completed"
+                                                                        value={confdate}
+                                                                        onChange={this.handleDateChange2}
+                                                                        animateYearScrolling={false}
+                                                                        leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+                                                                        rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+                                                                        fullWidth
+                                                                    />
+                                                                </MuiPickersUtilsProvider>
+                                                            </div>
+                                                        </Fragment>
+                                                    </AccordionInput>
+                                                </div></div>
 
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 
 
                                                 <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Schedule" placeholder="Schedule" />
-                                                </div>
-
-                                            </div>
-
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-
-                                                <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Revised" placeholder="Revised" />
-                                                </div>
-
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-
-                                                <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Completed" placeholder="Completed" />
-                                                </div>
-
-                                            </div>
-                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-
-
-                                                <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Days" placeholder="Days" />
+                                                  <TextField id="days" value={this.state.days} onChange={this.setstatevaluefunction('days')} fullWidth label="Days" placeholder="Days" />
                                                 </div>
 
                                             </div>
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
                                                 <RadioGroup row aria-label="anchorReference" name="anchorReference">
                                                     <div className="w-100 pt-10">
-                                                        <FormControlLabel color="primary" value="sample" control={<Radio />} label="Skip" />
+
+                                                    {(() => {
+
+                                                        if (skipflag == 'Y') {
+                                                            return (<FormControlLabel control={<Checkbox color="primary" onClick={(e) => this.skipChangecheckbox(e)} checked />} label="Skip" />
+
+                                                            )
+                                                        }
+                                                        if (skipflag != 'Y') {
+                                                            return (
+                                                                <FormControlLabel control={<Checkbox color="primary" onClick={(e) => this.skipChangecheckbox(e)} />} label="Skip" />
+                                                            )
+                                                        }
+                                                    })()}
+
+                                                       
                                                     </div>
 
                                                 </RadioGroup>
@@ -1893,7 +1721,7 @@ class PdtamasterElement extends Component {
 
 
                                                 <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Rmrk" placeholder="Rmrk" />
+                                                     <TextField id="rmrk" value={this.state.rmrk} onChange={this.setstatevaluefunction('rmrk')} fullWidth label="Rmrk" placeholder="Rmrk" />
                                                 </div>
 
                                             </div>
@@ -1922,62 +1750,9 @@ class PdtamasterElement extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
+                                                    {actstagelisthtml &&
+                                                    actstagelisthtml}
 
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-                                                            <td>Demo </td>
-
-                                                        </tr>
                                                     </tbody>
 
                                                 </table>
@@ -2161,4 +1936,4 @@ class PdtamasterElement extends Component {
     }
 }
 
-export default PdtamasterElement;
+export default PdtinternalElement;

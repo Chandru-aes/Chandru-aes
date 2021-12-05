@@ -608,33 +608,12 @@ class PdtamasterElement extends Component {
         this.setState({ [name]: checked });
     };
 
-    handleClickOpen = () => {
-        this.setState({ open: true });
-    };
-    ClickTechPack = () => {
-        this.setState({ tpopen: true });
-    }
-    handleClose = () => {
-        this.setState({ open: false });
-    };
-    CloseTechPack = () => {
-        this.setState({ tpopen: false });
-    };
-
-    rhandleClickOpen = () => {
-        this.setState({ ropen: true });
-    };
-
-    rhandleClose = () => {
-        this.setState({ ropen: false });
-    };
+    
 
     Clickclone = () => {
         this.setState({ cloneopen: true });
     }
-    Closeclone = () => {
-        this.setState({ cloneopen: false });
-    };
+    
 
     samaddmoresave() {
         const { samaddmoredata } = this.state;
