@@ -724,6 +724,7 @@ table tr th.MuiTableCell-head, table tr th.MuiTableCell-head .MuiButton-root, .t
 .rct-sidebar .rct-sidebar-nav .rct-mainMenu .sub-menu.MuiCollapse-entered li:first-child { padding-top: 10px; }
 .rct-sidebar .rct-sidebar-nav .rct-mainMenu .sub-menu ul li a { padding:8px 10px 8px 40px; font-size: 14px; }
 .ft-lft{float: left;}
+.disp-cnt{display: contents !important;}
 .rct-page-content{padding: 62px 15px 15px;}.t-pa .rct-block .rct-block-content { padding-top: 0; }
 .t-pa .MuiTab-textColorPrimary.Mui-selected { background: #fff; box-shadow: 0 1px 10px 1px rgba(141, 177, 215, 1) !important; margin: 10px 10px 0 10px; font-size: 16px; font-weight: 600; border: none; border-radius: 10px 10px 0 0px; height: 46px;
 }
@@ -1167,7 +1168,7 @@ table tr td button{width: 25px;
 .GREEN{color: GREEN !important;}
 .BLUE{color: BLUE !important;}
 .ORANGE{color: ORANGE !important;}
-
+.m-bt-20{margin-bottom: 20px;}
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }
