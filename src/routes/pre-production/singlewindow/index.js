@@ -4,10 +4,12 @@
 import React, { Component, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Media, Badge,Modal,
+import {
+    Media, Badge, Modal,
     ModalHeader,
     ModalBody,
-    ModalFooter, } from 'reactstrap';
+    ModalFooter,
+} from 'reactstrap';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -58,7 +60,7 @@ import Select1 from "react-dropdown-select";
 // 	},
 
 // };
-import { KeyboardDatePicker,MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 const $ = require('jquery');
 function TabContainer({ children }) {
@@ -107,115 +109,115 @@ class SinglewindowElement extends Component {
         selectedDate: moment(),
         addNewUserModal: false,
         checkedA: true,
-        buyerlists:[],
-        buyerdivlists:[],
-        yearlists:[],
-        reqtypelists:[],
-        reqtype:[],
+        buyerlists: [],
+        buyerdivlists: [],
+        yearlists: [],
+        reqtypelists: [],
+        reqtype: [],
 
-        bodygrainlists:[],
-        bodygrain:[],
+        bodygrainlists: [],
+        bodygrain: [],
 
-        joblists:[],
-        job:[],
+        joblists: [],
+        job: [],
 
-        addoninfolists:[],
-        addoninfo:[],
-        prepseqlists:[],
-        prepseq:[],
+        addoninfolists: [],
+        addoninfo: [],
+        prepseqlists: [],
+        prepseq: [],
 
-        stylenolists:[],
-        styleno:[],
+        stylenolists: [],
+        styleno: [],
 
-        materialtypelists:[],
-        materialtype:[],
-        sample_materialtype:[],
+        materialtypelists: [],
+        materialtype: [],
+        sample_materialtype: [],
 
-        sampletypelists:[],
-        sampletype:[],
+        sampletypelists: [],
+        sampletype: [],
 
-        valueaddlists:[],
-        valueadd:[],
+        valueaddlists: [],
+        valueadd: [],
 
-        valueaddtypelists:[],
-        valueaddtype:[],
+        valueaddtypelists: [],
+        valueaddtype: [],
 
-        markerforlists:[],
-        markerfor:[],
+        markerforlists: [],
+        markerfor: [],
 
 
-        locationlists:[],
-        sizelists:[],
-        size:[],
-        sample_size:[],
-        location:[],
-        FashionGRP:[],
-        buyer:[],
-        buyerdiv:[],
-        year:[],
+        locationlists: [],
+        sizelists: [],
+        size: [],
+        sample_size: [],
+        location: [],
+        FashionGRP: [],
+        buyer: [],
+        buyerdiv: [],
+        year: [],
 
-        stagedetailslists:[],
-        fitlists:[],
-        fabtypelists:[],
-        stagedetails:[],
-        stage:[],
-        fit:[],
-        fabtype:[],
-        seasonlists:[],
-        season:[],
+        stagedetailslists: [],
+        fitlists: [],
+        fabtypelists: [],
+        stagedetails: [],
+        stage: [],
+        fit: [],
+        fabtype: [],
+        seasonlists: [],
+        season: [],
         // styleno:'',
-        refstyleno:'',
-        versionno:'',
-        designStyleNo:'',
-        desc:'',
-        fabdesc:'',
+        refstyleno: '',
+        versionno: '',
+        designStyleNo: '',
+        desc: '',
+        fabdesc: '',
         fields: {},
         errors: {},
 
-        samaddmoredata:[],
-        optionType:'',
-        valueaddaddmoredata:[],
-        markeraddmoredata:[],
-        sampleaddmoredata:[],
-        valueaddcolor:'',
+        samaddmoredata: [],
+        optionType: '',
+        valueaddaddmoredata: [],
+        markeraddmoredata: [],
+        sampleaddmoredata: [],
+        valueaddcolor: '',
         // valueadd:[],
         // valueaddtype:[],
-        color:'',
-        noofpieces:0,
-        purposelists:[],
-        purpose:[],
-        costingwarp:'',
-        costingweft:'',
-        costingsize:[],
-        samplesize:[],
-        samplewarp:'',
-        sampleweft:'',
-        ref_version:'',
-        ref_styleno:'',
+        color: '',
+        noofpieces: 0,
+        purposelists: [],
+        purpose: [],
+        costingwarp: '',
+        costingweft: '',
+        costingsize: [],
+        samplesize: [],
+        samplewarp: '',
+        sampleweft: '',
+        ref_version: '',
+        ref_styleno: '',
 
-        sample_color:'',
-        sample_desc:'',
-        sample_pieces:'',
-        sample_placement:'',
+        sample_color: '',
+        sample_desc: '',
+        sample_pieces: '',
+        sample_placement: '',
 
-        marker_bodygrain:'',
-        marker_changesin:'',
-        marker_color:'',
-        marker_desc:'',
-        marker_pieces:'',
-        marker_placement:'',
-        marker_ref_version:'',
-        marker_repeat:'',
-        marker_shrinkage:'',
-        marker_width:'',
+        marker_bodygrain: '',
+        marker_changesin: '',
+        marker_color: '',
+        marker_desc: '',
+        marker_pieces: '',
+        marker_placement: '',
+        marker_ref_version: '',
+        marker_repeat: '',
+        marker_shrinkage: '',
+        marker_width: '',
 
-        baseStyleno:'',fabricDesc:'',fabricType:'',
-        reference_version:[],
-        reference_versionlists:[],
-        pattern_styleno:[],
-        pattern_stylenolists:[],
-        swid:0,
-        reqNo:''
+        baseStyleno: '', fabricDesc: '', fabricType: '',
+        reference_version: [],
+        reference_versionlists: [],
+        pattern_styleno: [],
+        pattern_stylenolists: [],
+        swid: 0,
+        reqNo: ''
 
     }
     onAddUpdateUserModalClose() {
@@ -236,8 +238,8 @@ class SinglewindowElement extends Component {
         $('.valueaddclass').hide();
         this.getfilldropdownlists();
 
-        if(this.props.match.params.swid!=undefined){
-            this.setState({swid:this.props.match.params.swid})
+        if (this.props.match.params.swid != undefined) {
+            this.setState({ swid: this.props.match.params.swid })
             this.editdata(this.props.match.params.swid);
         }
         // $(document).on('click', '.edit', function() {
@@ -274,53 +276,42 @@ class SinglewindowElement extends Component {
         //   });
     }
 
-    editdata(id){
-        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo='+id)
+    editdata(id) {
+        api.get('SingleWindowRequestheader/GetSinGleWindowheaderList?IdRequestNo=' + id)
             .then((response) => {
 
                 let data = response.data.data[0];
 
-                this.setState({ buyer: [{value:data.buyCode,label:data.buyerName}],buyerdiv: [{value:data.buyDivCode,label:data.buyDivCode}],season: [{value:data.seasonCode,label:data.seasonName}],year: [{value:data.seasonYear,label:data.seasonYear}],baseStyleno:data.baseStyleno,fabricDesc:data.fabricDesc,fabricType:data.fabricType,
-                    purpose: [{value:data.purpose,label:data.purpose}],
-                    reqtype: [{value:data.reqType,label:data.reqType}],
-                    styleno: [{value:data.styleNo,label:data.styleNo}],
-                    pattern_styleno:[{value:data.styleNo,label:data.styleNo}],
-                    fit:[{value:data.fit,label:data.fit}],
-                    reqNo:data.reqNo,
+                this.setState({
+                    buyer: [{ value: data.buyCode, label: data.buyerName }], buyerdiv: [{ value: data.buyDivCode, label: data.buyDivCode }], season: [{ value: data.seasonCode, label: data.seasonName }], year: [{ value: data.seasonYear, label: data.seasonYear }], baseStyleno: data.baseStyleno, fabricDesc: data.fabricDesc, fabricType: data.fabricType,
+                    purpose: [{ value: data.purpose, label: data.purpose }],
+                    reqtype: [{ value: data.reqType, label: data.reqType }],
+                    styleno: [{ value: data.styleNo, label: data.styleNo }],
+                    pattern_styleno: [{ value: data.styleNo, label: data.styleNo }],
+                    fit: [{ value: data.fit, label: data.fit }],
+                    reqNo: data.reqNo,
                 });
             })
             .catch(error => {
                 // error handling
             })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowPatternList?IdRequestNo='+id)
+        api.get('SingleWindowRequestheader/GetSinGleWindowPatternList?IdRequestNo=' + id)
             .then((response) => {
 
                 let data = response.data.data[0];
 
-                this.setState({buyerdiv: [{value:data.buyDivcode,label:data.buyerDivName}],
-                    samplewarp:data.samShrWarp,
-                    sampleweft:data.samShrWeft,
-                    costingwarp:data.costShrWarp,
-                    costingweft:data.costShrWeft,
-                    samplesize: [{value:data.samSize,label:data.samSize}],
-                    costingsize: [{value:data.costSize,label:data.costSize}],
-                    bodygrain: [{value:data.bodyGrain,label:data.bodyGrain}],
-                    addoninfo: [{value:data.addOnInfo,label:data.addOnInfo}],
-                    job: [{value:data.natureOfJob,label:data.natureOfJob}],
-
-                });
-            })
-            .catch(error => {
-                // error handling
-            })
-
-        api.get('SingleWindowRequestheader/GetSinGleWindowSampleList?IdRequestNo='+id)
-            .then((response) => {
-
-                let data = response.data.data[0];
-                this.setState({sampleaddmoredata:response.data.data,samplewarp:data.expDeliDate,
-                    prepseq: [{value:data.prepSeq,label:data.prepSeq}],
+                this.setState({
+                    buyerdiv: [{ value: data.buyDivcode, label: data.buyerDivName }],
+                    samplewarp: data.samShrWarp,
+                    sampleweft: data.samShrWeft,
+                    costingwarp: data.costShrWarp,
+                    costingweft: data.costShrWeft,
+                    samplesize: [{ value: data.samSize, label: data.samSize }],
+                    costingsize: [{ value: data.costSize, label: data.costSize }],
+                    bodygrain: [{ value: data.bodyGrain, label: data.bodyGrain }],
+                    addoninfo: [{ value: data.addOnInfo, label: data.addOnInfo }],
+                    job: [{ value: data.natureOfJob, label: data.natureOfJob }],
 
                 });
             })
@@ -328,22 +319,38 @@ class SinglewindowElement extends Component {
                 // error handling
             })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo='+id)
+        api.get('SingleWindowRequestheader/GetSinGleWindowSampleList?IdRequestNo=' + id)
             .then((response) => {
 
                 let data = response.data.data[0];
-                this.setState({valueaddaddmoredata:response.data.data
+                this.setState({
+                    sampleaddmoredata: response.data.data, samplewarp: data.expDeliDate,
+                    prepseq: [{ value: data.prepSeq, label: data.prepSeq }],
+
                 });
             })
             .catch(error => {
                 // error handling
             })
 
-        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo='+id)
+        api.get('SingleWindowRequestheader/GetSinGleWindowValueAddList?IdRequestNo=' + id)
             .then((response) => {
 
                 let data = response.data.data[0];
-                this.setState({samaddmoredata:response.data.data
+                this.setState({
+                    valueaddaddmoredata: response.data.data
+                });
+            })
+            .catch(error => {
+                // error handling
+            })
+
+        api.get('SingleWindowRequestheader/GetSinGleWindowSamReqList?IdRequestNo=' + id)
+            .then((response) => {
+
+                let data = response.data.data[0];
+                this.setState({
+                    samaddmoredata: response.data.data
                 });
             })
             .catch(error => {
@@ -416,7 +423,7 @@ class SinglewindowElement extends Component {
                 // error handling
             })
 
-            // Miscellaneous/GetMiscellaneousList?MType
+        // Miscellaneous/GetMiscellaneousList?MType
         api.get('Purpose/GetPurposeList?PType=JOB')
             .then((response) => {
 
@@ -567,13 +574,13 @@ class SinglewindowElement extends Component {
 
     setstatevaluedropdownfunction = name => event => {
         let fields = this.state.fields;
-        if(event.length!=0){
+        if (event.length != 0) {
             fields[name] = event[0].value;
-            this.setState({fields});
+            this.setState({ fields });
 
 
 
-            if(name=="reqtype"){
+            if (name == "reqtype") {
 
                 $('.patternclass').hide();
                 $('.samclass').hide();
@@ -583,19 +590,19 @@ class SinglewindowElement extends Component {
 
                 event.forEach(element => {
 
-                    if(element.value=="PATTERN"){
+                    if (element.value == "PATTERN") {
                         $('.patternclass').show();
                     }
-                    if(element.value=="SAM"){
+                    if (element.value == "SAM") {
                         $('.samclass').show();
                     }
-                    if(element.value=="SAMPLE"){
+                    if (element.value == "SAMPLE") {
                         $('.sampleclass').show();
                     }
-                    if(element.value=="VALUEADD"){
+                    if (element.value == "VALUEADD") {
                         $('.valueaddclass').show();
                     }
-                    if(element.value=="MARKER"){
+                    if (element.value == "MARKER") {
                         $('.markerclass').show();
                     }
 
@@ -607,8 +614,8 @@ class SinglewindowElement extends Component {
 
 
 
-        } else{
-            if(name=="reqtype"){
+        } else {
+            if (name == "reqtype") {
                 $('.patternclass').hide();
                 $('.samclass').hide();
                 $('.sampleclass').hide();
@@ -616,18 +623,18 @@ class SinglewindowElement extends Component {
                 $('.valueaddclass').hide();
             }
             fields[name] = '';
-            this.setState({fields});
+            this.setState({ fields });
         }
 
         this.setState({ [name]: event });
 
-        if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" || name=="styleno" || name=="reqtype"){
+        if (name == "buyer" || name == "buyerdiv" || name == "season" || name == "year" || name == "styleno" || name == "reqtype") {
             setTimeout(() => {
                 this.getrefversionno();
             }, 100);
         }
 
-        if(name=="buyer" || name=="buyerdiv" || name=="season" || name=="year" ){
+        if (name == "buyer" || name == "buyerdiv" || name == "season" || name == "year") {
 
             setTimeout(() => {
 
@@ -635,7 +642,7 @@ class SinglewindowElement extends Component {
             }, 100);
         }
 
-        if(name=="styleno"){
+        if (name == "styleno") {
 
             setTimeout(() => {
                 // console.log(this.state.styleno[0].label.split('-'),'6666666')
@@ -646,14 +653,14 @@ class SinglewindowElement extends Component {
     };
 
 
-    getstyleno(){
-        this.setState({styleno:[],stylenolists:[]});
-        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+    getstyleno() {
+        this.setState({ styleno: [], stylenolists: [] });
+        if (this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.season.length > 0 && this.state.year.length > 0) {
 
-            api.get('SingleWindowRequestheader/GetStyleNoDropDown?Buyer='+this.state.buyer[0].value+'&BuyDivCode='+this.state.buyerdiv[0].value+'&Seasoncode='+this.state.season[0].value+'&SeasonYear='+this.state.year[0].value)
+            api.get('SingleWindowRequestheader/GetStyleNoDropDown?Buyer=' + this.state.buyer[0].value + '&BuyDivCode=' + this.state.buyerdiv[0].value + '&Seasoncode=' + this.state.season[0].value + '&SeasonYear=' + this.state.year[0].value)
                 .then((response) => {
                     let datas = response.data.data;
-                    this.setState({stylenolists:datas});
+                    this.setState({ stylenolists: datas });
                 })
                 .catch(error => {
                     // error handling
@@ -661,14 +668,14 @@ class SinglewindowElement extends Component {
         }
     }
 
-    stylenochange(){
+    stylenochange() {
 
-        if(this.state.styleno.length>0){
-            this.setState({baseStyleno:'',fabricDesc:'',fabricType:'',pattern_styleno:[]});
-            api.get('StyleHeader/GetStyleHeaderList?SID='+this.state.styleno[0].value)
+        if (this.state.styleno.length > 0) {
+            this.setState({ baseStyleno: '', fabricDesc: '', fabricType: '', pattern_styleno: [] });
+            api.get('StyleHeader/GetStyleHeaderList?SID=' + this.state.styleno[0].value)
                 .then((response) => {
                     let datas = response.data.data[0];
-                    this.setState({baseStyleno:datas.baseStyleno,fabricDesc:datas.fabricDesc,fabricType:datas.fabricType,pattern_styleno:[{value:this.state.styleno[0].value,label:this.state.styleno[0].label}]});
+                    this.setState({ baseStyleno: datas.baseStyleno, fabricDesc: datas.fabricDesc, fabricType: datas.fabricType, pattern_styleno: [{ value: this.state.styleno[0].value, label: this.state.styleno[0].label }] });
                 })
                 .catch(error => {
                     // error handling
@@ -676,26 +683,26 @@ class SinglewindowElement extends Component {
         }
     }
 
-    getrefversionno(){
-        this.setState({reference_versionlists:[],reference_version:[],pattern_stylenolists:[]});
-        if(this.state.styleno.length>0 && this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0 && this.state.year.length>0){
+    getrefversionno() {
+        this.setState({ reference_versionlists: [], reference_version: [], pattern_stylenolists: [] });
+        if (this.state.styleno.length > 0 && this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.season.length > 0 && this.state.year.length > 0) {
 
-            api.get('SingleWindowRequestheader/GetRefVersion?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&syear='+this.state.year[0].value+'&StyleNumber='+this.state.styleno[0].value)
+            api.get('SingleWindowRequestheader/GetRefVersion?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value + '&season=' + this.state.season[0].value + '&syear=' + this.state.year[0].value + '&StyleNumber=' + this.state.styleno[0].value)
                 .then((response) => {
                     // let datas = response.data.data[0];
-                    this.setState({reference_versionlists:response.data.data});
+                    this.setState({ reference_versionlists: response.data.data });
                 })
                 .catch(error => {
                     // error handling
                 })
         }
 
-        if(this.state.buyer.length>0 && this.state.buyerdiv.length>0 && this.state.season.length>0  && this.state.year.length>0){
+        if (this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.season.length > 0 && this.state.year.length > 0) {
 
-            api.get('SingleWindowRequestheader/GetStyleNumber?Buyer='+this.state.buyer[0].value+'&BuyerDiv='+this.state.buyerdiv[0].value+'&season='+this.state.season[0].value+'&syear='+this.state.year[0].value)
+            api.get('SingleWindowRequestheader/GetStyleNumber?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value + '&season=' + this.state.season[0].value + '&syear=' + this.state.year[0].value)
                 .then((response) => {
                     // let datas = response.data.data[0];
-                    this.setState({pattern_stylenolists:response.data.data});
+                    this.setState({ pattern_stylenolists: response.data.data });
                 })
                 .catch(error => {
                     // error handling
@@ -704,81 +711,81 @@ class SinglewindowElement extends Component {
 
     }
 
-    save () {
-        console.log(this.state,'-----------------------')
+    save() {
+        console.log(this.state, '-----------------------')
 
 
-        if(this.state.buyer.length>0){
+        if (this.state.buyer.length > 0) {
 
-            let job="";
-            
-            if(this.state.job.length>0){
-                job=this.state.job[0].value;
+            let job = "";
+
+            if (this.state.job.length > 0) {
+                job = this.state.job[0].value;
             }
 
-            let bodygrain="";
-            
-            if(this.state.bodygrain.length>0){
-                bodygrain=this.state.bodygrain[0].value;
+            let bodygrain = "";
+
+            if (this.state.bodygrain.length > 0) {
+                bodygrain = this.state.bodygrain[0].value;
             }
 
-            let addoninfo="";
-            
-            if(this.state.addoninfo.length>0){
-                addoninfo=this.state.addoninfo[0].value;
+            let addoninfo = "";
+
+            if (this.state.addoninfo.length > 0) {
+                addoninfo = this.state.addoninfo[0].value;
             }
 
-            let sample_size="0";
-            
-            if(this.state.sample_size.length>0){
-                sample_size=this.state.sample_size[0].value;
+            let sample_size = "0";
+
+            if (this.state.sample_size.length > 0) {
+                sample_size = this.state.sample_size[0].value;
             }
 
-            let costingsize="0";
-            
-            if(this.state.costingsize.length>0){
-                costingsize=this.state.costingsize[0].value;
+            let costingsize = "0";
+
+            if (this.state.costingsize.length > 0) {
+                costingsize = this.state.costingsize[0].value;
             }
 
 
-            let samplesize="0";
-            
-            if(this.state.samplesize.length>0){
-                samplesize=this.state.samplesize[0].value;
+            let samplesize = "0";
+
+            if (this.state.samplesize.length > 0) {
+                samplesize = this.state.samplesize[0].value;
             }
 
-            
 
-            let markerfor="";
-            
-            if(this.state.markerfor.length>0){
-                markerfor=this.state.markerfor[0].value;
+
+            let markerfor = "";
+
+            if (this.state.markerfor.length > 0) {
+                markerfor = this.state.markerfor[0].value;
             }
 
-            let prepseq="";
-            
-            if(this.state.prepseq.length>0){
-                prepseq=this.state.prepseq[0].value;
+            let prepseq = "";
+
+            if (this.state.prepseq.length > 0) {
+                prepseq = this.state.prepseq[0].value;
             }
 
-            let sampletype="";
-            
-            if(this.state.sampletype.length>0){
-                sampletype=this.state.sampletype[0].value;
-            }
-            
-            
-            
+            let sampletype = "";
 
-            let patterndata ={};
-            let markerdata ={};
-            let sampledata ={};
-            let samdata ={};
-            let valueadddata ={};
+            if (this.state.sampletype.length > 0) {
+                sampletype = this.state.sampletype[0].value;
+            }
+
+
+
+
+            let patterndata = {};
+            let markerdata = {};
+            let sampledata = {};
+            let samdata = {};
+            let valueadddata = {};
             let reqtypedata = [];
             this.state.reqtype.forEach(element => {
 
-                let newdata =   {
+                let newdata = {
                     "id": 0,
                     "swH_Id": this.state.swid,
                     "reqType": element.value,
@@ -792,8 +799,8 @@ class SinglewindowElement extends Component {
                 reqtypedata.push(newdata);
 
 
-                if(element.value=="PATTERN"){
-                    patterndata ={
+                if (element.value == "PATTERN") {
+                    patterndata = {
                         "id": 0,
                         "swH_Id": this.state.swid,
                         "verRef": "string",
@@ -801,14 +808,14 @@ class SinglewindowElement extends Component {
                         "addOnInfo": addoninfo,
                         "samShr": "s",
                         "samShrWarp": this.state.samplewarp,
-                        "samShrWeft":  this.state.sampleweft,
+                        "samShrWeft": this.state.sampleweft,
                         //   "samNilShr":  "string",
                         "costShr": "s",
-                        "costShrWarp":  this.state.costingwarp,
+                        "costShrWarp": this.state.costingwarp,
                         "costShrWeft": this.state.costingweft,
                         //   "costNilShr": "string",
-                        "SamSize":samplesize,
-                        "CostSize":costingsize,
+                        "SamSize": samplesize,
+                        "CostSize": costingsize,
                         // "size": "string",
                         "createdBy": "string",
                         "createdDt": "2021-11-16T05:00:55.509Z",
@@ -867,7 +874,7 @@ class SinglewindowElement extends Component {
                 // }
 
 
-                if(element.value=="MARKER"){
+                if (element.value == "MARKER") {
                     markerdata = {
                         "id": 0,
                         "swH_Id": this.state.swid,
@@ -882,7 +889,7 @@ class SinglewindowElement extends Component {
                         "modifyDt": "2021-11-16T05:00:55.509Z",
                         "hostName": "string",
                         "swMarkerDetEntityModel":
-                        this.state.markeraddmoredata
+                            this.state.markeraddmoredata
 
                     }
                 }
@@ -926,7 +933,7 @@ class SinglewindowElement extends Component {
                 // }
 
 
-                if(element.value=="SAMPLE"){
+                if (element.value == "SAMPLE") {
                     sampledata = {
                         "id": 0,
                         "swH_Id": this.state.swid,
@@ -941,7 +948,7 @@ class SinglewindowElement extends Component {
                         "modifyDt": "2021-11-16T05:00:55.509Z",
                         "hostName": "string",
                         "swSampleDetEntityModel":
-                        this.state.sampleaddmoredata
+                            this.state.sampleaddmoredata
 
 
                     }
@@ -983,8 +990,8 @@ class SinglewindowElement extends Component {
                 // }
 
 
-                if(element.value=="SAM"){
-                    samdata =this.state.samaddmoredata;
+                if (element.value == "SAM") {
+                    samdata = this.state.samaddmoredata;
                 }
                 // else{
                 //     samdata =[
@@ -1005,8 +1012,8 @@ class SinglewindowElement extends Component {
 
 
 
-                if(element.value!="VALUEADD"){
-                    valueadddata =this.state.valueaddaddmoredata;
+                if (element.value != "VALUEADD") {
+                    valueadddata = this.state.valueaddaddmoredata;
                 }
                 // else{
                 //     valueadddata =[
@@ -1031,7 +1038,7 @@ class SinglewindowElement extends Component {
             });
 
             let stylenosplit = this.state.styleno[0].label.split('-');
-            let data ={
+            let data = {
                 "id": this.state.swid,
                 "entityId": "st",
                 "buyCode": this.state.buyer[0].value,
@@ -1044,7 +1051,7 @@ class SinglewindowElement extends Component {
                 "unitCode": "string",
                 "reqNo": this.state.reqNo,
                 "reqDate": "2021-11-16T05:00:55.509Z",
-                "fit":  this.state.fit[0].value,
+                "fit": this.state.fit[0].value,
                 "purpose": this.state.purpose[0].label,
                 "fabricDesc": this.state.fabricDesc,
                 "fabricType": this.state.fabricType,
@@ -1057,19 +1064,19 @@ class SinglewindowElement extends Component {
                 "singleWindowDetEntityModel": reqtypedata,
                 "swPatternHeadEntityModel": patterndata,
                 "swSampleHeadEntityModel": sampledata,
-                "swMarkerHeadEntityModel":markerdata,
+                "swMarkerHeadEntityModel": markerdata,
                 "swValueAddEntityModel": valueadddata,
                 "swsamReqEntityModel":
-                samdata
+                    samdata
 
             };
-            console.log(data,'datadatadata')
+            console.log(data, 'datadatadata')
 
-            api.post('SingleWindowRequestheader/SaveSingleWindowRequestDetails',data) .then((response) => {
+            api.post('SingleWindowRequestheader/SaveSingleWindowRequestDetails', data).then((response) => {
                 // this.getMenulists();
                 NotificationManager.success('Saved Sucessfully');
                 window.location.href = "/#/app/pre-production/request-grid";
-                this.setState( {
+                this.setState({
                     // edit_add:false,
                     // menuId:0,
                     // parent_menu_id:[],
@@ -1087,7 +1094,7 @@ class SinglewindowElement extends Component {
                     // error handling
                 })
 
-        } else{
+        } else {
             NotificationManager.error('Please Select Buyer');
 
         }
@@ -1095,23 +1102,23 @@ class SinglewindowElement extends Component {
 
     }
 
-    getBuyerDivision1(val,field,e){
+    getBuyerDivision1(val, field, e) {
         let fields = this.state.fields;
-        this.setState({ buyerdivlists: [],buyerdiv:[]  });
-        if(val.buyer.length!=0){
+        this.setState({ buyerdivlists: [], buyerdiv: [] });
+        if (val.buyer.length != 0) {
             fields['buyer'] = val.buyer[0].value;
-            this.setState({fields});
+            this.setState({ fields });
 
             this.setState({ buyer: val.buyer });
-            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID='+val.buyer[0].value)
+            api.get('BuyerDivision/GetBuyerDivisionList?BuyerID=' + val.buyer[0].value)
                 .then((response) => {
                     this.setState({ buyerdivlists: response.data.result.data });
                 })
-                .catch(error => {})
+                .catch(error => { })
 
-        } else{
+        } else {
             fields['buyer'] = '';
-            this.setState({fields});
+            this.setState({ fields });
         }
 
         // fields['buyer'] = val.buyer[0].value;
@@ -1120,16 +1127,16 @@ class SinglewindowElement extends Component {
 
     }
 
-    getvalueaddtype(val,field,e){
+    getvalueaddtype(val, field, e) {
         let fields = this.state.fields;
         this.setState({ valueaddtypelists: [] });
-        if(val.valueadd.length!=0){
+        if (val.valueadd.length != 0) {
             fields['valueadd'] = val.valueadd[0].value;
-            this.setState({fields});
+            this.setState({ fields });
 
             this.setState({ valueadd: val.valueadd });
 
-            api.get('Miscellaneous/GetMiscellaneousList?MType='+val.valueadd[0].value)
+            api.get('Miscellaneous/GetMiscellaneousList?MType=' + val.valueadd[0].value)
                 .then((response) => {
 
                     this.setState({ valueaddtypelists: response.data.result.data });
@@ -1140,9 +1147,9 @@ class SinglewindowElement extends Component {
 
 
 
-        } else{
+        } else {
             fields['valueadd'] = '';
-            this.setState({fields});
+            this.setState({ fields });
         }
 
         // fields['buyer'] = val.buyer[0].value;
@@ -1153,70 +1160,70 @@ class SinglewindowElement extends Component {
 
 
 
-    contactSubmit(e,type){
+    contactSubmit(e, type) {
         e.preventDefault();
-        if(this.handleValidation()){
+        if (this.handleValidation()) {
             this.save();
-        }else{
+        } else {
             //   alert("Form has errors.")
             NotificationManager.error('Form has errors');
         }
 
     }
-    handleValidation(){
+    handleValidation() {
         let fields = this.state.fields;
         let errors = {};
         let formIsValid = true;
         console.log(fields)
         //Name
-        if(!fields["buyer"]){
+        if (!fields["buyer"]) {
             formIsValid = false;
             errors["buyer"] = "Cannot be empty";
         }
 
         //buyerdiv
-        if(!fields["buyerdiv"]){
+        if (!fields["buyerdiv"]) {
             formIsValid = false;
             errors["buyerdiv"] = "Cannot be empty";
         }
         //season
-        if(!fields["season"]){
+        if (!fields["season"]) {
             formIsValid = false;
             errors["season"] = "Cannot be empty";
         }
 
         //year
-        if(!fields["year"]){
+        if (!fields["year"]) {
             formIsValid = false;
             errors["year"] = "Cannot be empty";
         }
 
         //styleno
-        if(!fields["styleno"]){
+        if (!fields["styleno"]) {
             formIsValid = false;
             errors["styleno"] = "Cannot be empty";
         }
 
         //reqtype
-        if(!fields["reqtype"]){
+        if (!fields["reqtype"]) {
             formIsValid = false;
             errors["reqtype"] = "Cannot be empty";
         }
 
         //purpose
-        if(!fields["purpose"]){
+        if (!fields["purpose"]) {
             formIsValid = false;
             errors["purpose"] = "Cannot be empty";
         }
 
         //fit
-        if(!fields["fit"]){
+        if (!fields["fit"]) {
             formIsValid = false;
             errors["fit"] = "Fit Cannot be empty";
         }
 
         //stage
-        if(!fields["stage"]){
+        if (!fields["stage"]) {
             formIsValid = false;
             errors["stage"] = "Stage Cannot be empty";
         }
@@ -1251,7 +1258,7 @@ class SinglewindowElement extends Component {
 
 
 
-        this.setState({errors: errors});
+        this.setState({ errors: errors });
         return formIsValid;
     }
 
@@ -1279,7 +1286,7 @@ class SinglewindowElement extends Component {
     handleClose = () => {
         this.setState({ open: false });
     };
-    CloseTechPack= () => {
+    CloseTechPack = () => {
         this.setState({ tpopen: false });
     };
 
@@ -1294,13 +1301,13 @@ class SinglewindowElement extends Component {
     Clickclone = () => {
         this.setState({ cloneopen: true });
     }
-    Closeclone= () => {
+    Closeclone = () => {
         this.setState({ cloneopen: false });
     };
 
-    samaddmoresave(){
-        const {samaddmoredata} = this.state;
-        if(this.state.optionType!=''){
+    samaddmoresave() {
+        const { samaddmoredata } = this.state;
+        if (this.state.optionType != '') {
             let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
@@ -1314,11 +1321,11 @@ class SinglewindowElement extends Component {
                 "hostName": "string"
             }
             samaddmoredata.push(data);
-            this.setState({samaddmoredata:samaddmoredata})
+            this.setState({ samaddmoredata: samaddmoredata })
             // this.state.samaddmoredata.push(data);
-            this.setState({optionType:''})
-            console.log(this.state.samaddmoredata,'this.state.samaddmoredata')
-        }  else{
+            this.setState({ optionType: '' })
+            console.log(this.state.samaddmoredata, 'this.state.samaddmoredata')
+        } else {
             NotificationManager.error('Please Enter all values');
 
         }
@@ -1327,37 +1334,37 @@ class SinglewindowElement extends Component {
 
 
 
-    samaddmoredelete(item){
-        const {samaddmoredata} = this.state;
+    samaddmoredelete(item) {
+        const { samaddmoredata } = this.state;
 
 
         if (samaddmoredata.indexOf(item) !== -1) {
             samaddmoredata.splice(samaddmoredata.indexOf(item), 1);
         }
-        this.setState({samaddmoredata:samaddmoredata})
-        console.log(this.state.samaddmoredata,'samaddmoredata')
+        this.setState({ samaddmoredata: samaddmoredata })
+        console.log(this.state.samaddmoredata, 'samaddmoredata')
 
 
     }
 
-    samaddmoreedit(item){
-        const {samaddmoredata} = this.state;
+    samaddmoreedit(item) {
+        const { samaddmoredata } = this.state;
 
-        this.setState({optionType:item.optionType});
+        this.setState({ optionType: item.optionType });
         if (samaddmoredata.indexOf(item) !== -1) {
             samaddmoredata.splice(samaddmoredata.indexOf(item), 1);
         }
-        this.setState({samaddmoredata:samaddmoredata})
-        console.log(this.state.samaddmoredata,'samaddmoredata')
+        this.setState({ samaddmoredata: samaddmoredata })
+        console.log(this.state.samaddmoredata, 'samaddmoredata')
 
 
     }
 
 
-    valueaddaddmoresave(){
-        console.log(this.state.valueadd,this.state.valueaddtype,'valueaddtypevalueaddtype')
-        const {valueaddaddmoredata} = this.state;
-        if(this.state.valueadd.length>0 || this.state.noofpieces!=0){
+    valueaddaddmoresave() {
+        console.log(this.state.valueadd, this.state.valueaddtype, 'valueaddtypevalueaddtype')
+        const { valueaddaddmoredata } = this.state;
+        if (this.state.valueadd.length > 0 || this.state.noofpieces != 0) {
             let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
@@ -1375,12 +1382,12 @@ class SinglewindowElement extends Component {
                 "hostName": "string"
             }
             valueaddaddmoredata.push(data);
-            this.setState({valueaddaddmoredata:valueaddaddmoredata})
+            this.setState({ valueaddaddmoredata: valueaddaddmoredata })
             // this.state.valueaddaddmoredata.push(data);
             //   this.setState({valueadd:[],valueaddtype:[],noofpieces:0})
-            this.setState({valueaddcolor:'',noofpieces:0})
+            this.setState({ valueaddcolor: '', noofpieces: 0 })
             //   console.log(this.state.valueaddaddmoredata,'this.state.valueaddaddmoredata')
-        }  else{
+        } else {
             NotificationManager.error('Please Enter all values');
 
         }
@@ -1389,28 +1396,28 @@ class SinglewindowElement extends Component {
 
 
 
-    valueaddaddmoredelete(item){
-        const {valueaddaddmoredata} = this.state;
+    valueaddaddmoredelete(item) {
+        const { valueaddaddmoredata } = this.state;
 
 
         if (valueaddaddmoredata.indexOf(item) !== -1) {
             valueaddaddmoredata.splice(valueaddaddmoredata.indexOf(item), 1);
         }
-        this.setState({valueaddaddmoredata:valueaddaddmoredata})
-        console.log(this.state.valueaddaddmoredata,'valueaddaddmoredata')
+        this.setState({ valueaddaddmoredata: valueaddaddmoredata })
+        console.log(this.state.valueaddaddmoredata, 'valueaddaddmoredata')
 
 
     }
 
-    valueaddaddmoreedit(item){
-        const {valueaddaddmoredata} = this.state;
+    valueaddaddmoreedit(item) {
+        const { valueaddaddmoredata } = this.state;
 
-        this.setState({noofpieces:item.pcs,valueaddcolor:item.color,valueadd: [{value:item.valueAdd,label:item.valueAdd}],valueaddtype: [{value:item.valueAddType,label:item.valueaddtypeDesc}]});
+        this.setState({ noofpieces: item.pcs, valueaddcolor: item.color, valueadd: [{ value: item.valueAdd, label: item.valueAdd }], valueaddtype: [{ value: item.valueAddType, label: item.valueaddtypeDesc }] });
         if (valueaddaddmoredata.indexOf(item) !== -1) {
             valueaddaddmoredata.splice(valueaddaddmoredata.indexOf(item), 1);
         }
-        this.setState({valueaddaddmoredata:valueaddaddmoredata})
-        console.log(this.state.valueaddaddmoredata,'valueaddaddmoredata')
+        this.setState({ valueaddaddmoredata: valueaddaddmoredata })
+        console.log(this.state.valueaddaddmoredata, 'valueaddaddmoredata')
 
 
     }
@@ -1418,18 +1425,18 @@ class SinglewindowElement extends Component {
 
 
 
-    markeraddmoresave(){
-        console.log(this.state.marker,this.state.markertype,'markertypemarkertype')
-        const {markeraddmoredata} = this.state;
-        if(this.state.markerfor.length>0 ){
-            let data =  {
+    markeraddmoresave() {
+        console.log(this.state.marker, this.state.markertype, 'markertypemarkertype')
+        const { markeraddmoredata } = this.state;
+        if (this.state.markerfor.length > 0) {
+            let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
                 "matType": this.state.materialtype[0].value,
                 "description": this.state.marker_desc,
-                "placement":this.state.marker_placement,
-                "color":this.state.marker_color,
-                "size":this.state.size[0].value,
+                "placement": this.state.marker_placement,
+                "color": this.state.marker_color,
+                "size": this.state.size[0].value,
                 "pcs": this.state.marker_pieces,
                 "width": this.state.marker_width,
                 "repeat": this.state.marker_repeat,
@@ -1442,10 +1449,10 @@ class SinglewindowElement extends Component {
                 "hostName": "string"
             }
             markeraddmoredata.push(data);
-            this.setState({markeraddmoredata:markeraddmoredata})
+            this.setState({ markeraddmoredata: markeraddmoredata })
 
-            this.setState({marker_desc:'',marker_placement:'',marker_color:'',marker_pieces:'',marker_width:'',marker_repeat:''})
-        }  else{
+            this.setState({ marker_desc: '', marker_placement: '', marker_color: '', marker_pieces: '', marker_width: '', marker_repeat: '' })
+        } else {
             NotificationManager.error('Please Enter all values');
 
         }
@@ -1454,44 +1461,44 @@ class SinglewindowElement extends Component {
 
 
 
-    markeraddmoredelete(item){
-        const {markeraddmoredata} = this.state;
+    markeraddmoredelete(item) {
+        const { markeraddmoredata } = this.state;
 
 
         if (markeraddmoredata.indexOf(item) !== -1) {
             markeraddmoredata.splice(markeraddmoredata.indexOf(item), 1);
         }
-        this.setState({markeraddmoredata:markeraddmoredata})
+        this.setState({ markeraddmoredata: markeraddmoredata })
 
 
     }
 
-    markeraddmoreedit(item){
-        const {markeraddmoredata} = this.state;
+    markeraddmoreedit(item) {
+        const { markeraddmoredata } = this.state;
 
-        this.setState({noofpieces:item.pcs,markercolor:item.color,marker: [{value:item.marker,label:item.marker}],markertype: [{value:item.markerType,label:item.markertypeDesc}]});
+        this.setState({ noofpieces: item.pcs, markercolor: item.color, marker: [{ value: item.marker, label: item.marker }], markertype: [{ value: item.markerType, label: item.markertypeDesc }] });
         if (markeraddmoredata.indexOf(item) !== -1) {
             markeraddmoredata.splice(markeraddmoredata.indexOf(item), 1);
         }
-        this.setState({markeraddmoredata:markeraddmoredata})
+        this.setState({ markeraddmoredata: markeraddmoredata })
 
 
     }
 
 
 
-    sampleaddmoresave(){
+    sampleaddmoresave() {
 
-        const {sampleaddmoredata} = this.state;
-        if(this.state.sample_materialtype.length>0 ){
-            let data =  {
+        const { sampleaddmoredata } = this.state;
+        if (this.state.sample_materialtype.length > 0) {
+            let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
                 "matType": this.state.sample_materialtype[0].value,
                 "matDesc": this.state.sample_desc,
-                "placement":this.state.sample_placement,
-                "color":this.state.sample_color,
-                "size":this.state.sample_size[0].value,
+                "placement": this.state.sample_placement,
+                "color": this.state.sample_color,
+                "size": this.state.sample_size[0].value,
                 "pcs": this.state.sample_pieces,
                 "cancel": "N",
                 "createdBy": "string",
@@ -1501,10 +1508,10 @@ class SinglewindowElement extends Component {
                 "hostName": "string"
             }
             sampleaddmoredata.push(data);
-            this.setState({sampleaddmoredata:sampleaddmoredata})
+            this.setState({ sampleaddmoredata: sampleaddmoredata })
 
-            this.setState({sample_desc:'',sample_placement:'',sample_color:'',sample_pieces:''})
-        }  else{
+            this.setState({ sample_desc: '', sample_placement: '', sample_color: '', sample_pieces: '' })
+        } else {
             NotificationManager.error('Please Enter all values');
 
         }
@@ -1513,26 +1520,26 @@ class SinglewindowElement extends Component {
 
 
 
-    sampleaddmoredelete(item){
-        const {sampleaddmoredata} = this.state;
+    sampleaddmoredelete(item) {
+        const { sampleaddmoredata } = this.state;
 
 
         if (sampleaddmoredata.indexOf(item) !== -1) {
             sampleaddmoredata.splice(sampleaddmoredata.indexOf(item), 1);
         }
-        this.setState({sampleaddmoredata:sampleaddmoredata})
+        this.setState({ sampleaddmoredata: sampleaddmoredata })
 
 
     }
 
-    sampleaddmoreedit(item){
-        const {sampleaddmoredata} = this.state;
+    sampleaddmoreedit(item) {
+        const { sampleaddmoredata } = this.state;
 
-        this.setState({sample_pieces:item.pcs,sample_color:item.color,sample_desc:item.matDesc,sample_placement:item.placement,sample_materialtype: [{value:item.matType,label:item.matType}],sample_size: [{value:item.size,label:item.size}]});
+        this.setState({ sample_pieces: item.pcs, sample_color: item.color, sample_desc: item.matDesc, sample_placement: item.placement, sample_materialtype: [{ value: item.matType, label: item.matType }], sample_size: [{ value: item.size, label: item.size }] });
         if (sampleaddmoredata.indexOf(item) !== -1) {
             sampleaddmoredata.splice(sampleaddmoredata.indexOf(item), 1);
         }
-        this.setState({sampleaddmoredata:sampleaddmoredata})
+        this.setState({ sampleaddmoredata: sampleaddmoredata })
 
 
     }
@@ -1540,17 +1547,17 @@ class SinglewindowElement extends Component {
 
 
     render() {
-        const { employeePayroll,samaddmoredata,valueaddaddmoredata,markeraddmoredata,sampleaddmoredata,reqtype,pattern_styleno } = this.state;
+        const { employeePayroll, samaddmoredata, valueaddaddmoredata, markeraddmoredata, sampleaddmoredata, reqtype, pattern_styleno } = this.state;
         const { match } = this.props;
         const { selectedDate } = this.state;
         const { classes } = this.props;
         const config = this.componentConfig;
         const djsConfig = this.djsConfig;
-        let pattern_stylenolabel="";
-        if(pattern_styleno.length>0){
-            pattern_stylenolabel=pattern_styleno[0].label;
+        let pattern_stylenolabel = "";
+        if (pattern_styleno.length > 0) {
+            pattern_stylenolabel = pattern_styleno[0].label;
         }
-        
+
         const handleToggle = () => {
             this.setState({ isActive: !this.state.isActive });
         };
@@ -1576,123 +1583,123 @@ class SinglewindowElement extends Component {
 
         const buyeroptions = [];
         for (const item of this.state.buyerlists) {
-            buyeroptions.push({value:item.buyerCode,label:item.buyerName});
+            buyeroptions.push({ value: item.buyerCode, label: item.buyerName });
         }
 
         const buyerdivoptions = [];
         for (const item of this.state.buyerdivlists) {
-            buyerdivoptions.push({value:item.divisionCode,label:item.divisionName});
+            buyerdivoptions.push({ value: item.divisionCode, label: item.divisionName });
         }
 
         const yearoptions = [];
         for (const item of this.state.yearlists) {
-            yearoptions.push({value:item.code,label:item.codeDesc});
+            yearoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const purposeoptions = [];
         for (const item of this.state.purposelists) {
-            purposeoptions.push({value:item.parntslno,label:item.purpose});
+            purposeoptions.push({ value: item.parntslno, label: item.purpose });
         }
 
 
         const reqtypeoptions = [];
         for (const item of this.state.reqtypelists) {
-            reqtypeoptions.push({value:item.code,label:item.codeDesc});
+            reqtypeoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const bodygrainoptions = [];
         for (const item of this.state.bodygrainlists) {
-            bodygrainoptions.push({value:item.code,label:item.codeDesc});
+            bodygrainoptions.push({ value: item.code, label: item.codeDesc });
         }
 
 
         const joboptions = [];
         for (const item of this.state.joblists) {
-            joboptions.push({value:item.purpose,label:item.purpose});
+            joboptions.push({ value: item.purpose, label: item.purpose });
         }
 
         const addoninfooptions = [];
         for (const item of this.state.addoninfolists) {
-            addoninfooptions.push({value:item.code,label:item.codeDesc});
+            addoninfooptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const prepseqoptions = [];
         for (const item of this.state.prepseqlists) {
-            prepseqoptions.push({value:item.code,label:item.codeDesc});
+            prepseqoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const reference_versionoptions = [];
         for (const item of this.state.reference_versionlists) {
-            reference_versionoptions.push({value:item.id,label:item.patVersion});
+            reference_versionoptions.push({ value: item.id, label: item.patVersion });
         }
 
         const pattern_stylenooptions = [];
         for (const item of this.state.pattern_stylenolists) {
-            pattern_stylenooptions.push({value:item.styleNo,label:item.styleNo});
+            pattern_stylenooptions.push({ value: item.styleNo, label: item.styleNo });
         }
 
 
         const locationoptions = [];
         for (const item of this.state.locationlists) {
-            locationoptions.push({value:item.locCode,label:item.locName});
+            locationoptions.push({ value: item.locCode, label: item.locName });
         }
 
         const sizeoptions = [];
         for (const item of this.state.sizelists) {
-            sizeoptions.push({value:item.sizecode,label:item.sizeIndex});
+            sizeoptions.push({ value: item.sizecode, label: item.sizeIndex });
         }
 
 
         const fitoptions = [];
         for (const item of this.state.fitlists) {
-            fitoptions.push({value:item.code,label:item.codeDesc});
+            fitoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const fabtypeoptions = [];
         for (const item of this.state.fabtypelists) {
-            fabtypeoptions.push({value:item.code,label:item.codeDesc});
+            fabtypeoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const stagedetailsoptions = [];
         for (const item of this.state.stagedetailslists) {
-            stagedetailsoptions.push({value:item.code,label:item.codeDesc});
+            stagedetailsoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const seasonoptions = [];
         for (const item of this.state.seasonlists) {
-            seasonoptions.push({value:item.seasonCode,label:item.seasonName});
+            seasonoptions.push({ value: item.seasonCode, label: item.seasonName });
         }
 
 
         const markerforoptions = [];
         for (const item of this.state.markerforlists) {
-            markerforoptions.push({value:item.code,label:item.codeDesc});
+            markerforoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const valueaddoptions = [];
         for (const item of this.state.valueaddlists) {
-            valueaddoptions.push({value:item.code,label:item.codeDesc});
+            valueaddoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const valueaddtypeoptions = [];
         for (const item of this.state.valueaddtypelists) {
-            valueaddtypeoptions.push({value:item.code,label:item.codeDesc});
+            valueaddtypeoptions.push({ value: item.code, label: item.codeDesc });
         }
 
 
         const sampletypeoptions = [];
         for (const item of this.state.sampletypelists) {
-            sampletypeoptions.push({value:item.code,label:item.codeDesc});
+            sampletypeoptions.push({ value: item.code, label: item.codeDesc });
         }
 
         const stylenooptions = [];
         for (const item of this.state.stylenolists) {
-            stylenooptions.push({value:item.id,label:item.refStyleNo+'-'+item.masterStyle});
+            stylenooptions.push({ value: item.id, label: item.refStyleNo + '-' + item.masterStyle });
         }
 
         const materialtypeoptions = [];
         for (const item of this.state.materialtypelists) {
-            materialtypeoptions.push({value:item.mattype,label:item.matDesc});
+            materialtypeoptions.push({ value: item.mattype, label: item.matDesc });
         }
 
 
@@ -1701,7 +1708,7 @@ class SinglewindowElement extends Component {
 
             <RctCollapsibleCard heading="Single Window">
                 <PageTitleBar title="Menu" match={this.props.match} />
-                <div  className={isActive ? "s-panel active" : 's-panel'}>
+                <div className={isActive ? "s-panel active" : 's-panel'}>
                     {/* { !isActive &&
                           <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-info mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle}><span className="MuiButton-label">Projection Details<i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
@@ -1711,22 +1718,22 @@ class SinglewindowElement extends Component {
                     <div className="row new-form">
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="table-responsive mt-15">
@@ -1734,54 +1741,54 @@ class SinglewindowElement extends Component {
 
                             <table className="table data w-100">
                                 <thead>
-                                <tr>
-                                    <th className="w-25">Activity</th>
-                                    <th className="w-25">Due By</th>
-                                    <th className="w-25">Number</th>
-                                    <th className="w-25 text-center">Actions  </th>
-                                </tr>
+                                    <tr>
+                                        <th className="w-25">Activity</th>
+                                        <th className="w-25">Due By</th>
+                                        <th className="w-25">Number</th>
+                                        <th className="w-25 text-center">Actions  </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td className="data">John Doe</td>
-                                    <td className="data">johndoe@john.com</td>
-                                    <td className="data">666-666-666</td>
-                                    <td className="text-center">
-                                        {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                    <tr>
+                                        <td className="data">John Doe</td>
+                                        <td className="data">johndoe@john.com</td>
+                                        <td className="data">666-666-666</td>
+                                        <td className="text-center">
+                                            {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                        {/* <button className="save">Save</button>
+                                            {/* <button className="save">Save</button>
                                          <button className="edit">Edit</button>
                                          <button className="delete">Delete</button> */}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="data">John Doe</td>
-                                    <td className="data">johndoe@john.com</td>
-                                    <td className="data">666-666-666</td>
-                                    <td className="text-center">
-                                        {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="data">John Doe</td>
+                                        <td className="data">johndoe@john.com</td>
+                                        <td className="data">666-666-666</td>
+                                        <td className="text-center">
+                                            {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                        {/* <button className="save">Save</button>
+                                            {/* <button className="save">Save</button>
                                          <button className="edit">Edit</button>
                                          <button className="delete">Delete</button> */}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 </tbody>
 
                             </table>
@@ -1790,7 +1797,7 @@ class SinglewindowElement extends Component {
                 </div>
 
 
-                <div  className={isActive ? "s-panel-1 active" : 's-panel-1'}>
+                <div className={isActive ? "s-panel-1 active" : 's-panel-1'}>
                     {/* { !isActive &&
                           <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon nd-fom" tabindex="0" type="button"  onClick={handleToggle2}><span className="MuiButton-label">Order Specification <i className="zmdi zmdi-cloud-upload"></i></span><span className="MuiTouchRipple-root"></span></button>
                       }
@@ -1800,22 +1807,22 @@ class SinglewindowElement extends Component {
                     <div className="row new-form">
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pl-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 pr-0">
                             <div className="form-group">
-                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name"/>
+                                <TextField id="Buyer" fullWidth label="Buyer" placeholder="Buyer Name" />
                             </div>
                         </div>
                         <div className="table-responsive mt-15">
@@ -1823,54 +1830,54 @@ class SinglewindowElement extends Component {
 
                             <table className="table data w-100">
                                 <thead>
-                                <tr>
-                                    <th className="w-25">Activity</th>
-                                    <th className="w-25">Due By</th>
-                                    <th className="w-25">Number</th>
-                                    <th className="w-25 text-center">Actions  </th>
-                                </tr>
+                                    <tr>
+                                        <th className="w-25">Activity</th>
+                                        <th className="w-25">Due By</th>
+                                        <th className="w-25">Number</th>
+                                        <th className="w-25 text-center">Actions  </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td className="data">John Doe</td>
-                                    <td className="data">johndoe@john.com</td>
-                                    <td className="data">666-666-666</td>
-                                    <td className="text-center">
-                                        {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                    <tr>
+                                        <td className="data">John Doe</td>
+                                        <td className="data">johndoe@john.com</td>
+                                        <td className="data">666-666-666</td>
+                                        <td className="text-center">
+                                            {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                        {/* <button className="save">Save</button>
+                                            {/* <button className="save">Save</button>
                                          <button className="edit">Edit</button>
                                          <button className="delete">Delete</button> */}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="data">John Doe</td>
-                                    <td className="data">johndoe@john.com</td>
-                                    <td className="data">666-666-666</td>
-                                    <td className="text-center">
-                                        {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="data">John Doe</td>
+                                        <td className="data">johndoe@john.com</td>
+                                        <td className="data">666-666-666</td>
+                                        <td className="text-center">
+                                            {/* <button class="MuiButtonBase-root MuiIconButton-root text-primary MuiIconButton-colorPrimary save" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-save"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-success MuiIconButton-colorPrimary edit" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-edit"></i></span><span class="MuiTouchRipple-root"></span></button>
 
                                      <button class="MuiButtonBase-root MuiIconButton-root text-danger MuiIconButton-colorPrimary delete" tabindex="0" type="button" aria-label="Delete"><span class="MuiIconButton-label"><i class="zmdi zmdi-delete"></i></span><span class="MuiTouchRipple-root"></span></button> */}
 
-                                        <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
-                                        <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root  mr-10 text-success btn-icon b-ic save" tabindex="0" type="button" ><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                        {/* <button className="save">Save</button>
+                                            {/* <button className="save">Save</button>
                                          <button className="edit">Edit</button>
                                          <button className="delete">Delete</button> */}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 </tbody>
 
                             </table>
@@ -1892,12 +1899,12 @@ class SinglewindowElement extends Component {
 
                                     if (this.state.swid == 0) {
                                         return (
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Save <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                         )
                                     }
                                     if (this.state.swid != 0) {
                                         return (
-                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button"  onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                            <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-success mr-0 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.contactSubmit(e)} ><span className="MuiButton-label">Update <i className="zmdi zmdi-save"></i></span><span className="MuiTouchRipple-root"></span></button>
                                         )
                                     }
                                 })()}
@@ -1953,7 +1960,7 @@ class SinglewindowElement extends Component {
                                             </div>
                                             <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                 <div className="form-group">
-                                                    <TextField id="Buyer" fullWidth label="Style No" placeholder="Style No"/>
+                                                    <TextField id="Buyer" fullWidth label="Style No" placeholder="Style No" />
                                                 </div>
                                             </div>
 
@@ -1989,7 +1996,7 @@ class SinglewindowElement extends Component {
                                                         createNewLabel="Buyer"
                                                         options={buyeroptions}
                                                         // onChange={this.setstatevaluedropdownfunction('buyer')}
-                                                        onChange={values => this.getBuyerDivision1({ buyer:values },this,"buyer")}
+                                                        onChange={values => this.getBuyerDivision1({ buyer: values }, this, "buyer")}
                                                         placeholder="Buyer"
                                                         values={this.state.buyer}
                                                     />
@@ -2055,11 +2062,11 @@ class SinglewindowElement extends Component {
                                             </div>
 
                                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                        
-                                            <div className="form-group">
-                                            <TextField id="reqNo" disabled value={this.state.reqNo}  onChange={this.setstatevaluefunction('reqNo')} fullWidth label="Request Number" placeholder="Request Number"/>
-                                                
-                                            </div>
+
+                                                <div className="form-group">
+                                                    <TextField id="reqNo" disabled value={this.state.reqNo} onChange={this.setstatevaluefunction('reqNo')} fullWidth label="Request Number" placeholder="Request Number" />
+
+                                                </div>
 
                                             </div>
                                             {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -2080,7 +2087,7 @@ class SinglewindowElement extends Component {
                                                 <div className="form-group">
                                                     <div className="w-100 float-left m-btop-10">
                                                         <FormControl>
-                                                            <div class="item cursor-pointer mt-5"  onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
+                                                            <div class="item cursor-pointer mt-5" onClick={this.ClickTechPack} ><span class="material-icons mr-10">attach_file</span><span>Tech Pack</span></div>
                                                             <span className="error">{this.state.errors["fit"]}</span>
                                                             <span className="error">{this.state.errors["stage"]}</span>
                                                             <Dialog open={this.state.tpopen} onClose={this.CloseTechPack} aria-labelledby="form-dialog-title">
@@ -2119,7 +2126,7 @@ class SinglewindowElement extends Component {
                                                                             <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                                                 <div className="form-group">
 
-                                                                                    <TextField id="versionno" value={this.state.versionno}  onChange={this.setstatevaluefunction('versionno')} fullWidth label="Version Number" placeholder="Version No"/>
+                                                                                    <TextField id="versionno" value={this.state.versionno} onChange={this.setstatevaluefunction('versionno')} fullWidth label="Version Number" placeholder="Version No" />
                                                                                 </div>
                                                                             </div>
 
@@ -2148,14 +2155,14 @@ class SinglewindowElement extends Component {
                                             <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 mt-5">
                                                 <div className="w-100 p-0 mt-5">
                                                     <label for="formFile" class="form-label float-left w-20 p-10">FIS</label>
-                                                    <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                                    <input class="form-control w-80 float-left" type="file" id="formFile" />
                                                 </div></div>
 
                                             <div className="clearfix"></div>
                                             <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 mt-5">
                                                 <div className="w-100 p-0 mt-5 ">
                                                     <label for="formFile" class="form-label float-left w-20 p-10">BLOCK</label>
-                                                    <input class="form-control w-80 float-left" type="file" id="formFile"/>
+                                                    <input class="form-control w-80 float-left" type="file" id="formFile" />
                                                 </div>
                                             </div>
                                         </div></div></div>
@@ -2198,8 +2205,8 @@ class SinglewindowElement extends Component {
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 
                                             <div className="form-group">
-                                            <TextField id="baseStyleno" disabled value={this.state.baseStyleno}  onChange={this.setstatevaluefunction('baseStyleno')} fullWidth label="Base Style" placeholder="Base Style"/>
-                                                
+                                                <TextField id="baseStyleno" disabled value={this.state.baseStyleno} onChange={this.setstatevaluefunction('baseStyleno')} fullWidth label="Base Style" placeholder="Base Style" />
+
                                             </div>
 
 
@@ -2220,7 +2227,7 @@ class SinglewindowElement extends Component {
 
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                                                <TextField id="fabricDesc" value={this.state.fabricDesc} disabled  onChange={this.setstatevaluefunction('fabricDesc')} fullWidth label="Fabric composition" placeholder="Fabric composition"/>
+                                                <TextField id="fabricDesc" value={this.state.fabricDesc} disabled onChange={this.setstatevaluefunction('fabricDesc')} fullWidth label="Fabric composition" placeholder="Fabric composition" />
                                             </div>
 
                                             {/* <div className="form-group">
@@ -2239,7 +2246,7 @@ class SinglewindowElement extends Component {
 
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
-                                                <TextField id="fabricType" value={this.state.fabricType} disabled onChange={this.setstatevaluefunction('fabricType')} fullWidth label="Fabric Type(Pluid)" placeholder="Fabric Type(Pluid)"/>
+                                                <TextField id="fabricType" value={this.state.fabricType} disabled onChange={this.setstatevaluefunction('fabricType')} fullWidth label="Fabric Type(Pluid)" placeholder="Fabric Type(Pluid)" />
                                             </div>
 
                                             {/* <div className="form-group">
@@ -2388,7 +2395,7 @@ class SinglewindowElement extends Component {
                                                                                 </div>
                                                                                 <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                                                                     <div className="form-group">
-                                                                                        <TextField id="ref_version" value={this.state.ref_version}  onChange={this.setstatevaluefunction('ref_version')} fullWidth label="Version" placeholder="Version"/>
+                                                                                        <TextField id="ref_version" value={this.state.ref_version} onChange={this.setstatevaluefunction('ref_version')} fullWidth label="Version" placeholder="Version" />
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -2493,12 +2500,12 @@ class SinglewindowElement extends Component {
 
                                                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                                                         <div className="form-group">
-                                                                                            <TextField id="samplewarp" value={this.state.samplewarp}  onChange={this.setstatevaluefunction('samplewarp')} fullWidth label="Warp %" placeholder="Warp %"/>
+                                                                                            <TextField id="samplewarp" value={this.state.samplewarp} onChange={this.setstatevaluefunction('samplewarp')} fullWidth label="Warp %" placeholder="Warp %" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                                                         <div className="form-group">
-                                                                                            <TextField id="sampleweft" value={this.state.sampleweft}  onChange={this.setstatevaluefunction('sampleweft')} fullWidth label="Weft %" placeholder="Weft %"/>
+                                                                                            <TextField id="sampleweft" value={this.state.sampleweft} onChange={this.setstatevaluefunction('sampleweft')} fullWidth label="Weft %" placeholder="Weft %" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
@@ -2525,12 +2532,12 @@ class SinglewindowElement extends Component {
                                                                                     </div>
                                                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                                                         <div className="form-group">
-                                                                                            <TextField id="costingwarp" value={this.state.costingwarp}  onChange={this.setstatevaluefunction('costingwarp')} fullWidth label="Warp %" placeholder="Warp %"/>
+                                                                                            <TextField id="costingwarp" value={this.state.costingwarp} onChange={this.setstatevaluefunction('costingwarp')} fullWidth label="Warp %" placeholder="Warp %" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
                                                                                         <div className="form-group">
-                                                                                            <TextField id="costingweft" value={this.state.costingweft}  onChange={this.setstatevaluefunction('costingweft')} fullWidth label="Weft %" placeholder="Weft %"/>
+                                                                                            <TextField id="costingweft" value={this.state.costingweft} onChange={this.setstatevaluefunction('costingweft')} fullWidth label="Weft %" placeholder="Weft %" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="col-lg-12 col-md-4 col-sm-6 col-xs-12">
@@ -2714,17 +2721,17 @@ class SinglewindowElement extends Component {
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="sample_desc" value={this.state.sample_desc}  onChange={this.setstatevaluefunction('sample_desc')}  fullWidth label="Description" placeholder="Description"/>
+                                                                <TextField id="sample_desc" value={this.state.sample_desc} onChange={this.setstatevaluefunction('sample_desc')} fullWidth label="Description" placeholder="Description" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="sample_placement" value={this.state.sample_placement}  onChange={this.setstatevaluefunction('sample_placement')}  fullWidth label="Placement" placeholder="Placement"/>
+                                                                <TextField id="sample_placement" value={this.state.sample_placement} onChange={this.setstatevaluefunction('sample_placement')} fullWidth label="Placement" placeholder="Placement" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="sample_color" value={this.state.sample_color}  onChange={this.setstatevaluefunction('sample_color')}  fullWidth label="Color" placeholder="Color"/>
+                                                                <TextField id="sample_color" value={this.state.sample_color} onChange={this.setstatevaluefunction('sample_color')} fullWidth label="Color" placeholder="Color" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -2743,7 +2750,7 @@ class SinglewindowElement extends Component {
 
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="sample_pieces" value={this.state.sample_pieces}  onChange={this.setstatevaluefunction('sample_pieces')}  fullWidth label="Pieces" placeholder="Pieces"/>
+                                                                <TextField id="sample_pieces" value={this.state.sample_pieces} onChange={this.setstatevaluefunction('sample_pieces')} fullWidth label="Pieces" placeholder="Pieces" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -2771,7 +2778,7 @@ class SinglewindowElement extends Component {
                                                     <div className="table-responsive mt-0">
                                                         <div className="w-20 float-right">
                                                             <div className="form-group">
-                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.sampleaddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) => this.sampleaddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                                                                 {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                                                             </div>
@@ -2779,45 +2786,45 @@ class SinglewindowElement extends Component {
 
                                                         <table className="table mt-10 data w-100 float-left">
                                                             <thead>
-                                                            <tr>
-                                                                <th className="w-25 text-center">Actions</th>
-                                                                <th className="w-20">Material Type</th>
-                                                                <th className="w-20">Description</th>
-                                                                <th className="w-20">Placement</th>
-                                                                <th className="">Color  </th>
-                                                                <th className="">Size  </th>
-                                                                <th className="">Pieces  </th>
-                                                                <th className="w-20">Sample Type  </th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th className="w-25 text-center">Actions</th>
+                                                                    <th className="w-20">Material Type</th>
+                                                                    <th className="w-20">Description</th>
+                                                                    <th className="w-20">Placement</th>
+                                                                    <th className="">Color  </th>
+                                                                    <th className="">Size  </th>
+                                                                    <th className="">Pieces  </th>
+                                                                    <th className="w-20">Sample Type  </th>
+                                                                </tr>
                                                             </thead>
                                                             <tbody>
-                                                            {sampleaddmoredata.map((n,index) => {
+                                                                {sampleaddmoredata.map((n, index) => {
 
-                                                                return (
+                                                                    return (
 
-                                                                    <tr key={`list${index}`}>
-                                                                        <td className="">
+                                                                        <tr key={`list${index}`}>
+                                                                            <td className="">
 
 
-                                                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.sampleaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.sampleaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) => this.sampleaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) => this.sampleaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                                                            {/* <button className="save">Save</button>
+                                                                                {/* <button className="save">Save</button>
                                         <button className="edit">Edit</button>
                                         <button className="delete">Delete</button> */}
 
-                                                                        </td>
-                                                                        <td className="data">{n.matType}</td>
-                                                                        <td className="data">{n.matDesc}</td>
-                                                                        <td className="data">{n.placement}</td>
-                                                                        <td className="data">{n.color}</td>
-                                                                        <td className="data">{n.size}</td>
-                                                                        <td className="data">{n.pcs}</td>
-                                                                        <td className="data"></td>
-                                                                    </tr>
-                                                                );
-                                                            })}
-                                                            {/* <tr>
+                                                                            </td>
+                                                                            <td className="data">{n.matType}</td>
+                                                                            <td className="data">{n.matDesc}</td>
+                                                                            <td className="data">{n.placement}</td>
+                                                                            <td className="data">{n.color}</td>
+                                                                            <td className="data">{n.size}</td>
+                                                                            <td className="data">{n.pcs}</td>
+                                                                            <td className="data"></td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                                {/* <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -2895,23 +2902,23 @@ class SinglewindowElement extends Component {
                                                     <div className="row">
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_ref_version" value={this.state.marker_ref_version}  onChange={this.setstatevaluefunction('marker_ref_version')} fullWidth label="Reference version" placeholder="Reference version"/>
+                                                                <TextField id="marker_ref_version" value={this.state.marker_ref_version} onChange={this.setstatevaluefunction('marker_ref_version')} fullWidth label="Reference version" placeholder="Reference version" />
                                                             </div>
                                                         </div>
 
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_changesin" value={this.state.marker_changesin}  onChange={this.setstatevaluefunction('marker_changesin')} fullWidth label="Changes In" placeholder="Changes In"/>
+                                                                <TextField id="marker_changesin" value={this.state.marker_changesin} onChange={this.setstatevaluefunction('marker_changesin')} fullWidth label="Changes In" placeholder="Changes In" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_bodygrain" value={this.state.marker_bodygrain}  onChange={this.setstatevaluefunction('marker_bodygrain')} fullWidth label="Body grain" placeholder="Body grain"/>
+                                                                <TextField id="marker_bodygrain" value={this.state.marker_bodygrain} onChange={this.setstatevaluefunction('marker_bodygrain')} fullWidth label="Body grain" placeholder="Body grain" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_shrinkage" value={this.state.marker_shrinkage}  onChange={this.setstatevaluefunction('marker_shrinkage')} fullWidth label="Shrinkage" placeholder="Shrinkage"/>
+                                                                <TextField id="marker_shrinkage" value={this.state.marker_shrinkage} onChange={this.setstatevaluefunction('marker_shrinkage')} fullWidth label="Shrinkage" placeholder="Shrinkage" />
                                                             </div>
                                                         </div>
 
@@ -2947,24 +2954,24 @@ class SinglewindowElement extends Component {
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_desc" value={this.state.marker_desc}  onChange={this.setstatevaluefunction('marker_desc')} fullWidth label="Description" placeholder="Description"/>
+                                                                <TextField id="marker_desc" value={this.state.marker_desc} onChange={this.setstatevaluefunction('marker_desc')} fullWidth label="Description" placeholder="Description" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_placement" value={this.state.marker_placement}  onChange={this.setstatevaluefunction('marker_placement')} fullWidth label="Placement" placeholder="Placement"/>
+                                                                <TextField id="marker_placement" value={this.state.marker_placement} onChange={this.setstatevaluefunction('marker_placement')} fullWidth label="Placement" placeholder="Placement" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_color" value={this.state.marker_color}  onChange={this.setstatevaluefunction('marker_color')} fullWidth label="Color" placeholder="Color"/>
+                                                                <TextField id="marker_color" value={this.state.marker_color} onChange={this.setstatevaluefunction('marker_color')} fullWidth label="Color" placeholder="Color" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group select_label_name mt-15">
                                                                 <Select1
                                                                     dropdownPosition="auto"
-                                                                    multi 
+                                                                    multi
                                                                     createNewLabel="Size"
                                                                     options={sizeoptions}
                                                                     onChange={this.setstatevaluedropdownfunction('size')}
@@ -2976,18 +2983,18 @@ class SinglewindowElement extends Component {
 
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_pieces" value={this.state.marker_pieces}  onChange={this.setstatevaluefunction('marker_pieces')} fullWidth label="Pieces" placeholder="Pieces"/>
+                                                                <TextField id="marker_pieces" value={this.state.marker_pieces} onChange={this.setstatevaluefunction('marker_pieces')} fullWidth label="Pieces" placeholder="Pieces" />
                                                             </div>
                                                         </div>
 
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_width" value={this.state.marker_width}  onChange={this.setstatevaluefunction('marker_width')} fullWidth label="Width" placeholder="Width"/>
+                                                                <TextField id="marker_width" value={this.state.marker_width} onChange={this.setstatevaluefunction('marker_width')} fullWidth label="Width" placeholder="Width" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="marker_repeat" value={this.state.marker_repeat}  onChange={this.setstatevaluefunction('marker_repeat')} fullWidth label="Repeat" placeholder="Repeat"/>
+                                                                <TextField id="marker_repeat" value={this.state.marker_repeat} onChange={this.setstatevaluefunction('marker_repeat')} fullWidth label="Repeat" placeholder="Repeat" />
                                                             </div>
                                                         </div>
 
@@ -2996,7 +3003,7 @@ class SinglewindowElement extends Component {
                                                                 <FormControl fullWidth>
                                                                     <InputLabel htmlFor="basemarker-simple">Base marker</InputLabel>
                                                                     <Select value={this.state.basemarker} onChange={this.handleChange}
-                                                                            inputProps={{ name: 'basemarker', id: 'basemarker-simple', }}>
+                                                                        inputProps={{ name: 'basemarker', id: 'basemarker-simple', }}>
                                                                         <MenuItem value=""><em>None</em></MenuItem>
                                                                         <MenuItem value={10}>Yes</MenuItem>
                                                                         <MenuItem value={20}>NO</MenuItem>
@@ -3010,7 +3017,7 @@ class SinglewindowElement extends Component {
                                                     <div className="table-responsive mt-0">
                                                         <div className="w-20 float-right">
                                                             <div className="form-group">
-                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) =>this.markeraddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" type="button" onClick={(e) => this.markeraddmoresave()}><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                                                                 {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                                                             </div>
@@ -3018,50 +3025,50 @@ class SinglewindowElement extends Component {
 
                                                         <table className="table mt-10 data w-100 float-left">
                                                             <thead>
-                                                            <tr>
-                                                                <th className="w-25 text-center">Actions  </th>
-                                                                {/* <th className="w-25">Marker For</th> */}
-                                                                <th className="w-25">Material Type</th>
-                                                                <th className="w-25">Description</th>
-                                                                <th className="w-25">Placement</th>
-                                                                <th className="w-25">Color  </th>
-                                                                <th className="w-25">Size  </th>
-                                                                <th className="w-25">Pieces  </th>
-                                                                <th className="w-25">Width  </th>
-                                                                <th className="w-25">Repeat  </th>
-                                                                <th className="w-25">Base Marker  </th>
+                                                                <tr>
+                                                                    <th className="w-25 text-center">Actions  </th>
+                                                                    {/* <th className="w-25">Marker For</th> */}
+                                                                    <th className="w-25">Material Type</th>
+                                                                    <th className="w-25">Description</th>
+                                                                    <th className="w-25">Placement</th>
+                                                                    <th className="w-25">Color  </th>
+                                                                    <th className="w-25">Size  </th>
+                                                                    <th className="w-25">Pieces  </th>
+                                                                    <th className="w-25">Width  </th>
+                                                                    <th className="w-25">Repeat  </th>
+                                                                    <th className="w-25">Base Marker  </th>
 
-                                                            </tr>
+                                                                </tr>
                                                             </thead>
                                                             <tbody>
-                                                            {markeraddmoredata.map((n,index) => {
+                                                                {markeraddmoredata.map((n, index) => {
 
-                                                                return (
+                                                                    return (
 
-                                                                    <tr key={`list${index}`}>
-                                                                        <td className="">
+                                                                        <tr key={`list${index}`}>
+                                                                            <td className="">
 
 
-                                                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.markeraddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.markeraddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) => this.markeraddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) => this.markeraddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                                                            {/* <button className="save">Save</button>
+                                                                                {/* <button className="save">Save</button>
                                         <button className="edit">Edit</button>
                                         <button className="delete">Delete</button> */}
-                                                                        </td>
-                                                                        <td className="data">{n.matType}</td>
-                                                                        <td className="data">{n.description}</td>
-                                                                        <td className="data">{n.placement}</td>
-                                                                        <td className="data">{n.color}</td>
-                                                                        <td className="data">{n.size}</td>
-                                                                        <td className="data">{n.pcs}</td>
-                                                                        <td className="data">{n.width}</td>
-                                                                        <td className="data">{n.repeat}</td>
-                                                                        <td className="data">{n.baseMarker}</td>
-                                                                    </tr>
-                                                                );
-                                                            })}
-                                                            {/* <tr>
+                                                                            </td>
+                                                                            <td className="data">{n.matType}</td>
+                                                                            <td className="data">{n.description}</td>
+                                                                            <td className="data">{n.placement}</td>
+                                                                            <td className="data">{n.color}</td>
+                                                                            <td className="data">{n.size}</td>
+                                                                            <td className="data">{n.pcs}</td>
+                                                                            <td className="data">{n.width}</td>
+                                                                            <td className="data">{n.repeat}</td>
+                                                                            <td className="data">{n.baseMarker}</td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                                {/* <tr>
                                          <td>Demo </td>
                                          <td>Demo </td>
                                          <td>Demo </td>
@@ -3124,7 +3131,7 @@ class SinglewindowElement extends Component {
                                                                     createNewLabel="Value Add"
                                                                     options={valueaddoptions}
                                                                     // onChange={this.setstatevaluedropdownfunction('valueadd')}
-                                                                    onChange={values => this.getvalueaddtype({ valueadd:values },this,"valueadd")}
+                                                                    onChange={values => this.getvalueaddtype({ valueadd: values }, this, "valueadd")}
                                                                     placeholder="Value Add"
                                                                     values={this.state.valueadd}
                                                                 />
@@ -3150,12 +3157,12 @@ class SinglewindowElement extends Component {
 
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="valueaddcolor" value={this.state.valueaddcolor}  onChange={this.setstatevaluefunction('valueaddcolor')} fullWidth label="Color" placeholder="Color"/>
+                                                                <TextField id="valueaddcolor" value={this.state.valueaddcolor} onChange={this.setstatevaluefunction('valueaddcolor')} fullWidth label="Color" placeholder="Color" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="noofpieces" value={this.state.noofpieces}  onChange={this.setstatevaluefunction('noofpieces')} fullWidth label="No of Pieces" placeholder="No of Pieces"/>
+                                                                <TextField id="noofpieces" value={this.state.noofpieces} onChange={this.setstatevaluefunction('noofpieces')} fullWidth label="No of Pieces" placeholder="No of Pieces" />
                                                             </div>
                                                         </div>
 
@@ -3169,10 +3176,10 @@ class SinglewindowElement extends Component {
                                                                     <FormControlLabel color="primary" value="sample" control={<Radio />} label="Sample" />
                                                                 </div>
                                                                 <div className="w-33">
-                                                                    <FormControlLabel color="primary" value="mock" control={<Radio  />} label="Mock" />
+                                                                    <FormControlLabel color="primary" value="mock" control={<Radio />} label="Mock" />
                                                                 </div>
                                                                 <div className="w-33">
-                                                                    <FormControlLabel color="primary" value="Reference" control={<Radio  />} label="Reference" />
+                                                                    <FormControlLabel color="primary" value="Reference" control={<Radio />} label="Reference" />
                                                                 </div>
                                                             </RadioGroup>
                                                         </div>
@@ -3182,7 +3189,7 @@ class SinglewindowElement extends Component {
                                                     <div className="table-responsive mt-0">
                                                         <div className="w-20 float-right">
                                                             <div className="form-group">
-                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" onClick={(e) =>this.valueaddaddmoresave()}  type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" tabindex="0" onClick={(e) => this.valueaddaddmoresave()} type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                                                                 {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                                                             </div>
@@ -3190,39 +3197,39 @@ class SinglewindowElement extends Component {
 
                                                         <table className="table mt-10 data w-100 float-left">
                                                             <thead>
-                                                            <tr>
-                                                                <th className="w-25 text-center">Actions  </th>
-                                                                <th className="w-25">Value Add</th>
-                                                                <th className="w-25">Value Add Type</th>
-                                                                <th className="w-25">Color</th>
-                                                                <th className="w-25">No of pcs  </th>
-                                                                <th className="w-25">Radio </th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th className="w-25 text-center">Actions  </th>
+                                                                    <th className="w-25">Value Add</th>
+                                                                    <th className="w-25">Value Add Type</th>
+                                                                    <th className="w-25">Color</th>
+                                                                    <th className="w-25">No of pcs  </th>
+                                                                    <th className="w-25">Radio </th>
+                                                                </tr>
                                                             </thead>
                                                             <tbody>
-                                                            {valueaddaddmoredata.map((n,index) => {
+                                                                {valueaddaddmoredata.map((n, index) => {
 
-                                                                return (
+                                                                    return (
 
-                                                                    <tr key={`list${index}`}>
-                                                                        <td className="">
+                                                                        <tr key={`list${index}`}>
+                                                                            <td className="">
 
 
-                                                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.valueaddaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.valueaddaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) => this.valueaddaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) => this.valueaddaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                                                            {/* <button className="save">Save</button>
+                                                                                {/* <button className="save">Save</button>
                                         <button className="edit">Edit</button>
                                         <button className="delete">Delete</button> */}
-                                                                        </td>
-                                                                        <td className="data">{n.valueAdd}</td>
-                                                                        <td className="data">{n.valueaddtypeDesc}</td>
-                                                                        <td className="data">{n.color}</td>
-                                                                        <td className="data">{n.pcs}</td>
-                                                                        <td className="data"></td>
-                                                                    </tr>
-                                                                );
-                                                            })}
+                                                                            </td>
+                                                                            <td className="data">{n.valueAdd}</td>
+                                                                            <td className="data">{n.valueaddtypeDesc}</td>
+                                                                            <td className="data">{n.color}</td>
+                                                                            <td className="data">{n.pcs}</td>
+                                                                            <td className="data"></td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
 
                                                             </tbody>
 
@@ -3247,7 +3254,7 @@ class SinglewindowElement extends Component {
 
                                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                                             <div className="form-group">
-                                                                <TextField id="optionType" value={this.state.optionType}  onChange={this.setstatevaluefunction('optionType')} fullWidth label="Option type" placeholder="Option type"/>
+                                                                <TextField id="optionType" value={this.state.optionType} onChange={this.setstatevaluefunction('optionType')} fullWidth label="Option type" placeholder="Option type" />
                                                             </div>
                                                         </div>
 
@@ -3256,7 +3263,7 @@ class SinglewindowElement extends Component {
                                                     <div className="table-responsive mt-0">
                                                         <div className="w-20 float-right">
                                                             <div className="form-group">
-                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" onClick={(e) =>this.samaddmoresave()} tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic add" onClick={(e) => this.samaddmoresave()} tabindex="0" type="button"><i className="zmdi zmdi-plus-circle"></i><span className="MuiTouchRipple-root"></span></button>
                                                                 {/* <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button"><i className="zmdi zmdi-save"></i><span className="MuiTouchRipple-root"></span></button>
                              <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-ic" tabindex="0" type="button" onClick={(e) => this.opnQuantityModal(e)}><i className="zmdi zmdi-copy"></i><span className="MuiTouchRipple-root"></span></button> */}
                                                             </div>
@@ -3264,32 +3271,32 @@ class SinglewindowElement extends Component {
 
                                                         <table className="table mt-10 data w-100 float-left">
                                                             <thead>
-                                                            <tr>
-                                                                <th className="w-25 text-center">Actions  </th>
-                                                                <th className="w-25">Option type</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th className="w-25 text-center">Actions  </th>
+                                                                    <th className="w-25">Option type</th>
+                                                                </tr>
                                                             </thead>
                                                             <tbody>
-                                                            {samaddmoredata.map((n,index) => {
+                                                                {samaddmoredata.map((n, index) => {
 
-                                                                return (
+                                                                    return (
 
-                                                                    <tr key={`list${index}`}>
-                                                                        <td className="">
+                                                                        <tr key={`list${index}`}>
+                                                                            <td className="">
 
 
-                                                                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) =>this.samaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
-                                                                            <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) =>this.samaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" onClick={(e) => this.samaddmoredelete(n)} tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                                                                                <button className="MuiButtonBase-root  mr-10 text-primary btn-icon b-ic edit" onClick={(e) => this.samaddmoreedit(n)} tabindex="0" type="button" ><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button>
 
-                                                                            {/* <button className="save">Save</button>
+                                                                                {/* <button className="save">Save</button>
                                         <button className="edit">Edit</button>
                                         <button className="delete">Delete</button> */}
-                                                                        </td>
-                                                                        <td className="data">{n.optionType}</td>
+                                                                            </td>
+                                                                            <td className="data">{n.optionType}</td>
 
-                                                                    </tr>
-                                                                );
-                                                            })}
+                                                                        </tr>
+                                                                    );
+                                                                })}
                                                             </tbody>
 
                                                         </table>
@@ -3320,4 +3327,3 @@ class SinglewindowElement extends Component {
 }
 
 export default SinglewindowElement;
- 
