@@ -1362,15 +1362,23 @@ class SinglewindowElement extends Component {
 
 
     valueaddaddmoresave() {
-        console.log(this.state.valueadd, this.state.valueaddtype, 'valueaddtypevalueaddtype')
+        let valueaddtype = "";
+        let valueaddtypelabel = "";
+        if (this.state.valueaddtype.length > 0) {
+            valueaddtype = this.state.valueaddtype[0].value;
+            valueaddtypelabel = this.state.valueaddtype[0].label;
+        }
+
+
         const { valueaddaddmoredata } = this.state;
         if (this.state.valueadd.length > 0 || this.state.noofpieces != 0) {
             let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
                 "valueAdd": this.state.valueadd[0].value,
-                "valueAddType": this.state.valueaddtype[0].value,
-                "valueaddtypeDesc": this.state.valueaddtype[0].label,
+                "valueAddlabel": this.state.valueadd[0].label,
+                "valueAddType": valueaddtype,
+                "valueaddtypeDesc": valueaddtypelabel,
                 "color": this.state.valueaddcolor,
                 "pcs": this.state.noofpieces,
                 "typeOfGarment": "string",
@@ -1383,10 +1391,9 @@ class SinglewindowElement extends Component {
             }
             valueaddaddmoredata.push(data);
             this.setState({ valueaddaddmoredata: valueaddaddmoredata })
-            // this.state.valueaddaddmoredata.push(data);
-            //   this.setState({valueadd:[],valueaddtype:[],noofpieces:0})
-            this.setState({ valueaddcolor: '', noofpieces: 0 })
-            //   console.log(this.state.valueaddaddmoredata,'this.state.valueaddaddmoredata')
+            
+            this.setState({ valueaddcolor: '', noofpieces: 0 ,valueaddtype:[],valueadd:[]})
+            
         } else {
             NotificationManager.error('Please Enter all values');
 
@@ -1412,7 +1419,8 @@ class SinglewindowElement extends Component {
     valueaddaddmoreedit(item) {
         const { valueaddaddmoredata } = this.state;
 
-        this.setState({ noofpieces: item.pcs, valueaddcolor: item.color, valueadd: [{ value: item.valueAdd, label: item.valueAdd }], valueaddtype: [{ value: item.valueAddType, label: item.valueaddtypeDesc }] });
+
+        this.setState({ noofpieces: item.pcs, valueaddcolor: item.color, valueadd: [{ value: item.valueAdd, label: item.valueAddlabel }], valueaddtype: [{ value: item.valueAddType, label: item.valueaddtypeDesc }] });
         if (valueaddaddmoredata.indexOf(item) !== -1) {
             valueaddaddmoredata.splice(valueaddaddmoredata.indexOf(item), 1);
         }
@@ -1426,17 +1434,34 @@ class SinglewindowElement extends Component {
 
 
     markeraddmoresave() {
-        console.log(this.state.marker, this.state.markertype, 'markertypemarkertype')
+        
+
+        let materialtype = "";
+        let materialtypelabel = "";
+        if (this.state.materialtype.length > 0) {
+            materialtype = this.state.materialtype[0].value;
+            materialtypelabel = this.state.materialtype[0].label;
+        }
+
+        let size = "";
+        let sizelabel = "";
+        if (this.state.size.length > 0) {
+            size = this.state.size[0].value;
+            sizelabel = this.state.size[0].label;
+        }
+
         const { markeraddmoredata } = this.state;
         if (this.state.markerfor.length > 0) {
             let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
-                "matType": this.state.materialtype[0].value,
+                "matType": materialtype,
+                "matType_label": materialtypelabel,
                 "description": this.state.marker_desc,
                 "placement": this.state.marker_placement,
                 "color": this.state.marker_color,
-                "size": this.state.size[0].value,
+                "size": size,
+                "size_label": sizelabel,
                 "pcs": this.state.marker_pieces,
                 "width": this.state.marker_width,
                 "repeat": this.state.marker_repeat,
@@ -1451,7 +1476,7 @@ class SinglewindowElement extends Component {
             markeraddmoredata.push(data);
             this.setState({ markeraddmoredata: markeraddmoredata })
 
-            this.setState({ marker_desc: '', marker_placement: '', marker_color: '', marker_pieces: '', marker_width: '', marker_repeat: '' })
+            this.setState({ marker_desc: '', marker_placement: '', marker_color: '', marker_pieces: '', marker_width: '', marker_repeat: '',size:[],materialtype:[] })
         } else {
             NotificationManager.error('Please Enter all values');
 
@@ -1475,8 +1500,8 @@ class SinglewindowElement extends Component {
 
     markeraddmoreedit(item) {
         const { markeraddmoredata } = this.state;
-
-        this.setState({ noofpieces: item.pcs, markercolor: item.color, marker: [{ value: item.marker, label: item.marker }], markertype: [{ value: item.markerType, label: item.markertypeDesc }] });
+        this.setState({ marker_desc: item.description, marker_placement: item.placement, marker_color: item.color, marker_pieces: item.pcs, marker_width: item.width, marker_repeat: item.repeat,size:[{ value: item.size, label: item.size_label }],materialtype:[{ value: item.matType, label: item.matType_label }] })
+        this.setState({marker: [{ value: item.marker, label: item.marker }], markertype: [{ value: item.markerType, label: item.markertypeDesc }] });
         if (markeraddmoredata.indexOf(item) !== -1) {
             markeraddmoredata.splice(markeraddmoredata.indexOf(item), 1);
         }
@@ -1490,27 +1515,48 @@ class SinglewindowElement extends Component {
     sampleaddmoresave() {
 
         const { sampleaddmoredata } = this.state;
+        let sample_size = "";
+        let sample_sizelabel = "";
+        if (this.state.sample_size.length > 0) {
+            sample_size = this.state.sample_size[0].value;
+            sample_sizelabel = this.state.sample_size[0].label;
+        }
+
+        let sampletype = "";
+        let sampletypelabel = "";
+        if (this.state.sampletype.length > 0) {
+            sampletype = this.state.sampletype[0].value;
+            sampletypelabel = this.state.sampletype[0].label;
+        }
+
+        
+
         if (this.state.sample_materialtype.length > 0) {
             let data = {
                 "id": 0,
                 "swH_Id": this.state.swid,
                 "matType": this.state.sample_materialtype[0].value,
+                "matType_label": this.state.sample_materialtype[0].label,
                 "matDesc": this.state.sample_desc,
                 "placement": this.state.sample_placement,
                 "color": this.state.sample_color,
-                "size": this.state.sample_size[0].value,
+                "size": sample_size,//this.state.sample_size[0].value,
+                "size_label": sample_sizelabel,
                 "pcs": this.state.sample_pieces,
                 "cancel": "N",
                 "createdBy": "string",
                 "createdDt": "2021-11-16T05:00:55.509Z",
                 "modifyBy": "string",
                 "modifyDt": "2021-11-16T05:00:55.509Z",
-                "hostName": "string"
+                "hostName": "string",
+                "sampletype":sampletype,
+                "sampletypelabel":sampletypelabel,
+
             }
             sampleaddmoredata.push(data);
             this.setState({ sampleaddmoredata: sampleaddmoredata })
 
-            this.setState({ sample_desc: '', sample_placement: '', sample_color: '', sample_pieces: '' })
+            this.setState({ sample_desc: '', sample_placement: '', sample_color: '', sample_pieces: '',sample_materialtype: [], sample_size: [],sampletype:[] })
         } else {
             NotificationManager.error('Please Enter all values');
 
@@ -1535,7 +1581,7 @@ class SinglewindowElement extends Component {
     sampleaddmoreedit(item) {
         const { sampleaddmoredata } = this.state;
 
-        this.setState({ sample_pieces: item.pcs, sample_color: item.color, sample_desc: item.matDesc, sample_placement: item.placement, sample_materialtype: [{ value: item.matType, label: item.matType }], sample_size: [{ value: item.size, label: item.size }] });
+        this.setState({ sample_pieces: item.pcs, sample_color: item.color, sample_desc: item.matDesc, sample_placement: item.placement, sample_materialtype: [{ value: item.matType, label: item.matType_label }], sample_size: [{ value: item.size, label: item.size_label }], sampletype: [{ value: item.sampletype, label: item.sampletypelabel }] });
         if (sampleaddmoredata.indexOf(item) !== -1) {
             sampleaddmoredata.splice(sampleaddmoredata.indexOf(item), 1);
         }
@@ -2464,7 +2510,7 @@ class SinglewindowElement extends Component {
                                                             <div className="form-group select_label_name mt-15">
                                                                 <Select1
                                                                     dropdownPosition="auto"
-                                                                    //   multi
+                                                                      multi
                                                                     createNewLabel="Add on info"
                                                                     options={addoninfooptions}
                                                                     onChange={this.setstatevaluedropdownfunction('addoninfo')}
@@ -2814,13 +2860,13 @@ class SinglewindowElement extends Component {
                                         <button className="delete">Delete</button> */}
 
                                                                             </td>
-                                                                            <td className="data">{n.matType}</td>
+                                                                            <td className="data">{n.matType_label}</td>
                                                                             <td className="data">{n.matDesc}</td>
                                                                             <td className="data">{n.placement}</td>
                                                                             <td className="data">{n.color}</td>
-                                                                            <td className="data">{n.size}</td>
+                                                                            <td className="data">{n.size_label}</td>
                                                                             <td className="data">{n.pcs}</td>
-                                                                            <td className="data"></td>
+                                                                            <td className="data">{n.sampletypelabel}</td>
                                                                         </tr>
                                                                     );
                                                                 })}
@@ -3056,11 +3102,11 @@ class SinglewindowElement extends Component {
                                         <button className="edit">Edit</button>
                                         <button className="delete">Delete</button> */}
                                                                             </td>
-                                                                            <td className="data">{n.matType}</td>
+                                                                            <td className="data">{n.matType_label}</td>
                                                                             <td className="data">{n.description}</td>
                                                                             <td className="data">{n.placement}</td>
                                                                             <td className="data">{n.color}</td>
-                                                                            <td className="data">{n.size}</td>
+                                                                            <td className="data">{n.size_label}</td>
                                                                             <td className="data">{n.pcs}</td>
                                                                             <td className="data">{n.width}</td>
                                                                             <td className="data">{n.repeat}</td>

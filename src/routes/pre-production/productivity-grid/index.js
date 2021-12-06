@@ -110,14 +110,14 @@ class Productivitygrid extends Component {
         // })        
         // .catch(error => {})  
 
-        api.get('StyleHeader/GetStyleHeaderList')
-            .then((response) => {
+        // api.get('StyleHeader/GetStyleHeaderList')
+        //     .then((response) => {
 
-                this.setState({ stylenolists: response.data.data });
-            })
-            .catch(error => {
-                // error handling
-            })
+        //         this.setState({ stylenolists: response.data.data });
+        //     })
+        //     .catch(error => {
+        //         // error handling
+        //     })
 
 
 
@@ -336,6 +336,11 @@ class Productivitygrid extends Component {
             }, 200);
         }
 
+        if (name == "buyer" || name == "BuyerdivisionValue") {
+            setTimeout(() => {
+                this.getstyleno();
+            }, 200);
+        }
 
 
     };
@@ -366,6 +371,17 @@ class Productivitygrid extends Component {
 
 
         // })
+    }
+
+
+    getstyleno() {
+
+        api.get('TNAMaster/GetStyleForBuyer?Buyer=' + this.state.fields.buyer + '&BuyerDivison=' + this.state.fields.BuyerdivisionValue)
+            .then((response) => response.data.data)
+            .then(overalllists => {
+                this.setState({ stylenolists: overalllists });
+            });
+       
     }
 
 
@@ -434,7 +450,7 @@ class Productivitygrid extends Component {
 
         const stylenooptions = [];
         for (const item of this.state.stylenolists) {
-            stylenooptions.push({ value: item.masterStyle, label: item.masterStyle });
+            stylenooptions.push({ value: item.masterStyle, label: item.masterStyle+'-'+item.refStyleNo });
         }
 
         const docnumberoptions = [];
@@ -551,7 +567,7 @@ class Productivitygrid extends Component {
 
                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div className="form-group mt-15">
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">View <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.viewRequestList(e)}><span className="MuiButton-label">Search <i class="ti-eye"></i></span><span className="MuiTouchRipple-root"></span></button>
                             </div>
                         </div>
                     </div>
