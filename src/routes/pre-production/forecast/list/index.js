@@ -97,6 +97,7 @@ class PreprodcutionTable extends Component {
       BuyerdivisionValue: [],
       locationItemValue: [],
       selectedDate: new Date(),
+      activityNameError: ''
     };
 
     this.onRowUpdated = this.onRowUpdated.bind(this);
@@ -197,7 +198,7 @@ class PreprodcutionTable extends Component {
   SaveForecast(type) {
     if (
       this.state.QtyBreakUpList.data.length === 0 &&
-      this.state.activityList.data.length === 0 &&
+      (this.state.activityList.data.length === 0 && this.state.activityName === '' )&&
       !this.state.IsEdit
     ) {
       NotificationManager.error("Please Select any Quantity or Activity Items");
@@ -242,7 +243,7 @@ class PreprodcutionTable extends Component {
           const saveActivityItems = {
             hid: 0,
             entityID: "st",
-            buyCode: this.state.BuyerDivisionList[0].buyerCode,
+            buyCode: this.state.BuyerValue[0].value,
             buyDivcode: this.state.BuyerdivisionValue[0].value,
             loccode: this.state.location[0].value,
             seasonCode: this.state.season[0].value,
@@ -253,7 +254,8 @@ class PreprodcutionTable extends Component {
             cancel: "N",
             hostName: "admin",
             fcQtyDetailInsertEntityModel:
-              saveQtyDetailItems.fcQtyDetailInsertEntityModel.length > 0 &&
+            Object.entries(saveQtyDetailItems).keys.length > 0 &&
+            saveQtyDetailItems.fcQtyDetailInsertEntityModel.length > 0 &&
               saveQtyDetailItems.fcQtyDetailInsertEntityModel[0].quantity !== 0
                 ? saveQtyDetailItems.fcQtyDetailInsertEntityModel
                 : saveQtyPayload,
@@ -568,8 +570,8 @@ class PreprodcutionTable extends Component {
       hid: e.data.fcHead_ID ? e.data.fcHead_ID : 0,
       entityID: "st",
       buyCode:
-        this.state.BuyerDivisionList.length > 0
-          ? this.state.BuyerDivisionList[0].buyerCode
+        this.state.BuyerValue.length > 0
+          ? this.state.BuyerValue[0].value
           : e.data.buyCode,
       buyDivcode: this.state.BuyerdivisionValue
         ? this.state.BuyerdivisionValue[0].value
@@ -753,7 +755,10 @@ class PreprodcutionTable extends Component {
       name === "refstyleno"
     ) {
       if (!event.target.value.match(/^[a-zA-Z0-9]+$/)) {
-        NotificationManager.error("Input is not alphanumeric");
+        // NotificationManager.error("Input is not alphanumeric");
+        this.setState({activityNameError: 'Input is not alphanumeric'})
+      } else {
+        this.setState({activityNameError: ''})
       }
     }
   };
@@ -1247,7 +1252,7 @@ class PreprodcutionTable extends Component {
                               )}
                             />
                             <span className="error">
-                              {this.state.errors["activityName"]}
+                              {this.state.activityNameError}
                             </span>
                           </div>
                         </div>
