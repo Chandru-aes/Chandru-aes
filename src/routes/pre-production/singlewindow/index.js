@@ -217,7 +217,9 @@ class SinglewindowElement extends Component {
         pattern_styleno: [],
         pattern_stylenolists: [],
         swid: 0,
-        reqNo: ''
+        reqNo: '',
+        unit: [],
+        unitlists: []
 
     }
     onAddUpdateUserModalClose() {
@@ -290,6 +292,7 @@ class SinglewindowElement extends Component {
                     pattern_styleno: [{ value: data.styleNo, label: data.styleNo }],
                     fit: [{ value: data.fit, label: data.fit }],
                     reqNo: data.reqNo,
+                    unit: [{ value: data.unitCode, label: data.unitCode }],
                 });
             })
             .catch(error => {
@@ -460,6 +463,15 @@ class SinglewindowElement extends Component {
                 // error handling
             })
 
+
+            api.get('Unit/GetUnitDropDown')
+            .then((response) => {
+
+                this.setState({ unitlists: response.data.result.data });
+            })
+            .catch(error => {
+                // error handling
+            })
 
         api.get('Miscellaneous/GetMiscellaneousList?MType=SAMPLETYPE')
             .then((response) => {
@@ -774,7 +786,10 @@ class SinglewindowElement extends Component {
                 sampletype = this.state.sampletype[0].value;
             }
 
-
+            let unit = "";
+            if (this.state.unit.length > 0) {
+                unit = this.state.unit[0].value;
+            }
 
 
             let patterndata = {};
@@ -1048,7 +1063,7 @@ class SinglewindowElement extends Component {
                 "styleNo": stylenosplit[0],//this.state.styleno[0].value,
                 "masterStyle": stylenosplit[1],
                 "baseStyleno": this.state.baseStyleno,
-                "unitCode": "string",
+                "unitCode": unit,
                 "reqNo": this.state.reqNo,
                 "reqDate": "2021-11-16T05:00:55.509Z",
                 "fit": this.state.fit[0].value,
@@ -1749,6 +1764,11 @@ class SinglewindowElement extends Component {
         }
 
 
+        const unitoptions = [];
+        for (const item of this.state.unitlists) {
+            unitoptions.push({ value: item.uCode, label: item.uName });
+        }
+
 
         return (
 
@@ -2115,6 +2135,20 @@ class SinglewindowElement extends Component {
                                                 </div>
 
                                             </div>
+                                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div className="form-group select_label_name mt-15">
+                                                    <Select1
+                                                        dropdownPosition="auto"
+                                                        //   multi
+                                                        createNewLabel="Unit"
+                                                        options={unitoptions}
+                                                        onChange={this.setstatevaluedropdownfunction('unit')}
+                                                        placeholder="Unit"
+                                                        values={this.state.unit}
+                                                    />
+                                                </div>
+                                            </div>
+                                        
                                             {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div className="form-group">
                         <FormControl fullWidth>
@@ -2784,7 +2818,7 @@ class SinglewindowElement extends Component {
                                                             <div className="form-group select_label_name mt-15">
                                                                 <Select1
                                                                     dropdownPosition="auto"
-                                                                    // multi
+                                                                    multi
                                                                     createNewLabel="Size"
                                                                     options={sizeoptions}
                                                                     onChange={this.setstatevaluedropdownfunction('sample_size')}
