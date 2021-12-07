@@ -288,12 +288,18 @@ class SinglewindowElement extends Component {
                     buyer: [{ value: data.buyCode, label: data.buyerName }], buyerdiv: [{ value: data.buyDivCode, label: data.buyDivCode }], season: [{ value: data.seasonCode, label: data.seasonName }], year: [{ value: data.seasonYear, label: data.seasonYear }], baseStyleno: data.baseStyleno, fabricDesc: data.fabricDesc, fabricType: data.fabricType,
                     purpose: [{ value: data.purpose, label: data.purpose }],
                     reqtype: [{ value: data.reqType, label: data.reqType }],
-                    styleno: [{ value: data.styleNo, label: data.styleNo }],
+                    styleno: [{ value: data.masterStyle, label: data.masterStyle+'-'+data.styleNo }],
                     pattern_styleno: [{ value: data.styleNo, label: data.styleNo }],
                     fit: [{ value: data.fit, label: data.fit }],
                     reqNo: data.reqNo,
                     unit: [{ value: data.unitCode, label: data.unitCode }],
+                    
                 });
+
+                // setTimeout(() => {
+                //     this.getrefversionno();this.getstyleno();
+                // }, 100);
+               
             })
             .catch(error => {
                 // error handling
@@ -666,13 +672,15 @@ class SinglewindowElement extends Component {
 
 
     getstyleno() {
-        this.setState({ styleno: [], stylenolists: [] });
+        // 
+        const {styleno} = this.state;
+        this.setState({  styleno: [],stylenolists: [] });
         if (this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.season.length > 0 && this.state.year.length > 0) {
 
             api.get('SingleWindowRequestheader/GetStyleNoDropDown?Buyer=' + this.state.buyer[0].value + '&BuyDivCode=' + this.state.buyerdiv[0].value + '&Seasoncode=' + this.state.season[0].value + '&SeasonYear=' + this.state.year[0].value)
                 .then((response) => {
                     let datas = response.data.data;
-                    this.setState({ stylenolists: datas });
+                    this.setState({ stylenolists: datas,styleno:styleno });
                 })
                 .catch(error => {
                     // error handling
@@ -697,9 +705,10 @@ class SinglewindowElement extends Component {
 
     getrefversionno() {
         this.setState({ reference_versionlists: [], reference_version: [], pattern_stylenolists: [] });
-        if (this.state.styleno.length > 0 && this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.season.length > 0 && this.state.year.length > 0) {
-
-            api.get('SingleWindowRequestheader/GetRefVersion?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value + '&season=' + this.state.season[0].value + '&syear=' + this.state.year[0].value + '&StyleNumber=' + this.state.styleno[0].value)
+        if (this.state.styleno.length > 0 && this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.season.length > 0 && this.state.year.length > 0 && this.state.styleno.length > 0) {
+            // SingleWindowRequestheader/GetVersion?Buyer=AC&BuyerDiv=AC&season=HOL&syear=2021&StyleNumber=787meme
+            // api.get('SingleWindowRequestheader/GetRefVersion?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value + '&season=' + this.state.season[0].value + '&syear=' + this.state.year[0].value + '&StyleNumber=' + this.state.styleno[0].value)
+            api.get('SingleWindowRequestheader/GetVersion?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value + '&season=' + this.state.season[0].value + '&syear=' + this.state.year[0].value + '&StyleNumber='+ this.state.styleno[0].value)
                 .then((response) => {
                     // let datas = response.data.data[0];
                     this.setState({ reference_versionlists: response.data.data });
@@ -795,8 +804,8 @@ class SinglewindowElement extends Component {
             let patterndata = {};
             let markerdata = {};
             let sampledata = {};
-            let samdata = {};
-            let valueadddata = {};
+            let samdata = [];
+            let valueadddata = [];
             let reqtypedata = [];
             this.state.reqtype.forEach(element => {
 
@@ -818,7 +827,7 @@ class SinglewindowElement extends Component {
                     patterndata = {
                         "id": 0,
                         "swH_Id": this.state.swid,
-                        "verRef": "string",
+                        "verRef": this.state.ref_version,
                         "bodyGrain": bodygrain,
                         "addOnInfo": addoninfo,
                         "samShr": "s",
@@ -1755,7 +1764,7 @@ class SinglewindowElement extends Component {
 
         const stylenooptions = [];
         for (const item of this.state.stylenolists) {
-            stylenooptions.push({ value: item.id, label: item.refStyleNo + '-' + item.masterStyle });
+            stylenooptions.push({ value: item.masterStyle, label: item.refStyleNo + '-' + item.masterStyle });
         }
 
         const materialtypeoptions = [];
