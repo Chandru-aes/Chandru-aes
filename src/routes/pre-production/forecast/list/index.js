@@ -1175,7 +1175,7 @@ class PreprodcutionTable extends Component {
 
                             <Summary>
                               <TotalItem
-                                column="Quantity"
+                                column="quantity"
                                 summaryType="sum"
                                 customizeText={this.customizeText}
                                 valueFormat="#0.00"
