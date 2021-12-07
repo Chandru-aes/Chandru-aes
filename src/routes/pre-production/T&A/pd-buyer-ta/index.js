@@ -223,15 +223,35 @@ class PdtamasterElement extends Component {
         filterstylenolists: [],
         filterstyleno: [],
         actstagelists: [],
-        option1: [],
         activity: '',
         optionname: '',
         optiondate: moment(new Date()).format('YYYY-MM-DD'),
         optionremark: '',
         optiondays: '',
         optionid: '',
-        firstoptionname:'Option1',
-        hid:0,
+        option1: [],
+        option1name: 'Option1',
+        option2: [],
+        option2name: 'Option2',
+        option3: [],
+        option3name: 'Option3',
+        option4: [],
+        option4name: 'Option4',
+        option5: [],
+        option5name: 'Option5',
+        option6: [],
+        option6name: 'Option6',
+        option7: [],
+        option7name: 'Option7',
+        option8: [],
+        option8name: 'Option8',
+        option9: [],
+        option9name: 'Option9',
+        option10: [],
+        option10name: 'Option10',
+        hid: 0,
+        count: 1,
+        currentoptiontype: "option1",
     }
     onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -244,11 +264,11 @@ class PdtamasterElement extends Component {
     componentDidMount() {
 
         document.body.classList.add('med-pop-up-h');
-       
-        this.getfilldropdownlists();
 
+        this.getfilldropdownlists();
+        $('.optionalltable').css('opacity', '0');
     }
-    
+
 
     getfilldropdownlists() {
 
@@ -368,7 +388,7 @@ class PdtamasterElement extends Component {
         this.setState({ [name]: event });
 
 
-        if (name == "buyerdiv") {
+        if (name == "buyer" || name == "buyerdiv" || name == "ordercategory") {
             setTimeout(() => {
                 this.getActivitylist();
             }, 200);
@@ -439,18 +459,20 @@ class PdtamasterElement extends Component {
 
 
     getActivitylist() {
-        this.setState({ actstagelists: [], option1: [] });
-        if (this.state.buyer.length > 0 && this.state.buyerdiv.length > 0) {
+        this.setState({ actstagelists: [], option1: [], option2: [], option3: [], option4: [], option5: [], option6: [], option7: [], option8: [], option9: [], option10: [] });
+        if (this.state.buyer.length > 0 && this.state.buyerdiv.length > 0 && this.state.ordercategory.length > 0) {
 
             // api.get('TNAMaster/GetExistChkForTNABuyer?Buyer='+this.state.buyer[0].value)
-            api.get('TNAMaster/GetExistChkForTNABuyerDiv?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value)
+            // api.get('TNAMaster/GetExistChkForTNABuyerDiv?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value)
+
+            api.get('TNAMaster/GetExistChkBuyerOCat?Buyer=' + this.state.buyer[0].value + '&BuyerDiv=' + this.state.buyerdiv[0].value + '&OCat=' + this.state.ordercategory[0].value)
                 .then((response) => {
                     let datas = response.data.data;
                     if (response.data.messageCode == "200") {
 
-                        this.setState({ actstagelists: datas, option1: [] });
+                        this.setState({ actstagelists: datas, option1: datas, option2: datas, option3: datas, option4: datas, option5: datas, option6: datas, option7: datas, option8: datas, option9: datas, option10: datas });
                     } else {
-                        this.setState({ actstagelists: datas, option1: [] });
+                        this.setState({ actstagelists: datas, option1: datas, option2: datas, option3: datas, option4: datas, option5: datas, option6: datas, option7: datas, option8: datas, option9: datas, option10: datas });
                         NotificationManager.error(response.data.message);
                     }
 
@@ -557,7 +579,7 @@ class PdtamasterElement extends Component {
         let fields = this.state.fields;
         let errors = {};
         let formIsValid = true;
-        
+
         //Name
         if (!fields["buyer"]) {
             formIsValid = false;
@@ -587,7 +609,7 @@ class PdtamasterElement extends Component {
             errors["styleno"] = "Cannot be empty";
         }
 
-      
+
 
         this.setState({ errors: errors });
         return formIsValid;
@@ -608,12 +630,12 @@ class PdtamasterElement extends Component {
         this.setState({ [name]: checked });
     };
 
-    
+
 
     Clickclone = () => {
         this.setState({ cloneopen: true });
     }
-    
+
 
     samaddmoresave() {
         const { samaddmoredata } = this.state;
@@ -853,75 +875,195 @@ class PdtamasterElement extends Component {
 
 
     }
-    rowclickfunction(n, index, optionname) {
+    rowclickfunction(n, index, optionname, optionid) {
         $('.alltd').css('background-color', '#fff');
-        $('#duration' + index).css('background-color', '#da0a0a');
-        $('#date' + index).css('background-color', '#da0a0a');
-        $('#remark' + index).css('background-color', '#da0a0a');
-        this.setState({ activity: n.activity, optiondays: n.duration, optionremark: "", optionname: optionname, optionid: n.hid })
+        $('#' + optionid + 'duration' + index).css('background-color', '#da0a0a');
+        $('#' + optionid + 'date' + index).css('background-color', '#da0a0a');
+        $('#' + optionid + 'remark' + index).css('background-color', '#da0a0a');
+        this.setState({ activity: n.activity, optiondays: n.duration, optionremark: "", optionname: optionname, optionid: n.hid, currentoptiontype: optionid })
     }
 
     //save Buyer T&A
     save() {
-        
+
         if (this.state.buyer.length > 0) {
-            if(this.state.option1.length>0){
+            if (this.state.option1.length > 0) {
                 let optionarraylists = []
                 this.state.option1.forEach(element => {
-                  let optiondata =  {
+                    let optiondata = {
                         "id": 0,
                         "buyerTna_Id": element.id,
                         "tnaSeqno": element.tnaSeqNo,
+                        "tnaOption": this.state.option1name,
+                        "triggerDt": "2021-12-07T17:39:20.942Z",
                         "actCode": 0,
                         "activity": element.activity,
                         "duration": element.duration,
                         "dependActCode": "string",
-                        "scheduleDt": element.schedule,
-                        "revisedDt": "2021-12-04T08:20:03.369Z",
+                        "scheduleDt":  element.schedule,
+                        "revisedDt": "2021-12-07T17:39:20.942Z",
                         "completed": "s",
-                        "completedDt": "2021-12-04T08:20:03.369Z",
+                        "completedDt": "2021-12-07T17:39:20.942Z",
                         "skipped": "s",
                         "deviation": 0,
+                        "baseOption": "Y",
+                        "confirmed": "Y",
                         "remarks": "string",
                         "createdBy": "string",
                         "modifyBy": "string",
                         "hostname": "string"
-                      }
-                      optionarraylists.push(optiondata);
+                    }
+                    optionarraylists.push(optiondata);
+                });
+                this.state.option2.forEach(element => {
+                    if(element.schedule!="" && element.schedule!=null){
+                        let optiondata = {
+                              "id": 0,
+                        "buyerTna_Id": element.id,
+                        "tnaSeqno": element.tnaSeqNo,
+                        "tnaOption": this.state.option2name,
+                        "triggerDt": "2021-12-07T17:39:20.942Z",
+                        "actCode": 0,
+                        "activity": element.activity,
+                        "duration": element.duration,
+                        "dependActCode": "string",
+                        "scheduleDt":  element.schedule,
+                        "revisedDt": "2021-12-07T17:39:20.942Z",
+                        "completed": "s",
+                        "completedDt": "2021-12-07T17:39:20.942Z",
+                        "skipped": "s",
+                        "deviation": 0,
+                        "baseOption": "N",
+                        "confirmed": "N",
+                        "remarks": "string",
+                        "createdBy": "string",
+                        "modifyBy": "string",
+                        "hostname": "string"
+                        }
+                        optionarraylists.push(optiondata);
+
+                    }
+                   
+                });
+                this.state.option3.forEach(element => {
+                    if(element.schedule!="" && element.schedule!=null){
+                        let optiondata = {
+                              "id": 0,
+                        "buyerTna_Id": element.id,
+                        "tnaSeqno": element.tnaSeqNo,
+                        "tnaOption": this.state.option3name,
+                        "triggerDt": "2021-12-07T17:39:20.942Z",
+                        "actCode": 0,
+                        "activity": element.activity,
+                        "duration": element.duration,
+                        "dependActCode": "string",
+                        "scheduleDt":  element.schedule,
+                        "revisedDt": "2021-12-07T17:39:20.942Z",
+                        "completed": "s",
+                        "completedDt": "2021-12-07T17:39:20.942Z",
+                        "skipped": "s",
+                        "deviation": 0,
+                        "baseOption": "N",
+                        "confirmed": "N",
+                        "remarks": "string",
+                        "createdBy": "string",
+                        "modifyBy": "string",
+                        "hostname": "string"
+                        }
+                        optionarraylists.push(optiondata);
+
+                    }
+                   
+                });
+                this.state.option4.forEach(element => {
+                    if(element.schedule!="" && element.schedule!=null){
+                        let optiondata = {
+                              "id": 0,
+                        "buyerTna_Id": element.id,
+                        "tnaSeqno": element.tnaSeqNo,
+                        "tnaOption": this.state.option4name,
+                        "triggerDt": "2021-12-07T17:39:20.942Z",
+                        "actCode": 0,
+                        "activity": element.activity,
+                        "duration": element.duration,
+                        "dependActCode": "string",
+                        "scheduleDt":  element.schedule,
+                        "revisedDt": "2021-12-07T17:39:20.942Z",
+                        "completed": "s",
+                        "completedDt": "2021-12-07T17:39:20.942Z",
+                        "skipped": "s",
+                        "deviation": 0,
+                        "baseOption": "N",
+                        "confirmed": "N",
+                        "remarks": "string",
+                        "createdBy": "string",
+                        "modifyBy": "string",
+                        "hostname": "string"
+                        }
+                        optionarraylists.push(optiondata);
+
+                    }
+                   
+                });
+                this.state.option5.forEach(element => {
+                    if(element.schedule!="" && element.schedule!=null){
+                        let optiondata = {
+                              "id": 0,
+                        "buyerTna_Id": element.id,
+                        "tnaSeqno": element.tnaSeqNo,
+                        "tnaOption": this.state.option5name,
+                        "triggerDt": "2021-12-07T17:39:20.942Z",
+                        "actCode": 0,
+                        "activity": element.activity,
+                        "duration": element.duration,
+                        "dependActCode": "string",
+                        "scheduleDt":  element.schedule,
+                        "revisedDt": "2021-12-07T17:39:20.942Z",
+                        "completed": "s",
+                        "completedDt": "2021-12-07T17:39:20.942Z",
+                        "skipped": "s",
+                        "deviation": 0,
+                        "baseOption": "N",
+                        "confirmed": "N",
+                        "remarks": "string",
+                        "createdBy": "string",
+                        "modifyBy": "string",
+                        "hostname": "string"
+                        }
+                        optionarraylists.push(optiondata);
+
+                    }
+                   
                 });
                 let data = {
                     "id": 0,
                     "entityId": "st",
                     "masterStyle": this.state.styleno[0].value,
-                    "tnaOption": this.state.firstoptionname,
                     "baseActivity": "string",
-                    "triggerDt": "2021-12-04T08:20:03.368Z",
                     "remarks": "string",
-                    "baseOption": "Y",
-                    "confirmed": "Y",
                     "cancel": "N",
                     "createdBy": "string",
                     "modifyBy": "string",
                     "hostname": "string",
-                    "buyerTNADetlEntityModel":optionarraylists
-                  };
-    
-    
+                    "buyerTNADetlEntityModel": optionarraylists
+                };
+
+
                 api.post('TNAMaster/SaveBuyerTNAMaster', data).then((response) => {
-    
+
                     NotificationManager.success('Saved Sucessfully');
                     this.setState({ edit_add: false });
                     this.setState({
-                        buyerdiv: [], buyer: [], ordercategory: [], year:[],season:[],actstagelists:[],option1:[],styleno:[],unit:[]
+                        buyerdiv: [], buyer: [], ordercategory: [], year: [], season: [], actstagelists: [], option1: [], styleno: [], unit: [],option2: [],option3: [],option4: [],option5: [],option6: [],option7: [],option8: [],option9: [],option10: [],
                     });
                 })
                     .catch(error => {
                         // error handling
                     })
 
-            }  else {
-                NotificationManager.error('Schedule Date Generation Records not found');    
-            }           
+            } else {
+                NotificationManager.error('Schedule Date Generation Records not found');
+            }
 
         } else {
             NotificationManager.error('Please Select Buyer');
@@ -931,25 +1073,87 @@ class PdtamasterElement extends Component {
 
     }
 
+    delete(n) {
+
+        let data = {
+            "id": n.hid,
+            "entityId": "st",
+            "masterStyle": 0,
+            "baseActivity": "string",
+            "remarks": "string",
+            "cancel": "Y",
+            "createdBy": "string",
+            "modifyBy": "string",
+            "hostname": "string",
+            "buyerTNADetlEntityModel": [
+                {
+                    "id": n.did,
+                    "buyerTna_Id": 0,
+                    "tnaSeqno": 0,
+                    "tnaOption": "string",
+                    "triggerDt": "2021-12-07T10:29:53.065Z",
+                    "actCode": 0,
+                    "activity": "string",
+                    "duration": 0,
+                    "dependActCode": "string",
+                    "scheduleDt": "2021-12-07T10:29:53.065Z",
+                    "revisedDt": "2021-12-07T10:29:53.065Z",
+                    "completed": "s",
+                    "completedDt": "2021-12-07T10:29:53.065Z",
+                    "skipped": "s",
+                    "deviation": 0,
+                    "baseOption": "s",
+                    "confirmed": "s",
+                    "remarks": "string",
+                    "createdBy": "string",
+                    "modifyBy": "string",
+                    "hostname": "string"
+                }
+            ]
+        };
+
+        api.post('TNAMaster/SaveBuyerTNAMaster', data).then((response) => {
+            if (response.data.messageCode == "200") {
+                NotificationManager.success('Deleted Sucessfully');
+                this.getalldata();
+            } else {
+                NotificationManager.error(response.data.message);
+            }
+
+
+        })
+            .catch(error => {
+                // error handling
+            })
+
+
+
+
+    }
+
+
+
+
+
     //edit buyer
     edittnabuyer(id) {
 
         this.setState({
-            actstagelists:[],
-            option1:[],
+            actstagelists: [],
+            option1: [],
             hid: 0,
-            styleno:[],
+            styleno: [],
             edit_add: true
         });
-        
+
         api.get('TNAMaster/GetBuyerTNAListBasedID?ID=' + id)
             .then((response) => {
                 let data = response.data.data[0];
 
-                
+
                 let tamasteraddmoredatalists = [];
                 for (const item of data.buyerTNADetlEntityModel) {
-                    let dataall ={
+                    let dataall = {
                         activity: item.activity,
                         buyer: "",
                         buyerDiv: "",
@@ -964,21 +1168,26 @@ class PdtamasterElement extends Component {
                     };
                     tamasteraddmoredatalists.push(dataall);
                 }
-                
+
                 // this.setState({ tamasteraddmoredata: tamasteraddmoredatalists, buyer: [{ value: data.buyCode, label: data.buyerCode }], buyerdiv: [{ value: data.buydivCode, label: data.buyerDivName }], ordercategory: [{ value: data.orderCategory, label: data.orderCategory }], department: [{ value: data.deptcode, label: data.deptcode }] });
 
                 this.setState({
-                    actstagelists:[],
-                    option1:tamasteraddmoredatalists,
+                    actstagelists: [],
+                    option1: tamasteraddmoredatalists,
                     hid: id,
-                    styleno:[{value:data.masterStyle,label:data.masterStyle}],
+                    styleno: [{ value: data.masterStyle, label: data.masterStyle }],
                 });
             })
             .catch(error => {
                 // error handling
             })
     }
+    Addoption() {
+        let count = this.state.count + 1;
+        this.setState({ count: count });
+        $('#option' + count + 'table').css('opacity', '1');
 
+    }
 
     Generate() {
 
@@ -988,8 +1197,8 @@ class PdtamasterElement extends Component {
         }
 
         if (this.state.buyer.length > 0 && this.state.buyer.length > 0) {
-            if(this.state.optionid!=0 && this.state.optionid!=''){
-                if(this.state.optiondays!=0 && this.state.optiondays!=''){
+            if (this.state.optionid != 0 && this.state.optionid != '') {
+                if (this.state.optiondays != 0 && this.state.optiondays != '') {
                     let data = {
                         "buyer": this.state.buyer[0].value,
                         "buyerDiv": this.state.buyerdiv[0].value,
@@ -997,39 +1206,41 @@ class PdtamasterElement extends Component {
                         "id": this.state.optionid,
                         "activity": this.state.activity,
                         "noofDays": this.state.optiondays,
-                        "schedule": this.state.optiondate
+                        "schedule": this.state.optiondate,
+                        "OptName": this.state.currentoptiontype
                     };
-        
-                    
+                    let optiontypename = this.state.currentoptiontype + 'name';
+                    let optiontype = this.state.currentoptiontype;
+
                     api.post('TNAMaster/GetScheduleDateGeneration', data).then((response) => {
-                        this.setState({firstoptionname:this.state.optionname,optionid:'',optionname:'',optiondays:0,optiondate: moment(new Date()).format('YYYY-MM-DD'),activity:''});
+                        this.setState({ [optiontypename]: this.state.optionname, optionid: '', optionname: '', optiondays: 0, optiondate: moment(new Date()).format('YYYY-MM-DD'), activity: '' });
                         let datas = response.data.data;
-                        if(datas!=null){
-                            if (response.data.messageCode == "200") {    
-                                this.setState({ actstagelists: [], option1: datas });
+                        if (datas != null) {
+                            if (response.data.messageCode == "200") {
+                                this.setState({ [optiontype]: datas });
                             } else {
-                                this.setState({ actstagelists: [], option1: datas });
+                                this.setState({ [optiontype]: datas });
                                 NotificationManager.error(response.data.message);
                             }
-                        } else{
-                            this.setState({ actstagelists: [], option1: [] });
+                        } else {
+                            this.setState({ [optiontype]: [] });
                             NotificationManager.error(response.data.message);
                         }
-                       
-        
+
+
                     })
                         .catch(error => {
                             // error handling
                         })
 
-                }else {
-                    NotificationManager.error('Please Enter valid days');    
+                } else {
+                    NotificationManager.error('Please Enter valid days');
                 }
             } else {
-                NotificationManager.error('Please Click on days or date');    
+                NotificationManager.error('Please Click on days or date');
             }
 
-          
+
 
         } else {
             NotificationManager.error('Please Select Buyer');
@@ -1137,7 +1348,7 @@ class PdtamasterElement extends Component {
                 return (
                     <tr>
                         <td className="text-center">
-                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" onClick={(e) => this.delete(n)} ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                             <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) => this.edittnabuyer(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
 
                         <td>{n.buyName} </td>
@@ -1162,9 +1373,9 @@ class PdtamasterElement extends Component {
                     <tr>
                         <td>{n.stage} </td>
                         <td>{n.activity} </td>
-                        <td className="alltd" id={'duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.firstoptionname)}>{n.duration} </td>
-                        <td className="alltd" id={'date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.firstoptionname)}> </td>
-                        <td className="alltd" id={'remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.firstoptionname)}> </td>
+                        {/* <td className="alltd" id={'duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option1name)}>{n.duration} </td>
+                        <td className="alltd" id={'date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option1name)}> </td>
+                        <td className="alltd" id={'remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option1name)}> </td> */}
                         {/* <td> </td>
                     <td> </td>
                     <td> </td> */}
@@ -1172,30 +1383,222 @@ class PdtamasterElement extends Component {
                 );
             })
         } else {
-            if (this.state.option1.length > 0) {
-                actstagelisthtml = this.state.option1.map((n, index) => {
-                    return (
-                        <tr>
-                            <td>{n.stage} </td>
-                            <td>{n.activity} </td>
-                            <td className="alltd" id={'duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.firstoptionname)}>{n.duration} </td>
-                            <td className="alltd" id={'date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.firstoptionname)}> {n.schedule}</td>
-                            <td className="alltd" id={'remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.firstoptionname)}> </td>
-                            {/* <td> </td>
-                        <td> </td>
-                        <td> </td> */}
-                        </tr>
-                    );
-                })
-            } else {
-                actstagelisthtml = <tr><td colSpan="5" className="no-records-data"><span>No records found</span></td></tr>;
-            }
+            actstagelisthtml = <tr><td colSpan="2" className="no-records-data"><span>No records found</span></td></tr>;
 
 
-            // actstagelisthtml = <tr><td colSpan="5" className="no-records-data"><span>No records found</span></td></tr>;
         }
 
-        
+        let option1html = null;
+        if (this.state.option1.length > 0) {
+            option1html = this.state.option1.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                        <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option1duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option1name, 'option1')}>{n.duration} </td>
+                        <td className="alltd" id={'option1date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option1name, 'option1')}> {n.schedule}</td>
+                        <td className="alltd" id={'option1remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option1name, 'option1')}> </td>
+                        {/* <td> </td>
+                    <td> </td>
+                    <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option1html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option2html = null;
+        if (this.state.option2.length > 0) {
+            option2html = this.state.option2.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                        <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option2duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option2name, 'option2')}>{n.duration} </td>
+                        <td className="alltd" id={'option2date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option2name, 'option2')}> {n.schedule} </td>
+                        <td className="alltd" id={'option2remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option2name, 'option2')}> </td>
+                        {/* <td> </td>
+                    <td> </td>
+                    <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option2html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option3html = null;
+        if (this.state.option3.length > 0) {
+            option3html = this.state.option3.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option3duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option3name, 'option3')}>{n.duration} </td>
+                        <td className="alltd" id={'option3date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option3name, 'option3')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option3remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option3name, 'option3')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option3html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option4html = null;
+        if (this.state.option4.length > 0) {
+            option4html = this.state.option4.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option4duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option4name, 'option4')}>{n.duration} </td>
+                        <td className="alltd" id={'option4date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option4name, 'option4')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option4remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option4name, 'option4')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option4html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option5html = null;
+        if (this.state.option5.length > 0) {
+            option5html = this.state.option5.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option5duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option5name, 'option5')}>{n.duration} </td>
+                        <td className="alltd" id={'option5date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option5name, 'option5')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option5remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option5name, 'option5')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option5html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option6html = null;
+        if (this.state.option6.length > 0) {
+            option6html = this.state.option6.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option6duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option6name, 'option6')}>{n.duration} </td>
+                        <td className="alltd" id={'option6date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option6name, 'option6')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option6remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option6name, 'option6')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option6html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option7html = null;
+        if (this.state.option7.length > 0) {
+            option7html = this.state.option7.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option7duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option7name, 'option7')}>{n.duration} </td>
+                        <td className="alltd" id={'option7date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option7name, 'option7')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option7remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option7name, 'option7')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option7html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option8html = null;
+        if (this.state.option8.length > 0) {
+            option8html = this.state.option8.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option8duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option8name, 'option8')}>{n.duration} </td>
+                        <td className="alltd" id={'option8date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option8name, 'option8')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option8remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option8name, 'option8')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option8html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option9html = null;
+        if (this.state.option9.length > 0) {
+            option9html = this.state.option9.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option9duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option9name, 'option9')}>{n.duration} </td>
+                        <td className="alltd" id={'option9date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option9name, 'option9')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option9remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option9name, 'option9')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option9html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+        let option10html = null;
+        if (this.state.option10.length > 0) {
+            option10html = this.state.option10.map((n, index) => {
+                return (
+                    <tr>
+                        {/* <td>{n.stage} </td>
+                    <td>{n.activity} </td> */}
+                        <td className="alltd" id={'option10duration' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option10name, 'option10')}>{n.duration} </td>
+                        <td className="alltd" id={'option10date' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option10name, 'option10')}>  {n.schedule}</td>
+                        <td className="alltd" id={'option10remark' + `${index}`} onClick={(e) => this.rowclickfunction(n, index, this.state.option10name, 'option10')}> </td>
+                        {/* <td> </td>
+                <td> </td>
+                <td> </td> */}
+                    </tr>
+                );
+            })
+        } else {
+            option10html = <tr><td colSpan="3" className="no-records-data"><span>No records found</span></td></tr>;
+
+        }
+
+
 
 
 
@@ -1216,7 +1619,7 @@ class PdtamasterElement extends Component {
                             <div className="float-right pr-0 but-tp">
 
                                 <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-secondary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.Generate(e)}  ><span className="MuiButton-label">    Generate  <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
-                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={this.Clickclone} ><span className="MuiButton-label">Add <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
+                                <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-primary mr-10 text-white btn-icon b-sm" tabindex="0" type="button" onClick={(e) => this.Addoption(e)}  ><span className="MuiButton-label">Add <i className="zmdi zmdi-copy"></i></span><span className="MuiTouchRipple-root"></span></button>
 
 
                                 <button className="MuiButtonBase-root MuiButton-root MuiButton-contained btn-danger mr-10 text-white btn-icon b-sm" tabindex="0" type="button" ><span className="MuiButton-label">Clear <i className="zmdi zmdi-close-circle-o"></i></span><span className="MuiTouchRipple-root"></span></button>
@@ -1395,12 +1798,12 @@ class PdtamasterElement extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        {/* <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
                                                 <TextField id="optionremark" value={this.state.optionremark} onChange={this.setstatevaluefunction('optionremark')} fullWidth label="Remarks" placeholder="Remarks" />
-                                                {/* <TextField id="Buyer" fullWidth label="Days" placeholder="Days"/> */}
+                                                
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                         <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                             <div className="form-group">
@@ -1418,110 +1821,568 @@ class PdtamasterElement extends Component {
                                     </div>
                                     <div className="table-responsive mt-20">
 
+                                        <div className="w-100 overflow-scl">
+                                            <div className="scr-tbl">
+                                                <div className="sc-tbl">
+
+                                                    <table className="table f-st-tbl mt-10 data w-100 float-left text-center">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+                                                                <th rowspan="">Stage</th>
+                                                                <th rowspan="">Activity</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {actstagelisthtml &&
+                                                                actstagelisthtml}
+
+                                                        </tbody>
+                                                    </table>
+                                                    </div>
+                                                <div className="nsc-tbl">
+                                                    <table className="table mt-10 data w-100 float-left text-center">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option1name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option1html &&
+                                                                option1html}
 
 
-                                        <table className="table mt-10 data w-100 float-left text-center">
-                                            <thead className="tbl-hh-br">
-                                                <tr>
-                                                    <th rowspan="4">Stage</th>
-                                                    <th rowspan="4">Activity</th>
-                                                    <th colspan="3">{this.state.firstoptionname}</th>
-                                                    {/* <th colspan="3">Option2</th>
-                                    <th colspan="3">Option3</th> */}
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="3" className="p-0">
+                                                        </tbody>
+                                                    </table>
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option2table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
 
-                                                        <div className="w-50 float-left border-right p-5">Created Dt</div>
-                                                        <div className="w-50 float-left p-5">Modified Dt</div>
+                                                                <th colspan="3">{this.state.option2name}</th>
 
-                                                    </th>
-                                                    {/* <th colspan="3" className="p-0">
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
 
-                                        <div className="w-50 float-left border-right p-5">Created Dt</div>
-                                        <div className="w-50 float-left p-5">Modified Dt</div>
-                                    </th>
-                                    <th colspan="3" className="p-0">
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
 
-                                        <div className="w-50 float-left border-right p-5">Created Dt</div>
-                                        <div className="w-50 float-left p-5">Modified Dt</div>
-                                    </th> */}
-                                                </tr>
-                                                <tr>
-                                                    <th className="p-0">
+                                                                </th>
 
-                                                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                                                            {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
-                                                        </div>
-                                                        </div>
-                                                        <div className="w-50 float-left p-5">Base</div>
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
 
-                                                    </th>
-                                                    <th className="p-0">
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
 
-                                                        <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                                                            {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
-                                                        </div>
-                                                        </div>
-                                                        <div className="w-50 float-left p-5">Confirmed</div>
+                                                                </th>
+                                                                <th className="p-0">
 
-                                                    </th>
-                                                    <th></th>
-                                                    {/* <th className="p-0">
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
 
-                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
-                                        </div></div>
-                                    <div className="w-50 float-left p-5">Base</div>
+                                                                </th>
+                                                                <th></th>
 
-                                    </th>
-                                    <th className="p-0">
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
 
-                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
-                                        </div></div>
-                                    <div className="w-50 float-left p-5">Confirmed</div>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                                    </th>
-                                    <th></th>
-                                    <th className="p-0">
-
-                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
-                                        </div></div>
-                                    <div className="w-50 float-left p-5">Base</div>
-
-                                    </th>
-                                    <th className="p-0">
-
-                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
-                                        <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" />
-                                        </div></div>
-                                    <div className="w-50 float-left p-5">Confirmed</div>
-
-                                    </th>
-                                    <th></th> */}
-                                                </tr>
-                                                <tr>
-                                                    <th>Days</th>
-                                                    <th>Date</th>
-                                                    <th>Rmrk</th>
-                                                    {/* <th>Days</th>
-                                    <th>Date</th>
-                                    <th>Rmrk</th>
-                                    <th>Days</th>
-                                    <th>Date</th>
-                                    <th>Rmrk</th> */}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                {actstagelisthtml &&
-                                                    actstagelisthtml}
+                                                            {option2html &&
+                                                                option2html}
 
 
-                                            </tbody>
-                                        </table>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option3table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option3name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option3html &&
+                                                                option3html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option4table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option4name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option4html &&
+                                                                option4html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option5table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option5name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option5html &&
+                                                                option5html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option6table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option6name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option6html &&
+                                                                option6html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option7table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option7name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option7html &&
+                                                                option7html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option8table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option8name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option8html &&
+                                                                option8html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option9table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option9name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option9html &&
+                                                                option9html}
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table className="table mt-10 data w-100 float-left text-center optionalltable" id="option10table">
+                                                        <thead className="tbl-hh-br">
+                                                            <tr>
+
+                                                                <th colspan="3">{this.state.option10name}</th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5">Created Dt</div>
+                                                                    <div className="w-50 float-left p-5">Modified Dt</div>
+
+                                                                </th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Base</div>
+
+                                                                </th>
+                                                                <th className="p-0">
+
+                                                                    <div className="w-50 float-left border-right p-5"> <div className="w-100 pt-10">
+                                                                        {/* <FormControlLabel control={<Checkbox color="primary" value="Sample" onClick={(e) =>this.handleChangecheckbox(n,index)} />} label="" /> */}
+                                                                    </div>
+                                                                    </div>
+                                                                    <div className="w-50 float-left p-5">Confirmed</div>
+
+                                                                </th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Days</th>
+                                                                <th>Date</th>
+                                                                <th>Rmrk</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {option10html &&
+                                                                option10html}
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
 
                                     </div>
                                 </div>
@@ -1637,6 +2498,8 @@ class PdtamasterElement extends Component {
                                         </tbody>
 
                                     </table>
+
+
                                     <div className="clearfix"></div>
                                     <div className="w-50 float-right">
                                         <div className="w-25 float-left">

@@ -1169,6 +1169,15 @@ table tr td button{width: 25px;
 .BLUE{color: BLUE !important;}
 .ORANGE{color: ORANGE !important;}
 .m-bt-20{margin-bottom: 20px;}
+
+.scr-tbl table{float: left !important; width: 1060px !important;}
+.scr-tbl .f-st-tbl{width: 500px!important;}
+.scr-tbl{float: left; width: 100%;width: 4350px;  position: relative;padding-left: 500px;}
+.scr-tbl .f-st-tbl th{padding: 46px 0 !important;}
+.nsc-tbl{float: left;}
+ .overflow-scl{overflow: scroll; overflow-y: hidden;}
+ .sc-tbl{position: absolute;left: 0;top:0;}
+// .sc-tbl{​​​​​​position: absolute; left: 0; top: 0;}​​​​​​
 /* #Media Queries
 ================================================== */
 @media only screen and (min-width:1920px) { }

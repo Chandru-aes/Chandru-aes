@@ -808,6 +808,33 @@ class PdtamasterElement extends Component {
 
     }
 
+    delete(n) {
+
+        n.cancel="Y";
+           
+        n.id=n.hid;
+            api.post('TNAMaster/SaveTNAMaster', {
+                "tnaMasterRecord": [n]}).then((response) => {
+
+                if (response.data.messageCode == "200") {    
+                    NotificationManager.success('Deleted Sucessfully');
+                    this.getalldata();
+                } else {                   
+                    NotificationManager.error(response.data.message);
+                }
+
+               
+            })
+                .catch(error => {
+                    // error handling
+                })
+
+     
+
+
+    }
+
+
     edittnamaster(id) {
 
 
@@ -1013,7 +1040,7 @@ class PdtamasterElement extends Component {
                 return (
                     <tr>
                         <td className="text-center">
-                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" onClick={(e) => this.delete(n)}><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                             <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) => this.edittnamaster(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
 
                         <td>{n.buyerCode} </td>

@@ -685,6 +685,64 @@ class PdtinternalElement extends Component {
 
 
     }
+
+
+    delete(n) {
+
+        let data = {
+            "id": n.hid,
+            "entityId": "st",
+            "masterStyle": 0,
+            "baseActivity": "string",
+            "triggerDt": "2021-12-07T10:35:11.467Z",
+            "remarks": "string",
+            "cancel": "Y",
+            "createdBy": "string",
+            "modifyBy": "string",
+            "hostname": "string",
+            "intTNADetlEntityModel": [
+              {
+                "id": n.did,
+                "intTna_Id": 0,
+                "tnaSeqno": 0,
+                "fit": "string",
+                "actCode": 0,
+                "activity": "string",
+                "subActivity": "string",
+                "duration": 0,
+                "dependActCode": "string",
+                "scheduleDt": "2021-12-07T10:35:11.467Z",
+                "revisedDt": "2021-12-07T10:35:11.467Z",
+                "completed": "s",
+                "completedDt": "2021-12-07T10:35:11.467Z",
+                "skipped": "s",
+                "deviation": 0,
+                "remarks": "string",
+                "createdBy": "string",
+                "modifyBy": "string",
+                "hostname": "string"
+              }
+            ]
+          };
+          
+          api.post('TNAMaster/SaveInternalTNAMaster', data).then((response) => {
+                if (response.data.messageCode == "200") {    
+                    NotificationManager.success('Deleted Sucessfully');
+                    this.getalldata();
+                } else {                   
+                    NotificationManager.error(response.data.message);
+                }
+
+               
+            })
+                .catch(error => {
+                    // error handling
+                })
+
+     
+
+
+    }
     
 
     //save Internal T&A
@@ -1386,7 +1444,7 @@ class PdtinternalElement extends Component {
                 return (
                     <tr>
                         <td className="text-center">
-                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
+                            <button className="MuiButtonBase-root   mr-10 text-danger btn-icon b-ic delete" tabindex="0" type="button" onClick={(e) => this.delete(n)}  ><i className="zmdi zmdi-delete"></i><span className="MuiTouchRipple-root"></span></button>
                             <button className="MuiButtonBase-root mr-10 text-primary btn-icon b-ic edit" tabindex="0" type="button" onClick={(e) => this.edittnainternal(n.hid)}><i className="zmdi zmdi-edit"></i><span className="MuiTouchRipple-root"></span></button></td>
 
                         <td>{n.buyName} </td>
