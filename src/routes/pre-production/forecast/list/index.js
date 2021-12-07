@@ -1089,13 +1089,13 @@ class PreprodcutionTable extends Component {
                               width={110}
                               caption="Quantity"
                             >
-                              {/*<RequiredRule />*/}
-                              {/*<StringLengthRule  max={7} message="Quantity should not more than 7 Digits"/>*/}
-                              <RangeRule
-                                type={"stringLength"}
-                                message="Quantity should not more than 7 Digits"
-                                max={7}
-                              />
+                              <RequiredRule />
+                              <StringLengthRule  max={7} message="Quantity should not more than 7 Digits"/>
+                              {/*<RangeRule*/}
+                              {/*  type={"stringLength"}*/}
+                              {/*  message="Quantity should not more than 7 Digits"*/}
+                              {/*  max={7}*/}
+                              {/*/>*/}
                             </Column>
                             <Column
                               dataField="productType"
