@@ -252,26 +252,6 @@ class PdtamasterElement extends Component {
         hid: 0,
         count: 1,
         currentoptiontype: "option1",
-        base1:"N",
-        confirmed1:"N",
-        base2:"N",
-        confirmed2:"N",
-        base3:"N",
-        confirmed3:"N",
-        base4:"N",
-        confirmed4:"N",
-        base5:"N",
-        confirmed5:"N",
-        base6:"N",
-        confirmed6:"N",
-        base7:"N",
-        confirmed7:"N",
-        base8:"N",
-        confirmed8:"N",
-        base9:"N",
-        confirmed9:"N",
-        base10:"N",
-        confirmed10:"N",
     }
     onAddUpdateUserModalClose() {
         this.setState({ addNewUserModal: false, editUser: null })
@@ -286,7 +266,7 @@ class PdtamasterElement extends Component {
         document.body.classList.add('med-pop-up-h');
 
         this.getfilldropdownlists();
-        $('.optionalltable').css('display', 'none');
+        $('.optionalltable').css('opacity', '0');
     }
 
 
@@ -1055,157 +1035,6 @@ class PdtamasterElement extends Component {
                     }
                    
                 });
-                this.state.option6.forEach(element => {
-                    if(element.schedule!="" && element.schedule!=null){
-                        let optiondata = {
-                              "id": 0,
-                        "buyerTna_Id": element.id,
-                        "tnaSeqno": element.tnaSeqNo,
-                        "tnaOption": this.state.option6name,
-                        "triggerDt": "2021-12-07T17:39:20.942Z",
-                        "actCode": 0,
-                        "activity": element.activity,
-                        "duration": element.duration,
-                        "dependActCode": "string",
-                        "scheduleDt":  element.schedule,
-                        "revisedDt": "2021-12-07T17:39:20.942Z",
-                        "completed": "s",
-                        "completedDt": "2021-12-07T17:39:20.942Z",
-                        "skipped": "s",
-                        "deviation": 0,
-                        "baseOption": "N",
-                        "confirmed": "N",
-                        "remarks": "string",
-                        "createdBy": "string",
-                        "modifyBy": "string",
-                        "hostname": "string"
-                        }
-                        optionarraylists.push(optiondata);
-
-                    }
-                   
-                });
-                this.state.option7.forEach(element => {
-                    if(element.schedule!="" && element.schedule!=null){
-                        let optiondata = {
-                              "id": 0,
-                        "buyerTna_Id": element.id,
-                        "tnaSeqno": element.tnaSeqNo,
-                        "tnaOption": this.state.option7name,
-                        "triggerDt": "2021-12-07T17:39:20.942Z",
-                        "actCode": 0,
-                        "activity": element.activity,
-                        "duration": element.duration,
-                        "dependActCode": "string",
-                        "scheduleDt":  element.schedule,
-                        "revisedDt": "2021-12-07T17:39:20.942Z",
-                        "completed": "s",
-                        "completedDt": "2021-12-07T17:39:20.942Z",
-                        "skipped": "s",
-                        "deviation": 0,
-                        "baseOption": "N",
-                        "confirmed": "N",
-                        "remarks": "string",
-                        "createdBy": "string",
-                        "modifyBy": "string",
-                        "hostname": "string"
-                        }
-                        optionarraylists.push(optiondata);
-
-                    }
-                   
-                });
-
-                this.state.option8.forEach(element => {
-                    if(element.schedule!="" && element.schedule!=null){
-                        let optiondata = {
-                              "id": 0,
-                        "buyerTna_Id": element.id,
-                        "tnaSeqno": element.tnaSeqNo,
-                        "tnaOption": this.state.option8name,
-                        "triggerDt": "2021-12-07T17:39:20.942Z",
-                        "actCode": 0,
-                        "activity": element.activity,
-                        "duration": element.duration,
-                        "dependActCode": "string",
-                        "scheduleDt":  element.schedule,
-                        "revisedDt": "2021-12-07T17:39:20.942Z",
-                        "completed": "s",
-                        "completedDt": "2021-12-07T17:39:20.942Z",
-                        "skipped": "s",
-                        "deviation": 0,
-                        "baseOption": "N",
-                        "confirmed": "N",
-                        "remarks": "string",
-                        "createdBy": "string",
-                        "modifyBy": "string",
-                        "hostname": "string"
-                        }
-                        optionarraylists.push(optiondata);
-
-                    }
-                   
-                });
-                this.state.option9.forEach(element => {
-                    if(element.schedule!="" && element.schedule!=null){
-                        let optiondata = {
-                              "id": 0,
-                        "buyerTna_Id": element.id,
-                        "tnaSeqno": element.tnaSeqNo,
-                        "tnaOption": this.state.option9name,
-                        "triggerDt": "2021-12-07T17:39:20.942Z",
-                        "actCode": 0,
-                        "activity": element.activity,
-                        "duration": element.duration,
-                        "dependActCode": "string",
-                        "scheduleDt":  element.schedule,
-                        "revisedDt": "2021-12-07T17:39:20.942Z",
-                        "completed": "s",
-                        "completedDt": "2021-12-07T17:39:20.942Z",
-                        "skipped": "s",
-                        "deviation": 0,
-                        "baseOption": "N",
-                        "confirmed": "N",
-                        "remarks": "string",
-                        "createdBy": "string",
-                        "modifyBy": "string",
-                        "hostname": "string"
-                        }
-                        optionarraylists.push(optiondata);
-
-                    }
-                   
-                });
-                this.state.option10.forEach(element => {
-                    if(element.schedule!="" && element.schedule!=null){
-                        let optiondata = {
-                              "id": 0,
-                        "buyerTna_Id": element.id,
-                        "tnaSeqno": element.tnaSeqNo,
-                        "tnaOption": this.state.option10name,
-                        "triggerDt": "2021-12-07T17:39:20.942Z",
-                        "actCode": 0,
-                        "activity": element.activity,
-                        "duration": element.duration,
-                        "dependActCode": "string",
-                        "scheduleDt":  element.schedule,
-                        "revisedDt": "2021-12-07T17:39:20.942Z",
-                        "completed": "s",
-                        "completedDt": "2021-12-07T17:39:20.942Z",
-                        "skipped": "s",
-                        "deviation": 0,
-                        "baseOption": "N",
-                        "confirmed": "N",
-                        "remarks": "string",
-                        "createdBy": "string",
-                        "modifyBy": "string",
-                        "hostname": "string"
-                        }
-                        optionarraylists.push(optiondata);
-
-                    }
-                   
-                });
                 let data = {
                     "id": 0,
                     "entityId": "st",
@@ -1356,7 +1185,7 @@ class PdtamasterElement extends Component {
     Addoption() {
         let count = this.state.count + 1;
         this.setState({ count: count });
-        $('#option' + count + 'table').css('display', 'inline-table');
+        $('#option' + count + 'table').css('opacity', '1');
 
     }
 
@@ -1990,9 +1819,9 @@ class PdtamasterElement extends Component {
 
 
                                     </div>
-                                    <div className="mt-20">
+                                    <div className="table-responsive mt-20">
 
-                                        <div className="w-100 ">
+                                        <div className="w-100 overflow-scl">
                                             <div className="scr-tbl">
                                                 <div className="sc-tbl">
 
@@ -2011,7 +1840,6 @@ class PdtamasterElement extends Component {
                                                         </tbody>
                                                     </table>
                                                     </div>
-                                                    <div className="table-responsive">
                                                 <div className="nsc-tbl">
                                                     <table className="table mt-10 data w-100 float-left text-center">
                                                         <thead className="tbl-hh-br">
@@ -2551,7 +2379,7 @@ class PdtamasterElement extends Component {
 
                                                         </tbody>
                                                     </table>
-                                                </div></div>
+                                                </div>
                                             </div>
                                         </div>
 

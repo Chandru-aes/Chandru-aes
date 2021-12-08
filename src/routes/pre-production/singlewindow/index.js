@@ -692,7 +692,7 @@ class SinglewindowElement extends Component {
 
         if (this.state.styleno.length > 0) {
             this.setState({ baseStyleno: '', fabricDesc: '', fabricType: '', pattern_styleno: [] });
-            api.get('StyleHeader/GetStyleHeaderList?SID=' + this.state.styleno[0].value)
+            api.get('StyleHeader/GetStyleHeaderList?MasterStyleID=' + this.state.styleno[0].value)
                 .then((response) => {
                     let datas = response.data.data[0];
                     this.setState({ baseStyleno: datas.baseStyleno, fabricDesc: datas.fabricDesc, fabricType: datas.fabricType, pattern_styleno: [{ value: this.state.styleno[0].value, label: this.state.styleno[0].label }] });
@@ -757,7 +757,7 @@ class SinglewindowElement extends Component {
             }
 
             let sample_size = "0";
-
+ 
             if (this.state.sample_size.length > 0) {
                 sample_size = this.state.sample_size[0].value;
             }
@@ -1036,7 +1036,7 @@ class SinglewindowElement extends Component {
 
 
 
-                if (element.value != "VALUEADD") {
+                if (element.value == "VALUEADD") {
                     valueadddata = this.state.valueaddaddmoredata;
                 }
                 // else{
@@ -1719,7 +1719,7 @@ class SinglewindowElement extends Component {
 
         const sizeoptions = [];
         for (const item of this.state.sizelists) {
-            sizeoptions.push({ value: item.sizecode, label: item.sizeIndex });
+            sizeoptions.push({ value: item.sizecode, label: item.sizecode });
         }
 
 
