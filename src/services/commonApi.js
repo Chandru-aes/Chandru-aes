@@ -1,4 +1,5 @@
 import axios from "axios";
+import {ItrApiService} from "@afiplfeed/itr-ui";
 const BASE_URL = "http://172.16.9.253:5005/api/";
 
 const headers = {
@@ -18,7 +19,7 @@ export const postApiCall = (url, payload) => {
 };
 
 export const getApiCall = (url, payload={})  => {
-	console.log(url, payload)
+	console.log(url)
 	return axios({
 		method: "get",
 		headers: headers,
@@ -27,6 +28,12 @@ export const getApiCall = (url, payload={})  => {
 	}).then(response => {
 		return response;
 	});
+};
+export const getLtrApiCall = (url, payload={})  => {
+	return ItrApiService.GET({url: 'ProductType/GetProductTypeList'})
+		.then(response => {
+			return response;
+		});
 };
 
 const put = (url, payload) => {

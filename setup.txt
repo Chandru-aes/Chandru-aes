@@ -1,0 +1,100 @@
+mkdir pname
+cd pname
+npm init
+npm install -D @webpack-cli/generators
+npx webpack-cli init
+npm i react react-cookies react-dom react-router-dom redux redux-thunk react-redux axios
+npm i @babel/preset-react babel-core babel-preset-env babel-preset-react -D
+
+add start scripts in package.json
+"start": "webpack serve",
+
+add this .babelrc
+{
+  "plugins": ["@babel/syntax-dynamic-import"],
+  "presets": [ "@babel/preset-env", "@babel/preset-react" ]
+}
+
+add this webpack.config.js
+// Generated using webpack-cli https://github.com/webpack/webpack-cli
+
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const isProduction = process.env.NODE_ENV == "production";
+
+const stylesHandler = MiniCssExtractPlugin.loader;
+
+const config = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+		publicPath: '/'
+  },
+  devServer: {
+    open: true,
+    host: "mac.karthi.sg",
+    port: 4050,
+    historyApiFallback: true
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "index.html",
+    }),
+
+    new MiniCssExtractPlugin(),
+
+    // Add your plugins here
+    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
+  ],
+  resolve: {
+    modules: [ path.resolve(__dirname, "/src"), "node_modules" ],
+    extensions: [ "*", ".js", ".jsx", ".json" ]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/i,
+        loader: "babel-loader",
+      },
+      {
+        test: /\.css$/i,
+        use: [stylesHandler, "css-loader"],
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+        type: "asset",
+      },
+
+      // Add your rules for custom modules here
+      // Learn more about loaders from https://webpack.js.org/loaders/
+    ],
+  },
+};
+
+module.exports = () => {
+  if (isProduction) {
+    config.mode = "production";
+  } else {
+    config.mode = "development";
+  }
+  return config;
+};
+
+
+add this in index.html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Webpack App</title>
+    </head>
+    <body>
+        <div id="root-app"></div>
+    </body>
+</html>
+
+write reactdom in index.js
+create App component in App.jsx
+npm start

@@ -1,33 +1,14 @@
-/**
- * Reactify - A Material Design Admin Template
- * Copyright 2018 All Rights Reserved
- * Made With Love
- * Created By The Iron Network, LLC
- */
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import reactDom from "react-dom";
+import { Provider } from "react-redux"
+import configureStore from "./store";
 
-// Save a reference to the root element for reuse
-const rootEl = document.getElementById("root");
+export const store = configureStore();
+import App from "./App"
 
-// Create a reusable render method that we can call more than once
-let render = () => {
-  // Dynamically import our main App component, and render it
-  const MainApp = require('./App').default;
-  ReactDOM.render(
-    <MainApp />,
-    rootEl
-  );
-};
-
-if (module.hot) {
-  module.hot.accept('./App', () => {
-    const NextApp = require('./App').default;
-    render(
-      <NextApp />,
-      rootEl
-    );
-  });
-}
-
-render();
+reactDom.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById("acpl-app")
+)
